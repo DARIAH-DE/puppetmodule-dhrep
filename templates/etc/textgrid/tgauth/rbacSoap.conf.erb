@@ -1,0 +1,103 @@
+<configuration>
+
+  <section name="crud">
+    <var name="secret"><%= scope.lookupvar('textgrid::tgauth::crud_secret') %></var>
+  </section>
+
+  <section name="webAuth">
+    <var name="secret"><%= scope.lookupvar('textgrid::tgauth::webauth_secret') %></var>
+  </section>
+
+  <section name="SIDcheck">
+    <var name="secret"><%= scope.lookupvar('textgrid::tgauth::sidcheck_secret') %></var>
+  </section>
+
+  <section name="resourcecounterdaemon">
+    <var name="port">6645</var>
+  </section>
+
+  <section name="userdetails">
+    <!-- order matters for the web form s display -->
+    <var name="00order">givenname surname displayname mail organisation orgunit street plz city country tel citizenship interest personid agreesearch ToUversion</var>
+    <!-- value: optionalness|attrNameInLDAP|schemaNameInLDAP|attrDisplayname|attrDescription -->
+    <var name="givenname">mandatory|givenname|inetOrgPerson|Given Name|Your First Name</var>
+    <var name="surname">mandatory|sn|inetOrgPerson|Surname|Your Last Name</var>
+    <var name="displayname">optional|displayname|inetOrgPerson|Full Name|Your Name for Display Purposes</var>
+    <var name="mail">mandatory|mail|inetOrgPerson|E-Mail|Your Electronic Mail Address</var>
+    <var name="organisation">mandatory|o|inetOrgPerson|Institution|Institute or Organisation</var>
+    <var name="orgunit">optional|ou|inetOrgPerson|Department|Organisational Unit</var>
+    <var name="street">mandatory|street|inetOrgPerson|Street|Institution\'s Street Address incl. Number</var>
+    <var name="plz">mandatory|postalCode|inetOrgPerson|Zip Code|Postal Code, Zipcode or PLZ</var>
+    <var name="city">mandatory|l|inetOrgPerson|City|Location of Institute</var>
+    <var name="country">mandatory|c|TextGridUser|Country|Country of Residence</var>
+    <var name="tel">mandatory|telephoneNumber|inetOrgPerson|Phone|Phone Number, International Format</var>
+    <var name="citizenship">mandatory|schacCountryOfCitizenship|schacPersonalCharacteristics|Citizenship|Your Country of Citizenship</var>
+    <var name="interest">optional|TGfieldOfInterest|TextGridUser|Field of Interest|Optional specification of fields of research interests in conjuction with TextGrid</var>
+    <var name="personid">optional|TGidentifierForPerson|TextGridUser|Person ID|PND / URI for Person, e.g. http://xyz.org/~johndoe</var>
+    <var name="agreesearch">optional|TGagreeSearch|TextGridUser|Searchable|If this option is set, other TextGrid users can find you by Name, Institution or E-Mail-Address</var>
+    <var name="ToUversion">mandatory|TGacceptedTermsOfUse|TextGridUser|Terms Of Use|Latest Version of Terms Of Use that has been accepted by user</var>
+  </section>
+
+  <section name="errorCode">
+    <var name="OK">1</var>
+    <var name="INSUFFICIENT_ACCESS">2</var>
+    <var name="AUTHENTICATION_ERROR">4</var>
+    <var name="RESOURCENOTFOUND_ERROR">8</var>
+    <var name="UNKNOWN_PROJECT">16</var>
+  </section>
+
+  <section name="errorDescription">
+    <var name="OK">Ok</var>
+    <var name="INSUFFICIENT_ACCESS">This function requires an authentication and authorization.</var>
+    <var name="AUTHENTICATION_ERROR">Authentication was not successfull. Username or password are incorrect.</var>
+    <var name="RESOURCENOTFOUND_ERROR">The given resource is unknown to the system.</var>
+    <var name="UNKNOWN_PROJECT">The given project is unknown to the system.</var>
+  </section>
+
+  <section name="authentication">
+    <var name="host"><%= scope.lookupvar('textgrid::tgauth::ldap_host') %></var>
+    <var name="port">389</var>
+    <var name="version">3</var>
+    <var name="tls">no</var>
+    <var name="base">ou=people,ou=rbac,dc=textgrid,dc=de</var>
+    <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
+    <var name="password"><%= scope.lookupvar('textgrid::tgauth::binddn_pass') %></var>
+    <var name="namingattribute">uid</var>
+  </section>
+
+  <section name="counter">
+    <var name="host"><%= scope.lookupvar('textgrid::tgauth::ldap_host') %></var>
+    <var name="port">389</var>
+    <var name="version">3</var>
+    <var name="tls">no</var>
+    <var name="base">ou=counter,ou=rbac,dc=textgrid,dc=de</var>
+    <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
+    <var name="password"><%= scope.lookupvar('textgrid::tgauth::binddn_pass') %></var>
+    <var name="namingattribute">cn</var>
+  </section>
+
+  <!-- All trees under which users are created
+       have this naming-attribute -->
+  <section name="user">
+    <var name="userTreeAttribute">ou</var>
+  </section>
+
+
+  <!-- The name of the project-role under which
+       all projects are stored. Remember that the
+       value given here is relative to the role-base
+       configured for the rbac-system! -->
+  <section name="project">
+    <var name="base">Projekt-Teilnehmer</var>
+    <!-- list the Sand Box Projects separated by ";", e.g. "TGPR3;TGPR25". -->
+    <var name="sandBoxProjects"></var>
+  </section>
+
+
+  <!-- This base is used to create new
+       TextGrid-Resources. -->
+  <section name="textGridResource">
+    <var name="base">ou=resources,ou=rbac,dc=textgrid,dc=de</var>
+  </section>
+
+</configuration>

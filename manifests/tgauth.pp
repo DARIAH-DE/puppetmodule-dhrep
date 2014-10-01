@@ -1,6 +1,10 @@
 class textgrid::tgauth (
     $ldap_host = '',
     $binddn_pass = '',
+	$crud_secret = '',
+	$webauth_secret = '',
+	$sidcheck_secret = '',
+	
 ){
 
     package {
@@ -45,8 +49,24 @@ class textgrid::tgauth (
         ensure  => present,
         owner   => root,
         group   => root,
-        mode    => '0755',
+        mode    => '0644',
         content => template('textgrid/etc/textgrid/tgauth/rbac.conf.erb'),
+    }
+
+    file { '/etc/textgrid/tgauth/conf/rbacSoap.conf':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/etc/textgrid/tgauth/rbacSoap.conf.erb'),
+    }
+
+    file { '/etc/textgrid/tgauth/conf/system.conf':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/etc/textgrid/tgauth/system.conf.erb'),
     }
 
 }

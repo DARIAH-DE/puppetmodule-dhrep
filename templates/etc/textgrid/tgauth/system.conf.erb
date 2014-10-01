@@ -1,0 +1,46 @@
+<?xml version="1.1" ?>
+<system>
+
+  <!-- This is the system-configuration for the RBAC-Framework.
+       The RBAC libraries need an additional configuration-file
+       where you have to define all LDAP-specific settings. Tell
+       the RBAC-Framework where it can find this configuration.
+       Specify a full path or a path relative to your main
+       application. -->
+  <configuration file="/etc/textgrid/tgauth/conf/rbac.conf" />	
+  
+  <!-- Here you can specify if you want to use Core RBAC or the
+       Limited Hierarchical RBAC. In order to work properly both
+       libraries need a couple of classes specified through
+       the "require" statements. Again you have to specify a full
+       path or a path relative to your main application. -->
+  <rbac class="RBAClimitedHirarchical">
+    <require file="/var/www/tgauth/rbac/iContext.interface.php" />
+    <require file="/var/www/tgauth/lib/iCrypto.interface.php" />
+    <require file="/var/www/tgauth/lib/iHelper.interface.php" />
+    <require file="/var/www/tgauth/lib/iLDAP.interface.php" />
+    <require file="/var/www/tgauth/rbac/iRBACcore.interface.php" />
+    <require file="/var/www/tgauth/rbac/iRBAClimitedHirarchical.interface.php" />
+    <require file="/var/www/tgauth/rbac/RBACException.class.php" />
+    <require file="/var/www/tgauth/rbac/RBACExtension.class.php" />
+    <require file="/var/www/tgauth/rbac/Context.class.php" />
+    <require file="/var/www/tgauth/lib/Helper.class.php" />
+    <require file="/var/www/tgauth/lib/LDAP.class.php" />
+    <require file="/var/www/tgauth/lib/Crypto.class.php" />
+    <require file="/var/www/tgauth/rbac/SimpleConfig.class.php" />
+    <require file="/var/www/tgauth/rbac/RBACcore.class.php" />
+    <require file="/var/www/tgauth/rbac/RBAClimitedHirarchical.class.php" />
+  </rbac>
+  
+  <!-- Specify the extensions you want to use through the
+       RBAC-Framework. Give a full path or a path relative
+       to your main application. -->
+  <extension class="PublicResource" file="/var/www/tgauth/tgExtensions/PublicResource.class.php" />
+  <extension class="ReadableProjectFile" file="/var/www/tgauth/tgExtensions/ReadableProjectFile.class.php" />
+  <extension class="Project" file="/var/www/tgauth/tgExtensions/Project.class.php" />
+  <extension class="UpdateTimestamp" file="/var/www/tgauth/tgExtensions/UpdateTimestamp.class.php" />
+  <!--  <extension class="SSD" file="/var/www/tgauth/rbac/extensions/SSD.class.php" /> -->
+  <!--  <extension class="DSD" file="/var/www/tgauth/rbac/extensions/DSD.class.php" /> -->
+  <extension class="Logger" file="/var/www/tgauth/tgExtensions/Logger.class.php" />
+  
+</system>
