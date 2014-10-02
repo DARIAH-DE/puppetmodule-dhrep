@@ -1,0 +1,2741 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- NOTE This tgextra.wsdl file is ment to READ ONLY on any TextGrid RBAC 
+	installation, for writing please use tgextra-write.wsdl, for communication 
+	with TG-crud use tgextra-crud.wsdl -->
+
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://textgrid.info/namespaces/middleware/tgauth"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="tgextra" targetNamespace="http://textgrid.info/namespaces/middleware/tgauth">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://textgrid.info/namespaces/middleware/tgauth">
+
+			<!-- ########################################################### -->
+			<!-- ## Typ-Definitionen READ -->
+			<!-- ########################################################### -->
+
+			<xsd:element name="userExistsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="username" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="filterBySidRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="0" maxOccurs="unbounded" />
+						<xsd:element name="operation" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getSidRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getSidResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="sid" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getSupportedUserAttributesRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getSupportedUserAttributesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="attribute" type="tns:userAttribute"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getMyUserAttributesRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getMyUserAttributesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="attribute" type="tns:userAttribute"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getObjectsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getAllProjectsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getAllProjectsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="project" type="tns:projectInfo"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getDeactivatedProjectsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getDeactivatedProjectsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="project" type="tns:projectInfo"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="tgCheckAccessRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="sid" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="operation" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="tgAssignedRolesRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="username" type="xsd:string"
+							minOccurs="0" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="tgAssignedProjectsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="level" type="xsd:int" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getLeaderRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getOwnerRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getOwnerResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="owner" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getMembersRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getUserRoleRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getUserRoleResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userRole" type="tns:userRole"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getFriendsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getRightsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="username" type="xsd:string"
+							minOccurs="0" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="isPublicRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getNumberOfResourcesRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getNumberOfResourcesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="allresources" type="xsd:int" />
+						<xsd:element name="publicresources" type="xsd:int" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getNamesRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="ePPN" type="xsd:string" minOccurs="0"
+							maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getNamesResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userdetails" type="tns:userDetail"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getIDsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="name" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="mail" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="organisation" type="xsd:string"
+							minOccurs="0" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getIDsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="userdetails" type="tns:userDetail"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getProjectDescriptionRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getProjectDescriptionResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="project" type="tns:projectInfo"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- ########################################################### -->
+			<!-- ## Typ-Definitionen WRITE -->
+			<!-- ########################################################### -->
+
+			<xsd:element name="authenticateRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="username" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="password" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="authenticateResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createProjectRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="name" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="description" type="xsd:string"
+							minOccurs="0" maxOccurs="1" />
+						<xsd:element name="file" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="createProjectResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="projectId" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="addMemberRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="username" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="role" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="deleteMemberRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="username" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="role" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="setMyUserAttributesRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="webAuthSecret" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="attribute" type="tns:userAttribute"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="tgAddActiveRoleRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="role" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="tgDropActiveRoleRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="role" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="tgGrantPermissionRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="role" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="operation" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="tgRevokePermissionRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="role" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="operation" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="setProjectFileRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="file" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="setNameRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="webAuthSecret" type="xsd:string"
+							minOccurs="0" maxOccurs="1" />
+						<xsd:element name="name" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="mail" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="organisation" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="agreeSearch" type="xsd:boolean"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="deactivateProjectRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="reactivateProjectRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="deleteProjectRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- ########################################################### -->
+			<!-- ## Typ-Definitionen GENERAL -->
+			<!-- ########################################################### -->
+
+			<xsd:element name="filterResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="booleanResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="result" type="xsd:boolean"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="rolesetResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="role" type="xsd:string" minOccurs="0"
+							maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="usersetResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="username" type="xsd:string"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="resourcesetResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="operationsetResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="operation" type="xsd:string"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="userRole">
+				<xsd:sequence>
+					<xsd:element name="username" type="xsd:string"
+						minOccurs="1" maxOccurs="1" />
+					<xsd:element name="roles" type="xsd:string" minOccurs="1"
+						maxOccurs="unbounded" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="userAttribute">
+				<xsd:sequence>
+					<xsd:element name="value" type="xsd:string" minOccurs="0"
+						maxOccurs="1" />
+					<xsd:element name="description" type="xsd:string"
+						minOccurs="0" maxOccurs="1" />
+				</xsd:sequence>
+				<xsd:attribute name="name" type="xsd:string" use="required" />
+				<xsd:attribute name="mandatory" type="xsd:boolean" />
+				<xsd:attribute name="ldapname" type="xsd:string" />
+				<xsd:attribute name="inclass" type="xsd:string" />
+				<xsd:attribute name="displayname" type="xsd:string" />
+			</xsd:complexType>
+			<xsd:element name="getFriendsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="friends" type="tns:friend"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="friend">
+				<xsd:sequence>
+					<xsd:element name="username" type="xsd:string"
+						minOccurs="1" maxOccurs="1" />
+					<xsd:element name="score" type="xsd:integer" minOccurs="1"
+						maxOccurs="1" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="userDetail">
+				<xsd:sequence>
+					<xsd:element name="ePPN" type="xsd:string" minOccurs="1"
+						maxOccurs="1" />
+					<xsd:element name="name" type="xsd:string" minOccurs="1"
+						maxOccurs="1" />
+					<xsd:element name="mail" type="xsd:string" minOccurs="0"
+						maxOccurs="1" />
+					<xsd:element name="organisation" type="xsd:string"
+						minOccurs="0" maxOccurs="1" />
+					<xsd:element name="agreesearch" type="xsd:boolean"
+						minOccurs="0" maxOccurs="1" />
+					<xsd:element name="usersupplieddata" type="xsd:boolean"
+						minOccurs="0" maxOccurs="1" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="projectInfo">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string" minOccurs="1"
+						maxOccurs="1" />
+					<xsd:element name="description" type="xsd:string"
+						minOccurs="0" maxOccurs="1" />
+					<xsd:element name="name" type="xsd:string" minOccurs="1"
+						maxOccurs="1" />
+					<xsd:element name="file" type="xsd:string" minOccurs="0"
+						maxOccurs="1" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- ########################################################### -->
+			<!-- ## Typ-Definitionen FAULTS -->
+			<!-- ########################################################### -->
+
+			<xsd:element name="authenticationFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="unknownProjectFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="rbacFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="notEmptyFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="objectNotFoundFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="unknownResourceFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:complexType name="TextGridFaultType">
+				<xsd:sequence>
+					<xsd:element name="faultNo" type="xsd:int" minOccurs="0"
+						maxOccurs="1" />
+					<xsd:element name="faultMessage" type="xsd:string"
+						minOccurs="0" maxOccurs="1" />
+					<xsd:element name="cause" type="xsd:string" minOccurs="0"
+						maxOccurs="1" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+
+	<!-- ################################################################### -->
+	<!-- ## WSDL-Messages READ -->
+	<!-- ################################################################### -->
+
+	<wsdl:message name="userExistsRequest">
+		<wsdl:part element="tns:userExistsRequest" name="userExistsInput" />
+	</wsdl:message>
+	<wsdl:message name="userExistsResponse">
+		<wsdl:part element="tns:booleanResponse" name="userExistsOutput" />
+	</wsdl:message>
+	<wsdl:message name="getObjectsRequest">
+		<wsdl:part element="tns:getObjectsRequest" name="getObjectsInput" />
+	</wsdl:message>
+	<wsdl:message name="getObjectsResponse">
+		<wsdl:part element="tns:resourcesetResponse" name="getObjectsOutput" />
+	</wsdl:message>
+	<wsdl:message name="tgCheckAccessRequest">
+		<wsdl:part element="tns:tgCheckAccessRequest" name="tgCheckAccessInput" />
+	</wsdl:message>
+	<wsdl:message name="tgCheckAccessResponse">
+		<wsdl:part element="tns:booleanResponse" name="tgCheckAccessOutput" />
+	</wsdl:message>
+	<wsdl:message name="tgAssignedRolesRequest">
+		<wsdl:part element="tns:tgAssignedRolesRequest" name="tgAssignedRolesInput" />
+	</wsdl:message>
+	<wsdl:message name="tgAssignedRolesResponse">
+		<wsdl:part element="tns:rolesetResponse" name="tgAssignedRolesOutput" />
+	</wsdl:message>
+	<wsdl:message name="tgAssignedProjectsRequest">
+		<wsdl:part element="tns:tgAssignedProjectsRequest" name="tgAssignedProjectsInput" />
+	</wsdl:message>
+	<wsdl:message name="tgAssignedProjectsResponse">
+		<wsdl:part element="tns:rolesetResponse" name="tgAssignedProjectsOutput" />
+	</wsdl:message>
+	<wsdl:message name="getAllProjectsRequest">
+		<wsdl:part element="tns:getAllProjectsRequest" name="getAllProjectsInput" />
+	</wsdl:message>
+	<wsdl:message name="getAllProjectsResponse">
+		<wsdl:part element="tns:getAllProjectsResponse" name="getAllProjectsOutput" />
+	</wsdl:message>
+	<wsdl:message name="getDeactivatedProjectsRequest">
+		<wsdl:part element="tns:getDeactivatedProjectsRequest" name="getDeactivatedProjectsInput" />
+	</wsdl:message>
+	<wsdl:message name="getDeactivatedProjectsResponse">
+		<wsdl:part element="tns:getDeactivatedProjectsResponse"
+			name="getDeactivatedProjectsOutput" />
+	</wsdl:message>
+	<wsdl:message name="getLeaderRequest">
+		<wsdl:part element="tns:getLeaderRequest" name="getLeaderInput" />
+	</wsdl:message>
+	<wsdl:message name="getLeaderResponse">
+		<wsdl:part element="tns:usersetResponse" name="getLeaderOutput" />
+	</wsdl:message>
+	<wsdl:message name="filterBySidRequest">
+		<wsdl:part element="tns:filterBySidRequest" name="filterBySidInput" />
+	</wsdl:message>
+	<wsdl:message name="filterBySidResponse">
+		<wsdl:part element="tns:filterResponse" name="filterBySidOutput" />
+	</wsdl:message>
+	<wsdl:message name="getOwnerRequest">
+		<wsdl:part element="tns:getOwnerRequest" name="getOwnerInput" />
+	</wsdl:message>
+	<wsdl:message name="getOwnerResponse">
+		<wsdl:part element="tns:getOwnerResponse" name="getOwnerOutput" />
+	</wsdl:message>
+	<wsdl:message name="getMembersRequest">
+		<wsdl:part element="tns:getMembersRequest" name="getMembersInput" />
+	</wsdl:message>
+	<wsdl:message name="getMembersResponse">
+		<wsdl:part element="tns:usersetResponse" name="getMembersOutput" />
+	</wsdl:message>
+	<wsdl:message name="getUserRoleRequest">
+		<wsdl:part element="tns:getUserRoleRequest" name="getUserRoleInput" />
+	</wsdl:message>
+	<wsdl:message name="getUserRoleResponse">
+		<wsdl:part element="tns:getUserRoleResponse" name="getUserRoleOutput" />
+	</wsdl:message>
+	<wsdl:message name="getFriendsRequest">
+		<wsdl:part element="tns:getFriendsRequest" name="getFriendsInput" />
+	</wsdl:message>
+	<wsdl:message name="getFriendsResponse">
+		<wsdl:part element="tns:getFriendsResponse" name="getFriendsOutput" />
+	</wsdl:message>
+	<wsdl:message name="getRightsRequest">
+		<wsdl:part element="tns:getRightsRequest" name="getRightsInput" />
+	</wsdl:message>
+	<wsdl:message name="getRightsResponse">
+		<wsdl:part element="tns:operationsetResponse" name="getRightsOutput" />
+	</wsdl:message>
+	<wsdl:message name="isPublicRequest">
+		<wsdl:part element="tns:isPublicRequest" name="isPublicInput" />
+	</wsdl:message>
+	<wsdl:message name="isPublicResponse">
+		<wsdl:part element="tns:booleanResponse" name="isPublicOutput" />
+	</wsdl:message>
+	<wsdl:message name="getNumberOfResourcesRequest">
+		<wsdl:part element="tns:getNumberOfResourcesRequest" name="getNumberOfResourcesInput" />
+	</wsdl:message>
+	<wsdl:message name="getNumberOfResourcesResponse">
+		<wsdl:part element="tns:getNumberOfResourcesResponse" name="getNumberOfResourcesOutput" />
+	</wsdl:message>
+	<wsdl:message name="getNamesRequest">
+		<wsdl:part element="tns:getNamesRequest" name="getNamesInput" />
+	</wsdl:message>
+	<wsdl:message name="getNamesResponse">
+		<wsdl:part element="tns:getNamesResponse" name="getNamesOutput" />
+	</wsdl:message>
+	<wsdl:message name="getIDsRequest">
+		<wsdl:part element="tns:getIDsRequest" name="getIDsInput" />
+	</wsdl:message>
+	<wsdl:message name="getIDsResponse">
+		<wsdl:part element="tns:getIDsResponse" name="getIDsOutput" />
+	</wsdl:message>
+	<wsdl:message name="getProjectDescriptionRequest">
+		<wsdl:part element="tns:getProjectDescriptionRequest" name="getProjectDescriptionInput" />
+	</wsdl:message>
+	<wsdl:message name="getProjectDescriptionResponse">
+		<wsdl:part element="tns:getProjectDescriptionResponse" name="getProjectDescriptionOutput" />
+	</wsdl:message>
+	<wsdl:message name="getSidRequest">
+		<wsdl:part element="tns:getSidRequest" name="getSidInput" />
+	</wsdl:message>
+	<wsdl:message name="getSidResponse">
+		<wsdl:part element="tns:getSidResponse" name="getSidOutput" />
+	</wsdl:message>
+	<wsdl:message name="getSupportedUserAttributesRequest">
+		<wsdl:part element="tns:getSupportedUserAttributesRequest"
+			name="getSupportedUserAttributesInput" />
+	</wsdl:message>
+	<wsdl:message name="getSupportedUserAttributesResponse">
+		<wsdl:part element="tns:getSupportedUserAttributesResponse"
+			name="getSupportedUserAttributesOutput" />
+	</wsdl:message>
+	<wsdl:message name="getMyUserAttributesRequest">
+		<wsdl:part element="tns:getMyUserAttributesRequest" name="getMyUserAttributesInput" />
+	</wsdl:message>
+	<wsdl:message name="getMyUserAttributesResponse">
+		<wsdl:part element="tns:getMyUserAttributesResponse" name="getMyUserAttributesOutput" />
+	</wsdl:message>
+
+	<!-- ################################################################### -->
+	<!-- ## WSDL-Messages WRITE -->
+	<!-- ################################################################### -->
+
+	<wsdl:message name="authenticateRequest">
+		<wsdl:part element="tns:authenticateRequest" name="authenticateInput" />
+	</wsdl:message>
+	<wsdl:message name="authenticateResponse">
+		<wsdl:part element="tns:authenticateResponse" name="authenticateOutput" />
+	</wsdl:message>
+	<wsdl:message name="createProjectRequest">
+		<wsdl:part element="tns:createProjectRequest" name="createProjectInput" />
+	</wsdl:message>
+	<wsdl:message name="createProjectResponse">
+		<wsdl:part element="tns:createProjectResponse" name="createProjectOutput" />
+	</wsdl:message>
+	<wsdl:message name="addMemberRequest">
+		<wsdl:part element="tns:addMemberRequest" name="addMemberInput" />
+	</wsdl:message>
+	<wsdl:message name="addMemberResponse">
+		<wsdl:part element="tns:booleanResponse" name="addMemberOutput" />
+	</wsdl:message>
+	<wsdl:message name="deleteMemberRequest">
+		<wsdl:part element="tns:deleteMemberRequest" name="deleteMemberInput" />
+	</wsdl:message>
+	<wsdl:message name="deleteMemberResponse">
+		<wsdl:part element="tns:booleanResponse" name="deleteMemberOutput" />
+	</wsdl:message>
+	<wsdl:message name="tgAddActiveRoleRequest">
+		<wsdl:part element="tns:tgAddActiveRoleRequest" name="tgAddActiveRoleInput" />
+	</wsdl:message>
+	<wsdl:message name="tgAddActiveRoleResponse">
+		<wsdl:part element="tns:booleanResponse" name="tgAddActiveRoleOutput" />
+	</wsdl:message>
+	<wsdl:message name="tgDropActiveRoleRequest">
+		<wsdl:part element="tns:tgDropActiveRoleRequest" name="tgDropActiveRoleInput" />
+	</wsdl:message>
+	<wsdl:message name="tgDropActiveRoleResponse">
+		<wsdl:part element="tns:booleanResponse" name="tgDropActiveRoleOutput" />
+	</wsdl:message>
+	<wsdl:message name="tgGrantPermissionRequest">
+		<wsdl:part element="tns:tgGrantPermissionRequest" name="tgGrantPermissionInput" />
+	</wsdl:message>
+	<wsdl:message name="tgGrantPermissionResponse">
+		<wsdl:part element="tns:booleanResponse" name="tgGrantPermissionOutput" />
+	</wsdl:message>
+	<wsdl:message name="tgRevokePermissionRequest">
+		<wsdl:part element="tns:tgRevokePermissionRequest" name="tgRevokePermissionInput" />
+	</wsdl:message>
+	<wsdl:message name="tgRevokePermissionResponse">
+		<wsdl:part element="tns:booleanResponse" name="tgRevokePermissionOutput" />
+	</wsdl:message>
+	<wsdl:message name="setProjectFileRequest">
+		<wsdl:part element="tns:setProjectFileRequest" name="setProjectFileInput" />
+	</wsdl:message>
+	<wsdl:message name="setProjectFileResponse">
+		<wsdl:part element="tns:booleanResponse" name="setProjectFileOutput" />
+	</wsdl:message>
+	<wsdl:message name="setNameRequest">
+		<wsdl:part element="tns:setNameRequest" name="setNameInput" />
+	</wsdl:message>
+	<wsdl:message name="setNameResponse">
+		<wsdl:part element="tns:booleanResponse" name="setNameOutput" />
+	</wsdl:message>
+	<wsdl:message name="deactivateProjectRequest">
+		<wsdl:part element="tns:deactivateProjectRequest" name="deactivateProjectInput" />
+	</wsdl:message>
+	<wsdl:message name="deactivateProjectResponse">
+		<wsdl:part element="tns:booleanResponse" name="deactivateProjectOutput" />
+	</wsdl:message>
+	<wsdl:message name="reactivateProjectRequest">
+		<wsdl:part element="tns:reactivateProjectRequest" name="reactivateProjectInput" />
+	</wsdl:message>
+	<wsdl:message name="reactivateProjectResponse">
+		<wsdl:part element="tns:booleanResponse" name="reactivateProjectOutput" />
+	</wsdl:message>
+	<wsdl:message name="deleteProjectRequest">
+		<wsdl:part element="tns:deleteProjectRequest" name="deleteProjectInput" />
+	</wsdl:message>
+	<wsdl:message name="deleteProjectResponse">
+		<wsdl:part element="tns:booleanResponse" name="deleteProjectOutput" />
+	</wsdl:message>
+	<wsdl:message name="setMyUserAttributesRequest">
+		<wsdl:part element="tns:setMyUserAttributesRequest" name="setMyUserAttributesInput" />
+	</wsdl:message>
+	<wsdl:message name="setMyUserAttributesResponse">
+		<wsdl:part element="tns:booleanResponse" name="setMyUserAttributesOutput" />
+	</wsdl:message>
+
+	<!-- ################################################################### -->
+	<!-- ## WSDL-Messages FAULTS -->
+	<!-- ################################################################### -->
+
+	<wsdl:message name="authenticationFault">
+		<wsdl:part element="tns:authenticationFaultResponse" name="authenticationFault" />
+	</wsdl:message>
+	<wsdl:message name="unknownProjectFault">
+		<wsdl:part element="tns:unknownProjectFaultResponse" name="unknownProjectFault" />
+	</wsdl:message>
+	<wsdl:message name="rbacFault">
+		<wsdl:part element="tns:rbacFaultResponse" name="rbacFault" />
+	</wsdl:message>
+	<wsdl:message name="notEmptyFault">
+		<wsdl:part element="tns:notEmptyFaultResponse" name="notEmptyFault" />
+	</wsdl:message>
+	<wsdl:message name="unknownResourceFault">
+		<wsdl:part element="tns:unknownResourceFaultResponse" name="unknownResourceFault" />
+	</wsdl:message>
+
+	<!-- ################################################################### -->
+	<!-- ## Port-Type-Definitionen -->
+	<!-- ################################################################### -->
+
+	<wsdl:portType name="port_tgextra">
+		<wsdl:operation name="userExists">
+			<wsdl:documentation>
+				Checks whether this UserID (eduPersonPrincipalName) exists in RBAC.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						userExistsRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of application or user asking</li>
+							<li>log - String for log information, optional</li>
+							<li>username - String containing the ID (ePPN) of the user</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if user exists, false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:userExistsRequest" />
+			<wsdl:output message="tns:userExistsResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getNames">
+			<wsdl:documentation>
+				Returns user records for a list of ePPNs
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getNamesRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query for
+								names</li>
+							<li>log - String,</li>
+							<li>ePPN - List of Strings</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getNamesResponse. It contains 0...n userDetails, which themselves
+						have elements
+						<ul>
+							<li>ePPN - String holding ePPN of user </li>
+							<li>name - String holding Name (cn) of user </li>
+							<li>mail - String holding E-Mail address of user </li>
+							<li>organisation - String holding user' affiliation </li>
+							<li>agreesearch - Boolean, whether user wants his ID to be found
+								be a search for name or mail address </li>
+							<li>usersupplieddata - Boolean, whether user himself or his
+								organisation supplied these data </li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						none
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getNamesRequest" />
+			<wsdl:output message="tns:getNamesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getIDs">
+			<wsdl:documentation>
+				Returns user records for a name or mail address.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getIDsRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query for
+								names</li>
+							<li>log - String,</li>
+							<li>name - String with Name</li>
+							<li>mail - String with E-Mail Address</li>
+							<li>organisation - String with Organisation</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getIDsResponse. It contains 0...n userDetails, which themselves
+						have elements
+						<ul>
+							<li>ePPN - String holding ePPN of user </li>
+							<li>name - String holding Name (cn) of user </li>
+							<li>mail - String holding E-Mail address of user </li>
+							<li>organisation - String holding user' affiliation </li>
+							<li>agreesearch - Boolean, whether user wants his ID to be found
+								be a search for name or mail address </li>
+							<li>usersupplieddata - Boolean, whether user himself or his
+								organisation supplied these data </li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						none
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getIDsRequest" />
+			<wsdl:output message="tns:getIDsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getObjects">
+			<wsdl:documentation>
+				Returns URIs of all resources in project. Caller must have
+				some role
+				in the project.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getObjectsRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String with projectID</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						resourcesetResponse, with element
+						<ul>
+							<li>resource - String with URI of resource in
+								project. Can occur
+								multiple times</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getObjectsRequest" />
+			<wsdl:output message="tns:getObjectsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="tgCheckAccess">
+			<wsdl:documentation>
+				Returns access decision for given operation on given resource
+				for
+				session.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						tgCheckAccessRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user (or service) that
+								wants to
+								intitiate the check</li>
+							<li>log - String for log information, optional</li>
+							<li>
+								sid - String, SessionID of user for whom the check
+								is to be done.
+								Leave empty if check is to be done for
+								user's own session given
+								under
+								<em>auth</em>
+							</li>
+							<li>operation - String, such as "read", "write"</li>
+							<li>resource - String, name of project or role, or URI of
+								TgObject resource</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>unknownResourceFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:tgCheckAccessRequest" />
+			<wsdl:output message="tns:tgCheckAccessResponse" />
+			<wsdl:fault name="unknownResourceFault" message="tns:unknownResourceFault" />
+		</wsdl:operation>
+		<wsdl:operation name="tgAssignedRoles">
+			<wsdl:documentation>
+				Returns the roles the requesting user has, in any project. Can
+				be
+				called for another user by project leaders, then roles will
+				be
+				limited to the intersection of those projects
+				where
+				<em>auth</em>
+				is leader AND
+				<em>username</em>
+				has some
+				role in.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						tgAssignedRolesRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to
+								query for roles</li>
+							<li>log - String for log information, optional</li>
+							<li>username - String, ePPN of user for whom the
+								query is to be
+								done. Can be empty.</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						rolesetResponse, with element
+						<ul>
+							<li>role - String with full-qualified role name of the
+								role. The
+								full-qualified role name has the form
+								"Administrator,TGPR3,Projekt-Teilnehmer". Can occur
+								multiple
+								times.</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:tgAssignedRolesRequest" />
+			<wsdl:output message="tns:tgAssignedRolesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="tgAssignedProjects">
+			<wsdl:documentation>
+				Returns projectIDs of all projects the user has some role in.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						tgAssignedProjectsRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to
+								query for roles</li>
+							<li>log - String for log information, optional</li>
+							<li>
+								level - Integer. Can be either empty (= level 0) or one of
+								the
+								following:
+								<ul>
+									<li>0 - Returns all projects the user has any
+										role in (default).</li>
+									<li>
+										1 - Returns only projects where the user has
+										read access, i.e.
+										<ul>
+											<li>she is Beobachter
+												(observer) or</li>
+											<li>she is Bearbeiter (editor)
+												or</li>
+											<li>there are any public resources in the
+												project</li>
+										</ul>
+									</li>
+									<li>2 - like level 1, but public resources do not
+										count</li>
+									<li>3 - Returns only projects where the user has
+										write access,
+										i.e. she is Bearbeiter (editor)</li>
+									<li>4 - Returns only projects where the user has
+										delegate
+										access, i.e. she is Projektleiter (project
+										leader)</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						rolesetResponse, with element
+						<ul>
+							<li>role - String with projectID (no full-qualified role
+								name is
+								needed here). Can occur multiple times.</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:tgAssignedProjectsRequest" />
+			<wsdl:output message="tns:tgAssignedProjectsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getAllProjects">
+			<wsdl:documentation>
+				Returns all projects stored in this RBAC instance with ID,
+				name, and
+				description. See also getProjectDescription().
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getAllProjectsRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query
+								for
+								projects. Can be omitted as this information can be
+								reviewed
+								publicly</li>
+							<li>log - String for log information, optional</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getAllProjectsResponse, with element
+						<ul>
+							<li>
+								project - projectInfo, can occur multiple
+								times.
+								<br />
+								The type projectInfo consists of the following elements:
+								<ul>
+									<li>id - String, project ID, such as "TGPR123"</li>
+									<li>description - String, project description</li>
+									<li>name - String, project name</li>
+									<li>file - String with URI of project file for
+										project-specific
+										settings. </li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getAllProjectsRequest" />
+			<wsdl:output message="tns:getAllProjectsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getDeactivatedProjects">
+			<wsdl:documentation>
+				Returns all projects stored in this RBAC instance with ID,
+				name, and
+				description that are deactivated and can be
+				reactivated by the
+				current user.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getAllProjectsRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query
+								for
+								projects. Can be omitted as this information can be
+								reviewed
+								publicly</li>
+							<li>log - String for log information, optional</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getDeactivatedProjectsResponse, with element
+						<ul>
+							<li>
+								project - projectInfo, can occur multiple
+								times.
+								<br />
+								The type projectInfo consists of the following elements:
+								<ul>
+									<li>id - String, project ID, such as "TGPR123"</li>
+									<li>description - String, project description</li>
+									<li>name - String, project name</li>
+									<li>file - String with URI of project file for
+										project-specific
+										settings. </li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getDeactivatedProjectsRequest" />
+			<wsdl:output message="tns:getDeactivatedProjectsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getLeader">
+			<wsdl:documentation>
+				Returns Project Leader/s (i.e. who have delegate right on the
+				respective project resource).
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getLeaderRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query
+								for
+								projects. Can be omitted as this information can be
+								reviewed
+								publicly</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String with project ID, such as "TGPR123"</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						usersetResponse, with element
+						<ul>
+							<li>username - String holding ePPN of user, can occur
+								multiple
+								times.
+	      </li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getLeaderRequest" />
+			<wsdl:output message="tns:getLeaderResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="filterBySid">
+			<wsdl:documentation>
+				This is tgCheckAccess in batch operation: Returns a list of
+				the
+				resources where a given operation with this SessionID is
+				allowed. The
+				resource parameter must contain a list of
+				resources, and the subset
+				of this list that matches
+				will be returned.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						filterBySidRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to
+								do the check</li>
+							<li>log - String for log information, optional</li>
+							<li>resource - String with projectID, or URI of
+								TgObject resource.
+								Can occur multiple times.</li>
+							<li>operation - String, such as "read", "write"</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						filterResponse, with element
+						<ul>
+							<li>resource - String with projectID, or URIs that
+								match. Can
+								occur multiple times.</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:filterBySidRequest" />
+			<wsdl:output message="tns:filterBySidResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getOwner">
+			<wsdl:documentation>
+				Returns ePPN of owner that was set in registerResource. User
+				must
+				have read permission on the resource, or resource must be
+				public.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getOwnerRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query
+								for the
+								owner</li>
+							<li>log - String for log information, optional</li>
+							<li>resource - String, URI of TgObject</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getOwnerResponse, with element
+						<ul>
+							<li>owner - String, ePPN of owner.</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getOwnerRequest" />
+			<wsdl:output message="tns:getOwnerResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getMembers">
+			<wsdl:documentation>
+				Returns ePPNs of all members in the project, caller must be
+				member
+				herself.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getMembersRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query
+								for
+								members</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String, ProjectID, such as "TGPR123"</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						usersetResponse, with element
+						<ul>
+							<li>username - String holding ePPN of user, can occur
+								multiple
+								times.</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getMembersRequest" />
+			<wsdl:output message="tns:getMembersResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getUserRole">
+			<wsdl:documentation>
+				Returns ePPNs plus Array of Roles of all members in the project,
+				caller must be member herself.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getUserRoleRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query
+								for roles</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String, ProjectID, such as "TGPR123"</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getUserRoleResponse. It contains 0...n userRoles, which themselves
+						have elements
+						<ul>
+							<li>username - String holding ePPN of user </li>
+							<li>roles - array of Strings with roles the user has (e.g.
+								"Bearbeiter").</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+							<li>unknownProjectFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getUserRoleRequest" />
+			<wsdl:output message="tns:getUserRoleResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+			<wsdl:fault name="unknownProjectFault" message="tns:unknownProjectFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getFriends">
+			<wsdl:documentation>
+				Returns ePPNs of the users the authenticated user has
+				relations with,
+				i.e. they are signed into the same project role. Each
+				user name has a
+				score which shows how many roles the requester shares
+				with that user.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getFriendsRequest, with element
+						<ul>
+							<li>auth - String, SessionID of user that wants to query
+								for
+								friends</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getFriendsResponse. It contains 0...n friends, which themselves
+						have elements
+						<ul>
+							<li>username - String holding ePPN of user </li>
+							<li>score - Integer with the users' number of common roles with
+								the requester</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						none
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getFriendsRequest" />
+			<wsdl:output message="tns:getFriendsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getRights">
+			<wsdl:documentation>
+				Returns permissions for given resource or projectID. Can be
+				used by
+				project leaders to check permissions for another
+				project member.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getRightsRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query
+								the
+								rights</li>
+							<li>log - String for log information, optional</li>
+							<li>resource - String, URI of TgObject or ProjectID</li>
+							<li>username - ePPN of user whose rights shall be
+								queried. Leave
+								empty to get rights of user authenticated
+								by the auth parameter.</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						operationsetResponse, with element
+						<ul>
+							<li>operation - String with a right, such as "read" or
+								"delegate". Can occur multiple times.</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getRightsRequest" />
+			<wsdl:output message="tns:getRightsResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="isPublic">
+			<wsdl:documentation>
+				Returns status of isPublic flag for a TextGridObject.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						isPublicRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to
+								query. Can be
+								empty.</li>
+							<li>log - String for log information, optional</li>
+							<li>resource - String, URI of TgObject</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if resource has the isPublic
+								flag set
+								to TRUE, i.e. has been published, false
+								otherwise</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:isPublicRequest" />
+			<wsdl:output message="tns:isPublicResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumberOfResources">
+			<wsdl:documentation>
+				Returns the total number of resources and the number of public ones
+				in this project. Can be called by anyone.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getNumberOfResourcesRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to
+								query. Can be
+								empty.</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getNumberOfResourcesResponse, with elements
+						<ul>
+							<li>allresources - integer</li>
+							<li>publicresources - integer</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getNumberOfResourcesRequest" />
+			<wsdl:output message="tns:getNumberOfResourcesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getProjectDescription">
+			<wsdl:documentation>
+				Returns name and description of project identified by ID. See
+				also
+				getAllProjects().
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getProjectDescriptionRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user. Can be empty.</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String, ProjectID</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getProjectDescriptionResponse, with element
+						<ul>
+							<li>
+								project - projectInfo
+								<br />
+								The type projectInfo consists of the following elements:
+								<ul>
+									<li>id - String, project ID, such as "TGPR123"</li>
+									<li>description - String, project description</li>
+									<li>name - String, project name</li>
+									<li>file - String with URI of project file for
+										project-specific
+										settings. </li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getProjectDescriptionRequest" />
+			<wsdl:output message="tns:getProjectDescriptionResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getSid">
+			<wsdl:documentation>
+				Returns some random SessionID suitable for RBAC.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						empty
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getSidResponse, with element
+						<ul>
+							<li>sid - String, approximately 60-70 bytes long, consisting of
+								random characters taken from a-zA-Z0-9.</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getSidRequest" />
+			<wsdl:output message="tns:getSidResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getSupportedUserAttributes">
+			<wsdl:documentation>TODO</wsdl:documentation>
+			<wsdl:input message="tns:getSupportedUserAttributesRequest" />
+			<wsdl:output message="tns:getSupportedUserAttributesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getMyUserAttributes">
+			<wsdl:documentation>TODO</wsdl:documentation>
+			<wsdl:input message="tns:getMyUserAttributesRequest" />
+			<wsdl:output message="tns:getMyUserAttributesResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+
+		<!-- ############################################################### -->
+		<!-- ## Port-Type-Definitionen -->
+		<!-- ############################################################### -->
+
+		<wsdl:operation name="authenticate">
+			<wsdl:documentation>
+				Internal function used by applications to identify themselves (via
+				shared secret between RBAC and WebAuth).
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						authenticateRequest, with elements
+						<ul>
+							<li>username - String with name of application</li>
+							<li>password - String with password for this application</li>
+							<li>log - String for log information, optional</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						authenticateResponse, with element
+						<ul>
+							<li>auth - String, SessionID of authenticated application
+								(See
+								getSid() for format.)</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:authenticateRequest" />
+			<wsdl:output message="tns:authenticateResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="createProject">
+			<wsdl:documentation>
+				Creates a project. Projects are roles with various sub-roles,
+				i.e
+				Leader, Administrator... Creates default roles with
+				default
+				permissions:
+				<table>
+					<tr>
+						<td>Role</td>
+						<td>Right on Project</td>
+					</tr>
+					<tr>
+						<td>Projektleiter (project leader)</td>
+						<td>delegate</td>
+					</tr>
+					<tr>
+						<td>Administrator</td>
+						<td>-none-</td>
+					</tr>
+					<tr>
+						<td>Bearbeiter (editor)</td>
+						<td>create</td>
+					</tr>
+					<tr>
+						<td>Beobachter (observer)</td>
+						<td>-none-</td>
+					</tr>
+				</table>
+				These permissions can be adapted afterwards. For the rights
+				on
+				resources, see registerResource().
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						createProjectRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of future project
+								leader</li>
+							<li>log - String for log information, optional</li>
+							<li>name - String with name of project</li>
+							<li>description - String with description of
+								project</li>
+							<li>
+								file - String with URI of project file
+								-
+								<em>currently unused, omit or leave empty and use
+									setProjectFile( ) once the file resource has been
+									created</em>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						createProjectResponse, with element
+						<ul>
+							<li>projectId - String with the newly assigned project
+								ID, such as
+								"TGPR123"</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:createProjectRequest" name="createProjectInput" />
+			<wsdl:output message="tns:createProjectResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="setProjectFile">
+			<wsdl:documentation>
+				Registers the URI of a TextGridObject to be the project file
+				for
+				project-specific settings. The URI must be registered at
+				RBAC
+				beforehand.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						setProjectFileRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of Project Leader</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String with projectID</li>
+							<li>file - String with URI of project file</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:setProjectFileRequest" />
+			<wsdl:output message="tns:setProjectFileResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="setName">
+			<wsdl:documentation>
+				Supply user-specific information for display instead of the ePPN.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						setNameRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of User who wants to set their name</li>
+							<li>log - String for log information, optional</li>
+							<li>webAuthSecret - String that is known by the Web
+								Authentication which will assure that the data are correct. If
+								the secret is not given, the user entry will be marked as a
+								volunteered one, where the users gave their details themselves.</li>
+							<li>name - String with User Name, preferredly in the form of
+								"givenname surname"</li>
+							<li>mail - String with User's E-Mail address</li>
+							<li>organisation - String with Affiliation of the User</li>
+							<li>agreeSerach - Boolean telling whether the user agrees to be
+								searchable by the getIDs function.</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:setNameRequest" />
+			<wsdl:output message="tns:setNameResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="addMember">
+			<wsdl:documentation>
+				Project leaders can assign users into specific roles. This
+				still does
+				not effect
+				<em>activation</em>
+				of the role in the
+				user(s)' session(s).
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						addMemberRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of project leader</li>
+							<li>log - String for log information, optional</li>
+							<li>username - String with ePPN of user to be added</li>
+							<li>role - String with full-qualified role name of the
+								role the
+								user is to be signed into. The full-qualified
+								role name has the
+								form
+								"Administrator,TGPR3,Projekt-Teilnehmer"</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>rbacFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:addMemberRequest" />
+			<wsdl:output message="tns:addMemberResponse" />
+			<wsdl:fault name="rbacFault" message="tns:rbacFault" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteMember">
+			<wsdl:documentation>
+				Project leaders can delete a role from a user. This
+				still does not
+				effect
+				<em>(de-)activation</em>
+				of the role in the
+				user(s)' session(s).
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						deleteMemberRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of project leader</li>
+							<li>log - String for log information, optional</li>
+							<li>username - String with ePPN of user to be signed off</li>
+							<li>role - String with full-qualified role name of the
+								role the
+								user is to be signed off. The full-qualified
+								role name has the
+								form
+								"Administrator,TGPR3,Projekt-Teilnehmer"</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:deleteMemberRequest" />
+			<wsdl:output message="tns:deleteMemberResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="tgAddActiveRole">
+			<wsdl:documentation>
+				Activates a role for a session. NB, currently the login
+				process
+				activates
+				<em>all</em>
+				available roles of the user.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						tgAddActiveRoleRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user</li>
+							<li>log - String for log information, optional</li>
+							<li>role - String with full-qualified role name of the
+								role the
+								user wants to activate. The full-qualified role
+								name has the form
+								"Administrator,TGPR3,Projekt-Teilnehmer".</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:tgAddActiveRoleRequest" />
+			<wsdl:output message="tns:tgAddActiveRoleResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="tgDropActiveRole">
+			<wsdl:documentation>
+				De-activates a role for a session.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						tgDropActiveRoleRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user</li>
+							<li>log - String for log information, optional</li>
+							<li>role - String with full-qualified role name of the
+								role the
+								user wants to de-activate. The full-qualified role
+								name has the
+								form
+								"Administrator,TGPR3,Projekt-Teilnehmer".</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:tgDropActiveRoleRequest" />
+			<wsdl:output message="tns:tgDropActiveRoleResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="tgGrantPermission">
+			<wsdl:documentation>
+				Enables given operation for given role on given
+				resource. Resource
+				may be an URI of a TgObject, or
+				a projectID. Users need delegate
+				right on resource or project
+				(i.e. be project leader).
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						tgGrantPermissionRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user</li>
+							<li>log - String for log information, optional</li>
+							<li>role - String with full-qualified role name of the
+								role the
+								user wants to grant a right. The full-qualified
+								role name has the
+								form
+								"Administrator,TGPR3,Projekt-Teilnehmer".</li>
+							<li>operation - String, operation to be granted, such as
+								"read",
+								"write".</li>
+							<li>resource - String, URI of TgObject, or projectID</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+							<li>rbacFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:tgGrantPermissionRequest" />
+			<wsdl:output message="tns:tgGrantPermissionResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="tgRevokePermission">
+			<wsdl:documentation>
+				Disables this permission, see tgGrantPermission for limitations.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						tgRevokePermissionRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user</li>
+							<li>log - String for log information, optional</li>
+							<li>role - String with full-qualified role name of the
+								role the
+								user wants to revoke a right. The full-qualified
+								role name has
+								the form
+								"Administrator,TGPR3,Projekt-Teilnehmer".</li>
+							<li>operation - String, operation to be granted, such as
+								"read",
+								"write".</li>
+							<li>resource - String, URI of TgObject, or projectID</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:tgRevokePermissionRequest" />
+			<wsdl:output message="tns:tgRevokePermissionResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="deactivateProject">
+			<wsdl:documentation>
+				Hides a project. User must be project leader of the project to
+				be
+				deactivated. Hidden projects cannot be modified or read
+				anymore
+				(except published resources). However, information is
+				preserved so
+				that the project can be re-activated by manual
+				modification of the
+				database.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						deactivateProjectRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants publish</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String, ProjectID</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:deactivateProjectRequest" />
+			<wsdl:output message="tns:deactivateProjectResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="reactivateProject">
+			<wsdl:documentation>
+				Reactivate a hidden and deactivated project. The user must be the
+				former project leader of the project to be able to reactivate it.
+				All rights will be restored.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						reactivateProjectRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants publish</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String, ProjectID</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:reactivateProjectRequest" />
+			<wsdl:output message="tns:reactivateProjectResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+			<wsdl:fault name="unknownProjectFault" message="tns:unknownProjectFault" />
+		</wsdl:operation>
+		<wsdl:operation name="deleteProject">
+			<wsdl:documentation>
+				Delete a project. User must be project leader of the project that
+				is
+				deleted. Before a project can be deleted there must not be any
+				resources associated with the project. A deleted project cannot be
+				restored.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						deleteProjectRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants publish</li>
+							<li>log - String for log information, optional</li>
+							<li>project - String, ProjectID</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+							<li>notEmptyFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:deleteProjectRequest" />
+			<wsdl:output message="tns:deleteProjectResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+			<wsdl:fault name="notEmptyFault" message="tns:notEmptyFault" />
+		</wsdl:operation>
+		<wsdl:operation name="setMyUserAttributes">
+			<wsdl:documentation>TODO</wsdl:documentation>
+			<wsdl:input message="tns:setMyUserAttributesRequest" />
+			<wsdl:output message="tns:setMyUserAttributesResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- ################################################################### -->
+	<!-- ## Binding -->
+	<!-- ################################################################### -->
+
+	<wsdl:binding name="binding_tgextra" type="tns:port_tgextra">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="userExists">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/userExists" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getNames">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getNames" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getIDs">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getIDs" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getObjects">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getObjects" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="tgCheckAccess">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/tgCheckAccess" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="unknownResourceFault">
+				<soap:fault use="literal" name="unknownResourceFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="tgAssignedRoles">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/tgAssignedRoles" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="tgAssignedProjects">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/tgAssignedProjects" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getAllProjects">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getAllProjects" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getLeader">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getLeader" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="filterBySid">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/filterBySid" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getOwner">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getOwner" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getMembers">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getMembers" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getUserRole">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getUserRole" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+			<wsdl:fault name="unknownProjectFault">
+				<soap:fault use="literal" name="unknownProjectFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getFriends">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getFriends" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getRights">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getRights" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="isPublic">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/isPublic" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumberOfResources">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getNumberOfResources" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProjectDescription">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getProjectDescription" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getDeactivatedProjects">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getDeactivatedProjects" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getSupportedUserAttributes">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getSupportedUserAttributes" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getMyUserAttributes">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getMyUserAttributes" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getSid">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/getSid" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="authenticate">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/authenticate" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="createProject">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/createProject" />
+			<wsdl:input name="createProjectInput">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setProjectFile">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/setProjectFile" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="setName">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/setName" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addMember">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/addMember" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="rbacFault">
+				<soap:fault use="literal" name="rbacFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteMember">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/deleteMember" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="tgAddActiveRole">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/tgAddActiveRole" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="tgDropActiveRole">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/tgDropActiveRole" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="tgGrantPermission">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/tgGrantPermission" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="tgRevokePermission">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/tgRevokePermission" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deactivateProject">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/deactivateProject" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="reactivateProject">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/reactivateProject" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+			<wsdl:fault name="unknownProjectFault">
+				<soap:fault use="literal" name="unknownProjectFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="deleteProject">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/deleteProject" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+			<wsdl:fault name="notEmptyFault">
+				<soap:fault use="literal" name="notEmptyFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="setMyUserAttributes">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth/setMyUserAttributes" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<!-- ################################################################### -->
+	<!-- ## Service-Definition -->
+	<!-- ################################################################### -->
+
+	<wsdl:service name="tgextra">
+		<wsdl:port binding="tns:binding_tgextra" name="tgextra">
+			<soap:address location="<%= scope.lookupvar('textgrid::tgauth::soap_local_location') %>/tgextra.php" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

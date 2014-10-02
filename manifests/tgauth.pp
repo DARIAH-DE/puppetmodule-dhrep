@@ -4,7 +4,8 @@ class textgrid::tgauth (
 	$crud_secret = '',
 	$webauth_secret = '',
 	$sidcheck_secret = '',
-	
+	$soap_location = '',
+	$soap_local_localtion = 'http://localhost:8080/tgauth'
 ){
 
     package {
@@ -69,4 +70,77 @@ class textgrid::tgauth (
         content => template('textgrid/etc/textgrid/tgauth/system.conf.erb'),
     }
 
+	file {
+		'/var/www/tgauth/rbacSoap/wsdl':
+		ensure  => directory,
+		owner   => root,
+        group   => root,
+        mode    => '0644',
+		require => File['/var/www/tgauth/rbacSoap'],
+	}
+
+    file { '/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl.erb'),
+    }
+
+    file { '/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl.erb'),
+    }
+
+    file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl.erb'),
+    }
+
+    file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl.erb'),
+    }
+
+    file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
+    }
+
+    file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.local.wsdl':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra.local.wsdl.erb'),
+    }
+
+    file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.local.wsdl':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgreview.local.wsdl.erb'),
+    }
+
+    file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.local.wsdl':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.local.wsdl.erb'),
+    }
+	
 }

@@ -32,4 +32,10 @@ class textgrid {
         mode    => '0755',
   }
 
+  service { 'tomcat7':
+    	ensure  => stopped,
+    	enable  => false,
+    	require => Package["tomcat7"],
+  }
+
 }

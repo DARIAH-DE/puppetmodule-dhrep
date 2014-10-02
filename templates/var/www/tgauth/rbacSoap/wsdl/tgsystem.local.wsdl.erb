@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions name="tgsystem"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://textgrid.info/namespaces/middleware/tgauth"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  targetNamespace="http://textgrid.info/namespaces/middleware/tgauth">
+
+
+  <!--
+  ####################
+  # Typ-Definitionen #
+  ####################
+  //-->
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://textgrid.info/namespaces/middleware/tgauth">
+
+      <!-- #### createSession #### //-->
+      <xsd:element name="createSessionRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="roleset" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="sid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### deleteSession #### //-->
+      <xsd:element name="deleteSessionRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="sid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### addActiveRole #### //-->
+      <xsd:element name="addActiveRoleRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="sid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### dropActiveRole #### //-->
+      <xsd:element name="dropActiveRoleRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="sid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### checkAccess #### //-->
+      <xsd:element name="checkAccessRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="sid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="operation" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="resource" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="booleanResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="result" type="xsd:boolean" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+
+      <!-- #### rbacFault #### //-->
+      <xsd:element name="rbacFaultResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fault" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### authenticationFault #### //-->
+      <xsd:element name="authenticationFaultResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fault" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+    </xsd:schema>
+
+  </wsdl:types>
+
+
+  <!--
+  #################
+  # WSDL-Messages #
+  #################
+  //-->
+
+  <!-- #### createSession #### //-->
+  <wsdl:message name="createSessionRequest">
+    <wsdl:part element="tns:createSessionRequest" name="createSessionInput" />
+  </wsdl:message>
+  <wsdl:message name="createSessionResponse">
+    <wsdl:part element="tns:booleanResponse" name="createSessionOutput" />
+  </wsdl:message>
+
+  <!-- #### deleteSession #### //-->
+  <wsdl:message name="deleteSessionRequest">
+    <wsdl:part element="tns:deleteSessionRequest" name="deleteSessionInput" />
+  </wsdl:message>
+  <wsdl:message name="deleteSessionResponse">
+    <wsdl:part element="tns:booleanResponse" name="deleteSessionOutput" />
+  </wsdl:message>
+
+  <!-- #### addActiveRole #### //-->
+  <wsdl:message name="addActiveRoleRequest">
+    <wsdl:part element="tns:addActiveRoleRequest" name="addActiveRoleInput" />
+  </wsdl:message>
+  <wsdl:message name="addActiveRoleResponse">
+    <wsdl:part element="tns:booleanResponse" name="addActiveRoleOutput" />
+  </wsdl:message>
+
+  <!-- #### dropActiveRole #### //-->
+  <wsdl:message name="dropActiveRoleRequest">
+    <wsdl:part element="tns:dropActiveRoleRequest" name="dropActiveRoleInput" />
+  </wsdl:message>
+  <wsdl:message name="dropActiveRoleResponse">
+    <wsdl:part element="tns:booleanResponse" name="dropActiveRoleOutput" />
+  </wsdl:message>
+
+  <!-- #### checkAccess #### //-->
+  <wsdl:message name="checkAccessRequest">
+    <wsdl:part element="tns:checkAccessRequest" name="checkAccessInput" />
+  </wsdl:message>
+  <wsdl:message name="checkAccessResponse">
+    <wsdl:part element="tns:booleanResponse" name="checkAccessOutput" />
+  </wsdl:message>
+
+  <!-- #### rbacFault #### //-->
+  <wsdl:message name="rbacFault">
+    <wsdl:part element="tns:rbacFaultResponse" name="rbacFault" />
+  </wsdl:message>
+
+  <!-- #### authenticationFault #### //-->
+  <wsdl:message name="authenticationFault">
+    <wsdl:part element="tns:authenticationFaultResponse" name="authenticationFault" />
+  </wsdl:message>
+
+
+  <!--
+  ##########################
+  # Port-Type-Definitionen #
+  ##########################
+  //-->
+  <wsdl:portType name="port_tgsystem">
+
+    <!-- #### createSession #### //-->
+    <wsdl:operation name="createSession">
+      <wsdl:input message="tns:createSessionRequest" />
+      <wsdl:output message="tns:createSessionResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### deleteSession #### //-->
+    <wsdl:operation name="deleteSession">
+      <wsdl:input message="tns:deleteSessionRequest" />
+      <wsdl:output message="tns:deleteSessionResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### addActiveRole #### //-->
+    <wsdl:operation name="addActiveRole">
+      <wsdl:input message="tns:addActiveRoleRequest" />
+      <wsdl:output message="tns:addActiveRoleResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+    </wsdl:operation>
+
+    <!-- #### addActiveRole #### //-->
+    <wsdl:operation name="dropActiveRole">
+      <wsdl:input message="tns:dropActiveRoleRequest" />
+      <wsdl:output message="tns:dropActiveRoleResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### checkAccess #### //-->
+    <wsdl:operation name="checkAccess">
+      <wsdl:input message="tns:checkAccessRequest" />
+      <wsdl:output message="tns:checkAccessResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+
+
+  <!--
+  ###########
+  # Binding #
+  ###########
+  //-->
+  <wsdl:binding name="binding_tgsystem" type="tns:port_tgsystem">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+
+    <!-- #### createSession #### //-->
+    <wsdl:operation name="createSession">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/createSession" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### deleteSession #### //-->
+    <wsdl:operation name="deleteSession">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/deleteSession" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### addActiveRole #### //-->
+    <wsdl:operation name="addActiveRole">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/addActiveRole" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### dropActiveRole #### //-->
+    <wsdl:operation name="dropActiveRole">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/dropActiveRole" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### checkAccess #### //-->
+    <wsdl:operation name="checkAccess">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/checkAccess" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+
+
+  <!--
+  #####################
+  # Servicedefinition #
+  #####################
+  //-->
+  <wsdl:service name="tgsystem">
+    <wsdl:port binding="tns:binding_tgsystem" name="tgsystem">
+      <soap:address location="<%= scope.lookupvar('textgrid::tgauth::soap_local_location') %>/tgsystem.php" />
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>

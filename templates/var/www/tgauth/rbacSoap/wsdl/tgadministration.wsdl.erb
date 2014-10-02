@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions name="tgadministration"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://textgrid.info/namespaces/middleware/tgauth"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  targetNamespace="http://textgrid.info/namespaces/middleware/tgauth">
+
+
+  <!--
+  ####################
+  # Typ-Definitionen #
+  ####################
+  //-->
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://textgrid.info/namespaces/middleware/tgauth">
+
+      <!-- #### addUser #### //-->
+      <xsd:element name="addUserRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="password" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### deleteUser #### //-->
+      <xsd:element name="deleteUserRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### addRole #### //-->
+      <xsd:element name="addRoleRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### deleteRole #### //-->
+      <xsd:element name="deleteRoleRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### assignUser #### //-->
+      <xsd:element name="assignUserRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### assignUser #### //-->
+      <xsd:element name="deassignUserRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### grantPermission #### //-->
+      <xsd:element name="grantPermissionRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="resource" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="operation" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### revokePermission #### //-->
+      <xsd:element name="revokePermissionRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="operation" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="resource" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### addInheritance #### //-->
+      <xsd:element name="addInheritanceRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ascendant" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="descendant" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### deleteInheritance #### //-->
+      <xsd:element name="deleteInheritanceRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ascendant" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="descendant" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### addAscendant #### //-->
+      <xsd:element name="addAscendantRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ascendant" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="descendant" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### addDescendant #### //-->
+      <xsd:element name="addDescendantRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="ascendant" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="descendant" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+
+      <xsd:element name="booleanResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="result" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+
+      <!-- #### rbacFault #### //-->
+      <xsd:element name="rbacFaultResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fault" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### authenticationFault #### //-->
+      <xsd:element name="authenticationFaultResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fault" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### formatFault #### //-->
+      <xsd:element name="formatFaultResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fault" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+    </xsd:schema>
+  </wsdl:types>
+
+
+  <!--
+  #################
+  # WSDL-Messages #
+  #################
+  //-->
+
+  <!-- #### addUser #### //-->
+  <wsdl:message name="addUserRequest">
+    <wsdl:part element="tns:addUserRequest" name="addUserInput" />
+  </wsdl:message>
+  <wsdl:message name="addUserResponse">
+    <wsdl:part element="tns:booleanResponse" name="addUserOutput" />
+  </wsdl:message>
+
+  <!-- #### deleteUser #### //-->
+  <wsdl:message name="deleteUserRequest">
+    <wsdl:part element="tns:deleteUserRequest" name="deleteUserInput" />
+  </wsdl:message>
+  <wsdl:message name="deleteUserResponse">
+    <wsdl:part element="tns:booleanResponse" name="deleteUserOutput" />
+  </wsdl:message>
+
+  <!-- #### addRole #### //-->
+  <wsdl:message name="addRoleRequest">
+    <wsdl:part element="tns:addRoleRequest" name="addRoleInput" />
+  </wsdl:message>
+  <wsdl:message name="addRoleResponse">
+    <wsdl:part element="tns:booleanResponse" name="addRoleOutput" />
+  </wsdl:message>
+
+  <!-- #### deleteRole #### //-->
+  <wsdl:message name="deleteRoleRequest">
+    <wsdl:part element="tns:deleteRoleRequest" name="deleteRoleInput" />
+  </wsdl:message>
+  <wsdl:message name="deleteRoleResponse">
+    <wsdl:part element="tns:booleanResponse" name="deleteRoleOutput" />
+  </wsdl:message>
+
+  <!-- #### assignUser #### //-->
+  <wsdl:message name="assignUserRequest">
+    <wsdl:part element="tns:assignUserRequest" name="assignUserInput" />
+  </wsdl:message>
+  <wsdl:message name="assignUserResponse">
+    <wsdl:part element="tns:booleanResponse" name="assignUserOutput" />
+  </wsdl:message>
+
+  <!-- #### deassignUser #### //-->
+  <wsdl:message name="deassignUserRequest">
+    <wsdl:part element="tns:deassignUserRequest" name="deassignUserInput" />
+  </wsdl:message>
+  <wsdl:message name="deassignUserResponse">
+    <wsdl:part element="tns:booleanResponse" name="deassignUserOutput" />
+  </wsdl:message>
+
+  <!-- #### grantPermission #### //-->
+  <wsdl:message name="grantPermissionRequest">
+    <wsdl:part element="tns:grantPermissionRequest" name="grantPermissionInput" />
+  </wsdl:message>
+  <wsdl:message name="grantPermissionResponse">
+    <wsdl:part element="tns:booleanResponse" name="grantPermissionOutput" />
+  </wsdl:message>
+
+  <!-- #### grantPermission #### //-->
+  <wsdl:message name="revokePermissionRequest">
+    <wsdl:part element="tns:revokePermissionRequest" name="revokePermissionInput" />
+  </wsdl:message>
+  <wsdl:message name="revokePermissionResponse">
+    <wsdl:part element="tns:booleanResponse" name="revokePermissionOutput" />
+  </wsdl:message>
+
+  <!-- #### addInheritance #### //-->
+  <wsdl:message name="addInheritanceRequest">
+    <wsdl:part element="tns:addInheritanceRequest" name="addInheritanceInput" />
+  </wsdl:message>
+  <wsdl:message name="addInheritanceResponse">
+    <wsdl:part element="tns:booleanResponse" name="addInheritanceOutput" />
+  </wsdl:message>
+
+  <!-- #### deleteInheritance #### //-->
+  <wsdl:message name="deleteInheritanceRequest">
+    <wsdl:part element="tns:deleteInheritanceRequest" name="deleteInheritanceInput" />
+  </wsdl:message>
+  <wsdl:message name="deleteInheritanceResponse">
+    <wsdl:part element="tns:booleanResponse" name="deleteInheritanceOutput" />
+  </wsdl:message>
+
+  <!-- #### addAscendant #### //-->
+  <wsdl:message name="addAscendantRequest">
+    <wsdl:part element="tns:addAscendantRequest" name="addAscendantInput" />
+  </wsdl:message>
+  <wsdl:message name="addAscendantResponse">
+    <wsdl:part element="tns:booleanResponse" name="addAscendantOutput" />
+  </wsdl:message>
+
+  <!-- #### addAscendant #### //-->
+  <wsdl:message name="addDescendantRequest">
+    <wsdl:part element="tns:addDescendantRequest" name="addDescendantInput" />
+  </wsdl:message>
+  <wsdl:message name="addDescendantResponse">
+    <wsdl:part element="tns:booleanResponse" name="addDescendantOutput" />
+  </wsdl:message>
+
+  <!-- #### rbacFault #### //-->
+  <wsdl:message name="rbacFault">
+    <wsdl:part element="tns:rbacFaultResponse" name="rbacFault" />
+  </wsdl:message>
+
+  <!-- #### authenticationFault #### //-->
+  <wsdl:message name="authenticationFault">
+    <wsdl:part element="tns:authenticationFaultResponse" name="authenticationFault" />
+  </wsdl:message>
+
+  <!-- #### formatFault #### //-->
+  <wsdl:message name="formatFault">
+    <wsdl:part element="tns:formatFaultResponse" name="formatFault" />
+  </wsdl:message>
+
+
+  <!--
+  ##########################
+  # Port-Type-Definitionen #
+  ##########################
+  //-->
+  <wsdl:portType name="port_tgadministration">
+
+    <!-- #### addUser #### //-->
+    <wsdl:operation name="addUser">
+      <wsdl:input message="tns:addUserRequest" />
+      <wsdl:output message="tns:addUserResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+      <wsdl:fault name="formatFault" message="tns:formatFault" />
+    </wsdl:operation>
+
+    <!-- #### deleteUser #### //-->
+    <wsdl:operation name="deleteUser">
+      <wsdl:input message="tns:deleteUserRequest" />
+      <wsdl:output message="tns:deleteUserResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+      <wsdl:fault name="formatFault" message="tns:formatFault" />
+    </wsdl:operation>
+
+    <!-- #### addRole #### //-->
+    <wsdl:operation name="addRole">
+      <wsdl:input message="tns:addRoleRequest" />
+      <wsdl:output message="tns:addRoleResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### deleteRole #### //-->
+    <wsdl:operation name="deleteRole">
+      <wsdl:input message="tns:deleteRoleRequest" />
+      <wsdl:output message="tns:deleteRoleResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### assignUser #### //-->
+    <wsdl:operation name="assignUser">
+      <wsdl:input message="tns:assignUserRequest" />
+      <wsdl:output message="tns:assignUserResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+      <wsdl:fault name="formatFault" message="tns:formatFault" />
+    </wsdl:operation>
+
+    <!-- #### deassignUser #### //-->
+    <wsdl:operation name="deassignUser">
+      <wsdl:input message="tns:deassignUserRequest" />
+      <wsdl:output message="tns:deassignUserResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+      <wsdl:fault name="formatFault" message="tns:formatFault" />
+    </wsdl:operation>
+
+    <!-- #### grantPermission #### //-->
+    <wsdl:operation name="grantPermission">
+      <wsdl:input message="tns:grantPermissionRequest" />
+      <wsdl:output message="tns:grantPermissionResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### revokePermission #### //-->
+    <wsdl:operation name="revokePermission">
+      <wsdl:input message="tns:revokePermissionRequest" />
+      <wsdl:output message="tns:revokePermissionResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### addInheritance #### //-->
+    <wsdl:operation name="addInheritance">
+      <wsdl:input message="tns:addInheritanceRequest" />
+      <wsdl:output message="tns:addInheritanceResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### deleteInheritance #### //-->
+    <wsdl:operation name="deleteInheritance">
+      <wsdl:input message="tns:deleteInheritanceRequest" />
+      <wsdl:output message="tns:deleteInheritanceResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### addAscendant #### //-->
+    <wsdl:operation name="addAscendant">
+      <wsdl:input message="tns:addAscendantRequest" />
+      <wsdl:output message="tns:addAscendantResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### addDescendant #### //-->
+    <wsdl:operation name="addDescendant">
+      <wsdl:input message="tns:addDescendantRequest" />
+      <wsdl:output message="tns:addDescendantResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+
+
+  <!--
+  ###########
+  # Binding #
+  ###########
+  //-->
+  <wsdl:binding name="binding_tgadministration" type="tns:port_tgadministration">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+
+    <!-- #### addUser #### //-->
+    <wsdl:operation name="addUser">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/addUser" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="formatFault"><soap:fault name="formatFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### deleteUser #### //-->
+    <wsdl:operation name="deleteUser">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/deleteUser" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="formatFault"><soap:fault name="formatFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### addRole #### //-->
+    <wsdl:operation name="addRole">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/addRole" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### deleteRole #### //-->
+    <wsdl:operation name="deleteRole">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/deleteRole" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### assignUser #### //-->
+    <wsdl:operation name="assignUser">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/assignUser" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="formatFault"><soap:fault name="formatFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### deassignUser #### //-->
+    <wsdl:operation name="deassignUser">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/deassignUser" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="formatFault"><soap:fault name="formatFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### grantPermission #### //-->
+    <wsdl:operation name="grantPermission">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/grantPermission" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### revokePermission #### //-->
+    <wsdl:operation name="revokePermission">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/revokePermission" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### addInheritance #### //-->
+    <wsdl:operation name="addInheritance">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/addInheritance" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### deleteInheritance #### //-->
+    <wsdl:operation name="deleteInheritance">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/deleteInheritance" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### addAscendant #### //-->
+    <wsdl:operation name="addAscendant">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/addAscendant" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### addDescendant #### //-->
+    <wsdl:operation name="addDescendant">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/addDescendant" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="authenticationFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+
+
+  <!--
+  #####################
+  # Servicedefinition #
+  #####################
+  //-->
+  <wsdl:service name="tgadministration">
+    <wsdl:port binding="tns:binding_tgadministration" name="tgadministration">
+      <soap:address location="<%= scope.lookupvar('textgrid::tgauth::soap_location') %>/tgadministration.php" />
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>

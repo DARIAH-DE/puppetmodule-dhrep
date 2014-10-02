@@ -1,0 +1,912 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- NOTE This tgextra-crud.wsdl file is ment to COMMUNICATE WITH TG-crud 
+	service only, for read access please use tgextra.wsdl, for write access use 
+	tgextra-write.wsdl -->
+
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://textgrid.info/namespaces/middleware/tgauth-crud"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="tgextra-crud" targetNamespace="http://textgrid.info/namespaces/middleware/tgauth-crud">
+
+	<!-- ################################################################### -->
+	<!-- ## Typ-Definitionen -->
+	<!-- ################################################################### -->
+
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://textgrid.info/namespaces/middleware/tgauth-crud">
+			<xsd:element name="registerResourceRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="secret" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="project" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="uri" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="uuid" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="operationsetResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="operation" type="xsd:string"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="unregisterResourceRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="secret" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="uri" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="tgCrudCheckAccessRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="secret" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="sid" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="operation" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="tgCrudCheckAccessResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="result" type="xsd:boolean"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="public" type="xsd:boolean"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="project" type="tns:projectInfo"
+							minOccurs="0" maxOccurs="1" />
+						<xsd:element name="username" type="xsd:string"
+							minOccurs="0" maxOccurs="1" />
+						<xsd:element name="operation" type="xsd:string"
+							minOccurs="0" maxOccurs="unbounded" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="publishRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="secret" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="isPublicRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getCSRRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getCSRResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="csr" type="xsd:base64Binary"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="putCRTRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="crt" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="putCRTResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="success" type="xsd:boolean"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getEPPNRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="secret" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getEPPNResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="eppn" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getSLCRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="secret" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getSLCResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="slc" type="xsd:base64Binary"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getUUIDRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="secret" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="getUUIDResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="uuid" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="nearlyPublishRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="auth" type="xsd:string" minOccurs="1"
+							maxOccurs="1" />
+						<xsd:element name="log" type="xsd:string" minOccurs="0"
+							maxOccurs="1" />
+						<xsd:element name="secret" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+						<xsd:element name="resource" type="xsd:string"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="booleanResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="result" type="xsd:boolean"
+							minOccurs="1" maxOccurs="1" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:complexType name="projectInfo">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string" minOccurs="1"
+						maxOccurs="1" />
+					<xsd:element name="description" type="xsd:string"
+						minOccurs="0" maxOccurs="1" />
+					<xsd:element name="name" type="xsd:string" minOccurs="1"
+						maxOccurs="1" />
+					<xsd:element name="file" type="xsd:string" minOccurs="0"
+						maxOccurs="1" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- ########################################################### -->
+			<!-- ## Typ-Definitionen FAULTS -->
+			<!-- ########################################################### -->
+
+			<xsd:element name="authenticationFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="unknownProjectFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="rbacFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="notEmptyFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="objectNotFoundFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:element name="unknownResourceFaultResponse" type="tns:TextGridFaultType" />
+			<xsd:complexType name="TextGridFaultType">
+				<xsd:sequence>
+					<xsd:element name="faultNo" type="xsd:int" minOccurs="0"
+						maxOccurs="1" />
+					<xsd:element name="faultMessage" type="xsd:string"
+						minOccurs="0" maxOccurs="1" />
+					<xsd:element name="cause" type="xsd:string" minOccurs="0"
+						maxOccurs="1" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+
+	<!-- ################################################################### -->
+	<!-- ## WSDL-Messages -->
+	<!-- ################################################################### -->
+
+	<wsdl:message name="registerResourceRequest">
+		<wsdl:part element="tns:registerResourceRequest" name="registerResourceInput" />
+	</wsdl:message>
+	<wsdl:message name="registerResourceResponse">
+		<wsdl:part element="tns:operationsetResponse" name="registerResourceOutput" />
+	</wsdl:message>
+	<wsdl:message name="unregisterResourceRequest">
+		<wsdl:part element="tns:unregisterResourceRequest" name="unregisterResourceInput" />
+	</wsdl:message>
+	<wsdl:message name="unregisterResourceResponse">
+		<wsdl:part element="tns:booleanResponse" name="unregisterResourceOutput" />
+	</wsdl:message>
+	<wsdl:message name="publishRequest">
+		<wsdl:part element="tns:publishRequest" name="publishInput" />
+	</wsdl:message>
+	<wsdl:message name="publishResponse">
+		<wsdl:part element="tns:booleanResponse" name="publishOutput" />
+	</wsdl:message>
+	<wsdl:message name="getCSRRequest">
+		<wsdl:part element="tns:getCSRRequest" name="getCSRInput" />
+	</wsdl:message>
+	<wsdl:message name="getCSRResponse">
+		<wsdl:part element="tns:getCSRResponse" name="getCSROutput" />
+	</wsdl:message>
+	<wsdl:message name="putCRTRequest">
+		<wsdl:part element="tns:putCRTRequest" name="putCRTInput" />
+	</wsdl:message>
+	<wsdl:message name="putCRTResponse">
+		<wsdl:part element="tns:putCRTResponse" name="putCRTOutput" />
+	</wsdl:message>
+	<wsdl:message name="getEPPNRequest">
+		<wsdl:part element="tns:getEPPNRequest" name="getEPPNInput" />
+	</wsdl:message>
+	<wsdl:message name="getEPPNResponse">
+		<wsdl:part element="tns:getEPPNResponse" name="getEPPNOutput" />
+	</wsdl:message>
+	<wsdl:message name="getSLCRequest">
+		<wsdl:part element="tns:getSLCRequest" name="getSLCInput" />
+	</wsdl:message>
+	<wsdl:message name="getSLCResponse">
+		<wsdl:part element="tns:getSLCResponse" name="getSLCOutput" />
+	</wsdl:message>
+	<wsdl:message name="getUUIDRequest">
+		<wsdl:part element="tns:getUUIDRequest" name="getUUIDInput" />
+	</wsdl:message>
+	<wsdl:message name="getUUIDResponse">
+		<wsdl:part element="tns:getUUIDResponse" name="getUUIDResponse" />
+	</wsdl:message>
+	<wsdl:message name="tgCrudCheckAccessRequest">
+		<wsdl:part element="tns:tgCrudCheckAccessRequest" name="tgCrudCheckAccessInput" />
+	</wsdl:message>
+	<wsdl:message name="tgCrudCheckAccessResponse">
+		<wsdl:part element="tns:tgCrudCheckAccessResponse" name="tgCrudCheckAccessOutput" />
+	</wsdl:message>
+	<wsdl:message name="nearlyPublishRequest">
+		<wsdl:part element="tns:nearlyPublishRequest" name="nearlyPublishInput" />
+	</wsdl:message>
+	<wsdl:message name="nearlyPublishResponse">
+		<wsdl:part element="tns:booleanResponse" name="nearlyPublishOutput" />
+	</wsdl:message>
+
+	<!-- ################################################################### -->
+	<!-- ## WSDL-Messages FAULTS -->
+	<!-- ################################################################### -->
+
+	<wsdl:message name="authenticationFault">
+		<wsdl:part element="tns:authenticationFaultResponse" name="authenticationFault" />
+	</wsdl:message>
+	<wsdl:message name="unknownProjectFault">
+		<wsdl:part element="tns:unknownProjectFaultResponse" name="unknownProjectFault" />
+	</wsdl:message>
+	<wsdl:message name="rbacFault">
+		<wsdl:part element="tns:rbacFaultResponse" name="rbacFault" />
+	</wsdl:message>
+	<wsdl:message name="notEmptyFault">
+		<wsdl:part element="tns:notEmptyFaultResponse" name="notEmptyFault" />
+	</wsdl:message>
+	<wsdl:message name="unknownResourceFault">
+		<wsdl:part element="tns:unknownResourceFaultResponse" name="unknownResourceFault" />
+	</wsdl:message>
+
+	<!-- ################################################################### -->
+	<!-- ## Port-Type-Definitionen -->
+	<!-- ################################################################### -->
+
+	<wsdl:portType name="port_tgextra_crud">
+		<wsdl:operation name="registerResource">
+			<wsdl:documentation>
+				Registers a resource in the database. Assigns standard permissions
+				to roles in project:
+				<table>
+					<tr>
+						<td>Role</td>
+						<td>Right on Resource</td>
+					</tr>
+					<tr>
+						<td>Projektleiter (project leader)</td>
+						<td>delegate, publish</td>
+					</tr>
+					<tr>
+						<td>Administrator</td>
+						<td>delete</td>
+					</tr>
+					<tr>
+						<td>Bearbeiter (editor)</td>
+						<td>read, write</td>
+					</tr>
+					<tr>
+						<td>Beobachter (observer)</td>
+						<td>read</td>
+					</tr>
+				</table>
+				These permissions can be adapted afterwards. User needs create right
+				on project resource, see createProject().
+				<br />
+				This function is
+				<b>only for use by TG-crud.</b>
+				Clients should call TG-crud.create instead.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						registerResourceRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of future owner of this resource</li>
+							<li>log - String for log information, optional</li>
+							<li>secret - String known by TG-crud to authenticate
+								itself</li>
+							<li>project - String with project ID, such as "TGPR123".</li>
+							<li>uri - String holding URI of TgObject resource to be
+								registered in RBAC</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						operationsSetResponse, with element
+						<ul>
+							<li>operation (0..n) Strings with permissible operations on the
+								newly created resource</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+							<li>rbacFault - if resource could not be registered successfully</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:registerResourceRequest" />
+			<wsdl:output message="tns:registerResourceResponse" />
+			<wsdl:fault name="rbacFault" message="tns:rbacFault" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="unregisterResource">
+			<wsdl:documentation>
+				Removes resource from database. User needs delete right on
+				resource.
+				<b>Only for use by TG-crud.</b>
+				Clients should call
+				TG-crud.delete instead.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						unregisterResourceRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of requester</li>
+							<li>log - String for log information, optional</li>
+							<li>secret - String known by TG-crud to authenticate
+								itself</li>
+							<li>uri - String holding URI of TgObject resource to be
+								removed
+								from RBAC</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>unknownResourceFault</li>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:unregisterResourceRequest" />
+			<wsdl:output message="tns:unregisterResourceResponse" />
+			<wsdl:fault name="unknownResourceFault" message="tns:unknownResourceFault" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="tgCrudCheckAccess">
+			<wsdl:documentation>
+				Returns access decision for given operation on given resource
+				for
+				session. In addition the owner of the session and informations
+				on the
+				project is returned.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						tgCrudCheckAccessRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user (or service) that
+								wants to
+								intitiate the check</li>
+							<li>log - String for log information, optional</li>
+							<li>secret - String known by TG-crud to authenticate
+								itself</li>
+							<li>
+								sid - String, SessionID of user for whom the check
+								is to be done.
+								Leave empty if check is to be done for
+								user's own session given
+								under
+								<em>auth</em>
+							</li>
+							<li>operation - String, such as "read", "write"</li>
+							<li>resource - String, name of project or role, or URI of
+								TgObject resource</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						See wsdl
+						<ul>
+							<li>XXX</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>unknownResourceFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:tgCrudCheckAccessRequest" />
+			<wsdl:output message="tns:tgCrudCheckAccessResponse" />
+			<wsdl:fault name="unknownResourceFault" message="tns:unknownResourceFault" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="putCRT">
+			<wsdl:documentation>
+				Puts the signed Certificate into the RBAC's accompanying daemon that
+				holds the key.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						putCRTRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user</li>
+							<li>log - String for log information, optional</li>
+							<li>crt - the Certificate as a String</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						putCRTResponse, with element
+						<ul>
+							<li>success, Boolean.</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:putCRTRequest" />
+			<wsdl:output message="tns:putCRTResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+			<wsdl:fault name="unknownResourceFault" message="tns:unknownResourceFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getEPPN">
+			<wsdl:documentation>
+				Returns ePPN (aka TextGrid ID) of authenticated user. As ths
+				function could be used for SID guessing, the caller must know a
+				secret.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getEPPNRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query his ePPN</li>
+							<li>log - String for log information, optional</li>
+							<li>secret - String known by TG-crud to authenticate
+								itself</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getEPPNResponse, with element
+						<ul>
+							<li>eppn - String, ePPN of user.</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getEPPNRequest" />
+			<wsdl:output message="tns:getEPPNResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getUUID">
+			<wsdl:documentation>
+				Returns UUID (full path including server address) of the resource.
+				User
+				must have read permission on the resource, or resource must be
+				public.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getUUIDRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants to query
+								for the
+								UUID</li>
+							<li>log - String for log information, optional</li>
+							<li>secret - String known by TG-crud to authenticate
+								itself</li>
+							<li>resource - String, URI of TgObject</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getUUIDResponse, with element
+						<ul>
+							<li>uuid - String, UUID if defined.</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getUUIDRequest" />
+			<wsdl:output message="tns:getUUIDResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="publish">
+			<wsdl:documentation>
+				Sets the isPublic flag of a TextGridObject identified by its
+				URI to
+				TRUE. The resource will then be world-readable. This is
+				irreversible
+				(only by manual modification of the database) and
+				needs the publish
+				right, which by default is granted to
+				project leaders.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						publishRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user that wants publish</li>
+							<li>log - String for log information, optional</li>
+							<li>secret - String known by TG-crud to authenticate
+								itself</li>
+							<li>resource - String, URI of TgObject</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						booleanResponse, with element
+						<ul>
+							<li>result - boolean, true if operation was successful,
+								false
+								otherwise</li>
+						</ul>
+					</li>
+					<li>
+						<b>Faults</b>
+						<ul>
+							<li>authenticationFault</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:publishRequest" />
+			<wsdl:output message="tns:publishResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getSLC">
+			<wsdl:documentation>
+				CRUD may use this to retrieve a Short-Lived Certificate Key pair in
+				PEM format for the user
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getSLCRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user</li>
+							<li>log - String for log information, optional</li>
+							<li>secret - String known by TG-crud to authenticate
+								itself</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getSLCResponse, with element
+						<ul>
+							<li>slc - Base64binary String with the key pair. Contains only
+								printable ASCII Character.</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getSLCRequest" />
+			<wsdl:output message="tns:getSLCResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+			<wsdl:fault name="unknownResourceFault" message="tns:unknownResourceFault" />
+		</wsdl:operation>
+		<wsdl:operation name="nearlyPublish">
+			<wsdl:documentation>++TODO++</wsdl:documentation>
+			<wsdl:input message="tns:nearlyPublishRequest" />
+			<wsdl:output message="tns:nearlyPublishResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+			<wsdl:fault name="unknownResourceFault" message="tns:unknownResourceFault" />
+		</wsdl:operation>
+		<wsdl:operation name="getCSR">
+			<wsdl:documentation>
+				The Portal may use this to retrieve a Dummy Certificate Signing
+				Request (CSR)
+				in PEM format, for which the RBAC's accompanying daemon
+				will hold the real key.
+				<ul>
+					<li>
+						<b>Input Parameters</b>
+						getCSRRequest, with elements
+						<ul>
+							<li>auth - String, SessionID of user</li>
+							<li>log - String for log information, optional</li>
+						</ul>
+					</li>
+					<li>
+						<b>Output Parameters</b>
+						getCSRResponse, with element
+						<ul>
+							<li>csr - Base64binary String with the CSR. Contains only
+								printable ASCII Character.</li>
+						</ul>
+					</li>
+				</ul>
+			</wsdl:documentation>
+			<wsdl:input message="tns:getCSRRequest" />
+			<wsdl:output message="tns:getCSRResponse" />
+			<wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+			<wsdl:fault name="unknownResourceFault" message="tns:unknownResourceFault" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<!-- ################################################################### -->
+	<!-- ## Binding -->
+	<!-- ################################################################### -->
+
+	<wsdl:binding name="binding_tgextra_crud" type="tns:port_tgextra_crud">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="nearlyPublish">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/nearlyPublish" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+			<wsdl:fault name="unknownResourceFault">
+				<soap:fault use="literal" name="unknownResourceFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="registerResource">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/registerResource" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+			<wsdl:fault name="rbacFault">
+				<soap:fault use="literal" name="rbacFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="unregisterResource">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/unregisterResource" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="unknownResourceFault">
+				<soap:fault use="literal" name="unknownResourceFault" />
+			</wsdl:fault>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="tgCrudCheckAccess">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/tgCrudCheckAccess" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="unknownResourceFault">
+				<soap:fault use="literal" name="unknownResourceFault" />
+			</wsdl:fault>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getEPPN">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/getEPPN" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getUUID">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/getUUID" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="publish">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/publish" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getSLC">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/getSLC" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+			<wsdl:fault name="unknownResourceFault">
+				<soap:fault use="literal" name="unknownResourceFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getCSR">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/getCSR" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+			<wsdl:fault name="unknownResourceFault">
+				<soap:fault use="literal" name="unknownResourceFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="putCRT">
+			<soap:operation
+				soapAction="http://textgrid.info/namespaces/middleware/tgauth-crud/putCRT" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="authenticationFault">
+				<soap:fault use="literal" name="authenticationFault" />
+			</wsdl:fault>
+			<wsdl:fault name="unknownResourceFault">
+				<soap:fault use="literal" name="unknownResourceFault" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<!-- ################################################################### -->
+	<!-- ## Service-Definition -->
+	<!-- ################################################################### -->
+
+	<wsdl:service name="tgextra_crud">
+		<wsdl:port binding="tns:binding_tgextra_crud" name="tgextra_crud">
+			<soap:address location="<%= scope.lookupvar('textgrid::tgauth::soap_location') %>/tgextra-crud.php" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions name="tgreview"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://textgrid.info/namespaces/middleware/tgauth"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  targetNamespace="http://textgrid.info/namespaces/middleware/tgauth">
+
+
+  <!--
+  ####################
+  # Typ-Definitionen #
+  ####################
+  //-->
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://textgrid.info/namespaces/middleware/tgauth">
+
+      <!-- #### sessionRoles #### //-->
+      <xsd:element name="sessionRolesRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="sid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### assignedRoles #### //-->
+      <xsd:element name="assignedRolesRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### authorizedRoles #### //-->
+      <xsd:element name="authorizedRolesRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### authorizedUsers #### //-->
+      <xsd:element name="authorizedUsersRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### rolePermissions #### //-->
+      <xsd:element name="rolePermissionsRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### userPermissions #### //-->
+      <xsd:element name="userPermissionsRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="username" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### sessionPermissions #### //-->
+      <xsd:element name="sessionPermissionsRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="sid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### assignedUsers #### //-->
+      <xsd:element name="assignedUsersRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### roleOperationsOnObject #### //-->
+      <xsd:element name="roleOperationsOnObjectRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="role" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="resource" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### userOperationsOnObject #### //-->
+      <xsd:element name="userOperationsOnObjectRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="intSid" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="user" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="resource" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+
+      <xsd:element name="operationsetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="operationset" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="permissionsetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="permissionset" type="tns:permission" minOccurs="0" maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="rolesetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="role" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="usersetResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="username" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="booleanResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="result" type="xsd:boolean" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+
+      <xsd:element name="permission">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="resource" type="xsd:string" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="operation" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+
+      <!-- #### rbacFault #### //-->
+      <xsd:element name="rbacFaultResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fault" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!-- #### authenticationFault #### //-->
+      <xsd:element name="authenticationFaultResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="fault" type="xsd:string" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+    </xsd:schema>
+
+  </wsdl:types>
+
+
+  <!--
+  #################
+  # WSDL-Messages #
+  #################
+  //-->
+
+  <!-- #### sessionRoles #### //-->
+  <wsdl:message name="sessionRolesRequest">
+    <wsdl:part element="tns:sessionRolesRequest" name="sessionRolesInput" />
+  </wsdl:message>
+  <wsdl:message name="sessionRolesResponse">
+    <wsdl:part element="tns:rolesetResponse" name="sessionRolesOutput" />
+  </wsdl:message>
+
+  <!-- #### assignedRoles #### //-->
+  <wsdl:message name="assignedRolesRequest">
+    <wsdl:part element="tns:assignedRolesRequest" name="assignedRolesInput" />
+  </wsdl:message>
+  <wsdl:message name="assignedRolesResponse">
+    <wsdl:part element="tns:rolesetResponse" name="assignedRolesOutput" />
+  </wsdl:message>
+
+  <!-- #### authorizedRoles #### //-->
+  <wsdl:message name="authorizedRolesRequest">
+    <wsdl:part element="tns:authorizedRolesRequest" name="authorizedRolesInput" />
+  </wsdl:message>
+  <wsdl:message name="authorizedRolesResponse">
+    <wsdl:part element="tns:rolesetResponse" name="authorizedRolesOutput" />
+  </wsdl:message>
+
+  <!-- #### authorizedUsers #### //-->
+  <wsdl:message name="authorizedUsersRequest">
+    <wsdl:part element="tns:authorizedUsersRequest" name="authorizedUsersInput" />
+  </wsdl:message>
+  <wsdl:message name="authorizedUsersResponse">
+    <wsdl:part element="tns:usersetResponse" name="authorizedUsersOutput" />
+  </wsdl:message>
+
+  <!-- #### rolePermissions #### //-->
+  <wsdl:message name="rolePermissionsRequest">
+    <wsdl:part element="tns:rolePermissionsRequest" name="rolePermissionsInput" />
+  </wsdl:message>
+  <wsdl:message name="rolePermissionsResponse">
+    <wsdl:part element="tns:permissionsetResponse" name="rolePermissionsOutput" />
+  </wsdl:message>
+
+  <!-- #### userPermissions #### //-->
+  <wsdl:message name="userPermissionsRequest">
+    <wsdl:part element="tns:userPermissionsRequest" name="userPermissionsInput" />
+  </wsdl:message>
+  <wsdl:message name="userPermissionsResponse">
+    <wsdl:part element="tns:permissionsetResponse" name="userPermissionsOutput" />
+  </wsdl:message>
+
+  <!-- #### sessionPermissions #### //-->
+  <wsdl:message name="sessionPermissionsRequest">
+    <wsdl:part element="tns:sessionPermissionsRequest" name="sessionPermissionsInput" />
+  </wsdl:message>
+  <wsdl:message name="sessionPermissionsResponse">
+    <wsdl:part element="tns:permissionsetResponse" name="sessionPermissionsOutput" />
+  </wsdl:message>
+
+  <!-- #### assignedUsers #### //-->
+  <wsdl:message name="assignedUsersRequest">
+    <wsdl:part element="tns:assignedUsersRequest" name="assignedUsersInput" />
+  </wsdl:message>
+  <wsdl:message name="assignedUsersResponse">
+    <wsdl:part element="tns:usersetResponse" name="assignedUsersOutput" />
+  </wsdl:message>
+
+  <!-- #### roleOperationsOnObject #### //-->
+  <wsdl:message name="roleOperationsOnObjectRequest">
+    <wsdl:part element="tns:roleOperationsOnObjectRequest" name="roleOperationsOnObjectInput" />
+  </wsdl:message>
+  <wsdl:message name="roleOperationsOnObjectResponse">
+    <wsdl:part element="tns:operationsetResponse" name="roleOperationsOnObjectOutput" />
+  </wsdl:message>
+
+  <!-- #### userOperationsOnObject #### //-->
+  <wsdl:message name="userOperationsOnObjectRequest">
+    <wsdl:part element="tns:userOperationsOnObjectRequest" name="userOperationsOnObjectInput" />
+  </wsdl:message>
+  <wsdl:message name="userOperationsOnObjectResponse">
+    <wsdl:part element="tns:operationsetResponse" name="userOperationsOnObjectOutput" />
+  </wsdl:message>
+
+  <!-- #### rbacFault #### //-->
+  <wsdl:message name="rbacFault">
+    <wsdl:part element="tns:rbacFaultResponse" name="rbacFault" />
+  </wsdl:message>
+
+  <!-- #### authenticationFault #### //-->
+  <wsdl:message name="authenticationFault">
+    <wsdl:part element="tns:authenticationFaultResponse" name="authenticationFault" />
+  </wsdl:message>
+
+
+  <!--
+  ##########################
+  # Port-Type-Definitionen #
+  ##########################
+  //-->
+  <wsdl:portType name="port_tgreview">
+
+    <!-- #### sessionRoles #### //-->
+    <wsdl:operation name="sessionRoles">
+      <wsdl:input message="tns:sessionRolesRequest" />
+      <wsdl:output message="tns:sessionRolesResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### assignedRoles #### //-->
+    <wsdl:operation name="assignedRoles">
+      <wsdl:input message="tns:assignedRolesRequest" />
+      <wsdl:output message="tns:assignedRolesResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### authorizedRoles #### //-->
+    <wsdl:operation name="authorizedRoles">
+      <wsdl:input message="tns:authorizedRolesRequest" />
+      <wsdl:output message="tns:authorizedRolesResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### authorizedUsers #### //-->
+    <wsdl:operation name="authorizedUsers">
+      <wsdl:input message="tns:authorizedUsersRequest" />
+      <wsdl:output message="tns:authorizedUsersResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### rolePermissions #### //-->
+    <wsdl:operation name="rolePermissions">
+      <wsdl:input message="tns:rolePermissionsRequest" />
+      <wsdl:output message="tns:rolePermissionsResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### userPermissions #### //-->
+    <wsdl:operation name="userPermissions">
+      <wsdl:input message="tns:userPermissionsRequest" />
+      <wsdl:output message="tns:userPermissionsResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### sessionPermissions #### //-->
+    <wsdl:operation name="sessionPermissions">
+      <wsdl:input message="tns:sessionPermissionsRequest" />
+      <wsdl:output message="tns:sessionPermissionsResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### assignedUsers #### //-->
+    <wsdl:operation name="assignedUsers">
+      <wsdl:input message="tns:assignedUsersRequest" />
+      <wsdl:output message="tns:assignedUsersResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### roleOperationsOnOBject #### //-->
+    <wsdl:operation name="roleOperationsOnObject">
+      <wsdl:input message="tns:roleOperationsOnObjectRequest" />
+      <wsdl:output message="tns:roleOperationsOnObjectResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+    <!-- #### userOperationsOnOBject #### //-->
+    <wsdl:operation name="userOperationsOnObject">
+      <wsdl:input message="tns:userOperationsOnObjectRequest" />
+      <wsdl:output message="tns:userOperationsOnObjectResponse" />
+      <wsdl:fault name="rbacFault" message="tns:rbacFault" />
+      <wsdl:fault name="authenticationFault" message="tns:authenticationFault" />
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+
+
+  <!--
+  ###########
+  # Binding #
+  ###########
+  //-->
+  <wsdl:binding name="binding_tgreview" type="tns:port_tgreview">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+
+    <!-- #### sessionRoles #### //-->
+    <wsdl:operation name="sessionRoles">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/sessionRoles" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### assignedRoles #### //-->
+    <wsdl:operation name="assignedRoles">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/assignedRoles" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### authorizedRoles #### //-->
+    <wsdl:operation name="authorizedRoles">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/authorizedRoles" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### authorizedUsers #### //-->
+    <wsdl:operation name="authorizedUsers">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/authorizedUsers" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### rolePermissions #### //-->
+    <wsdl:operation name="rolePermissions">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/rolePermissions" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### userPermissions #### //-->
+    <wsdl:operation name="userPermissions">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/userPermissions" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### sessionPermissions #### //-->
+    <wsdl:operation name="sessionPermissions">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/sessionPermissions" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### assignedUsers #### //-->
+    <wsdl:operation name="assignedUsers">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/assignedUsers" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### roleOperationsOnObject #### //-->
+    <wsdl:operation name="roleOperationsOnObject">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/roleOperationsOnObject" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+    <!-- #### userOperationsOnObject #### //-->
+    <wsdl:operation name="userOperationsOnObject">
+      <soap:operation soapAction="http://textgrid.info/namespaces/middleware/tgauth/userOperationsOnObject" />
+      <wsdl:input><soap:body use="literal" /></wsdl:input>
+      <wsdl:output><soap:body use="literal" /></wsdl:output>
+      <wsdl:fault name="rbacFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+      <wsdl:fault name="authenticationFault"><soap:fault name="rbacFault" use="literal"/></wsdl:fault>
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+
+
+  <!--
+  #####################
+  # Servicedefinition #
+  #####################
+  //-->
+  <wsdl:service name="tgreview">
+    <wsdl:port binding="tns:binding_tgreview" name="tns:tgreview">
+      <soap:address location="<%= scope.lookupvar('textgrid::tgauth::soap_location') %>/tgreview.php" />
+    </wsdl:port>
+  </wsdl:service>
+
+</wsdl:definitions>
