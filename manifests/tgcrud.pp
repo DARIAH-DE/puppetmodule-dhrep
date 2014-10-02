@@ -1,4 +1,8 @@
-class textgrid::tgcrud {
+class textgrid::tgcrud (
+	$aai_special_secret = '',
+	$id_service_pass = '',
+	$publish_secret = '',
+){
 
     $tgname = 'tomcat-tgcrud'
     $http_port = '9093'
@@ -25,10 +29,42 @@ class textgrid::tgcrud {
         user    => 'textgrid',
     }
 
-#    tomcat::war { 'tgsearch-service-webapp.war':
-#        war_ensure      => absent,
-#        catalina_base   => "/home/textgrid/${tgname}",
-#        war_source      => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=releases&g=info.textgrid.middleware&a=tgsearch-service-webapp&v=3.3.0-SNAPSHOT&e=war',
-#    }
+    tomcat::war { 'tgcrud.war':
+        war_ensure      => present,
+        catalina_base   => "/home/textgrid/${tgname}",
+        war_source      => 'http://dev.dariah.eu/nexus/content/repositories/releases/info/textgrid/middleware/tgcrud-base/5.0.1/tgcrud-base-5.0.1.war',
+    }
+
+	file { '/etc/textgrid/tgcrud':
+        ensure  => directory,
+        owner   => root,
+        group   => root,
+        mode    => '0755',
+        require => File['/etc/textgrid'],
+    }
+
+    file { '/etc/textgrid/tgcrud/tgcrud.properties':
+        ensure  => present,
+        owner   => 'textgrid',
+        group   => 'ULSB',
+        mode    => '0600',
+        content => template('/etc/textgrid/tgcrud/tgcrud.properties.erb'),
+    }
+
+    file { '/etc/textgrid/tgcrud/tgcrud.log4j':
+        ensure  => present,
+        owner   => 'textgrid',
+        group   => 'ULSB',
+        mode    => '0600',
+        content => template('/etc/textgrid/tgcrud/tgcrud.log4j.erb'),
+    }
+
+	file { '/var/log/textgrid/tgcrud':
+        ensure  => directory,
+        owner   => 'textgrid',
+        group   => 'ULSB',
+        mode    => '0755',
+        require => File['/var/log/textgrid'],
+    }
 
 }

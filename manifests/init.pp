@@ -24,4 +24,11 @@ class textgrid {
         mode    => '0755',
   }
 
+  file { '/var/log/textgrid':
+        ensure  => directory,
+        owner   => root,
+        group   => root,
+        mode    => '0755',
+  }
+
 }

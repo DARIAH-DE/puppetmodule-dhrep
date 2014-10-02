@@ -1,0 +1,89 @@
+# Special TG-crud feature: Directly pubish objects created with #CREATE.
+# Used for the second (public) TG-crud instance used by TG-publish.
+DIRECTLY_PUBLISH_WITH_CREATE = FALSE
+
+# The TextGrid metadata namespace TG-crud is working with (mandatory).
+METADATA_NAMESPACE = http://textgrid.info/namespaces/metadata/core/2010
+
+# The path to the log4j config file (mandatory).
+LOG4J_CONFIGFILE = /etc/textgrid/tgcrud/tgcrud.log4j
+
+# The Handle resolver URL (mandatory).                                                  
+HANDLE_RESOLVER_URL = http://pid.gwdg.de/handles/
+
+# The ID implementation to use for URI creation.
+ID_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceIdentifierNoidImpl
+# The security implementation (AAI) to use for authentification and authorization.
+AAI_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceAaiTgextraImpl
+# GRID storage implementation class.
+DATA_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceStorageGatImpl
+# XMLDB storage implementation class.
+IDXDB_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceStorageElasticSearchImpl
+# RDFDB storage implementation class.
+RDFDB_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceStorageSesameImpl
+
+# The default encoding of all used XML operations (default: UTF-8).
+DEFAULT_ENCODING = UTF-8
+
+# The path, all files will be stored to, including the protocol to use. Only
+# "gsiftp://" and "file://" are supportet at the moment (mandatory).
+DEFAULT_DATA_STORAGE_URI = file://localhost//data/nonpublic/productive/
+DEFAULT_DATA_STORAGE_URI_PUBLIC = file://localhost//data/public/productive/
+
+# Which DATA STORAGE authentication shall be used (e.g. JavaGAT)? Allowed is one
+# of MYPROXY, PROXY, CERT, SLC or NONE. The needed values have to be set
+# accordingly (mandatory).
+DATA_STORAGE_AUTHENTICATION = NONE
+
+# The stream buffer size, that shall be used for stream reading and writing.
+# (default: 4096).
+STREAM_BUFFER_SIZE = 8192
+# The prefix of the URI created for TextGrid objects (mandatory).
+URI_PREFIX = textgrid
+# The suffix for the TextGrid metadata files stored TO THE GRID (mandatory).
+METADATA_FILE_SUFFIX = .meta
+# The suffix for the TextGrid rollback temporary files (mandatory).
+ROLLBACK_FILE_SUFFIX = .rollback
+# Shall the baseline encoded objects be validated by the AdaptorManager?
+# (default: FALSE).
+VALIDATE_BASELINE = FALSE
+
+# The URI of the Tgextra service endpopint (mandatory).
+AAI_SERVICE_URL = http://localhost:8080/tgauth/tgextra.php
+AAI_CRUD_SERVICE_URL =  http://localhost:8080/tgauth/tgextra-crud.php
+AAI_SPECIAL_SECRET = <%= scope.lookupvar('textgrid::tgcrud::aai_special_secret') %>
+AAI_CLIENT_STUB_TIMEOUT = 45000
+
+# The RDF database namespace (mandatory).
+RDFDB_NAMESPACE = http://textgrid.info/relation-ns
+RDFDB_SERVICE_URL = http://localhost:9091/openrdf-sesame/repositories/textgrid-nonpublic
+RDFDB_USER = *
+RDFDB_PASS = *
+RDFDB_SERVICE_URL_PUBLIC =http://localhost:9091/openrdf-sesame/repositories/textgrid-public
+RDFDB_USER_PUBLIC = *
+RDFDB_PASS_PUBLIC = *
+SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results
+
+# The Index DB namespapce, if XML.
+IDXDB_NAMESPACE = urn:elasticsearch
+#IDXDB_SERVICE_URL = http://localhost:9300/textgrid-nonpublic-productive/metadata
+IDXDB_SERVICE_URL = http://localhost:9302/textgrid-nonpublic/metadata
+#IDXDB_CLUSTER_NAME = tg-esx1-productive
+IDXDB_CLUSTER_NAME = esx-1-test-instance
+IDXDB_USER = *
+IDXDB_PASS = *
+#IDXDB_SERVICE_URL_PUBLIC = http://localhost:9300/textgrid-public-productive/metadata
+IDXDB_SERVICE_URL_PUBLIC = http://localhost:9302/textgrid-public/metadata
+IDXDB_USER_PUBLIC = *
+IDXDB_PASS_PUBLIC = *
+IDXDB_PAIRTREE_USAGE = FALSE
+
+# The URI settings.
+ID_SERVICE_URL = http://localhost:8080/nd/noidu_textgrid/
+ID_SERVICE_USER = tgcrud
+ID_SERVICE_PASS = <%= scope.lookupvar('textgrid::tgcrud::id_service_pass') %>
+ID_AUTOMAGIC_UNLOCKING_TIME = 1800000
+
+# Password for the #MOVEPUBLIC method.
+PUBLISH_SECRET = <%= scope.lookupvar('textgrid::tgcrud::publish_secret') %>
+
