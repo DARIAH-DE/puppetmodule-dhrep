@@ -117,8 +117,8 @@ location /1.0/tgsearch-public/navigation/toplevel  {
     expires 24h;
     gzip on;
     gzip_types text/plain application/xml;
-    proxy_cache tgsearch;
-    proxy_cache_valid 24h;
+#    proxy_cache tgsearch;
+#    proxy_cache_valid 24h;
     proxy_pass http://localhost:9090/tgsearch-public/navigation/toplevel;
 }
 

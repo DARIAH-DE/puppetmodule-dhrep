@@ -5,7 +5,7 @@ class textgrid {
   include textgrid::tgelasticsearch
   include textgrid::sesame
   include textgrid::tgauth
-  include textgrid::nginx
+  include textgrid::tgnginx
 
   package {
     'openjdk-6-jdk':            ensure => absent;

@@ -1,6 +1,13 @@
-class textgrid::nginx {
+class textgrid::tgnginx {
 
     package { 'nginx': ensure  => present; }
+
+#    class { 'nginx':
+#        http_cfg_append => {
+#            client_body_buffer_size => '512k',
+#            chunkin => 'on',
+#        }
+#    }
 
 	service { 'nginx':
     	ensure  => running,
