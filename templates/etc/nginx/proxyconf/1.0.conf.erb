@@ -1,0 +1,124 @@
+# locations for /1.0/
+
+location /1.0/confserv/ {
+#    gzip on;
+    alias /var/www/confserv/1.0/;
+    autoindex on;
+}
+
+location /1.0/tgrep {
+    alias /var/www/nginx-root/textgridrep.de/textgridrep-webseite;
+}
+
+location /1.0/tgauth {
+    proxy_pass http://localhost:8080/tgauth;
+}
+
+location /1.0/WebAuthN {
+    proxy_pass http://localhost:8080/WebAuthN;
+}
+
+location /1.0/Shibboleth.sso {
+    proxy_pass http://localhost:8080/1.0/Shibboleth.sso;
+}
+
+location /1.0/secure {
+    proxy_pass http://localhost:8080/1.0/secure;
+}
+
+location /1.0/triplestore {
+    proxy_pass http://localhost:9091/openrdf-sesame/repositories;
+    limit_except GET {
+       deny all;
+    }
+
+}
+
+location /1.0/tgoaipmh {
+    proxy_pass http://localhost:9097/tgoaipmh;
+}
+
+location /1.0/tgsearch {
+    gzip on;
+    gzip_types text/plain application/xml;
+    proxy_pass http://localhost:9090/tgsearch;
+}
+
+
+location /dev/tgsearch {
+    proxy_pass http://localhost:9096/tgsearch;
+}
+
+location /dev/tgsearch-public {
+    gzip on;
+    gzip_types text/plain application/xml;
+    proxy_pass http://localhost:9096/tgsearch-public;
+}
+
+location /1.0/tgsearch-public {
+    gzip on;
+    gzip_types text/plain application/xml;
+    proxy_pass http://localhost:9090/tgsearch-public;
+}
+
+location /1.0/tgcrud {
+#    gzip on;
+#    gzip_types multipart/related application/xop+xml text/xml;
+    client_max_body_size 1000m;
+    proxy_read_timeout 900s;
+    proxy_send_timeout 900s;
+    proxy_connect_timeout 120s;
+    proxy_pass http://localhost:9093/tgcrud;
+}
+
+location /1.0/tgcrud-public {
+    client_max_body_size 1000m;
+    proxy_read_timeout 900s;
+    proxy_send_timeout 900s;
+    proxy_connect_timeout 120s;
+    proxy_pass http://localhost:9094/tgcrud-public;
+}
+
+location /1.0/tgpublish {
+    proxy_pass http://localhost:9094/tgpublish;
+}
+
+location /1.0/tgpid {
+    proxy_pass http://localhost:9094/tgpid;
+}
+
+location /1.0/digilib {
+    proxy_pass http://localhost:9092/digilibservice;
+}
+
+location /1.0/iiif/manifests {
+    gzip on;
+    gzip_types text/plain application/json;
+    proxy_pass http://localhost:9092/screpview;
+}
+
+location /1.0/iiif/mirador {
+    alias /var/www/nginx-root/textgridrep.de/iiif/mirador;
+}
+
+location /1.0/aggregator {
+    proxy_read_timeout 900s;
+    proxy_send_timeout 900s;
+    proxy_connect_timeout 120s;
+    proxy_pass http://localhost:9095/aggregator;
+
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host localhost:9095;
+#    proxy_set_header Host $http_host;
+}
+
+location /1.0/tgsearch-public/navigation/toplevel  {
+    expires 24h;
+    gzip on;
+    gzip_types text/plain application/xml;
+    proxy_cache tgsearch;
+    proxy_cache_valid 24h;
+    proxy_pass http://localhost:9090/tgsearch-public/navigation/toplevel;
+}
+
