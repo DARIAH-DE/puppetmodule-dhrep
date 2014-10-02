@@ -16,19 +16,9 @@ class textgrid::tgauth (
 
     include textgrid::resources::apache
 
-# anonymous git is broken at gwdg right now
-
-    exec { 'git_clone_tgauth':
-        path    => ['/usr/bin','/bin','/usr/sbin'],
-#        command => 'git clone git:/git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
-        command => 'git clone git@git.projects.gwdg.de:tg-auth.git /usr/local/src/tgauth-git',
-        creates => '/usr/local/src/tgauth-git',
-    }
-
-    file { '/var/www/tgauth':
-        source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
-        recurse => true,
-    }
+	###
+	# conf to etc
+	###
 
     file { '/etc/textgrid/tgauth':
         ensure  => directory,
@@ -68,6 +58,23 @@ class textgrid::tgauth (
         group   => root,
         mode    => '0644',
         content => template('textgrid/etc/textgrid/tgauth/system.conf.erb'),
+    }
+
+	###
+	# /var/www/tgauth
+	###
+
+	# anonymous git is broken at gwdg right now
+    exec { 'git_clone_tgauth':
+        path    => ['/usr/bin','/bin','/usr/sbin'],
+#        command => 'git clone git:/git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
+        command => 'git clone git@git.projects.gwdg.de:tg-auth.git /usr/local/src/tgauth-git',
+        creates => '/usr/local/src/tgauth-git',
+    }
+
+    file { '/var/www/tgauth':
+        source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
+        recurse => true,
     }
 
 	file {
@@ -142,6 +149,14 @@ class textgrid::tgauth (
         group   => root,
         mode    => '0644',
         content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.local.wsdl.erb'),
+    }
+
+	###
+	# /var/www/info.textgrid.middleware.tgauth.webauth
+	###
+	file { '/var/www/info.textgrid.middleware.tgauth.webauth':
+        source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.webauth',
+        recurse => true,
     }
 	
 }
