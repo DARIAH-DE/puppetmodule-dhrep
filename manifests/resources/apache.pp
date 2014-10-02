@@ -10,7 +10,7 @@ class textgrid::resources::apache {
         default_vhost       => false,
     }
 
-    apache::listen { '8090': }
+    apache::listen { '8080': }
     
     include apache::mod::php
 
