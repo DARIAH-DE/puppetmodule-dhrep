@@ -1,0 +1,98 @@
+# You may add here your
+# server {
+#	...
+# }
+# statements for each of your virtual hosts to this file
+
+##
+# You should look at the following URL's in order to grasp a solid understanding
+# of Nginx configuration files in order to fully unleash the power of Nginx.
+# http://wiki.nginx.org/Pitfalls
+# http://wiki.nginx.org/QuickStart
+# http://wiki.nginx.org/Configuration
+#
+# Generally, you will want to move this file somewhere, and start with a clean
+# file but keep this around for reference. Or just disable in sites-enabled.
+#
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
+
+server {
+
+	# http://wiki.nginx.org/ServerBlockExample#A_Default_.22Catch_All.22_Server_Block	
+	#listen 80 default_server;
+	#server_name _; # This is just an invalid value which will never trigger on a real hostname.
+	#server_name_in_redirect off;
+
+	#listen   80; ## listen for ipv4; this line is default and implied
+	#listen   [::]:80 default_server ipv6only=on; ## listen for ipv6
+
+	root /usr/share/nginx/www;
+	index index.html index.htm;
+
+	# Make site accessible from http://localhost/
+	server_name localhost;
+
+	# chunking
+    error_page 411 = @my_411_error;
+    location @my_411_error {
+    	chunkin_resume;
+    }
+
+	location / {
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ /index.html;
+		# Uncomment to enable naxsi on this location
+		# include /etc/nginx/naxsi.rules
+	}
+
+    # Status of nginx
+    location /nginx_status {
+    	# copied from http://blog.kovyrin.net/2006/04/29/monitoring-nginx-with-rrdtool/
+        stub_status on;
+        access_log off;
+        allow 10.160.254.110;
+        allow 134.76.20.90;
+        allow 127.0.0.1;
+        deny all;
+    }
+
+    # textgrid proxy rules
+	include /etc/nginx/proxyconf/1.0.conf;
+
+}
+
+
+# HTTPS server
+#
+server {
+	listen 443;
+#	listen 443 default_server;
+#	server_name _; 
+#	server_name_in_redirect off;
+
+	server_name localhost;
+
+	root /usr/share/nginx/www;
+	index index.html index.htm;
+
+	ssl on;
+	ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
+	ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
+
+	ssl_session_timeout 5m;
+
+	ssl_protocols SSLv3 TLSv1;
+	ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
+	ssl_prefer_server_ciphers on;
+
+    error_page 411 = @my_411_error;
+    location @my_411_error {
+        chunkin_resume;
+    }
+
+	include /etc/nginx/proxyconf/1.0.conf;
+
+}
+
