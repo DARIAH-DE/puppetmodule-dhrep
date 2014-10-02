@@ -48,7 +48,7 @@ class textgrid::tgcrud (
         owner   => 'textgrid',
         group   => 'ULSB',
         mode    => '0600',
-        content => template('/etc/textgrid/tgcrud/tgcrud.properties.erb'),
+        content => template('etc/textgrid/tgcrud/tgcrud.properties.erb'),
     }
 
     file { '/etc/textgrid/tgcrud/tgcrud.log4j':
@@ -56,7 +56,7 @@ class textgrid::tgcrud (
         owner   => 'textgrid',
         group   => 'ULSB',
         mode    => '0600',
-        content => template('/etc/textgrid/tgcrud/tgcrud.log4j.erb'),
+        content => template('etc/textgrid/tgcrud/tgcrud.log4j.erb'),
     }
 
 	file { '/var/log/textgrid/tgcrud':
