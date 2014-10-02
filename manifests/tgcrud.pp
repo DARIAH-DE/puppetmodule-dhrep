@@ -67,4 +67,26 @@ class textgrid::tgcrud (
         require => File['/var/log/textgrid'],
     }
 
+    file { '/data':
+        ensure  => directory,
+        owner   => 'textgrid',
+        group   => 'ULSB',
+        mode    => '0755',
+    }
+
+    file { '/data/public':
+        ensure  => directory,
+        owner   => 'textgrid',
+        group   => 'ULSB',
+        mode    => '0755',
+		require => File['/data'],
+    }
+
+    file { '/data/nonpublic':
+        ensure  => directory,
+        owner   => 'textgrid',
+        group   => 'ULSB',
+        mode    => '0755',
+		require => File['/data'],
+    }
 }
