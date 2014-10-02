@@ -76,7 +76,8 @@ class textgrid::tgauth (
 		owner   => root,
         group   => root,
         mode    => '0644',
-		require => File['/var/www/tgauth/rbacSoap'],
+#		this dir needs to be there from above copy operation
+#		require => File['/var/www/tgauth/rbacSoap'],
 	}
 
     file { '/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl':
