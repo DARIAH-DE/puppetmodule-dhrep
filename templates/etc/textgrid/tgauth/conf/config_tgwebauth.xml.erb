@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<conf xmlns="http://textgrid.info/namespaces/middleware/tgwebauth">
+  <authn type="community">
+    <!-- zunächst textgridlab.org (134.76.20.91) nutzen über /etc/hosts,
+	 später textgrid-users kopieren auf esx1 -->
+    <!-- der vorige Kommentar unbekannten Datums hat sich mit der 
+         heutigen (2014-08-20) Migration nach DARIAH erledigt :) -->
+    <key name="host">auth.dariah.eu</key>
+    <key name="port">389</key>
+    <key name="binddn">uid=${login},ou=people,dc=dariah,dc=eu</key>
+    <key name="basedn">ou=people,dc=dariah,dc=eu</key>
+    <key name="filter">(uid=${login})</key>
+    <key name="IDattribute">dariahMappedIds;eduPersonPrincipalName</key>
+    <key name="name">DARIAH Community Authentication Server</key>
+    <key name="setAttributesDN">cn=Manager,dc=dariah,dc=eu</key>
+    <key name="setAttributesPW"><%= scope.lookupvar('textgrid::tgauth::webauth_dariah_secret') %></key>
+  </authn>
+  
+  <authz instance="<%= scope.lookupvar('textgrid::tgauth::authz_instance') %>">
+    <termsOfUse>
+      <version>1.0b</version>
+      <text>/var/Nutzungsordnung_en_200611.txt.html</text>
+    </termsOfUse>
+    <rbacbase><%= scope.lookupvar('textgrid::tgauth::rbac_base') %></rbacbase>
+    <!--rbacbase>http://localhost:8080/tgauth/</rbacbase-->
+    <sessioncreator>
+      <user>shibconnector@application.int</user>
+      <password><%= scope.lookupvar('textgrid::tgauth::authz_shib_pw') %></password>
+    </sessioncreator>
+    <setnamessecret><%= scope.lookupvar('textgrid::tgauth::authz_name_secret') %></setnamessecret>
+  </authz>
+
+</conf>

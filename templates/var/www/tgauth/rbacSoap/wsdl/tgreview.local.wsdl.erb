@@ -490,7 +490,7 @@
   //-->
   <wsdl:service name="tgreview">
     <wsdl:port binding="tns:binding_tgreview" name="tns:tgreview">
-      <soap:address location="<%= scope.lookupvar('textgrid::tgauth::soap_local_location') %>/tgreview.php" />
+      <soap:address location="<%= scope.lookupvar('textgrid::tgauth::rbac_local_base') %>tgreview.php" />
     </wsdl:port>
   </wsdl:service>
 

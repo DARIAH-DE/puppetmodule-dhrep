@@ -906,7 +906,7 @@
 
 	<wsdl:service name="tgextra_crud">
 		<wsdl:port binding="tns:binding_tgextra_crud" name="tgextra_crud">
-			<soap:address location="<%= scope.lookupvar('textgrid::tgauth::soap_location') %>/tgextra-crud.php" />
+			<soap:address location="<%= scope.lookupvar('textgrid::tgauth::rbac_base') %>tgextra-crud.php" />
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

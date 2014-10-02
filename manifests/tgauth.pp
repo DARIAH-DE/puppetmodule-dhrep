@@ -4,8 +4,12 @@ class textgrid::tgauth (
 	$crud_secret = '',
 	$webauth_secret = '',
 	$sidcheck_secret = '',
-	$soap_location = '',
-	$soap_local_localtion = 'http://localhost:8080/tgauth'
+	$rbac_base = '',
+	$rbac_local_base = 'http://localhost:8080/tgauth/',
+	$webauth_dariah_secret = '',
+	$authz_shib_pw = '',
+	$authz_name_secret = '',
+	$authz_instance = '',
 ){
 
     package {
@@ -41,7 +45,7 @@ class textgrid::tgauth (
         owner   => root,
         group   => root,
         mode    => '0644',
-        content => template('textgrid/etc/textgrid/tgauth/rbac.conf.erb'),
+        content => template('textgrid/etc/textgrid/tgauth/conf/rbac.conf.erb'),
     }
 
     file { '/etc/textgrid/tgauth/conf/rbacSoap.conf':
@@ -49,7 +53,7 @@ class textgrid::tgauth (
         owner   => root,
         group   => root,
         mode    => '0644',
-        content => template('textgrid/etc/textgrid/tgauth/rbacSoap.conf.erb'),
+        content => template('textgrid/etc/textgrid/tgauth/conf/rbacSoap.conf.erb'),
     }
 
     file { '/etc/textgrid/tgauth/conf/system.conf':
@@ -57,7 +61,15 @@ class textgrid::tgauth (
         owner   => root,
         group   => root,
         mode    => '0644',
-        content => template('textgrid/etc/textgrid/tgauth/system.conf.erb'),
+        content => template('textgrid/etc/textgrid/tgauth/conf/system.conf.erb'),
+    }
+
+    file { '/etc/textgrid/tgauth/conf/config_tgwebauth.xml':
+        ensure  => present,
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template('textgrid/etc/textgrid/tgauth/conf/config_tgwebauth.xml.erb'),
     }
 
 	###
@@ -158,5 +170,7 @@ class textgrid::tgauth (
         source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.webauth',
         recurse => true,
     }
+
+	
 	
 }

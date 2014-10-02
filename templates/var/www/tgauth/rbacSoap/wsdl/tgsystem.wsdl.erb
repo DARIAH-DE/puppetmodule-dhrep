@@ -277,7 +277,7 @@
   //-->
   <wsdl:service name="tgsystem">
     <wsdl:port binding="tns:binding_tgsystem" name="tgsystem">
-      <soap:address location="<%= scope.lookupvar('textgrid::tgauth::soap_location') %>/tgsystem.php" />
+      <soap:address location="<%= scope.lookupvar('textgrid::tgauth::rbac_base') %>tgsystem.php" />
     </wsdl:port>
   </wsdl:service>
 
