@@ -1,4 +1,4 @@
-class textgrid::tgsearch {
+class textgrid::services::tgsearch {
 
     $tgname = 'tomcat-tgsearch'
     $http_port = '9090'

@@ -1,4 +1,4 @@
-class textgrid::sesame {
+class textgrid::services::intern::sesame {
 
     $tgname = 'tomcat-sesame'
     $http_port = '9091'
@@ -23,6 +23,7 @@ class textgrid::sesame {
         command => "tomcat7-instance-create -p ${http_port} -c ${control_port} /home/${tgname}/${tgname}",
         creates => "/home/${tgname}/${tgname}",
         user    => $tgname,
+		require => Package["tomcat7-user"],
     }
 
     tomcat::war { 'openrdf-workbench.war':

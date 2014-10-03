@@ -1,4 +1,4 @@
-class textgrid::tgauth (
+class textgrid::services::tgauth (
     $ldap_host = '',
     $binddn_pass = '',
 	$crud_secret = '',
@@ -80,8 +80,10 @@ class textgrid::tgauth (
     exec { 'git_clone_tgauth':
         path    => ['/usr/bin','/bin','/usr/sbin'],
 #        command => 'git clone git:/git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
-        command => 'git clone git@git.projects.gwdg.de:tg-auth.git /usr/local/src/tgauth-git',
+#        command => 'git clone git@git.projects.gwdg.de:tg-auth.git /usr/local/src/tgauth-git',
+		command => 'git clone http://git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',	
         creates => '/usr/local/src/tgauth-git',
+		require => Package["git"],
     }
 
     file { '/var/www/tgauth':

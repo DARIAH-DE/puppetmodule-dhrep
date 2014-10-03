@@ -1,4 +1,4 @@
-class textgrid::tgcrud (
+class textgrid::services::tgcrud (
 	$aai_special_secret = '',
 	$id_service_pass = '',
 	$publish_secret = '',

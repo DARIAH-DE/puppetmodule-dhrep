@@ -1,10 +1,12 @@
 class textgrid {
 
-  include textgrid::tgsearch
-  include textgrid::tgcrud
-  include textgrid::tgelasticsearch
-  include textgrid::sesame
-  include textgrid::tgauth
+  include textgrid::services::tgsearch
+  include textgrid::services::tgcrud
+  include textgrid::services::tgauth
+
+  include textgrid::services::intern::tgelasticsearch
+  include textgrid::services::intern::sesame
+
   include textgrid::tgnginx
 
   package {

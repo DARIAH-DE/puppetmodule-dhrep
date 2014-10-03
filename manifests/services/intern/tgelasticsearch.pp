@@ -1,4 +1,4 @@
-class textgrid::tgelasticsearch {
+class textgrid::services::intern::tgelasticsearch {
 
     # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
