@@ -51,7 +51,7 @@ VALIDATE_BASELINE = FALSE
 # The URI of the Tgextra service endpopint (mandatory).
 AAI_SERVICE_URL = http://localhost:8080/tgauth/tgextra.php
 AAI_CRUD_SERVICE_URL =  http://localhost:8080/tgauth/tgextra-crud.php
-AAI_SPECIAL_SECRET = <%= scope.lookupvar('textgrid::tgcrud::aai_special_secret') %>
+AAI_SPECIAL_SECRET = <%= scope.lookupvar('textgrid::services::tgcrud::aai_special_secret') %>
 AAI_CLIENT_STUB_TIMEOUT = 45000
 
 # The RDF database namespace (mandatory).
@@ -81,9 +81,9 @@ IDXDB_PAIRTREE_USAGE = FALSE
 # The URI settings.
 ID_SERVICE_URL = http://localhost:8080/nd/noidu_textgrid/
 ID_SERVICE_USER = tgcrud
-ID_SERVICE_PASS = <%= scope.lookupvar('textgrid::tgcrud::id_service_pass') %>
+ID_SERVICE_PASS = <%= scope.lookupvar('textgrid::services::tgcrud::id_service_pass') %>
 ID_AUTOMAGIC_UNLOCKING_TIME = 1800000
 
 # Password for the #MOVEPUBLIC method.
-PUBLISH_SECRET = <%= scope.lookupvar('textgrid::tgcrud::publish_secret') %>
+PUBLISH_SECRET = <%= scope.lookupvar('textgrid::services::tgcrud::publish_secret') %>
 

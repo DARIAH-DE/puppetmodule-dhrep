@@ -8,6 +8,7 @@ class textgrid::services::tgcrud (
     $http_port = '9093'
     $control_port = '9008'
 
+	# TODO modify textgrid::resources::servicetomcat to choose group and username, then use here
     group { 'ULSB':
         ensure  =>  present,
         gid     =>  '29900',
@@ -16,7 +17,7 @@ class textgrid::services::tgcrud (
     user { 'textgrid':
         ensure      => present,
         uid         => '49628',
-        gid         => ULSB,
+        gid         => 'ULSB',
         shell       => '/bin/bash',
         home        => "/home/textgrid",
         managehome  => true,
@@ -27,12 +28,14 @@ class textgrid::services::tgcrud (
         command => "tomcat7-instance-create -p ${http_port} -c ${control_port} /home/textgrid/${tgname}",
         creates => "/home/textgrid/${tgname}",
         user    => 'textgrid',
+		require => Package["tomcat7-user"],
     }
 
     tomcat::war { 'tgcrud.war':
         war_ensure      => present,
         catalina_base   => "/home/textgrid/${tgname}",
         war_source      => 'http://dev.dariah.eu/nexus/content/repositories/releases/info/textgrid/middleware/tgcrud-base/5.0.1/tgcrud-base-5.0.1.war',
+		require			=> Exec["create_${tgname}"],
     }
 
 	file { '/etc/textgrid/tgcrud':

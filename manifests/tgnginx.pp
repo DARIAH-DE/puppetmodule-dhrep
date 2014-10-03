@@ -30,6 +30,7 @@ class textgrid::tgnginx {
         mode    => '0644',
         content => template('textgrid/etc/nginx/proxyconf/1.0.conf.erb'),
 		notify  => Service['nginx'],
+		require => Package["nginx"],
     }
 
 	file { '/etc/nginx/sites-available/default':
@@ -39,6 +40,7 @@ class textgrid::tgnginx {
         mode    => '0644',
         content => template('textgrid/etc/nginx/sites-available/default.erb'),
 		notify  => Service['nginx'],
+		require => Package["nginx"],
     }
 
 

@@ -548,7 +548,7 @@
   //-->
   <wsdl:service name="tgadministration">
     <wsdl:port binding="tns:binding_tgadministration" name="tgadministration">
-      <soap:address location="<%= scope.lookupvar('textgrid::tgauth::soap_location') %>/tgadministration.php" />
+      <soap:address location="<%= scope.lookupvar('textgrid::services::tgauth::soap_location') %>/tgadministration.php" />
     </wsdl:port>
   </wsdl:service>
 
