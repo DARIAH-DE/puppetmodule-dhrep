@@ -21,23 +21,23 @@ class textgrid {
   }
 
   file { '/etc/textgrid':
-        ensure  => directory,
-        owner   => root,
-        group   => root,
-        mode    => '0755',
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
   }
 
   file { '/var/log/textgrid':
-        ensure  => directory,
-        owner   => root,
-        group   => root,
-        mode    => '0755',
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
   }
 
   service { 'tomcat7':
-    	ensure  => stopped,
-    	enable  => false,
-    	require => Package["tomcat7"],
+    ensure  => stopped,
+    enable  => false,
+    require => Package['tomcat7'],
   }
 
 }

@@ -1,31 +1,27 @@
 class textgrid::resources::apache {
 
-#    package {
-#        'php5-ldap':            ensure => present;
-#    }
+  class { '::apache':
+    default_confd_files => false,
+    mpm_module          => prefork,
+    default_vhost       => false,
+  }
 
-    class { '::apache':
-        default_confd_files => false,
-        mpm_module          => prefork,
-        default_vhost       => false,
-    }
-
-    apache::listen { '8080': }
+  apache::listen { '8080': }
     
-    include apache::mod::php
+  include apache::mod::php
 
-    # TODO: sites-available & a2ensite
-    $defaultvhost = "/etc/apache2/sites-enabled/25-${::fqdn}.conf"
+  # TODO: sites-available & a2ensite
+  $defaultvhost = "/etc/apache2/sites-enabled/25-${::fqdn}.conf"
     concat { $defaultvhost:
-        owner  => root,
-        group  => root,
-        mode   => '0644',
-        notify => Service['apache2'],
-    }
+      owner  => root,
+      group  => root,
+      mode   => '0644',
+      notify => Service['apache2'],
+  }
 
-    concat::fragment{'apache_default_head':
-        target => $defaultvhost,
-        content => "
+  concat::fragment{'apache_default_head':
+    target  => $defaultvhost,
+    content => "
 #####################
 # MANAGED BY PUPPET #
 #####################
@@ -64,19 +60,17 @@ class textgrid::resources::apache {
 
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 
-        ", 
-        order => 010,
-    }
+    ",
+    order   => 010,
+  }
 
 
-    concat::fragment{'apache_default_tail':
-        target => $defaultvhost,
-        content => "
+  concat::fragment{'apache_default_tail':
+    target  => $defaultvhost,
+    content => "
 </VirtualHost>
-        ",
-        order   => 990,
-    }
-
-
+    ",
+    order   => 990,
+  }
 
 }
