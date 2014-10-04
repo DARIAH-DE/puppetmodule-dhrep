@@ -7,7 +7,7 @@ class textgrid::services::intern::tgelasticsearch {
     #repo_version => '1.0',
     #autoupgrade  => true,
     package_url => 'https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.3.deb',
-    config      => { 
+    config      => {
       'cluster.name' => 'tg-dev1-test-instance',
       'network.host' => '127.0.0.1',
     },
@@ -15,7 +15,7 @@ class textgrid::services::intern::tgelasticsearch {
   }
 
   elasticsearch::instance { 'masternode':
-    config => { 
+    config => {
       'node.master'        => 'true',
       'node.data'          => 'true',
       'http.port'          => '9202',
@@ -23,8 +23,8 @@ class textgrid::services::intern::tgelasticsearch {
     }
   }
 
-  elasticsearch::instance { 'workhorse':  
-    config      => { 
+  elasticsearch::instance { 'workhorse':
+    config => {
       'node.master'        => 'false',
       'node.data'          => 'true',
       'http.port'          => '9203',
