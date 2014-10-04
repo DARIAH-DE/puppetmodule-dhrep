@@ -1,3 +1,9 @@
+# == Class: textgrid::resources::apache
+#
+# install and configure apache for textgrid
+#
+# mainly used by tgauth with mod php and tgnoid with mod-cgi
+#
 class textgrid::resources::apache {
 
   class { '::apache':

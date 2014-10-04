@@ -1,3 +1,31 @@
+# == Define: textgrid::resources::servicetomcat
+#
+# Create a new user and tomcat-home and add tomcat-user-instance
+# uses debian package tomcat7-user
+#
+# === Parameters
+#
+# [*gid*]
+#   the group id of new user
+#
+# [*uid*]
+#   the user id of new user
+#
+# [*http_port*]
+#   which port should tomcat listen on
+#
+# [*control_port*]
+#   the tomcat control port
+#
+# [*xmx*]
+#   java max memory allocation (Xmx), in megabyte
+#
+# [*xms*]
+#   java inital memory allocation (Xms), in megabyte 
+#
+# [*jmx_port*]
+#   port for java jmx management
+#
 define textgrid::resources::servicetomcat (
   $gid = undef,
   $uid = undef,

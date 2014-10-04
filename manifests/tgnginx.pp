@@ -1,6 +1,12 @@
+# == Class: textgrid::tgnginx
+#
+# install and configure nginx.
+#
+# set proxyconfig for forwarding local services via port 80 
+#
 class textgrid::tgnginx {
 
-package { 'nginx': ensure  => present; }
+  package { 'nginx': ensure  => present; }
 
   #    class { 'nginx':
   #        http_cfg_append => {

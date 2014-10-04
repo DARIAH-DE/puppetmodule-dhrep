@@ -1,3 +1,11 @@
+# == Class: textgrid::services::tgsearch
+#
+# Class to install and configure tgauth.
+# 
+# === Parameters
+#
+# TODO for someone who understands tgauth ;-)
+#
 class textgrid::services::tgauth (
   $ldap_host = '',
   $binddn_pass = '',

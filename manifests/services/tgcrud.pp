@@ -1,3 +1,7 @@
+# == Class: textgrid::services::tgcrud
+#
+# Class to install and configure tgcrud
+#
 class textgrid::services::tgcrud (
   $aai_special_secret = '',
   $id_service_pass    = '',

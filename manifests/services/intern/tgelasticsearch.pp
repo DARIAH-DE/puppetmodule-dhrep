@@ -1,3 +1,7 @@
+# == Class: textgrid::services::intern::tgelasticsearch
+#
+# Class to install and configure elasticsearch
+# 
 class textgrid::services::intern::tgelasticsearch {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master

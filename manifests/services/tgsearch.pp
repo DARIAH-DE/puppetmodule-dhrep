@@ -1,3 +1,7 @@
+# == Class: textgrid::services::tgsearch
+#
+# Class to install and configure tgsearch.
+# 
 class textgrid::services::tgsearch {
 
   $tgname = 'tomcat-tgsearch'

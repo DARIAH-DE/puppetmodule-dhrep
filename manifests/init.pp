@@ -1,3 +1,7 @@
+# == Class: textgrid
+#
+# setup and manage a textgrid server
+#
 class textgrid {
 
   include textgrid::services::tgsearch
@@ -6,6 +10,7 @@ class textgrid {
 
   include textgrid::services::intern::tgelasticsearch
   include textgrid::services::intern::sesame
+  include  textgrid::services::intern::tgwildfly
 
   include textgrid::tgnginx
 

@@ -1,3 +1,9 @@
+# == Class: textgrid::services::intern::sesame
+#
+# Class to install and configure sesame.
+# Creates initial repos textgrid-nonpublic 
+# and textgrid-public and adds initial triples.
+# 
 class textgrid::services::intern::sesame {
 
   $tgname = 'tomcat-sesame'
