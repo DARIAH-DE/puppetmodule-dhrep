@@ -77,6 +77,17 @@ class textgrid::services::tgcrud (
         mode    => '0755',
     }
 
+	# TODO: decide wether to mount stornext or create local data dir
+
+    #mount { '/media/stornext':
+    #  device  => 'fs-base3.gwdg.de:/home/textgrid/',
+    #  fstype  => 'nfs',
+    #  ensure  => 'mounted',
+    #  options => 'defaults',
+    #  atboot  => true,
+    #  require => [File['/mnt/storage'],Package['nfs-common']],
+    #}
+
     file { '/data/public':
         ensure  => directory,
         owner   => 'textgrid',

@@ -53,7 +53,7 @@ define textgrid::resources::servicetomcat (
 	service { $name:
     	ensure  => running,
     	enable  => true,
-    	require => Package["tomcat7"],
+    	require => Exec["create_${name}"],
 	}	
 
 }

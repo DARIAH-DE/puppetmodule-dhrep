@@ -1,0 +1,53 @@
+@prefix tgl: <http://textgrid.info/namespaces/metadata/language/2010> .
+@prefix xi: <http://www.w3.org/2001/XInclude> .
+@prefix tei: <http://www.tei-c.org/ns/1.0> .
+@prefix tns: <http://textgrid.info/namespaces/metadata/core/2010> .
+@prefix tgr: <http://textgrid.info/namespaces/metadata/agent/2010> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix tg: <http://textgrid.info/relation-ns#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ore: <http://www.openarchives.org/ore/terms/> .
+@prefix tgs: <http://textgrid.info/namespaces/metadata/script/2010> .
+@prefix xsi: <http://www.w3.org/2001/XMLSchema-instance> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix exif: <http://www.w3.org/2003/12/exif/ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sesame: <http://www.openrdf.org/schema/sesame#> .
+@prefix fn: <http://www.w3.org/2005/xpath-functions#> .
+
+<textgrid:mime:text/xml> tg:superType <textgrid:mime:text> ;
+	rdfs:label "text/xml" ;
+	a tg:TextGridMimeType .
+
+<textgrid:mime:text/tg.aggregation+xml> tg:superType <textgrid:mime:text> ;
+	rdfs:label "text/tg.aggregation+xml" ;
+	a tg:TextGridMimeType .
+
+<textgrid:mime:text/tg.edition+tg.aggregation+xml> tg:superType <textgrid:mime:text> ;
+	rdfs:label "text/tg.edition+tg.aggregation+xml" ;
+	a tg:TextGridMimeType .
+
+<textgrid:mime:text/tg.work+xml> tg:superType <textgrid:mime:text> ;
+	rdfs:label "text/tg.work+xml" ;
+	a tg:TextGridMimeType .
+
+<textgrid:mime:text/tg.collection+tg.aggregation+xml> tg:superType <textgrid:mime:text> ;
+	rdfs:label "text/tg.collection+tg.aggregation+xml" ;
+	a tg:TextGridMimeType .
+
+<textgrid:mime:text/plain> tg:superType <textgrid:mime:text> ;
+	rdfs:label "text/plain" ;
+	a tg:TextGridMimeType .
+
+<textgrid:mime:image/tiff> tg:superType <textgrid:mime:image> ;
+	rdfs:label "image/tiff" ;
+	a tg:TextGridMimeType .
+
+<textgrid:mime:image/jpeg> tg:superType <textgrid:mime:image> ;
+	rdfs:label "image/jpeg" ;
+	a tg:TextGridMimeType .
+
+<textgrid:mime:application/pdf> tg:superType <textgrid:mime:application> ;
+	rdfs:label "application/pdf" ;
+	a tg:TextGridMimeType .

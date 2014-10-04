@@ -10,7 +10,7 @@ class textgrid::services::tgsearch {
 		uid => '1007',
     	http_port => $http_port,
     	control_port => $control_port,
-		jmx_port => $jmx_port
+		jmx_port => $jmx_port,
 	}
 
     tomcat::war { 'tgsearch-service-webapp.war':
