@@ -4,6 +4,9 @@
 # Creates initial repos textgrid-nonpublic 
 # and textgrid-public and adds initial triples.
 # 
+# TODO:
+#   repo init should only run once
+#
 class textgrid::services::intern::sesame {
 
   $tgname = 'tomcat-sesame'
@@ -12,8 +15,8 @@ class textgrid::services::intern::sesame {
   $jmx_port = '9991'
 
   # http://sourceforge.net/projects/sesame/files/Sesame%202/2.7.13/openrdf-sesame-2.7.13-sdk.tar.gz/download
-  #$sesame_version = '2.7.13'
-  $sesame_version = '2.7.8'
+  $sesame_version = '2.7.13'
+  #$sesame_version = '2.7.8'
   $sesame_file = "openrdf-sesame-${sesame_version}-sdk.tar.gz"
 
   textgrid::resources::servicetomcat { $tgname:
@@ -22,26 +25,27 @@ class textgrid::services::intern::sesame {
     http_port    => $http_port,
     control_port => $control_port,
     jmx_port     => $jmx_port,
+    #notify       => [create_tgrepo{'textgrid-nonpublic'],create_tgrepo{'textgrid-public']],
   }
 
-  staging::deploy { $sesame_file:
-    source => "http://sourceforge.net/projects/sesame/files/Sesame%202/${sesame_version}/${sesame_file}/download",
-    target => "/home/${tgname}",
-    notify => [Tomcat::War['openrdf-workbench.war'], Tomcat::War['openrdf-sesame.war']],
-  }
+#  staging::deploy { $sesame_file:
+#    source => "http://sourceforge.net/projects/sesame/files/Sesame%202/${sesame_version}/${sesame_file}/download",
+#    target => "/home/${tgname}",
+#    notify => [Tomcat::War['openrdf-workbench.war'], Tomcat::War['openrdf-sesame.war']],
+#  }
 
   tomcat::war { 'openrdf-workbench.war':
     war_ensure    => present,
     catalina_base => "/home/${tgname}/${tgname}",
-    war_source    => "/home/${tgname}/openrdf-sesame-${sesame_version}/war/openrdf-workbench.war",
-    require       => [Textgrid::Resources::Servicetomcat[$tgname], Staging::Deploy[$sesame_file]],
+    war_source    => "http://central.maven.org/maven2/org/openrdf/sesame/sesame-http-workbench/${sesame_version}/sesame-http-workbench-${sesame_version}.war",
+    require       => [Textgrid::Resources::Servicetomcat[$tgname]],
   }
 
   tomcat::war { 'openrdf-sesame.war':
     war_ensure    => present,
     catalina_base => "/home/${tgname}/${tgname}",
-    war_source    => "/home/${tgname}/openrdf-sesame-${sesame_version}/war/openrdf-sesame.war",
-    require       => [Textgrid::Resources::Servicetomcat[$tgname], Staging::Deploy[$sesame_file]],
+    war_source    => "http://central.maven.org/maven2/org/openrdf/sesame/sesame-http-server/${sesame_version}/sesame-http-server-${sesame_version}.war",
+    require       => [Textgrid::Resources::Servicetomcat[$tgname]],
   }
 
 #    file { "/home/${tgname}/repo1.trig":
@@ -112,14 +116,16 @@ class textgrid::services::intern::sesame {
   }
 
   create_tgrepo{'textgrid-nonpublic':
-    port => '9091',
-    user => $tgname,
+    port    => '9091',
+    user    => $tgname,
 #    creates => "/home/$tgname/.aduna/openrdf-sesame/repositories/textgrid-nonpublic",
+    require => [Tomcat::War['openrdf-sesame.war'],Tomcat::War['openrdf-workbench.war']],
   }
 
   create_tgrepo{'textgrid-public':
     port => '9091',
     user => $tgname,
+    require => [Tomcat::War['openrdf-sesame.war'],Tomcat::War['openrdf-workbench.war']],
   }
 
   # add tg repos

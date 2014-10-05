@@ -1,0 +1,104 @@
+#
+# See slapd.conf(5) for details on configuration options.
+# This file should NOT be world readable.
+#
+include		/etc/ldap/schema/core.schema
+include		/etc/ldap/schema/cosine.schema
+include		/etc/ldap/schema/inetorgperson.schema
+include		/etc/ldap/schema/eduperson-200806.schema
+include         /etc/ldap/schema/textgrid.schema
+include         /etc/ldap/schema/rbac.schema
+include 	/etc/ldap/schema/schac-20090326-1.4.0.schema
+
+
+# Define global ACLs to disable default read access.
+
+# Do not enable referrals until AFTER you have a working directory
+# service AND an understanding of referrals.
+#referral	ldap://root.openldap.org
+
+pidfile		/var/run/slapd/slapd.pid
+argsfile	/var/run/slapd/slapd.args
+
+# Load dynamic backend modules:
+modulepath	/usr/lib/ldap
+# moduleload	back_ldap.la
+# moduleload	back_meta.la
+# moduleload	back_monitor.la
+# moduleload	back_perl.la
+moduleload	back_hdb.la
+
+# Access Control
+access to dn.base=""
+        by * read
+
+access to dn.base="cn=Subschema"
+        by * read
+
+access to attrs=userPassword
+	by self write
+	by * auth
+
+access to dn.sub="ou=rbac,dc=textgrid,dc=de"
+        by dn="cn=rbac,ou=bindaccounts,dc=textgrid,dc=de" write
+
+access to dn.sub="ou=users,dc=textgrid,dc=de"
+	by dn="cn=attributewriter,ou=bindaccounts,dc=textgrid,dc=de" write
+        by self read
+	by users search
+
+access to * 
+       by * none
+
+# rootdn can always read and write EVERYTHING!
+
+#######################################################################
+# BDB database definitions
+#######################################################################
+
+database	hdb
+suffix		"dc=textgrid,dc=de"
+checkpoint      1024    5
+cachesize       10000
+sizelimit	unlimited
+rootdn		"cn=Manager,dc=textgrid,dc=de"
+
+# Cleartext passwords, especially for the rootdn, should
+# be avoided.  See slappasswd(8) and slapd.conf(5) for details.
+# Use of strong authentication encouraged.
+
+rootpw <%= @slapd_pass_sha %>
+
+# The database directory MUST exist prior to running slapd AND 
+# should only be accessible by the slapd and slap tools.
+# Mode 700 recommended.
+directory	/var/lib/ldap
+
+#TLSCertificateFile      /etc/apache2/ssl.crt/server-cert.pem
+#TLSCertificateKeyFile   /etc/apache2/ssl.key/server-key.pem
+#TLSCACertificateFile    /etc/apache2/ssl.crt/server-chain.pem
+
+# For the Debian package we use 2MB as default but be sure to update this
+# value if you have plenty of RAM
+dbconfig set_cachesize 0 2097152 0
+
+# Sven Hartge reported that he had to set this value incredibly high
+# to get slapd running at all. See http://bugs.debian.org/303057 for more
+# information.
+
+# Number of objects that can be locked at the same time.
+dbconfig set_lk_max_objects 1500
+# Number of locks (both requested and granted)
+dbconfig set_lk_max_locks 1500
+# Number of lockers
+dbconfig set_lk_max_lockers 1500
+
+# Indices to maintain
+index	objectClass	eq
+index	uid		eq,sub
+index rbacSessionUser eq
+index eduPersonPrincipalName eq,sub
+index rbacName eq
+index rbacPerformer eq
+index TGResourceURI eq
+index rbacPermission eq

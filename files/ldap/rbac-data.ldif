@@ -1,0 +1,157 @@
+# textgrid.de
+dn: dc=textgrid,dc=de
+dc: textgrid
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: textgrid
+
+# users, textgrid.de
+dn: ou=users,dc=textgrid,dc=de
+ou: users
+objectClass: top
+objectClass: organizationalUnit
+
+# bindaccounts, textgrid.de
+dn: ou=bindaccounts,dc=textgrid,dc=de
+ou: bindaccounts
+objectClass: top
+objectClass: organizationalUnit
+
+# rbac, bindaccounts, textgrid.de
+dn: cn=rbac,ou=bindaccounts,dc=textgrid,dc=de
+userPassword: testing123
+objectClass: simpleSecurityObject
+objectClass: person
+sn: rbac
+cn: rbac
+
+# rbac, textgrid.de
+dn: ou=rbac,dc=textgrid,dc=de
+ou: rbac
+objectClass: top
+objectClass: organizationalUnit
+description: This is the authorization ldap for TextGrid
+
+# people, rbac, textgrid.de
+dn: ou=people,ou=rbac,dc=textgrid,dc=de
+rbacOperation: administer
+rbacOperation: review
+rbacPermission: rbacName=sessionCreator,rbacName=Anwendung,ou=roles,ou=rbac,dc
+ =textgrid,dc=de:-:administer
+rbacPermission: rbacName=sessionCreator,rbacName=Anwendung,ou=roles,ou=rbac,dc
+ =textgrid,dc=de:-:review
+ou: people
+objectClass: top
+objectClass: organizationalUnit
+objectClass: rbacResource
+rbacName: user_base
+
+# application.int, people, rbac, textgrid.de
+dn: ou=application.int,ou=people,ou=rbac,dc=textgrid,dc=de
+ou: application.int
+objectClass: top
+objectClass: organizationalUnit
+
+# ShibConnector@application.int, application.int, people, rbac, textgrid.de
+dn: uid=ShibConnector@application.int,ou=application.int,ou=people,ou=rbac,dc=
+ textgrid,dc=de
+uid: ShibConnector@application.int
+objectClass: top
+objectClass: inetOrgPerson
+sn: ShibConnector
+cn: ShibConnector
+userPassword: testing123
+
+# roles, rbac, textgrid.de
+dn: ou=roles,ou=rbac,dc=textgrid,dc=de
+rbacOperation: administer
+ou: roles
+objectClass: top
+objectClass: organizationalUnit
+objectClass: rbacResource
+
+# Projekt-Teilnehmer, roles, rbac, textgrid.de
+dn: rbacName=Projekt-Teilnehmer,ou=roles,ou=rbac,dc=textgrid,dc=de
+objectClass: top
+objectClass: rbacRole
+rbacName: Projekt-Teilnehmer
+
+# Anwendung, roles, rbac, textgrid.de
+dn: rbacName=Anwendung,ou=roles,ou=rbac,dc=textgrid,dc=de
+objectClass: top
+objectClass: rbacRole
+rbacName: Anwendung
+
+# sessionCreator, Anwendung, roles, rbac, textgrid.de
+dn: rbacName=sessionCreator,rbacName=Anwendung,ou=roles,ou=rbac,dc=textgrid,dc
+ =de
+objectClass: top
+objectClass: rbacRole
+rbacPerformer: ShibConnector@application.int
+rbacName: sessionCreator
+
+# TextGrid-Admin, roles, rbac, textgrid.de
+dn: rbacName=TextGrid-Admin,ou=roles,ou=rbac,dc=textgrid,dc=de
+objectClass: top
+objectClass: rbacRole
+rbacName: TextGrid-Admin
+
+# sessions, rbac, textgrid.de
+dn: ou=sessions,ou=rbac,dc=textgrid,dc=de
+rbacPermission: rbacName=sessionCreator,rbacName=Anwendung,ou=roles,ou=rbac,dc
+ =textgrid,dc=de:-:administer
+ou: sessions
+objectClass: top
+objectClass: organizationalUnit
+objectClass: rbacResource
+rbacName: session_base
+
+# resources, rbac, textgrid.de
+dn: ou=resources,ou=rbac,dc=textgrid,dc=de
+rbacOperation: administer
+rbacOperation: registerResource
+rbacPermission: rbacName=Projekt-Teilnehmer,ou=roles,ou=rbac,dc=textgrid,dc=de
+ :-:registerResource
+ou: resources
+objectClass: top
+objectClass: organizationalUnit
+objectClass: rbacResource
+rbacName: resource_base
+
+# counter, rbac, textgrid.de
+dn: ou=counter,ou=rbac,dc=textgrid,dc=de
+ou: counter
+objectClass: top
+objectClass: organizationalUnit
+
+# resource, counter, rbac, textgrid.de
+dn: cn=resource,ou=counter,ou=rbac,dc=textgrid,dc=de
+objectClass: person
+sn: 0
+cn: resource
+
+# admin, users, textgrid.de
+dn: uid=admin,ou=users,dc=textgrid,dc=de
+TGacceptedTermsOfUse: TRUE
+givenName: Admin
+sn: Admin
+eduPersonPrincipalName: admin.admin@textgrid.de
+objectClass: top
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: TextGridUser
+uid: admin
+TGWantsNewsletter: TRUE
+userPassword: testing123
+mail: admin@somewhere.ac.uk
+cn: Admin Adminster
+
+# attributewriter, bindaccounts, textgrid.de
+dn: cn=attributewriter,ou=bindaccounts,dc=textgrid,dc=de
+userPassword: testing123
+objectClass: simpleSecurityObject
+objectClass: person
+sn: attributewriter
+cn: attributewriter
+
