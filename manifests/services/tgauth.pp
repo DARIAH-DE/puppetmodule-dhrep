@@ -27,6 +27,8 @@ class textgrid::services::tgauth (
     'php5-ldap':            ensure => present;
   }
 
+  # TODO: possibly we want a require here
+  # http://localhost:9292/puppet/latest/reference/lang_relationships.html#the-require-function
   include textgrid::resources::apache
 
   Exec {

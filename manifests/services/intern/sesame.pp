@@ -115,17 +115,27 @@ class textgrid::services::intern::sesame {
 
   }
 
-  create_tgrepo{'textgrid-nonpublic':
-    port    => '9091',
-    user    => $tgname,
-#    creates => "/home/$tgname/.aduna/openrdf-sesame/repositories/textgrid-nonpublic",
-    require => [Tomcat::War['openrdf-sesame.war'],Tomcat::War['openrdf-workbench.war']],
+  unless $sesame_nonpublic_repo_created {
+    create_tgrepo{'textgrid-nonpublic':
+      port    => '9091',
+      user    => $tgname,
+  #    creates => "/home/$tgname/.aduna/openrdf-sesame/repositories/textgrid-nonpublic",
+      require => [Tomcat::War['openrdf-sesame.war'],Tomcat::War['openrdf-workbench.war']],
+    }
+    file {'/etc/facter/facts.d/sesame_nonpublic.txt':
+      content => "sesame_nonpublic_repo_created=true",
+    }
   }
 
-  create_tgrepo{'textgrid-public':
-    port => '9091',
-    user => $tgname,
-    require => [Tomcat::War['openrdf-sesame.war'],Tomcat::War['openrdf-workbench.war']],
+  unless $sesame_public_repo_created {
+    create_tgrepo{'textgrid-public':
+      port => '9091',
+      user => $tgname,
+      require => [Tomcat::War['openrdf-sesame.war'],Tomcat::War['openrdf-workbench.war']],
+    }
+    file {'/etc/facter/facts.d/sesame_public.txt':
+      content => "sesame_public_repo_created=true",
+    }
   }
 
   # add tg repos
