@@ -208,35 +208,54 @@ class textgrid::services::tgauth (
 # this does not work, as generate functions are executed first, so the slappasswd from ldap-utils 
 # is not yet installed
 #  $slapd_pass_sha = generate('/usr/sbin/slappasswd', '-s', $slapd_pass)
-#  $slapd_pass_sha = 'secret'
-  
-#  file { '/etc/ldap/slapd.conf':
-#    ensure  => present,
-#    owner   => 'openldap',
-#    group   => 'openldap',
-#    mode    => '0750',
-#    content => template('textgrid/etc/ldap/slapd.conf.erb'),
-#    notify  => Service['slapd'],
-#    require => Package['slapd'],
-#  }
+  # /usr/sbin/slappasswd -s secret
+  $slapd_pass_sha = '{SSHA}27SkyYHMenDPBiWZJsPkx1YlQeAnl+kU' 
+
+  file { '/etc/ldap/slapd.conf':
+    ensure  => present,
+    owner   => 'openldap',
+    group   => 'openldap',
+    mode    => '0750',
+    content => template('textgrid/etc/ldap/slapd.conf.erb'),
+    require => Package['slapd'],
+  }
+  ~>
+  exec { 'slapdconf_to_cn_p1':
+    command => 'mv /etc/ldap/slapd.d /etc/ldap/slapd.d.orig',
+    refreshonly => true,
+  } 
+  ~>
+  file { '/etc/ldap/slapd.d':
+    ensure => directory,
+    owner  => 'openldap',
+    group  => 'openldap',
+  }
+  ~>
+  exec { 'slapdconf_to_cn_p2':
+    command     => 'slaptest -f /etc/ldap/slapd.conf -F /etc/ldap/slapd.d/',
+    refreshonly => true,
+    user        => 'openldap',
+    notify      => [Exec['ldapadd_ldap_template'],Service['slapd']],
+  }
 
   file { '/tmp/ldap-template.ldif':
     ensure => present,
     source => 'puppet:///modules/textgrid/ldap/rbac-data.ldif',
-#    notify => Exec['ldapadd_ldap_template'],
   }
 
   # should only run once, if ldap template is added (with help of notify and refreshonly)
-#  exec { 'ldapadd_ldap_template':
-#    command     => 'ldapadd -x -f /tmp/ldap-template.ldif -D "cn=Manager,dc=textgrid,dc=de" -W',
-#    refreshonly => true,
-#    require     => [Package['ldap-utils'], File['/tmp/ldap-template.ldif'], Service['slapd']],    
-#  }
+  exec { 'ldapadd_ldap_template':
+    command     => "ldapadd -x -f /tmp/ldap-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_pass}",
+    refreshonly => true,
+    require     => [Package['ldap-utils'], File['/tmp/ldap-template.ldif'], Service['slapd']],    
+    logoutput   => true,
+  }
 
-#  service{ 'slapd':
-#    ensure  => running,
-#    enable  => true,
+  service{ 'slapd':
+    ensure  => running,
+    enable  => true,
 #    require => [Package['slapd'], File['/etc/ldap/slapd.conf']],
-#  }
+    require => Package['slapd'],
+  }
 
 }
