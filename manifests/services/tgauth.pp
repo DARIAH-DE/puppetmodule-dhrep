@@ -87,6 +87,11 @@ class textgrid::services::tgauth (
     content => template('textgrid/etc/textgrid/tgauth/conf/config_tgwebauth.xml.erb'),
   }
 
+  file { '/var/www/tgauth/conf':
+    ensure => link,
+    target => '/etc/textgrid/tgauth/conf',
+  }
+
   ###
   # /var/www/tgauth
   ###
