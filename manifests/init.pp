@@ -2,6 +2,9 @@
 #
 # setup and manage a textgrid server
 #
+# TODO  read https://dev2.dariah.eu/wiki/display/TGINT/textgrid-esx1.gwdg.de
+#       and write the manifests ;-)
+#
 class textgrid {
 
   include textgrid::services::tgsearch

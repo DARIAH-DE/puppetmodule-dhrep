@@ -4,7 +4,16 @@
 # 
 # === Parameters
 #
-# TODO for someone who understands tgauth ;-)
+# TODO 
+#   - param doku from someone who understands tgauth
+#   - read https://dev2.dariah.eu/wiki/display/TGINT/TG-auth+Installation+und+Konfiguration
+#     for completing this module
+#
+# possibly useful modules
+#   https://github.com/gtmtechltd/puppet_ldapdn
+#   https://forge.puppetlabs.com/datacentred/ldap
+#   https://forge.puppetlabs.com/torian/ldap
+#   https://forge.puppetlabs.com/camptocamp/openldap
 #
 class textgrid::services::tgauth (
   $ldap_host = '',
