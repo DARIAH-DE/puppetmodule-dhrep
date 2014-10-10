@@ -28,6 +28,9 @@ class textgrid::services::tgauth (
   $authz_name_secret = '',
   $authz_instance = '',
   $slapd_pass = '',
+  $slapd_rootpw = '',
+  $slapd_rootpw_sha1 = '',
+  $slapd_rootpw_base64 = '',
 ){
 
   package {
@@ -213,55 +216,88 @@ class textgrid::services::tgauth (
   }
 
   # todo: changes group of /etc/ldap/schemas from root to staff, ok?
-  file { '/etc/ldap/schema/':
-    source  => '/usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac/ldap-schemas/',
-    recurse => true,
-    require => Exec['git_clone_tgauth'],
-  }
+#  file { '/etc/ldap/schema/':
+#    source  => '/usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac/ldap-schemas/',
+#    recurse => true,
+#    require => Exec['git_clone_tgauth'],
+#  }
 
 # this does not work, as generate functions are executed first, so the slappasswd from ldap-utils 
 # is not yet installed
 #  $slapd_pass_sha = generate('/usr/sbin/slappasswd', '-s', $slapd_pass)
   # /usr/sbin/slappasswd -s secret
-  $slapd_pass_sha = '{SSHA}27SkyYHMenDPBiWZJsPkx1YlQeAnl+kU' 
+  #$slapd_pass_sha = '{SSHA}27SkyYHMenDPBiWZJsPkx1YlQeAnl+kU' 
 
-  file { '/etc/ldap/slapd.conf':
+
+  $slapd_rootpw_sha = sha1digest($slapd_rootpw)
+
+#  file { '/etc/ldap/slapd.conf':
+#    ensure  => present,
+#    owner   => 'openldap',
+#    group   => 'openldap',
+#    mode    => '0750',
+#    content => template('textgrid/etc/ldap/slapd.conf.erb'),
+#    require => Package['slapd'],
+#  }
+  file { '/tmp/ldap-cn-config.ldif':
     ensure  => present,
-    owner   => 'openldap',
-    group   => 'openldap',
-    mode    => '0750',
-    content => template('textgrid/etc/ldap/slapd.conf.erb'),
-    require => Package['slapd'],
-  }
-  ~>
-  exec { 'slapdconf_to_cn_p1':
-    command => 'mv /etc/ldap/slapd.d /etc/ldap/slapd.d.orig',
-    refreshonly => true,
+    content => template('textgrid//tmp/ldap-cn-config.ldif.erb'),
+    require => Service['slapd'],
   } 
   ~>
-  file { '/etc/ldap/slapd.d':
-    ensure => directory,
-    owner  => 'openldap',
-    group  => 'openldap',
+  file { '/tmp/tgldapconf.sh':
+    source => 'puppet:///modules/textgrid/ldap/tgldapconf.sh',
+    mode   => '0744',   
+  } 
+  ~>
+  exec { 'tgldapconf.sh':
+    command => '/tmp/tgldapconf.sh',
+    require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
   }
   ~>
-  exec { 'slapdconf_to_cn_p2':
-    command     => 'slaptest -f /etc/ldap/slapd.conf -F /etc/ldap/slapd.d/',
-    refreshonly => true,
-    user        => 'openldap',
-    notify      => [Exec['ldapadd_ldap_template'],Service['slapd']],
-  }
+    
+#  service{ 'slapd':
+#    ensure  => stopped,
+#    enable  => true,
+#    require => [Package['slapd'], File['/etc/ldap/slapd.conf']],
+#  }  
+#  ~>
+#  exec { 'slapdconf_to_cn_p1':
+#    command => 'mv /etc/ldap/slapd.d /etc/ldap/slapd.d.orig',
+#    refreshonly => true,
+#  } 
+#  ~>
+#  file { '/etc/ldap/slapd.d':
+#    ensure => directory,
+#    owner  => 'openldap',
+#    group  => 'openldap',
+#  }
+#  ~>
+#  exec { 'slapadd_cn_conf':
+#    command => 'slapadd -l /tmp/ldap-cn-config.ldif',
+#    refreshonly => true,
+#  } 
+#  ~>
+#  package {
+#    'slapd':  ensure => present,
+#  }
+#  exec { 'slapdconf_to_cn_p2':
+#    command     => 'slaptest -f /etc/ldap/slapd.conf -F /etc/ldap/slapd.d/',
+#    refreshonly => true,
+#    user        => 'openldap',
+#    notify      => [Exec['ldapadd_ldap_template'],Service['slapd']],
+#  }
 
-  file { '/tmp/ldap-template.ldif':
+  file { '/tmp/ldap-rbac-template.ldif':
     ensure => present,
     source => 'puppet:///modules/textgrid/ldap/rbac-data.ldif',
   }
-
+  ~>
   # should only run once, if ldap template is added (with help of notify and refreshonly)
   exec { 'ldapadd_ldap_template':
-    command     => "ldapadd -x -f /tmp/ldap-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_pass}",
+    command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
     refreshonly => true,
-    require     => [Package['ldap-utils'], File['/tmp/ldap-template.ldif'], Service['slapd']],    
+    require     => [Package['ldap-utils'], Service['slapd']],    
     logoutput   => true,
   }
 
