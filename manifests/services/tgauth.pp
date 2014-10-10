@@ -172,29 +172,30 @@ class textgrid::services::tgauth (
     content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
   }
 
-  file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.local.wsdl':
-    ensure  => present,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra.local.wsdl.erb'),
-  }
+# i guess the local wsdls are not needed anymore
+#  file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.local.wsdl':
+#    ensure  => present,
+#    owner   => root,
+#    group   => root,
+#    mode    => '0644',
+#    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra.local.wsdl.erb'),
+#  }
 
-  file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.local.wsdl':
-    ensure  => present,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgreview.local.wsdl.erb'),
-  }
+#  file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.local.wsdl':
+#    ensure  => present,
+#    owner   => root,
+#    group   => root,
+#    mode    => '0644',
+#    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgreview.local.wsdl.erb'),
+#  }
 
-  file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.local.wsdl':
-    ensure  => present,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.local.wsdl.erb'),
-  }
+#  file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.local.wsdl':
+#    ensure  => present,
+#    owner   => root,
+#    group   => root,
+#    mode    => '0644',
+#    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.local.wsdl.erb'),
+#  }
 
   ###
   # /var/www/info.textgrid.middleware.tgauth.webauth
@@ -202,7 +203,31 @@ class textgrid::services::tgauth (
   file { '/var/www/info.textgrid.middleware.tgauth.webauth':
     source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.webauth',
     recurse => true,
+  } 
+  ->
+  file { '/var/www/info.textgrid.middleware.tgauth.webauth/i18n_cache':
+    ensure => directory,
+    owner  => 'www-data',
+    group  => 'www-data',
   }
+
+  file { '/var/www/WebAuthN':
+    ensure => link,
+    target => '/var/www/info.textgrid.middleware.tgauth.webauth/WebAuthN/',
+  }
+
+  file { '/var/www/secure':
+    ensure => link,
+    target => '/var/www/info.textgrid.middleware.tgauth.webauth/secure/',
+  }
+
+  ###
+  # Nutzungsordnung
+  ###
+  file { '/var/Nutzungsordnung_en_200611.txt.html':
+    source => 'puppet:///modules/textgrid/var/Nutzungsordnung_en_200611.txt.html',
+    mode   => '0644',   
+  }   
 
   ###
   # ldap config

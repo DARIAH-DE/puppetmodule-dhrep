@@ -15,12 +15,6 @@ class textgrid::tgnginx {
   #        }
   #    }
 
-  service { 'nginx':
-    ensure  => running,
-    enable  => true,
-    require => Package['nginx'],
-  }
-
   file { '/etc/nginx/proxyconf':
     ensure  => directory,
     owner   => root,
@@ -28,24 +22,30 @@ class textgrid::tgnginx {
     mode    => '0755',
     require => Package['nginx'],
   }
-
+  ->
   file { '/etc/nginx/proxyconf/1.0.conf':
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template('textgrid/etc/nginx/proxyconf/1.0.conf.erb'),
-    notify  => Service['nginx'],
-    require => Package['nginx'],
+    #notify  => Service['nginx'],
+    #require => Package['nginx'],
   }
-
+  ->
   file { '/etc/nginx/sites-available/default':
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template('textgrid/etc/nginx/sites-available/default.erb'),
-    notify  => Service['nginx'],
+    #notify  => Service['nginx'],
+    #require => Package['nginx'],
+  }
+  ~>
+  service { 'nginx':
+    ensure  => running,
+    enable  => true,
     require => Package['nginx'],
   }
 
