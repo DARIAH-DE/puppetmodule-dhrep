@@ -222,23 +222,9 @@ class textgrid::services::tgauth (
 #    require => Exec['git_clone_tgauth'],
 #  }
 
-# this does not work, as generate functions are executed first, so the slappasswd from ldap-utils 
-# is not yet installed
-#  $slapd_pass_sha = generate('/usr/sbin/slappasswd', '-s', $slapd_pass)
-  # /usr/sbin/slappasswd -s secret
-  #$slapd_pass_sha = '{SSHA}27SkyYHMenDPBiWZJsPkx1YlQeAnl+kU' 
-
 
   $slapd_rootpw_sha = sha1digest($slapd_rootpw)
 
-#  file { '/etc/ldap/slapd.conf':
-#    ensure  => present,
-#    owner   => 'openldap',
-#    group   => 'openldap',
-#    mode    => '0750',
-#    content => template('textgrid/etc/ldap/slapd.conf.erb'),
-#    require => Package['slapd'],
-#  }
   file { '/tmp/ldap-cn-config.ldif':
     ensure  => present,
     content => template('textgrid//tmp/ldap-cn-config.ldif.erb'),
@@ -255,39 +241,6 @@ class textgrid::services::tgauth (
     require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
   }
   ~>
-    
-#  service{ 'slapd':
-#    ensure  => stopped,
-#    enable  => true,
-#    require => [Package['slapd'], File['/etc/ldap/slapd.conf']],
-#  }  
-#  ~>
-#  exec { 'slapdconf_to_cn_p1':
-#    command => 'mv /etc/ldap/slapd.d /etc/ldap/slapd.d.orig',
-#    refreshonly => true,
-#  } 
-#  ~>
-#  file { '/etc/ldap/slapd.d':
-#    ensure => directory,
-#    owner  => 'openldap',
-#    group  => 'openldap',
-#  }
-#  ~>
-#  exec { 'slapadd_cn_conf':
-#    command => 'slapadd -l /tmp/ldap-cn-config.ldif',
-#    refreshonly => true,
-#  } 
-#  ~>
-#  package {
-#    'slapd':  ensure => present,
-#  }
-#  exec { 'slapdconf_to_cn_p2':
-#    command     => 'slaptest -f /etc/ldap/slapd.conf -F /etc/ldap/slapd.d/',
-#    refreshonly => true,
-#    user        => 'openldap',
-#    notify      => [Exec['ldapadd_ldap_template'],Service['slapd']],
-#  }
-
   file { '/tmp/ldap-rbac-template.ldif':
     ensure => present,
     source => 'puppet:///modules/textgrid/ldap/rbac-data.ldif',
@@ -304,7 +257,6 @@ class textgrid::services::tgauth (
   service{ 'slapd':
     ensure  => running,
     enable  => true,
-#    require => [Package['slapd'], File['/etc/ldap/slapd.conf']],
     require => Package['slapd'],
   }
 
