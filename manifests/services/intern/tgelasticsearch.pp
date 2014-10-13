@@ -2,7 +2,22 @@
 #
 # Class to install and configure elasticsearch
 # 
-class textgrid::services::intern::tgelasticsearch {
+# === Parameters
+#
+# [*cluster_name*]
+#   name of elastic search cluster
+#
+# [*master_http_port*]
+#   elastic search http port (masternode)
+#
+# [*master_tcp_port*]
+#   elastic search tcp transport port (masternode)
+#
+class textgrid::services::intern::tgelasticsearch (
+  $cluster_name,
+  $master_http_port = '9202',
+  $master_tcp_port = '9302',
+) {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
@@ -12,7 +27,7 @@ class textgrid::services::intern::tgelasticsearch {
     #autoupgrade  => true,
     package_url => 'https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.3.deb',
     config      => {
-      'cluster.name' => 'tg-dev1-test-instance',
+      'cluster.name' => $cluster_name,
       'network.host' => '127.0.0.1',
     },
     java_install => false,
@@ -22,8 +37,8 @@ class textgrid::services::intern::tgelasticsearch {
     config => {
       'node.master'        => 'true',
       'node.data'          => 'true',
-      'http.port'          => '9202',
-      'transport.tcp.port' => '9302',
+      'http.port'          => $master_http_port,
+      'transport.tcp.port' => $master_tcp_port,
     }
   }
 

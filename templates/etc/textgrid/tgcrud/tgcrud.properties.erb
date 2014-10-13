@@ -66,14 +66,11 @@ SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results
 
 # The Index DB namespapce, if XML.
 IDXDB_NAMESPACE = urn:elasticsearch
-#IDXDB_SERVICE_URL = http://localhost:9300/textgrid-nonpublic-productive/metadata
-IDXDB_SERVICE_URL = http://localhost:9302/textgrid-nonpublic/metadata
-#IDXDB_CLUSTER_NAME = tg-esx1-productive
-IDXDB_CLUSTER_NAME = esx-1-test-instance
+IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-nonpublic/metadata
+IDXDB_CLUSTER_NAME = <%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::cluster_name') %>
 IDXDB_USER = *
 IDXDB_PASS = *
-#IDXDB_SERVICE_URL_PUBLIC = http://localhost:9300/textgrid-public-productive/metadata
-IDXDB_SERVICE_URL_PUBLIC = http://localhost:9302/textgrid-public/metadata
+IDXDB_SERVICE_URL_PUBLIC = http://localhost:<%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-public/metadata
 IDXDB_USER_PUBLIC = *
 IDXDB_PASS_PUBLIC = *
 IDXDB_PAIRTREE_USAGE = FALSE

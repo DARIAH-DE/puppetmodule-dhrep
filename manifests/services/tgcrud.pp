@@ -8,6 +8,8 @@ class textgrid::services::tgcrud (
   $publish_secret     = '',
 ){
 
+  include textgrid::services::intern::tgelasticsearch
+
   $tgname = 'tomcat-tgcrud'
   $http_port = '9093'
   $control_port = '9008'
@@ -47,22 +49,21 @@ class textgrid::services::tgcrud (
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => File['/etc/textgrid'],
   }
 
   file { '/etc/textgrid/tgcrud/tgcrud.properties':
     ensure  => present,
-    owner   => 'textgrid',
+    owner   => root,
     group   => 'ULSB',
-    mode    => '0600',
+    mode    => '0640',
     content => template('textgrid/etc/textgrid/tgcrud/tgcrud.properties.erb'),
   }
 
   file { '/etc/textgrid/tgcrud/tgcrud.log4j':
     ensure  => present,
-    owner   => 'textgrid',
+    owner   => root,
     group   => 'ULSB',
-    mode    => '0600',
+    mode    => '0640',
     content => template('textgrid/etc/textgrid/tgcrud/tgcrud.log4j.erb'),
   }
 
