@@ -14,7 +14,7 @@ class textgrid {
 
   include textgrid::services::intern::tgelasticsearch
   include textgrid::services::intern::sesame
-  include  textgrid::services::intern::tgwildfly
+  include textgrid::services::intern::tgwildfly
 
   include textgrid::tgnginx
 
@@ -27,6 +27,7 @@ class textgrid {
     'tomcat7':                  ensure => present;
     'tomcat7-user':             ensure => present;
     'git':                      ensure => present;
+    'curl':                     ensure => present;
   }
 
   file { '/etc/textgrid':

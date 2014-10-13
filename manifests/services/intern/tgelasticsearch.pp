@@ -51,4 +51,21 @@ class textgrid::services::intern::tgelasticsearch (
     }
   }
 
+  # clone commons repo, which contains shell scripts to create textgrid elastic search indizes
+  exec { 'git_clone_tgcommon':
+    path    => ['/usr/bin','/bin','/usr/sbin'],
+    command => 'git clone git://git.projects.gwdg.de/common.git /usr/local/src/tgcommon-git',
+    creates => '/usr/local/src/tgcommon-git',
+    require => Package['git'],
+  }
+
+  # todo: run only once !!!
+  exec { 'create_public_es_index':
+    path    => ['/usr/bin','/bin','/usr/sbin', '/usr/local/src/tgcommon-git/esutils/tools/createIndex/'],
+    cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
+    command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${master_http_port}",
+    require => Package['curl'],
+  }
+
+
 }
