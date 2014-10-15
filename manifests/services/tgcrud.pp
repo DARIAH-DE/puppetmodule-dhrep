@@ -51,7 +51,14 @@ class textgrid::services::tgcrud (
     mode    => '0755',
   }
 
-  file { '/etc/textgrid/tgcrud/tgcrud.properties':
+  file { '/etc/textgrid/tgcrud/conf':
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+  }
+
+  file { '/etc/textgrid/tgcrud/conf/tgcrud.properties':
     ensure  => present,
     owner   => root,
     group   => 'ULSB',
@@ -59,7 +66,7 @@ class textgrid::services::tgcrud (
     content => template('textgrid/etc/textgrid/tgcrud/tgcrud.properties.erb'),
   }
 
-  file { '/etc/textgrid/tgcrud/tgcrud.log4j':
+  file { '/etc/textgrid/tgcrud/conf/tgcrud.log4j':
     ensure  => present,
     owner   => root,
     group   => 'ULSB',

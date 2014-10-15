@@ -75,6 +75,12 @@ class textgrid::services::intern::tgelasticsearch (
       command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${master_http_port}",
       require => Package['curl'],
     }
+    exec { 'create_nonpublic_es_index':
+      path    => ['/usr/bin','/bin','/usr/sbin', '/usr/local/src/tgcommon-git/esutils/tools/createIndex/'],
+      cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
+      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${master_http_port}",
+      require => Package['curl'],
+    }
     file {'/etc/facter/facts.d/tgelastic_repos_initialized.txt':
       content => "tgelastic_repos_initialized=true",
     }
