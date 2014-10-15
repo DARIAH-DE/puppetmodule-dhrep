@@ -3,12 +3,10 @@
 # Class to install and configure tgcrud
 #
 class textgrid::services::tgcrud (
-  $aai_special_secret = '',
-  $id_service_pass    = '',
-  $publish_secret     = '',
 ){
 
   include textgrid::services::intern::tgelasticsearch
+  include textgrid::services::tgauth
 
   $tgname = 'tomcat-tgcrud'
   $http_port = '9093'
@@ -36,7 +34,7 @@ class textgrid::services::tgcrud (
   tomcat::war { 'tgcrud.war':
     war_ensure    => present,
     catalina_base => "/home/textgrid/${tgname}",
-    war_source    => 'http://dev.dariah.eu/nexus/content/repositories/releases/info/textgrid/middleware/tgcrud-base/5.0.1/tgcrud-base-5.0.1.war',
+    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=5.1.2-SNAPSHOT&e=war',
      require      => Textgrid::Resources::Servicetomcat[$tgname],
 #    require       => Exec["create_${tgname}"],
   }
@@ -51,14 +49,14 @@ class textgrid::services::tgcrud (
     mode    => '0755',
   }
 
-  file { '/etc/textgrid/tgcrud/conf':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-  }
+#  file { '/etc/textgrid/tgcrud/conf':
+#    ensure  => directory,
+#    owner   => root,
+#    group   => root,
+#    mode    => '0755',
+#  }
 
-  file { '/etc/textgrid/tgcrud/conf/tgcrud.properties':
+  file { '/etc/textgrid/tgcrud/tgcrud.properties':
     ensure  => present,
     owner   => root,
     group   => 'ULSB',
@@ -66,7 +64,7 @@ class textgrid::services::tgcrud (
     content => template('textgrid/etc/textgrid/tgcrud/tgcrud.properties.erb'),
   }
 
-  file { '/etc/textgrid/tgcrud/conf/tgcrud.log4j':
+  file { '/etc/textgrid/tgcrud/tgcrud.log4j':
     ensure  => present,
     owner   => root,
     group   => 'ULSB',

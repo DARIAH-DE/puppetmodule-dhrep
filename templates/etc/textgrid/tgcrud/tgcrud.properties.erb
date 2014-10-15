@@ -51,7 +51,7 @@ VALIDATE_BASELINE = FALSE
 # The URI of the Tgextra service endpopint (mandatory).
 AAI_SERVICE_URL = http://localhost:8080/tgauth/tgextra.php
 AAI_CRUD_SERVICE_URL =  http://localhost:8080/tgauth/tgextra-crud.php
-AAI_SPECIAL_SECRET = <%= scope.lookupvar('textgrid::services::tgcrud::aai_special_secret') %>
+AAI_SPECIAL_SECRET = <%= scope.lookupvar('textgrid::services::tgauth::crud_secret') %>
 AAI_CLIENT_STUB_TIMEOUT = 45000
 
 # The RDF database namespace (mandatory).
