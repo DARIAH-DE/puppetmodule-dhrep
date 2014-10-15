@@ -17,6 +17,8 @@ class textgrid::services::intern::tgelasticsearch (
   $cluster_name,
   $master_http_port = '9202',
   $master_tcp_port = '9302',
+  $es_version = '1.0.3',
+  $attachments_plugin_version = '2.0.0',
 ) {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
@@ -25,10 +27,11 @@ class textgrid::services::intern::tgelasticsearch (
     #manage_repo  => true,
     #repo_version => '1.0',
     #autoupgrade  => true,
-    package_url => 'https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.0.3.deb',
+    package_url => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
     config      => {
       'cluster.name' => $cluster_name,
-      'network.host' => '127.0.0.1',
+# es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
+#      'network.host' => '127.0.0.1',
     },
     java_install => false,
   }
@@ -51,6 +54,11 @@ class textgrid::services::intern::tgelasticsearch (
     }
   }
 
+  elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
+    module_dir => 'mapper-attachments',
+    instances  => ['masternode', 'workhorse'],
+  }
+
   # clone commons repo, which contains shell scripts to create textgrid elastic search indizes
   exec { 'git_clone_tgcommon':
     path    => ['/usr/bin','/bin','/usr/sbin'],
@@ -66,6 +74,5 @@ class textgrid::services::intern::tgelasticsearch (
     command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${master_http_port}",
     require => Package['curl'],
   }
-
 
 }
