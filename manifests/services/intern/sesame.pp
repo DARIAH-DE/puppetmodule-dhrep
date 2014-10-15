@@ -64,6 +64,13 @@ class textgrid::services::intern::sesame {
 #    }
 #  }
 
+# need to wait for tomcat before creating repo
+# http://stackoverflow.com/questions/8244663/puppet-wait-for-a-service-to-be-ready
+#exec {"wait for tomcat":
+#  require => Service["tomcat6"],
+#  command => "/usr/bin/wget --spider --tries 10 --retry-connrefused --no-check-certificate https://localhost:8443/service/",
+#}
+
 #  unless $sesame_public_repo_created {
     create_tgrepo{'textgrid-public':
       port => '9091',

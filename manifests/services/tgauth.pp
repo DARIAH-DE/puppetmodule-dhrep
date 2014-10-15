@@ -108,11 +108,10 @@ class textgrid::services::tgauth (
   # /var/www/tgauth
   ###
 
-  # anonymous git is broken at gwdg right now
   exec { 'git_clone_tgauth':
-    #command => 'git clone git:/git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
+    command => 'git clone git://git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
     #command => 'git clone git@git.projects.gwdg.de:tg-auth.git /usr/local/src/tgauth-git',
-    command => 'git clone http://git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
+    #command => 'git clone http://git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
     creates => '/usr/local/src/tgauth-git',
     require => Package['git'],
   }
@@ -247,36 +246,41 @@ class textgrid::services::tgauth (
 #    require => Exec['git_clone_tgauth'],
 #  }
 
+  unless $tgauth_ldap_initialized {
+      $slapd_rootpw_sha = sha1digest($slapd_rootpw)
 
-  $slapd_rootpw_sha = sha1digest($slapd_rootpw)
-
-  file { '/tmp/ldap-cn-config.ldif':
-    ensure  => present,
-    content => template('textgrid//tmp/ldap-cn-config.ldif.erb'),
-    require => Service['slapd'],
-  } 
-  ~>
-  file { '/tmp/tgldapconf.sh':
-    source => 'puppet:///modules/textgrid/ldap/tgldapconf.sh',
-    mode   => '0744',   
-  } 
-  ~>
-  exec { 'tgldapconf.sh':
-    command => '/tmp/tgldapconf.sh',
-    require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
-  }
-  ~>
-  file { '/tmp/ldap-rbac-template.ldif':
-    ensure => present,
-    source => 'puppet:///modules/textgrid/ldap/rbac-data.ldif',
-  }
-  ~>
-  # should only run once, if ldap template is added (with help of notify and refreshonly)
-  exec { 'ldapadd_ldap_template':
-    command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
-    refreshonly => true,
-    require     => [Package['ldap-utils'], Service['slapd']],    
-    logoutput   => true,
+      file { '/tmp/ldap-cn-config.ldif':
+        ensure  => present,
+        content => template('textgrid//tmp/ldap-cn-config.ldif.erb'),
+        require => Service['slapd'],
+      } 
+      ~>
+      file { '/tmp/tgldapconf.sh':
+        source => 'puppet:///modules/textgrid/ldap/tgldapconf.sh',
+        mode   => '0744',   
+      } 
+      ~>
+      exec { 'tgldapconf.sh':
+        command => '/tmp/tgldapconf.sh',
+        require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
+      }
+      ~>
+      file { '/tmp/ldap-rbac-template.ldif':
+        ensure => present,
+        source => 'puppet:///modules/textgrid/ldap/rbac-data.ldif',
+      }
+      ~>
+      # should only run once, if ldap template is added (with help of notify and refreshonly)
+      exec { 'ldapadd_ldap_template':
+        command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
+        refreshonly => true,
+        require     => [Package['ldap-utils'], Service['slapd']],    
+        logoutput   => true,
+      }
+      ->
+      file {'/etc/facter/facts.d/tgauth_ldap_initialized.txt':
+        content => "tgauth_ldap_initialized=true",
+      }
   }
 
   service{ 'slapd':

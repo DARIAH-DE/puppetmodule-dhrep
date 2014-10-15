@@ -34,27 +34,29 @@ define textgrid::resources::servicetomcat (
   $xmx = 1024,
   $xms = 128,
   $jmx_port = undef,
+  $group = $name,
+  $user = $name,
 ){
 
-  group { $name:
+  group { $group:
     ensure =>  present,
     gid    =>  $gid,
   }
 
-  user { $name:
+  user { $user:
     ensure     => present,
     uid        => $uid,
     gid        => $gid,
     shell      => '/bin/bash',
-    home       => "/home/${name}",
+    home       => "/home/${user}",
     managehome => true,
   }
 
   exec { "create_${name}":
     path    => ['/usr/bin','/bin','/usr/sbin'],
-    command => "tomcat7-instance-create -p ${http_port} -c ${control_port} /home/${name}/${name}",
-    creates => "/home/${name}/${name}",
-    user    => $name,
+    command => "tomcat7-instance-create -p ${http_port} -c ${control_port} /home/${user}/${name}",
+    creates => "/home/${user}/${name}",
+    user    => $user,
     require => Package['tomcat7-user'],
   }
 

@@ -13,37 +13,37 @@ class textgrid::services::tgcrud (
   $tgname = 'tomcat-tgcrud'
   $http_port = '9093'
   $control_port = '9008'
+  $xmx = '1024'
+  $xms = '128'
+  $jmx_port = '9993'
 
-  # TODO modify textgrid::resources::servicetomcat to choose group and username, then use here
-  group { 'ULSB':
-    ensure =>  present,
-    gid    =>  '29900',
+  ###
+  # user, home-dir and user-tomcat
+  ###
+  textgrid::resources::servicetomcat { $tgname:
+    user        => 'textgrid',
+    group       => 'ULSB',
+    gid          => '29900',
+    uid          => '49628',
+    http_port    => $http_port,
+    control_port => $control_port,
+    jmx_port     => $jmx_port,
   }
 
-  user { 'textgrid':
-    ensure     => present,
-    uid        => '49628',
-    gid        => 'ULSB',
-    shell      => '/bin/bash',
-    home       => '/home/textgrid',
-    managehome => true,
-  }
-
-  exec { "create_${tgname}":
-    path    => ['/usr/bin','/bin','/usr/sbin'],
-    command => "tomcat7-instance-create -p ${http_port} -c ${control_port} /home/textgrid/${tgname}",
-    creates => "/home/textgrid/${tgname}",
-    user    => 'textgrid',
-    require => Package['tomcat7-user'],
-  }
-
+  ###
+  # deploy war
+  ###
   tomcat::war { 'tgcrud.war':
     war_ensure    => present,
     catalina_base => "/home/textgrid/${tgname}",
     war_source    => 'http://dev.dariah.eu/nexus/content/repositories/releases/info/textgrid/middleware/tgcrud-base/5.0.1/tgcrud-base-5.0.1.war',
-    require       => Exec["create_${tgname}"],
+     require      => Textgrid::Resources::Servicetomcat[$tgname],
+#    require       => Exec["create_${tgname}"],
   }
 
+  ###
+  # config
+  ###
   file { '/etc/textgrid/tgcrud':
     ensure  => directory,
     owner   => root,
@@ -75,6 +75,9 @@ class textgrid::services::tgcrud (
     require => File['/var/log/textgrid'],
   }
 
+  ###
+  # the data dir
+  ###
   file { '/data':
     ensure => directory,
     owner  => 'textgrid',
