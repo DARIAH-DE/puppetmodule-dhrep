@@ -6,6 +6,7 @@ class textgrid::services::tgcrud (
 ){
 
   include textgrid::services::intern::tgelasticsearch
+  include textgrid::services::intern::tgnoid
   include textgrid::services::tgauth
 
   $tgname = 'tomcat-tgcrud'

@@ -27,13 +27,13 @@
 #   port for java jmx management
 #
 define textgrid::resources::servicetomcat (
-  $gid = undef,
-  $uid = undef,
-  $http_port = undef,
-  $control_port = undef,
+  $gid,
+  $uid,
+  $http_port,
+  $control_port,
   $xmx = 1024,
   $xms = 128,
-  $jmx_port = undef,
+  $jmx_port,
   $group = $name,
   $user = $name,
 ){
