@@ -33,8 +33,8 @@ class textgrid::services::intern::tgwildfly {
 
   # add user for tgcrud to connect
   exec { 'wildfly_add_tgrud_user':
-    path => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
-    environment => ["JBOSS_HOME=/home/wildfly/wildfly", "JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64"],
+    path        => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
+    environment => ['JBOSS_HOME=/home/wildfly/wildfly', 'JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64'],
     require     => Class['wildfly::install'],
     refreshonly => true,
     command     => '/home/wildfly/wildfly/bin/add-user.sh -a -s --user tgcrud --password secret --group guest',
@@ -42,11 +42,11 @@ class textgrid::services::intern::tgwildfly {
 
   # add tgcrud topic to jms
   exec { 'wildfly_add_tgcrud_topic':
-    path => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
-    environment => ["JBOSS_HOME=/home/wildfly/wildfly", "JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64"],
+    path        => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
+    environment => ['JBOSS_HOME=/home/wildfly/wildfly', 'JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64'],
     require     => Class['wildfly::install'],
     refreshonly => true,
-    command => '/home/wildfly/wildfly/bin/jboss-cli.sh --controller=localhost:19990 --connect --command="jms-topic add --topic-address=tgcrudTopic --entries=topic/tgcrud,java:jboss/exported/jms/topic/tgcrud"',
+    command     => '/home/wildfly/wildfly/bin/jboss-cli.sh --controller=localhost:19990 --connect --command="jms-topic add --topic-address=tgcrudTopic --entries=topic/tgcrud,java:jboss/exported/jms/topic/tgcrud"',
   }
 
 }

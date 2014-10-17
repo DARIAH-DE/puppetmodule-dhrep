@@ -44,10 +44,10 @@ class textgrid::services::tgsearch {
   # the config in /etc
   ###
   file { '/etc/textgrid/tgsearch':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
   }
 
   file { '/etc/textgrid/tgsearch/tgsearch-nonpublic.properties':

@@ -20,8 +20,8 @@ class textgrid::services::tgcrud (
   # user, home-dir and user-tomcat
   ###
   textgrid::resources::servicetomcat { $tgname:
-    user        => 'textgrid',
-    group       => 'ULSB',
+    user         => 'textgrid',
+    group        => 'ULSB',
     gid          => '29900',
     uid          => '49628',
     http_port    => $http_port,
@@ -36,26 +36,18 @@ class textgrid::services::tgcrud (
     war_ensure    => present,
     catalina_base => "/home/textgrid/${tgname}",
     war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=5.1.2-SNAPSHOT&e=war',
-     require      => Textgrid::Resources::Servicetomcat[$tgname],
-#    require       => Exec["create_${tgname}"],
+    require       => Textgrid::Resources::Servicetomcat[$tgname],
   }
 
   ###
   # config
   ###
   file { '/etc/textgrid/tgcrud':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
   }
-
-#  file { '/etc/textgrid/tgcrud/conf':
-#    ensure  => directory,
-#    owner   => root,
-#    group   => root,
-#    mode    => '0755',
-#  }
 
   file { '/etc/textgrid/tgcrud/tgcrud.properties':
     ensure  => present,

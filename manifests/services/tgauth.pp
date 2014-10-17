@@ -22,15 +22,11 @@ class textgrid::services::tgauth (
   $webauth_secret = '',
   $sidcheck_secret = '',
   $rbac_base = '',
-  $rbac_local_base = 'http://localhost:8080/tgauth/',
   $webauth_dariah_secret = '',
   $authz_shib_pw = '',
   $authz_name_secret = '',
   $authz_instance = '',
-  $slapd_pass = '',
   $slapd_rootpw = '',
-  $slapd_rootpw_sha1 = '',
-  $slapd_rootpw_base64 = '',
 ){
 
   package {
@@ -44,7 +40,7 @@ class textgrid::services::tgauth (
   include textgrid::resources::apache
 
   Exec {
-    path    => ['/usr/bin','/bin','/usr/sbin'],
+    path => ['/usr/bin','/bin','/usr/sbin'],
   }
 
   ###
@@ -171,38 +167,13 @@ class textgrid::services::tgauth (
     content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
   }
 
-# i guess the local wsdls are not needed anymore
-#  file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.local.wsdl':
-#    ensure  => present,
-#    owner   => root,
-#    group   => root,
-#    mode    => '0644',
-#    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra.local.wsdl.erb'),
-#  }
-
-#  file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.local.wsdl':
-#    ensure  => present,
-#    owner   => root,
-#    group   => root,
-#    mode    => '0644',
-#    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgreview.local.wsdl.erb'),
-#  }
-
-#  file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.local.wsdl':
-#    ensure  => present,
-#    owner   => root,
-#    group   => root,
-#    mode    => '0644',
-#    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.local.wsdl.erb'),
-#  }
-
   ###
   # /var/www/info.textgrid.middleware.tgauth.webauth
   ###
   file { '/var/www/info.textgrid.middleware.tgauth.webauth':
     source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.webauth',
     recurse => true,
-  } 
+  }
   ->
   file { '/var/www/info.textgrid.middleware.tgauth.webauth/i18n_cache':
     ensure => directory,
@@ -225,8 +196,8 @@ class textgrid::services::tgauth (
   ###
   file { '/var/Nutzungsordnung_en_200611.txt.html':
     source => 'puppet:///modules/textgrid/var/Nutzungsordnung_en_200611.txt.html',
-    mode   => '0644',   
-  }   
+    mode   => '0644',
+  }
 
   ###
   # ldap config
@@ -253,12 +224,12 @@ class textgrid::services::tgauth (
         ensure  => present,
         content => template('textgrid//tmp/ldap-cn-config.ldif.erb'),
         require => Service['slapd'],
-      } 
+      }
       ~>
       file { '/tmp/tgldapconf.sh':
         source => 'puppet:///modules/textgrid/ldap/tgldapconf.sh',
-        mode   => '0744',   
-      } 
+        mode   => '0744',
+      }
       ~>
       exec { 'tgldapconf.sh':
         command => '/tmp/tgldapconf.sh',
@@ -274,12 +245,12 @@ class textgrid::services::tgauth (
       exec { 'ldapadd_ldap_template':
         command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
         refreshonly => true,
-        require     => [Package['ldap-utils'], Service['slapd']],    
+        require     => [Package['ldap-utils'], Service['slapd']],
         logoutput   => true,
       }
       ->
       file {'/etc/facter/facts.d/tgauth_ldap_initialized.txt':
-        content => "tgauth_ldap_initialized=true",
+        content => 'tgauth_ldap_initialized=true',
       }
   }
 

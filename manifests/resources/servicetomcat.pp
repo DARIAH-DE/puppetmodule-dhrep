@@ -17,23 +17,30 @@
 # [*control_port*]
 #   the tomcat control port
 #
-# [*xmx*]
-#   java max memory allocation (Xmx), in megabyte
-#
-# [*xms*]
-#   java inital memory allocation (Xms), in megabyte 
-#
 # [*jmx_port*]
 #   port for java jmx management
 #
+# [*xmx*]
+#   java max memory allocation (Xmx), in megabyte, default: 1024
+#
+# [*xms*]
+#   java inital memory allocation (Xms), in megabyte, default: 128
+#
+# [*user*]
+#   user which the service belongs to (will be created), defaults to $name if not set 
+#
+# [*group*]
+#   usergroup which the service belongs to (will be created), defaults to $name if not set 
+#
+
 define textgrid::resources::servicetomcat (
   $gid,
   $uid,
   $http_port,
   $control_port,
+  $jmx_port,
   $xmx = 1024,
   $xms = 128,
-  $jmx_port,
   $group = $name,
   $user = $name,
 ){
