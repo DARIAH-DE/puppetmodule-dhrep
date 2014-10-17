@@ -45,7 +45,12 @@ class textgrid::services::tgcrud (
   textgrid::tools::tgstaging {"JavaGAT-2.1.1-binary.zip":
     source  => 'http://gforge.cs.vu.nl/gf/download/frsrelease/154/1196/JavaGAT-2.1.1-binary.zip',
     target  => '/usr/local',
-    creates => 'usr/local/JavaGAT-2.1.1',
+    creates => '/usr/local/JavaGAT-2.1.1',
+  }
+
+  file { '/usr/local/javagat':
+    ensure => link,
+    target => '/usr/local/JavaGAT-2.1.1',
   }
 
   ###
