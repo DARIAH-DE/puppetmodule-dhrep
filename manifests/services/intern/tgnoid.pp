@@ -66,7 +66,8 @@ class textgrid::services::intern::tgnoid ( $tgcrud_secret ) {
   }
   ~>
   exec { 'install_tgnoid':
-    command => '/home/tgnoid/install_tgnoid.sh',    
+    command => '/home/tgnoid/install_tgnoid.sh',
+    creates => '/home/tgnoid/htdocs/nd/textgrid/NOID',
     logoutput => true,
   }  
 
