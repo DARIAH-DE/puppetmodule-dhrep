@@ -41,7 +41,7 @@ class textgrid::services::intern::tgnoid ( $tgcrud_secret ) {
   # create apache user for tgnoid
   ###
   exec { 'create_noid_apache_credentials':
-    command => "htpasswd -c /etc/apache2/tgnoid.htpasswd ${tgcrud_secret}",
+    command => "htpasswd -bc /etc/apache2/tgnoid.htpasswd tgcrud ${tgcrud_secret}",
     creates => '/etc/apache2/tgnoid.htpasswd',
   }
   ->

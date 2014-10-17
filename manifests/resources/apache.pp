@@ -83,11 +83,11 @@ class textgrid::resources::apache {
     </Directory>
 
     # Make the server recognize links to htdocs/nd
-    ScriptAliasMatch ^/nd/noidr(.*) \"/home/tgnoid/htdocs/nd/noidr$1\"
-    ScriptAliasMatch ^/nd/noidu(.*) \"/home/tgnoid/htdocs/nd/noidu$1\"
+    ScriptAliasMatch ^/nd/noidr(.*) \"/home/tgnoid/htdocs/nd/noidr\$1\"
+    ScriptAliasMatch ^/nd/noidu(.*) \"/home/tgnoid/htdocs/nd/noidu\$1\"
 
     # Define all the rewrite maps, start every program once on server start
-    RewriteMap rslv_textgrid prg:/home/tgnoid/htdocs/nd/noidr_textgrid
+    # RewriteMap rslv_textgrid prg:/home/tgnoid/htdocs/nd/noidr_textgrid
     
     # --------------------------------------------------------------------------
     # End of NOID configuration
