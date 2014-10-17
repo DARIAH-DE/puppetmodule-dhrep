@@ -40,6 +40,15 @@ class textgrid::services::tgcrud (
   }
 
   ###
+  # javagat
+  ###
+  textgrid::tools::tgstaging {"JavaGAT-2.1.1-binary.zip":
+    source  => 'http://gforge.cs.vu.nl/gf/download/frsrelease/154/1196/JavaGAT-2.1.1-binary.zip',
+    target  => '/usr/local',
+    creates => 'usr/local/JavaGAT-2.1.1',
+  }
+
+  ###
   # config
   ###
   file { '/etc/textgrid/tgcrud':
@@ -99,7 +108,6 @@ class textgrid::services::tgcrud (
     owner   => 'textgrid',
     group   => 'ULSB',
     mode    => '0755',
-    require => File['/data'],
   }
 
   file { '/data/nonpublic':
@@ -107,6 +115,19 @@ class textgrid::services::tgcrud (
     owner   => 'textgrid',
     group   => 'ULSB',
     mode    => '0755',
-    require => File['/data'],
+  }
+
+  file { '/data/public/productive':
+    ensure  => directory,
+    owner   => 'textgrid',
+    group   => 'ULSB',
+    mode    => '0755',
+  }
+
+  file { '/data/nonpublic/productive':
+    ensure  => directory,
+    owner   => 'textgrid',
+    group   => 'ULSB',
+    mode    => '0755',
   }
 }

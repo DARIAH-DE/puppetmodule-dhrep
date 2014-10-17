@@ -61,4 +61,10 @@ class textgrid {
     ensure  => directory,
   }
 
+  # cache for tgstaging
+  # vagrant cachier changes this to symlink TODO: workaround
+  file { '/var/cache/textgrid/' :
+    ensure => directory,
+  }
+
 }
