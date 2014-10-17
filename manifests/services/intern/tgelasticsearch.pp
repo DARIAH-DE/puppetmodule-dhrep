@@ -59,28 +59,32 @@ class textgrid::services::intern::tgelasticsearch (
     instances  => ['masternode', 'workhorse'],
   }
 
-  # clone commons repo, which contains shell scripts to create textgrid elastic search indizes
-  exec { 'git_clone_tgcommon':
-    path    => ['/usr/bin','/bin','/usr/sbin'],
-    command => 'git clone git://git.projects.gwdg.de/common.git /usr/local/src/tgcommon-git',
-    creates => '/usr/local/src/tgcommon-git',
-    require => Package['git'],
-  }
 
   # run only once
   unless $tgelastic_repos_initialized {
+
+    # clone commons repo, which contains shell scripts to create textgrid elastic search indizes
+    exec { 'git_clone_tgcommon':
+      path    => ['/usr/bin','/bin','/usr/sbin'],
+      command => 'git clone git://git.projects.gwdg.de/common.git /usr/local/src/tgcommon-git',
+      creates => '/usr/local/src/tgcommon-git',
+      require => Package['git'],
+    }
+    ->
     exec { 'create_public_es_index':
-      path    => ['/usr/bin','/bin','/usr/sbin', '/usr/local/src/tgcommon-git/esutils/tools/createIndex/'],
+#      path    => ['/usr/bin','/bin','/usr/sbin', '/usr/local/src/tgcommon-git/esutils/tools/createIndex/'],
+      path    => ['/usr/bin','/bin','/usr/sbin'],
       cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
       command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${master_http_port}",
-      require => [Package['curl'],Exec['git_clone_tgcommon']],
+      require => [Package['curl']],
     }
     ->
     exec { 'create_nonpublic_es_index':
-      path    => ['/usr/bin','/bin','/usr/sbin', '/usr/local/src/tgcommon-git/esutils/tools/createIndex/'],
+#      path    => ['/usr/bin','/bin','/usr/sbin', '/usr/local/src/tgcommon-git/esutils/tools/createIndex/'],
+      path    => ['/usr/bin','/bin','/usr/sbin'],
       cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
       command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${master_http_port}",
-      require => [Package['curl'],Exec['git_clone_tgcommon']],
+      require => [Package['curl']],
     }
     ->
     file {'/etc/facter/facts.d/tgelastic_repos_initialized.txt':

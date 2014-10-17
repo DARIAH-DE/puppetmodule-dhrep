@@ -32,7 +32,9 @@
 # [*group*]
 #   usergroup which the service belongs to (will be created), defaults to $name if not set 
 #
-
+# [*defaults_template*]
+#   defaults file template for /etc/defaults, if different from textgrid/etc/default/tomcat.erb
+#
 define textgrid::resources::servicetomcat (
   $gid,
   $uid,
@@ -43,6 +45,7 @@ define textgrid::resources::servicetomcat (
   $xms = 128,
   $group = $name,
   $user = $name,
+  $defaults_template = 'textgrid/etc/default/tomcat.erb',
 ){
 
   group { $group:
@@ -79,7 +82,7 @@ define textgrid::resources::servicetomcat (
 
   file { "/etc/default/${name}":
     ensure  => present,
-    content => template('textgrid/etc/default/tomcat.erb'),
+    content => template($defaults_template),
     owner   => 'root',
     group   => 'root',
     mode    => '0644',

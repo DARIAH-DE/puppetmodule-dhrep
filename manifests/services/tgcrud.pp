@@ -27,6 +27,7 @@ class textgrid::services::tgcrud (
     http_port    => $http_port,
     control_port => $control_port,
     jmx_port     => $jmx_port,
+    defaults_template => 'textgrid/etc/default/tomcat.tgcrud.erb',
   }
 
   ###
