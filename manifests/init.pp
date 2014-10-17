@@ -29,6 +29,8 @@ class textgrid {
     'tomcat7-user':             ensure => present;
     'git':                      ensure => present;
     'curl':                     ensure => present;
+    'emacs':			ensure => present;
+    'mc':			ensure => present;
   }
 
   file { '/etc/textgrid':

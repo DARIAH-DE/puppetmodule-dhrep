@@ -1,0 +1,12 @@
+--- noidr_textgrid      2014-01-27 14:30:16.834109035 +0100
++++ noid        2014-01-27 15:50:07.954280381 +0100
+@@ -62,7 +62,8 @@
+ #use lib       get_untainted_PERL5LIB( );
+ 
+ use Config;     # Now do Brian McCauley's perl5lib.pm trick for untainting.
+-use lib map { /(.*)/ } split /$Config{path_sep}/ => $ENV{PERL5LIB};
++use lib map { /(.*)/ }
++    defined($ENV{PERL5LIB}) ? split(/$Config{path_sep}/, $ENV{PERL5LIB}) : ();
+ 
+ use Text::ParseWords;
+ use Getopt::Long;

@@ -15,6 +15,7 @@ class textgrid::resources::apache {
   apache::listen { '8080': }
     
   include apache::mod::php
+  include apache::mod::rewrite
 
   # TODO: sites-available & a2ensite
   $defaultvhost = "/etc/apache2/sites-enabled/25-${::fqdn}.conf"
@@ -58,13 +59,39 @@ class textgrid::resources::apache {
         Allow from all
     </Directory>
 
-      Alias /tgauth /var/www/tgauth/rbacSoap
-      <Directory \"/var/www/tgauth/rbacSoap\">
-                 Options +FollowSymLinks -Indexes
-                 Order Allow,Deny
-                 Allow from all
-      </Directory>
+    Alias /tgauth /var/www/tgauth/rbacSoap
+    <Directory \"/var/www/tgauth/rbacSoap\">
+      Options +FollowSymLinks -Indexes
+      Order Allow,Deny
+      Allow from all
+    </Directory>
 
+    # --------------------------------------------------------------------------
+    # All the NOID configuration things following here for minting TextGrid URIs
+    # --------------------------------------------------------------------------
+   
+    # ScriptAlias /cgi-bin/ /home/tgnoid/htdocs/nd/
+    <Directory \"/home/tgnoid/htdocs/nd/\">
+      AuthType Basic
+      AuthName \"The TextGrid URI NOID Service\"
+      AuthUserFile /etc/apache2/tgnoid.htpasswd
+      Require valid-user
+      AllowOverride None
+      Options +ExecCGI -Includes
+      Order allow,deny
+      Allow from all
+    </Directory>
+
+    # Make the server recognize links to htdocs/nd
+    ScriptAliasMatch ^/nd/noidr(.*) \"/home/tgnoid/htdocs/nd/noidr$1\"
+    ScriptAliasMatch ^/nd/noidu(.*) \"/home/tgnoid/htdocs/nd/noidu$1\"
+
+    # Define all the rewrite maps, start every program once on server start
+    RewriteMap rslv_textgrid prg:/home/tgnoid/htdocs/nd/noidr_textgrid
+    
+    # --------------------------------------------------------------------------
+    # End of NOID configuration
+    # --------------------------------------------------------------------------
 
     ErrorLog \${APACHE_LOG_DIR}/error.log
 
