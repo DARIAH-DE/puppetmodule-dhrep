@@ -68,9 +68,14 @@ class textgrid::services::intern::tgelasticsearch (
       path    => ['/usr/bin','/bin','/usr/sbin'],
       command => 'git clone git://git.projects.gwdg.de/common.git /usr/local/src/tgcommon-git',
       creates => '/usr/local/src/tgcommon-git',
-      require => Package['git'],
+      require => [Package['git'],Elasticsearch::Instance['masternode']],
     }
     ->
+    exec {"wait_for_es_master":
+      path    => ['/usr/bin','/bin','/usr/sbin'],
+      command => "/usr/bin/wget --spider --tries 10 --retry-connrefused http://localhost:${$master_http_port}/",
+    }
+    ~>
     exec { 'create_public_es_index':
 #      path    => ['/usr/bin','/bin','/usr/sbin', '/usr/local/src/tgcommon-git/esutils/tools/createIndex/'],
       path    => ['/usr/bin','/bin','/usr/sbin'],
@@ -78,7 +83,7 @@ class textgrid::services::intern::tgelasticsearch (
       command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${master_http_port}",
       require => [Package['curl']],
     }
-    ->
+    ~>
     exec { 'create_nonpublic_es_index':
 #      path    => ['/usr/bin','/bin','/usr/sbin', '/usr/local/src/tgcommon-git/esutils/tools/createIndex/'],
       path    => ['/usr/bin','/bin','/usr/sbin'],
@@ -86,7 +91,7 @@ class textgrid::services::intern::tgelasticsearch (
       command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${master_http_port}",
       require => [Package['curl']],
     }
-    ->
+    ~>
     file {'/etc/facter/facts.d/tgelastic_repos_initialized.txt':
       content => "tgelastic_repos_initialized=true",
     }

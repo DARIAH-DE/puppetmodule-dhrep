@@ -14,7 +14,7 @@ class textgrid {
 
   include textgrid::services::intern::tgelasticsearch
   include textgrid::services::intern::sesame
-  include textgrid::services::intern::tgwildfly
+  #include textgrid::services::intern::tgwildfly
   include textgrid::services::intern::tgnoid
 
   include textgrid::tgnginx
@@ -63,8 +63,14 @@ class textgrid {
 
   # cache for tgstaging
   # vagrant cachier changes this to symlink TODO: workaround
-  file { '/var/cache/textgrid/' :
-    ensure => directory,
+#  unless $textgrid_staging_dir_created {
+  unless $vagrant {
+    file { '/var/cache/textgrid/' :
+      ensure => directory,
+    }
+#    file {'/etc/facter/facts.d/textgrid_staging_dir_created.txt':
+#      content => "textgrid_staging_dir_created=true",
+#    }
   }
 
 }

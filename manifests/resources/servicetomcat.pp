@@ -35,6 +35,12 @@
 # [*defaults_template*]
 #   defaults file template for /etc/defaults, if different from textgrid/etc/default/tomcat.erb
 #
+# TODO:
+#   install libapr1 and integrate with tomcat-conf
+#      in conf/server.conf
+#   <!--APR library loader. Documentation at /docs/apr.html -->
+#   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+#
 define textgrid::resources::servicetomcat (
   $gid,
   $uid,

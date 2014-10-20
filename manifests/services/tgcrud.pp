@@ -15,6 +15,7 @@ class textgrid::services::tgcrud (
   $xmx = '1024'
   $xms = '128'
   $jmx_port = '9993'
+  $tgcrud_version = '5.1.2-SNAPSHOT'
 
   ###
   # user, home-dir and user-tomcat
@@ -30,13 +31,26 @@ class textgrid::services::tgcrud (
     defaults_template => 'textgrid/etc/default/tomcat.tgcrud.erb',
   }
 
+  staging::file { "tgcrud-${tgcrud_version}.war":
+    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=${tgcrud_version}&e=war",
+    target  => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
+  }
+
+#  textgrid::tools::tgstaging { "tgcrud-${tgcrud_version}.war":
+#    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=${tgcrud_version}&e=war",
+#    target  => "/home/textgrid/${tgname}/webapps/tgcrud",
+#    creates => "/home/textgrid/${tgname}/webapps/tgcrud",
+#    require => Textgrid::Resources::Servicetomcat[$tgname],
+#  }
+
   ###
   # deploy war
   ###
   tomcat::war { 'tgcrud.war':
     war_ensure    => present,
     catalina_base => "/home/textgrid/${tgname}",
-    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=5.1.2-SNAPSHOT&e=war',
+    war_source    => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
+#    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=5.1.2-SNAPSHOT&e=war',
     require       => Textgrid::Resources::Servicetomcat[$tgname],
   }
 
