@@ -6,14 +6,17 @@
 #
 class textgrid::tgnginx {
 
-  package { 'nginx': ensure  => present; }
+  package {
+    'nginx': ensure  => present;
+    'nginx-extras': ensure => present;
+  }
 
-  #    class { 'nginx':
-  #        http_cfg_append => {
-  #            client_body_buffer_size => '512k',
-  #            chunkin => 'on',
-  #        }
-  #    }
+  class { 'nginx':
+    http_cfg_append => {
+      client_body_buffer_size => '512k',
+      chunkin => 'on',
+    }
+  }
 
   file { '/etc/nginx/proxyconf':
     ensure  => directory,
@@ -47,6 +50,7 @@ class textgrid::tgnginx {
     ensure  => running,
     enable  => true,
     require => Package['nginx'],
+    require => Package['nginx-extras'],
   }
 
 }
