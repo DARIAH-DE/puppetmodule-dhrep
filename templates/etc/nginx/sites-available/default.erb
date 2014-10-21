@@ -34,10 +34,10 @@ server {
 	server_name localhost;
 
 	# chunking, enable on http-config first
-#    error_page 411 = @my_411_error;
-#    location @my_411_error {
-#    	chunkin_resume;
-#    }
+	error_page 411 = @my_411_error;
+	location @my_411_error {
+		chunkin_resume;
+	}
 
 	location / {
 		# First attempt to serve request as file, then
@@ -87,12 +87,11 @@ server {
 	ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
 	ssl_prefer_server_ciphers on;
 
-#    error_page 411 = @my_411_error;
-#    location @my_411_error {
-#        chunkin_resume;
-#    }
+	error_page 411 = @my_411_error;
+	location @my_411_error {
+		chunkin_resume;
+	}
 
 	include /etc/nginx/proxyconf/1.0.conf;
 
 }
-
