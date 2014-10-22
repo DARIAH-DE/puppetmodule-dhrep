@@ -7,4 +7,6 @@ class textgrid::services::intern::messaging {
     require => Package['git'],
   }
 
+  # mvn package wildfly:deploy -Dwildfly.port=19990
+
 }

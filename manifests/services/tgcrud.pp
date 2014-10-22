@@ -3,6 +3,8 @@
 # Class to install and configure tgcrud
 #
 class textgrid::services::tgcrud (
+  $use_messaging = 'false',
+  $tgcrud_version = '5.5.0-SNAPSHOT',
 ){
 
   include textgrid::services::intern::tgelasticsearch
@@ -15,8 +17,6 @@ class textgrid::services::tgcrud (
   $xmx = '1024'
   $xms = '128'
   $jmx_port = '9993'
-  $tgcrud_version = '5.1.2-SNAPSHOT'
-  #$tgcrud_version = '4.7.3.1-SNAPSHOT'
 
   ###
   # user, home-dir and user-tomcat
@@ -43,7 +43,7 @@ class textgrid::services::tgcrud (
 #    creates => "/home/textgrid/${tgname}/webapps/tgcrud",
 #    require => Textgrid::Resources::Servicetomcat[$tgname],
 #  }
-
+  ~>
   ###
   # deploy war
   ###
