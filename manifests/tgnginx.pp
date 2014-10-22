@@ -7,16 +7,17 @@
 class textgrid::tgnginx {
 
   package {
-    'nginx': ensure  => present;
+    'nginx': ensure        => present;
     'nginx-extras': ensure => present;
   }
 
-  class { 'nginx':
-    http_cfg_append => {
-      client_body_buffer_size => '512k',
-      chunkin => 'on',
-    }
-  }
+  # Use with module jfryman/nginx (maybe later)
+  #    class { 'nginx':
+  #        http_cfg_append => {
+  #            client_body_buffer_size => '512k',
+  #            chunkin                 => 'on',
+  #        }
+  #    }
 
   file { '/etc/nginx/proxyconf':
     ensure  => directory,
@@ -36,6 +37,16 @@ class textgrid::tgnginx {
     #require => Package['nginx'],
   }
   ->
+  file { '/etc/nginx/nginx.conf':
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('textgrid/etc/nginx/nginx.erb'),
+    #notify  => Service['nginx'],
+    #require => Package['nginx'],
+  }
+  ->
   file { '/etc/nginx/sites-available/default':
     ensure  => present,
     owner   => root,
@@ -50,7 +61,6 @@ class textgrid::tgnginx {
     ensure  => running,
     enable  => true,
     require => Package['nginx'],
-    require => Package['nginx-extras'],
   }
 
 }

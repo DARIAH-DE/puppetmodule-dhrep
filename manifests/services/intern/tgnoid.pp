@@ -4,7 +4,7 @@
 # Creates initial minter textgrid.
 # 
 # TODO:
-#   all
+#   add checks to bash script
 #
 
 class textgrid::services::intern::tgnoid ( $tgcrud_secret ) {
@@ -69,6 +69,6 @@ class textgrid::services::intern::tgnoid ( $tgcrud_secret ) {
     command => '/home/tgnoid/install_tgnoid.sh',
     creates => '/home/tgnoid/htdocs/nd/textgrid/NOID',
     logoutput => true,
-  }  
+  }
 
 }
