@@ -33,8 +33,6 @@ class textgrid::tgnginx {
     group   => root,
     mode    => '0644',
     content => template('textgrid/etc/nginx/proxyconf/1.0.conf.erb'),
-    #notify  => Service['nginx'],
-    #require => Package['nginx'],
   }
   ->
   file { '/etc/nginx/nginx.conf':
@@ -43,8 +41,6 @@ class textgrid::tgnginx {
     group   => root,
     mode    => '0644',
     content => template('textgrid/etc/nginx/nginx.erb'),
-    #notify  => Service['nginx'],
-    #require => Package['nginx'],
   }
   ->
   file { '/etc/nginx/sites-available/default':
@@ -53,14 +49,12 @@ class textgrid::tgnginx {
     group   => root,
     mode    => '0644',
     content => template('textgrid/etc/nginx/sites-available/default.erb'),
-    #notify  => Service['nginx'],
-    #require => Package['nginx'],
   }
   ~>
   service { 'nginx':
     ensure  => running,
     enable  => true,
-    require => Package['nginx'],
+    require => [Package['nginx'],Package['nginx-extras']],
   }
 
 }
