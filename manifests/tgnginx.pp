@@ -7,7 +7,6 @@
 class textgrid::tgnginx {
 
   package {
-    'nginx': ensure        => present;
     'nginx-extras': ensure => present;
   }
 
@@ -24,7 +23,7 @@ class textgrid::tgnginx {
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => Package['nginx'],
+    require => Package['nginx-extras'],
   }
   ->
   file { '/etc/nginx/proxyconf/1.0.conf':
@@ -54,7 +53,7 @@ class textgrid::tgnginx {
   service { 'nginx':
     ensure  => running,
     enable  => true,
-    require => [Package['nginx'],Package['nginx-extras']],
+    require => Package['nginx-extras'],
   }
 
 }

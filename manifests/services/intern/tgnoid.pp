@@ -44,13 +44,15 @@ class textgrid::services::intern::tgnoid ( $tgcrud_secret ) {
     command => "htpasswd -bc /etc/apache2/tgnoid.htpasswd tgcrud ${tgcrud_secret}",
     creates => '/etc/apache2/tgnoid.htpasswd',
   }
-  ->
+  ~>
   exec { 'change_noid_apache_credential_permissions':
     command => 'chmod 600 /etc/apache2/tgnoid.htpasswd',
+    refreshonly => true,
   }
-  ->
+  ~>
   exec { 'change_noid_apache_credential_owner':
     command => 'chown www-data:root /etc/apache2/tgnoid.htpasswd',
+    refreshonly => true,
   }
 
   ###
