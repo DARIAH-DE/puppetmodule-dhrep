@@ -11,12 +11,12 @@ class textgrid::tgnginx {
     'nginx-extras': ensure => present;
   }
 
-  class { 'nginx':
-    http_cfg_append => {
-      client_body_buffer_size => '512k',
-      chunkin => 'on',
-    }
-  }
+#  class { 'nginx':
+#    http_cfg_append => {
+#      client_body_buffer_size => '512k',
+#      chunkin => 'on',
+#    }
+#  }
 
   file { '/etc/nginx/proxyconf':
     ensure  => directory,

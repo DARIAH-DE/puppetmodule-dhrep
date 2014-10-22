@@ -16,6 +16,7 @@ class textgrid::services::tgcrud (
   $xms = '128'
   $jmx_port = '9993'
   $tgcrud_version = '5.1.2-SNAPSHOT'
+  #$tgcrud_version = '4.7.3.1-SNAPSHOT'
 
   ###
   # user, home-dir and user-tomcat
