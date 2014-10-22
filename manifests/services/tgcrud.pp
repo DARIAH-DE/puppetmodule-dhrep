@@ -18,6 +18,10 @@ class textgrid::services::tgcrud (
   $xms = '128'
   $jmx_port = '9993'
 
+  #Maven {
+  #  repos => 'http://dev.dariah.eu/nexus/content/groups/public',
+  #}
+
   ###
   # user, home-dir and user-tomcat
   ###
@@ -31,6 +35,13 @@ class textgrid::services::tgcrud (
     jmx_port     => $jmx_port,
     defaults_template => 'textgrid/etc/default/tomcat.tgcrud.erb',
   }
+  #->
+  #class {'maven:maven': }
+  #->
+  #maven {"/home/textgrid/${tgname}/webapps/tgcrud.war":
+  #  id     => "info.textgrid.middleware:tgcrud-base:${tgcrud_version}:war",
+  #  notify => Service[$tgname],
+  #}
 
   staging::file { "tgcrud-${tgcrud_version}.war":
     source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=${tgcrud_version}&e=war",
