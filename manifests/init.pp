@@ -11,13 +11,13 @@ class textgrid {
   include textgrid::services::tgcrud
   include textgrid::services::tgauth
   include textgrid::services::confserv
+  include textgrid::services::digilib
 
   include textgrid::services::intern::tgelasticsearch
   include textgrid::services::intern::sesame
   include textgrid::services::intern::tgwildfly
   include textgrid::services::intern::messaging
   include textgrid::services::intern::tgnoid
-
 
   include textgrid::tgnginx
 
@@ -44,6 +44,13 @@ class textgrid {
   }
 
   file { '/var/log/textgrid':
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
+  }
+
+  file { '/var/textgrid':
     ensure => directory,
     owner  => root,
     group  => root,
