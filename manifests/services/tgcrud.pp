@@ -4,7 +4,7 @@
 #
 class textgrid::services::tgcrud (
   $use_messaging = 'false',
-  $tgcrud_version = '5.5.0-SNAPSHOT',
+  $tgcrud_version = '5.0.1',
 ){
 
   include textgrid::services::intern::tgelasticsearch
