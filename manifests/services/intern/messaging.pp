@@ -30,5 +30,16 @@ class textgrid::services::intern::messaging {
     source  => 'puppet:///modules/textgrid/root/m2-settings.xml',
   }
 
+  file { "/etc/textgrid/messagebeans":
+    ensure => directory,
+  }
+
+  file { "/etc/textgrid/messagebeans/mdb.properties":
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('textgrid/etc/textgrid/messagebeans/mdb.properties.erb'),
+  }
 
 }
