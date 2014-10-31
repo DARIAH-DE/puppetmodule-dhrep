@@ -58,12 +58,13 @@ class textgrid::services::intern::tgnoid ( $tgcrud_secret ) {
   ###
   # do everything else via bash scripting
   ###
-  file { '/home/tgnoid/install_tgnoid.sh':
+  file { "/home/tgnoid/install_tgnoid.sh":
     source => 'puppet:///modules/textgrid/tgnoid/install_tgnoid.sh',
     mode   => '0744',
+    require => User[$noiduser],
   } 
   ~>
-  file { '/home/tgnoid/tgnoid.patch':
+  file { "/home/tgnoid/tgnoid.patch":
     source => 'puppet:///modules/textgrid/tgnoid/tgnoid.patch',
   }
   ~>

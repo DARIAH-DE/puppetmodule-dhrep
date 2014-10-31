@@ -44,7 +44,7 @@ class textgrid::services::tgcrud (
   #}
 
   staging::file { "tgcrud-${tgcrud_version}.war":
-    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=${tgcrud_version}&e=war",
+    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-service&v=${tgcrud_version}&e=war",
     target  => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
   }
 
