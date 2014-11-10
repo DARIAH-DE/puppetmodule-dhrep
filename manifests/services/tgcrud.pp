@@ -4,6 +4,7 @@
 #
 class textgrid::services::tgcrud (
   $use_messaging = 'false',
+  $tgcrud_name = 'tgcrud-base',
   $tgcrud_version = '5.0.1',
 ){
 
@@ -44,12 +45,12 @@ class textgrid::services::tgcrud (
   #}
 
   staging::file { "tgcrud-${tgcrud_version}.war":
-    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=${tgcrud_version}&e=war",
+    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=${tgcrud_name}&v=${tgcrud_version}&e=war",
     target  => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
   }
 
 #  textgrid::tools::tgstaging { "tgcrud-${tgcrud_version}.war":
-#    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=${tgcrud_version}&e=war",
+#    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=${tgcrud_name}&v=${tgcrud_version}&e=war",
 #    target  => "/home/textgrid/${tgname}/webapps/tgcrud",
 #    creates => "/home/textgrid/${tgname}/webapps/tgcrud",
 #    require => Textgrid::Resources::Servicetomcat[$tgname],
@@ -62,7 +63,7 @@ class textgrid::services::tgcrud (
     war_ensure    => present,
     catalina_base => "/home/textgrid/${tgname}",
     war_source    => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
-#    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=5.1.2-SNAPSHOT&e=war',
+#    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=${tgcrud_name}&v=5.1.2-SNAPSHOT&e=war',
     require       => Textgrid::Resources::Servicetomcat[$tgname],
   }
 
