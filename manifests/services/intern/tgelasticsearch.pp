@@ -71,7 +71,7 @@ class textgrid::services::intern::tgelasticsearch (
       require => [Package['git'],Elasticsearch::Instance['masternode']],
     }
     ->
-    exec {"wait_for_es_master":
+    exec { "wait_for_es_master":
       path    => ['/usr/bin','/bin','/usr/sbin'],
       command => "/usr/bin/wget --spider --tries 10 --retry-connrefused http://localhost:${$master_http_port}/",
     }
@@ -92,7 +92,7 @@ class textgrid::services::intern::tgelasticsearch (
       require => [Package['curl']],
     }
     ~>
-    file {'/etc/facter/facts.d/tgelastic_repos_initialized.txt':
+    file { '/etc/facter/facts.d/tgelastic_repos_initialized.txt':
       content => "tgelastic_repos_initialized=true",
     }
   }

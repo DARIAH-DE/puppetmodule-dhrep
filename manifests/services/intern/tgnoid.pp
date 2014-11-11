@@ -6,8 +6,9 @@
 # TODO:
 #   add checks to bash script
 #
-
-class textgrid::services::intern::tgnoid ( $tgcrud_secret ) {
+class textgrid::services::intern::tgnoid (
+  $tgcrud_secret
+){
 
   $tgname    = 'tgnoid'
   $noiduser  = 'tgnoid'

@@ -3,21 +3,22 @@
 # Class to install and configure tgcrud
 #
 class textgrid::services::tgcrud (
-  $use_messaging = 'false',
-  $tgcrud_name = 'tgcrud-base',
+  $use_messaging  = 'FALSE',
+  $tgcrud_name    = 'tgcrud-base',
   $tgcrud_version = '5.0.1',
 ){
 
   include textgrid::services::intern::tgelasticsearch
   include textgrid::services::intern::tgnoid
+  include textgrid::services::intern::javagat
   include textgrid::services::tgauth
 
-  $tgname = 'tomcat-tgcrud'
-  $http_port = '9093'
+  $tgname       = 'tomcat-tgcrud'
+  $http_port    = '9093'
   $control_port = '9008'
-  $xmx = '1024'
-  $xms = '128'
-  $jmx_port = '9993'
+  $xmx          = '1024'
+  $xms          = '128'
+  $jmx_port     = '9993'
 
   #Maven {
   #  repos => 'http://dev.dariah.eu/nexus/content/groups/public',
@@ -68,20 +69,6 @@ class textgrid::services::tgcrud (
   }
 
   ###
-  # javagat
-  ###
-  textgrid::tools::tgstaging {"JavaGAT-2.1.1-binary.zip":
-    source  => 'http://gforge.cs.vu.nl/gf/download/frsrelease/154/1196/JavaGAT-2.1.1-binary.zip',
-    target  => '/usr/local',
-    creates => '/usr/local/JavaGAT-2.1.1',
-  }
-
-  file { '/usr/local/javagat':
-    ensure => link,
-    target => '/usr/local/JavaGAT-2.1.1',
-  }
-
-  ###
   # config
   ###
   file { '/etc/textgrid/tgcrud':
@@ -115,52 +102,4 @@ class textgrid::services::tgcrud (
     require => File['/var/log/textgrid'],
   }
 
-  ###
-  # the data dir
-  ###
-  file { '/data':
-    ensure => directory,
-    owner  => 'textgrid',
-    group  => 'ULSB',
-    mode   => '0755',
-  }
-
-  # TODO: decide wether to mount stornext or create local data dir
-
-  #mount { '/media/stornext':
-  #  device  => 'fs-base3.gwdg.de:/home/textgrid/',
-  #  fstype  => 'nfs',
-  #  ensure  => 'mounted',
-  #  options => 'defaults',
-  #  atboot  => true,
-  #  require => [File['/mnt/storage'],Package['nfs-common']],
-  #}
-
-  file { '/data/public':
-    ensure  => directory,
-    owner   => 'textgrid',
-    group   => 'ULSB',
-    mode    => '0755',
-  }
-
-  file { '/data/nonpublic':
-    ensure  => directory,
-    owner   => 'textgrid',
-    group   => 'ULSB',
-    mode    => '0755',
-  }
-
-  file { '/data/public/productive':
-    ensure  => directory,
-    owner   => 'textgrid',
-    group   => 'ULSB',
-    mode    => '0755',
-  }
-
-  file { '/data/nonpublic/productive':
-    ensure  => directory,
-    owner   => 'textgrid',
-    group   => 'ULSB',
-    mode    => '0755',
-  }
 }

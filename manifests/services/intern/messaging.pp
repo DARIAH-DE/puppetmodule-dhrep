@@ -2,14 +2,14 @@ class textgrid::services::intern::messaging {
 
   exec { 'git_clone_messagebeans':
     command => 'git clone git://git.projects.gwdg.de/textgrid-messagebeans.git /usr/local/src/messagebeans-git',
-    path => ['/usr/bin','/bin','/usr/sbin'],
+    path    => ['/usr/bin','/bin','/usr/sbin'],
     creates => '/usr/local/src/messagebeans-git',
     require => Package['git'],
   }
 
 #  $nexus = {
-#    id => "dariah-nexus",
-#    url => "http://dev.dariah.eu/nexus/content/groups/public",
+#    id       => "dariah-nexus",
+#    url      => "http://dev.dariah.eu/nexus/content/groups/public",
 #    mirrorof => "*",      # if you want to use the repo as a mirror, see maven::settings below
 #  }
 
@@ -26,9 +26,8 @@ class textgrid::services::intern::messaging {
   }
 
   file { "/root/.m2/settings.xml":
-    ensure  => present,
-    source  => 'puppet:///modules/textgrid/root/m2-settings.xml',
+    ensure => present,
+    source => 'puppet:///modules/textgrid/root/m2-settings.xml',
   }
-
 
 }

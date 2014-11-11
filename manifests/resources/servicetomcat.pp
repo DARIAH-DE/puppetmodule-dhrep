@@ -54,18 +54,24 @@ define textgrid::resources::servicetomcat (
   $defaults_template = 'textgrid/etc/default/tomcat.erb',
 ){
 
-  group { $group:
-    ensure =>  present,
-    gid    =>  $gid,
+  # Check if group and user are already existing.
+  # Just in case we have two tomcats using the same user and group
+  # (e.g. tgcrud and tgcrud-public)
+  if ! defined(Group[$group]) {
+    group { $group:
+      ensure =>  present,
+      gid    =>  $gid,
+    }
   }
-
-  user { $user:
-    ensure     => present,
-    uid        => $uid,
-    gid        => $gid,
-    shell      => '/bin/bash',
-    home       => "/home/${user}",
-    managehome => true,
+  if ! defined(User[$user]) {
+    user { $user:
+      ensure     => present,
+      uid        => $uid,
+      gid        => $gid,
+      shell      => '/bin/bash',
+      home       => "/home/${user}",
+      managehome => true,
+    }
   }
 
   exec { "create_${name}":
