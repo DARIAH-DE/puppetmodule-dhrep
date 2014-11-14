@@ -153,7 +153,7 @@
 			</property>
 			<property>
 				<field>tgcrudUrl</field>
-				<value>http://localhost:8089/tgcrud/TGCrudService?wsdl</value>
+				<value>http://localhost:9093/tgcrud/TGCrudService?wsdl</value>
 			</property>
 		</class>
 		<class name="processstarter.textgrid.publish.TGPublish">
@@ -226,7 +226,7 @@
 		<class name="actionmodule.textgrid.publish.PublishCheckEdition">
 			<property>
 				<field>tgsearchUrl</field>
-				<value>http://localhost:9092/tgsearch</value>
+				<value>http://localhost:9090/tgsearch</value>
 			</property>
 			<property>
 				<!-- Add required namespaces for evaluating xpath-expressions below separate 
@@ -257,7 +257,7 @@
 		<class name="actionmodule.textgrid.publish.PublishCheckWorldReadable">
 			<property>
 				<field>tgsearchUrl</field>
-				<value>http://localhost:9092/tgsearch</value>
+				<value>http://localhost:9090/tgsearch</value>
 			</property>
 		</class>
 		<class name="actionmodule.textgrid.publish.CheckReferences">
@@ -339,7 +339,7 @@
 		<class name="actionmodule.textgrid.publish.CopyRelationData">
 			<property>
 				<field>sesameReadHost</field>
-				<value>http://localhost:9090/openrdf-sesame/repositories/textgrid</value>
+				<value>http://localhost:9091/openrdf-sesame/repositories/textgrid</value>
 				<description>The endpoint URL of the Sesame host to read metadata from (non-public instance).</description>
 			</property>
 			<property>
@@ -354,7 +354,7 @@
 			</property>
 			<property>
 				<field>sesameWriteHost</field>
-				<value>http://localhost:9090/openrdf-sesame/repositories/textgrid-public</value>
+				<value>http://localhost:9091/openrdf-sesame/repositories/textgrid-public</value>
 				<description>The endpoint URL of the Sesame host to write metadata to (public instance).</description>
 			</property>
 			<property>
@@ -371,7 +371,7 @@
 		<class name="actionmodule.textgrid.publish.ReleaseNearlyPublishedRelation">
 			<property>
 				<field>sesameHost</field>
-				<value>http://localhost:9090/openrdf-sesame/repositories/textgrid-public</value>
+				<value>http://localhost:9091/openrdf-sesame/repositories/textgrid-public</value>
 				<description>The endpoint URL of the Sesame host to write metadata to (public instance).</description>
 			</property>
 			<property>
@@ -408,12 +408,12 @@
 		<class name="actionmodule.textgrid.copy.GatherObjectUris">
 			<property>
 				<field>tgsearchUrl</field>
-				<value>http://localhost:9092/tgsearch/</value>
+				<value>http://localhost:9090/tgsearch/</value>
 				<description>The endpoint URL of the TG-search service (non-public instance).</description>
 			</property>
 			<property>
 				<field>tgsearchUrlPublic</field>
-				<value>http://localhost:9092/tgsearch-public/</value>
+				<value>http://localhost:9090/tgsearch-public/</value>
 				<description>The endpoint URL of the TG-search service (non-public instance).</description>
 			</property>
 		</class>
