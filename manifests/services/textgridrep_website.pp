@@ -4,7 +4,7 @@
 #
 class textgrid::services::textgridrep_website(
   $tgrep_server_name = 'vm1rep vm1rep.textgrid.local',
-  $tgrep_service_url  = 'http://vm1rep.textgrid.local/1.0',
+  $tgrep_service_url  = 'http://vm1.textgrid.local/1.0',
 ) {
 
   include textgrid::tgnginx
