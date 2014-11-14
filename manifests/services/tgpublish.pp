@@ -7,8 +7,6 @@ class textgrid::services::tgpublish (
   $tgpublish_version  = '3.5.4-SNAPSHOT',
 ){
 
-# TODO wait for tgcrud and tgcrud-public to be ready?!
-
   $tgname = 'tomcat-tgpublish'
 
   ###
@@ -29,7 +27,7 @@ class textgrid::services::tgpublish (
     war_source    => "/var/cache/textgrid/${tgpublish_name}-${tgpublish_version}.war",
     require       => Textgrid::Resources::Servicetomcat[$tgname],
   }
-  
+
   ###
   # config
   ###
