@@ -1,0 +1,36 @@
+/* configuration here */
+// TODO: http or https?
+
+// smjwsk: We need to have the same proto (http/https) here, as the
+// main page (users can use https) because of same domain policy for
+// xhr calls includes proto
+var tgProtoHost = window.location.protocol + '//' + window.location.host;
+var servicesURL = '<%= scope.lookupvar('textgrid::services::textgridrep_website::tgrep_service_url') %>';
+var tgsearchURL = servicesURL + '/tgsearch-public/';
+var tgcrudURL =  servicesURL + '/tgcrud-public/';
+var voyantURL = tgProtoHost + '/voyant/';
+var pndResolveURL = 'http://d-nb.info/gnd/';
+var aggregatorURL = tgProtoHost + '/services/aggregator/';
+var statusURL = tgProtoHost + '/services/repstatus/';
+var dfgViewerURL = 'http://dfg-viewer.de/v3/';
+var collatexWrapURL = 'http://collatex.dariah.eu:8080/collatex-wrap/rest/';
+var digilibURL = servicesURL + '/digilib/rest/digilib';
+var miradorURL = 'http://textgrid-esx1.gwdg.de/1.0/iiif/mirador/view.html?uri=';
+var iiifProjectsURL = 'http://textgrid-esx1.gwdg.de/1.0/iiif/manifests/projects/';
+
+var sandbox = false;
+
+
+/* configuration ends */
+
+if(sandbox) {
+        $(document).ready(function() {
+        setSandboxLayout();
+        });
+}
+
+function setSandboxLayout() {
+        $('html').css('background', '#E5DF88 url("images/bg_gradient_sandbox.png") 0 0 repeat-x');
+        $('#replogo').attr('src', 'images/textgridrep_logo_sandbox3.png');
+}
+

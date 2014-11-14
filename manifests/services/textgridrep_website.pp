@@ -4,6 +4,7 @@
 #
 class textgrid::services::textgridrep_website(
   $tgrep_server_name = 'vm1rep vm1rep.textgrid.local',
+  $tgrep_service_url  = 'http://vm1rep.textgrid.local/1.0',
 ) {
 
   include textgrid::tgnginx
@@ -29,6 +30,14 @@ class textgrid::services::textgridrep_website(
     source  => 'file:///var/www/nginx-root/textgridrep.de/textgridrep-webseite',
     recurse => true,
   }
+  ->
+  file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite/js/config.js':
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('textgrid/var/www/nginx-root/textgridrep-webseite/config.js.erb'),
+  }  
 
   file { '/etc/nginx/sites-available/textgridrep':
     ensure  => present,
