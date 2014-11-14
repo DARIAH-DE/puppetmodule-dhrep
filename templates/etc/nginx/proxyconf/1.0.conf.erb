@@ -31,7 +31,6 @@ location /1.0/triplestore {
     limit_except GET {
        deny all;
     }
-
 }
 
 location /1.0/tgoaipmh {
@@ -43,7 +42,6 @@ location /1.0/tgsearch {
     gzip_types text/plain application/xml;
     proxy_pass http://localhost:9090/tgsearch;
 }
-
 
 location /dev/tgsearch {
     proxy_pass http://localhost:9096/tgsearch;
@@ -72,6 +70,8 @@ location /1.0/tgcrud {
 }
 
 location /1.0/tgcrud-public {
+#    gzip on;
+#    gzip_types multipart/related application/xop+xml text/xml;
     client_max_body_size 1000m;
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
@@ -121,4 +121,3 @@ location /1.0/tgsearch-public/navigation/toplevel  {
 #    proxy_cache_valid 24h;
     proxy_pass http://localhost:9090/tgsearch-public/navigation/toplevel;
 }
-

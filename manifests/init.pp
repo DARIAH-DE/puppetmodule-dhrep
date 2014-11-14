@@ -9,6 +9,8 @@ class textgrid {
 
   include textgrid::services::tgsearch
   include textgrid::services::tgcrud
+  include textgrid::services::tgcrud_public
+  include textgrid::services::tgpublish
   include textgrid::services::tgauth
   include textgrid::services::confserv
   include textgrid::services::digilib

@@ -3,20 +3,22 @@
 # Class to install and configure tgcrud
 #
 class textgrid::services::tgcrud (
-  $use_messaging = 'false',
+  $use_messaging  = 'FALSE',
+  $tgcrud_name    = 'tgcrud-base',
   $tgcrud_version = '5.0.1',
 ){
 
   include textgrid::services::intern::tgelasticsearch
   include textgrid::services::intern::tgnoid
+  include textgrid::services::intern::javagat
   include textgrid::services::tgauth
 
-  $tgname = 'tomcat-tgcrud'
-  $http_port = '9093'
+  $tgname       = 'tomcat-tgcrud'
+  $http_port    = '9093'
   $control_port = '9008'
-  $xmx = '1024'
-  $xms = '128'
-  $jmx_port = '9993'
+  $xmx          = '1024'
+  $xms          = '128'
+  $jmx_port     = '9993'
 
   #Maven {
   #  repos => 'http://dev.dariah.eu/nexus/content/groups/public',
@@ -44,12 +46,12 @@ class textgrid::services::tgcrud (
   #}
 
   staging::file { "tgcrud-${tgcrud_version}.war":
-    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=${tgcrud_version}&e=war",
+    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=${tgcrud_name}&v=${tgcrud_version}&e=war",
     target  => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
   }
 
 #  textgrid::tools::tgstaging { "tgcrud-${tgcrud_version}.war":
-#    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=${tgcrud_version}&e=war",
+#    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=${tgcrud_name}&v=${tgcrud_version}&e=war",
 #    target  => "/home/textgrid/${tgname}/webapps/tgcrud",
 #    creates => "/home/textgrid/${tgname}/webapps/tgcrud",
 #    require => Textgrid::Resources::Servicetomcat[$tgname],
@@ -62,22 +64,8 @@ class textgrid::services::tgcrud (
     war_ensure    => present,
     catalina_base => "/home/textgrid/${tgname}",
     war_source    => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
-#    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgcrud-base&v=5.1.2-SNAPSHOT&e=war',
+#    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=${tgcrud_name}&v=5.1.2-SNAPSHOT&e=war',
     require       => Textgrid::Resources::Servicetomcat[$tgname],
-  }
-
-  ###
-  # javagat
-  ###
-  textgrid::tools::tgstaging {"JavaGAT-2.1.1-binary.zip":
-    source  => 'http://gforge.cs.vu.nl/gf/download/frsrelease/154/1196/JavaGAT-2.1.1-binary.zip',
-    target  => '/usr/local',
-    creates => '/usr/local/JavaGAT-2.1.1',
-  }
-
-  file { '/usr/local/javagat':
-    ensure => link,
-    target => '/usr/local/JavaGAT-2.1.1',
   }
 
   ###
@@ -114,52 +102,4 @@ class textgrid::services::tgcrud (
     require => File['/var/log/textgrid'],
   }
 
-  ###
-  # the data dir
-  ###
-  file { '/data':
-    ensure => directory,
-    owner  => 'textgrid',
-    group  => 'ULSB',
-    mode   => '0755',
-  }
-
-  # TODO: decide wether to mount stornext or create local data dir
-
-  #mount { '/media/stornext':
-  #  device  => 'fs-base3.gwdg.de:/home/textgrid/',
-  #  fstype  => 'nfs',
-  #  ensure  => 'mounted',
-  #  options => 'defaults',
-  #  atboot  => true,
-  #  require => [File['/mnt/storage'],Package['nfs-common']],
-  #}
-
-  file { '/data/public':
-    ensure  => directory,
-    owner   => 'textgrid',
-    group   => 'ULSB',
-    mode    => '0755',
-  }
-
-  file { '/data/nonpublic':
-    ensure  => directory,
-    owner   => 'textgrid',
-    group   => 'ULSB',
-    mode    => '0755',
-  }
-
-  file { '/data/public/productive':
-    ensure  => directory,
-    owner   => 'textgrid',
-    group   => 'ULSB',
-    mode    => '0755',
-  }
-
-  file { '/data/nonpublic/productive':
-    ensure  => directory,
-    owner   => 'textgrid',
-    group   => 'ULSB',
-    mode    => '0755',
-  }
 }
