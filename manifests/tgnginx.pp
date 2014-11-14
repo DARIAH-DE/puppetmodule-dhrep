@@ -24,6 +24,14 @@ class textgrid::tgnginx (
   #        }
   #    }
 
+  file { '/var/www':
+    ensure => directory,
+  }
+
+  file { '/var/www/nginx-root':
+    ensure => directory,
+  } 
+
   file { '/etc/nginx/proxyconf':
     ensure  => directory,
     owner   => root,
