@@ -3,9 +3,9 @@
 # Class to install and configure tgcrud-public
 #
 class textgrid::services::tgcrud_public (
-  $use_messaging = 'FALSE',
-  $tgcrud_name = 'tgcrud-base',
-  $tgcrud_version = '5.0.1',
+  $use_messaging   = 'FALSE',
+  $tgcrud_name     = 'tgcrud-base',
+  $tgcrud_version  = '5.0.1',
 ){
 
   include textgrid::services::intern::tgelasticsearch
@@ -13,12 +13,12 @@ class textgrid::services::tgcrud_public (
   include textgrid::services::intern::javagat
   include textgrid::services::tgauth
 
-  $tgname = 'tomcat-tgpublish'
-  $http_port = '9094'
+  $tgname       = 'tomcat-tgpublish'
+  $http_port    = '9094'
   $control_port = '9009'
-  $xmx = '1024'
-  $xms = '128'
-  $jmx_port = '9994'
+  $xmx          = '1024'
+  $xms          = '128'
+  $jmx_port     = '9994'
 
   ###
   # user, home-dir and user-tomcat
@@ -33,7 +33,11 @@ class textgrid::services::tgcrud_public (
     jmx_port     => $jmx_port,
     defaults_template => 'textgrid/etc/default/tomcat.tgcrud-public.erb',
   }
+  ~>
 
+  ###
+  # stage war
+  ###
   staging::file { "tgcrud-public-${tgcrud_version}.war":
     source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=${tgcrud_name}&v=${tgcrud_version}&e=war",
     target  => "/var/cache/textgrid/tgcrud-public-${tgcrud_version}.war",
@@ -59,23 +63,34 @@ class textgrid::services::tgcrud_public (
     group  => root,
     mode   => '0755',
   }
-
   file { '/etc/textgrid/tgcrud-public/tgcrud.properties':
     ensure  => present,
     owner   => root,
     group   => 'ULSB',
     mode    => '0640',
     content => template('textgrid/etc/textgrid/tgcrud-public/tgcrud.properties.erb'),
+    require => File['/etc/textgrid/tgcrud-public'],
+  }
+  file { '/etc/textgrid/tgcrud-public/beans.properties':
+    ensure  => present,
+    owner   => root,
+    group   => 'ULSB',
+    mode    => '0640',
+    content => template('textgrid/etc/textgrid/tgcrud-public/beans.properties.erb'),
+    require => File['/etc/textgrid/tgcrud-public'],
   }
 
+  ###
+  # logging
+  ###
   file { '/etc/textgrid/tgcrud-public/tgcrud.log4j':
     ensure  => present,
     owner   => root,
     group   => 'ULSB',
     mode    => '0640',
     content => template('textgrid/etc/textgrid/tgcrud-public/tgcrud.log4j.erb'),
+    require => File['/etc/textgrid/tgcrud-public'],
   }
-
   file { '/var/log/textgrid/tgcrud-public':
     ensure  => directory,
     owner   => 'textgrid',
