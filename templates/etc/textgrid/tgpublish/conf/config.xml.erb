@@ -277,7 +277,7 @@
 		<class name="actionmodule.textgrid.publish.GetPids">
 			<property>
 				<field>tgpidUrl</field>
-				<value>http://localhost:TODO/tgpid/</value>
+				<value>http://localhost:9094/tgpid/</value>
 			</property>
 			<property>
 				<field>pidResolverPrefix</field>
@@ -290,6 +290,14 @@
 			<property>
 				<field>fakePids</field>
 				<value><%= scope.lookupvar('textgrid::services::tgpublish::fake_pids') %></value>
+			</property>
+			<property>
+				<field>repeateTimes</field>
+				<value>3</value>
+			</property>
+			<property>
+				<field>repeatEvery</field>
+				<value>2</value>
 			</property>
 		</class>
 		<class name="actionmodule.textgrid.publish.ModifyAndUpdate">
