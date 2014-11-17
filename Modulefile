@@ -1,4 +1,4 @@
-name 'textgrid-textgrid'
+name 'textgrid'
 version '0.0.1'
 source 'git@git.projects.gwdg.de:textgrid-puppetmodule.git'
 author 'TextGrid'
