@@ -6,10 +6,10 @@ class textgrid::services::tgsearch {
 
   include textgrid::services::intern::tgelasticsearch
 
-  $tgname = 'tomcat-tgsearch'
-  $http_port = '9090'
+  $tgname       = 'tomcat-tgsearch'
+  $http_port    = '9090'
   $control_port = '9005'
-  $jmx_port = '9990'
+  $jmx_port     = '9990'
 
   ###
   # user, home-dir and user-tomcat

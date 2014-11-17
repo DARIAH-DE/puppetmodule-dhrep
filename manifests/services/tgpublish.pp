@@ -3,8 +3,9 @@
 # Class to install and configure tgpublish.
 #
 class textgrid::services::tgpublish (
-  $tgpublish_name     = 'kolibri-tgpublish-service',
-  $tgpublish_version  = '3.5.4-SNAPSHOT',
+  $tgpublish_name    = 'kolibri-tgpublish-service',
+  $tgpublish_version = '3.5.4-SNAPSHOT',
+  $fake_pids         = 'false',
 ){
 
   $tgname = 'tomcat-tgpublish'

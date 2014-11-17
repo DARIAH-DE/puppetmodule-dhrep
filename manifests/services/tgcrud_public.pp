@@ -3,9 +3,10 @@
 # Class to install and configure tgcrud-public
 #
 class textgrid::services::tgcrud_public (
-  $use_messaging   = 'FALSE',
-  $tgcrud_name     = 'tgcrud-base',
-  $tgcrud_version  = '5.0.1',
+  $tgcrud_name    = 'tgcrud-base',
+  $tgcrud_version = '5.0.1',
+  $use_messaging  = 'false',
+  $publish_secret = '',
 ){
 
   include textgrid::services::intern::tgelasticsearch
