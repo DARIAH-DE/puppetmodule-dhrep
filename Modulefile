@@ -16,7 +16,3 @@ dependency 'puppetlabs/tomcat', "1.2.0"
 dependency 'maestrodev/wget', "1.5.6"
 dependency 'biemond/wildfly', "0.1.7"
 
-dependency 'dariah-dariahcommon',
-  :git => "git@git.projects.gwdg.de:dariah-puppetmodule.git",
-  :ref => "b03e4bf20e3927dc77f5d4b6cc50b73a7e46480c"
-
