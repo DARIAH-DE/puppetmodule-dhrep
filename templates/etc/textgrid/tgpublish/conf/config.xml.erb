@@ -343,7 +343,7 @@
 				<description>Set to true if you want to NEARLY publish, set to false if you want to REALLY publish. See TextGrid Sandbox documentation for more information.</description>
 			</property>
 			<property>
-				<field>tgcrudSecret</field>
+				<field>tgauthSecret</field>
 				<value><%= scope.lookupvar('textgrid::services::tgauth::crud_secret') %></value>
 				<description>The secret the TG-auth needs for publishing. Only TG-crud is allowed to!</description>
 			</property>
@@ -351,7 +351,7 @@
 		<class name="actionmodule.textgrid.publish.CopyRelationData">
 			<property>
 				<field>sesameReadHost</field>
-				<value>http://localhost:9091/openrdf-sesame/repositories/textgrid</value>
+				<value>http://localhost:9091/openrdf-sesame/repositories/textgrid-nonpublic</value>
 				<description>The endpoint URL of the Sesame host to read metadata from (non-public instance).</description>
 			</property>
 			<property>
