@@ -7,6 +7,8 @@
 #
 class textgrid {
 
+  include '::dariahcommon'
+
   include textgrid::services::tgsearch
   include textgrid::services::tgcrud
   include textgrid::services::tgcrud_public
@@ -33,11 +35,16 @@ class textgrid {
     'openjdk-7-jdk':            ensure => present;
     'tomcat7':                  ensure => present;
     'tomcat7-user':             ensure => present;
-    'git':                      ensure => present;
-    'curl':                     ensure => present;
     'emacs':                    ensure => present;
     'mc':                       ensure => present;
     'maven':                    ensure => present;
+  }
+
+  # open http and https ports (other ports are closed via dariah-common firewall rules)
+  firewall { '100 allow http and https access':
+    port   => [80, 443],
+    proto  => tcp,
+    action => accept,
   }
 
   file { '/etc/textgrid':

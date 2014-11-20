@@ -49,4 +49,16 @@ class textgrid::services::intern::tgwildfly {
     command     => '/home/wildfly/wildfly/bin/jboss-cli.sh --controller=localhost:19990 --connect --command="jms-topic add --topic-address=tgcrudTopic --entries=topic/tgcrud,java:jboss/exported/jms/topic/tgcrud"',
   }
 
+  ###
+  # stage war
+  ###
+  staging::file { "message-beans.war":
+    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=1.0-SNAPSHOT&e=war",
+    target  => "/var/cache/textgrid/message-beans.war",
+  }
+  ~>
+  file { "/home/wildfly/wildfly/standalone/deployments/message-beans.war":
+    source => "/var/cache/textgrid/message-beans.war",
+  }
+
 }
