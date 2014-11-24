@@ -74,6 +74,21 @@ class textgrid {
     require => Package['tomcat7'],
   }
 
+  ###
+  # create admin users on system and set mail aliases
+  ###
+  file { '/etc/aliases':
+    ensure => present,
+  }
+
+  $textgridadmins = hiera_hash('textgridadmins')
+  $admin_defaults = {
+    'groups' => ['sudo'],
+  }
+
+  create_resources(textgrid::users_addadmin, $textgridadmins, $admin_defaults)
+
+
   # we want to use custom facts (TODO: is there an existing puppet plugin?)
   file { '/etc/facter/':
     ensure => directory,
