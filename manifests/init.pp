@@ -18,6 +18,7 @@ class textgrid {
   include textgrid::services::confserv
   include textgrid::services::digilib
   include textgrid::services::textgridrep_website
+  include textgrid::services::tgoaipmh
 
   include textgrid::services::intern::tgelasticsearch
   include textgrid::services::intern::sesame
