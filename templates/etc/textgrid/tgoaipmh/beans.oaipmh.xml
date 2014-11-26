@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:jaxws="http://cxf.apache.org/jaxws"
+      xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+      xmlns:util="http://www.springframework.org/schema/util"
+      xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://cxf.apache.org/jaxws
+http://cxf.apache.org/schemas/jaxws.xsd
+http://cxf.apache.org/jaxrs
+http://cxf.apache.org/schemas/jaxrs.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util-3.1.xsd
+">
+
+<description>Configuration for the textgrid oai interface</description>
+
+<import resource="classpath:META-INF/cxf/cxf.xml"/>
+<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+  <property name="locations">
+    <list>
+      <value>file:/etc/textgrid/oaipmh/oaipmh.properties</value>
+    </list>
+  </property>
+  <property name="ignoreResourceNotFound" value="true"/>
+  <property name="ignoreUnresolvablePlaceholders">
+  	<value>true</value>
+  </property>
+</bean>
+
+<bean id="ElasticSearchClient" class="info.textgrid.middleware.OAI_ESClient">
+	<constructor-arg index="0"><value>${elasticSearch.url}</value></constructor-arg>
+	<constructor-arg index="1"><value>${elasticSearch.port}</value></constructor-arg>
+	<constructor-arg index="2"><value>${elasticSearch.clusterName}</value></constructor-arg>
+	<property name="esIndex" value="${elasticSearch.index}"/>
+	<property name="esType" value="${elasticSearch.type}"/>
+</bean>
+
+
+<!-- REST Interface -->
+<bean id="rest" class="info.textgrid.middleware.Rest"></bean>
+
+<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter">
+    <property name="allowOrigins">
+        <util:list/>
+    </property>
+</bean>
+
+
+<bean id="oai" class="info.textgrid.middleware.OAIPMHImpl">
+	<constructor-arg ref="ElasticSearchClient"/>
+</bean> 
+
+<jaxrs:server id="root" address="/root">
+    <jaxrs:serviceBeans>
+        <ref bean="rest" />
+    </jaxrs:serviceBeans>
+    <jaxrs:providers>
+        <ref bean="cors-filter"/>
+    </jaxrs:providers>
+</jaxrs:server>
+
+<jaxrs:server id="queryEndpoint" address="/oai">
+    <jaxrs:serviceBeans>
+        <ref bean="oai" />
+    </jaxrs:serviceBeans>
+    <jaxrs:providers>
+        <ref bean="cors-filter"/>
+    </jaxrs:providers>
+</jaxrs:server>
+
+
+</beans>
