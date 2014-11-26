@@ -33,6 +33,8 @@ class textgrid::services::tgcrud_public (
     control_port => $control_port,
     jmx_port     => $jmx_port,
     defaults_template => 'textgrid/etc/default/tomcat.tgcrud-public.erb',
+    init_dependencies => 'tomcat-tgcrud',
+    require           => Service['tomcat-tgcrud'],
   }
   ~>
 

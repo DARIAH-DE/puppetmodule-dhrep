@@ -18,7 +18,7 @@
 #
 ### BEGIN INIT INFO
 # Provides:          <%= @name %>
-# Required-Start:    $local_fs $remote_fs $network
+# Required-Start:    $local_fs $remote_fs $network <%= @init_dependencies %>
 # Required-Stop:     $local_fs $remote_fs $network
 # Should-Start:      $named
 # Should-Stop:       $named

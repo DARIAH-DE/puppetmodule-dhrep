@@ -35,6 +35,9 @@
 # [*defaults_template*]
 #   defaults file template for /etc/defaults, if different from textgrid/etc/default/tomcat.erb
 #
+# [*init_dependencies*]
+#   services which should be started before this tomcat, added as dependency to init.d script, separate with whitespace if more than one
+#
 # TODO:
 #   install libapr1 and integrate with tomcat-conf
 #      in conf/server.conf
@@ -52,6 +55,7 @@ define textgrid::resources::servicetomcat (
   $group = $name,
   $user = $name,
   $defaults_template = 'textgrid/etc/default/tomcat.erb',
+  $init_dependencies = '',
 ){
 
   # Check if group and user are already existing.

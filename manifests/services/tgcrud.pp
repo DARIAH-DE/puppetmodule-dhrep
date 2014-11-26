@@ -25,36 +25,18 @@ class textgrid::services::tgcrud (
   # user, home-dir and user-tomcat
   ###
   textgrid::resources::servicetomcat { $tgname:
-    user         => 'textgrid',
-    group        => 'ULSB',
-    gid          => '29900',
-    uid          => '49628',
-    http_port    => $http_port,
-    control_port => $control_port,
-    jmx_port     => $jmx_port,
+    user              => 'textgrid',
+    group             => 'ULSB',
+    gid               => '29900',
+    uid               => '49628',
+    http_port         => $http_port,
+    control_port      => $control_port,
+    jmx_port          => $jmx_port,
     defaults_template => 'textgrid/etc/default/tomcat.tgcrud.erb',
+    init_dependencies => 'wildfly',
+    require           => Service['wildfly'],
   }
 
-  ###
-  # stage war
-  ###
-  staging::file { "tgcrud-${tgcrud_version}.war":
-    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=${tgcrud_name}&v=${tgcrud_version}&e=war",
-    target  => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
-  }
-  ~>
-
-  ###
-  # deploy war
-  ###
-  tomcat::war { 'tgcrud.war':
-    war_ensure    => present,
-    catalina_base => "/home/textgrid/${tgname}",
-    war_source    => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
-    require       => Textgrid::Resources::Servicetomcat[$tgname],
-  }
-  ~>
-  
   ###
   # config
   ###
@@ -63,7 +45,8 @@ class textgrid::services::tgcrud (
     owner  => root,
     group  => root,
     mode   => '0755',
-  }
+  } 
+  ->
   file { '/etc/textgrid/tgcrud/tgcrud.properties':
     ensure  => present,
     owner   => root,
@@ -72,6 +55,7 @@ class textgrid::services::tgcrud (
     content => template('textgrid/etc/textgrid/tgcrud/tgcrud.properties.erb'),
     require => File['/etc/textgrid/tgcrud'],
   }
+  ->
   file { '/etc/textgrid/tgcrud/beans.properties':
     ensure  => present,
     owner   => root,
@@ -79,6 +63,24 @@ class textgrid::services::tgcrud (
     mode    => '0640',
     content => template('textgrid/etc/textgrid/tgcrud/beans.properties.erb'),
     require => File['/etc/textgrid/tgcrud'],
+  }
+  ->
+  ###
+  # stage war
+  ###
+  staging::file { "tgcrud-${tgcrud_version}.war":
+    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=${tgcrud_name}&v=${tgcrud_version}&e=war",
+    target  => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
+  }
+  ~>
+  ###
+  # deploy war
+  ###
+  tomcat::war { 'tgcrud.war':
+    war_ensure    => present,
+    catalina_base => "/home/textgrid/${tgname}",
+    war_source    => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
+    require       => Textgrid::Resources::Servicetomcat[$tgname],
   }
 
   ###
