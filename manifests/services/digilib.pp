@@ -32,15 +32,19 @@ class textgrid::services::digilib {
     source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.services&a=digilib-service&v=${digilib_version}&e=war",
     target  => "/var/cache/textgrid/digilib-service-${digilib_version}.war",
   }
-
+  ->
   tomcat::war { 'digilibservice.war':
     war_ensure    => present,
     catalina_base => "/home/${tgname}/${tgname}",
     war_source    => "/var/cache/textgrid/digilib-service-${digilib_version}.war",
     require       => Textgrid::Resources::Servicetomcat[$tgname],
   }
+  ~>
+  textgrid::tools::wait_for_url_ready { 'wait_4_digilib_war_deployed':
+    url         => "http://localhost:${http_port}/digilibservice/", 
+    refreshonly => true,
+  }
   ->
-  # TODO: next step needs to need to wait until tomcat unzipped war file
   file { "/home/${tgname}/${tgname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
     ensure => link,
     target => '/etc/textgrid/digilib/digilib.properties',
