@@ -69,11 +69,9 @@ class textgrid::services::intern::sesame {
   }
 
   unless $sesame_nonpublic_repo_created {
-
     textgrid::resources::create_rdf_repository{'textgrid-nonpublic':
       port    => '9091',
       user    => $tgname,
-      require => [Tomcat::War['openrdf-sesame.war'],Tomcat::War['openrdf-workbench.war']],
     }
     ->
     file {'/etc/facter/facts.d/sesame_nonpublic.txt':
@@ -85,7 +83,6 @@ class textgrid::services::intern::sesame {
     textgrid::resources::create_rdf_repository{'textgrid-public':
       port    => '9091',
       user    => $tgname,
-      require => [Tomcat::War['openrdf-sesame.war'],Tomcat::War['openrdf-workbench.war']],
     }
     ->
     file {'/etc/facter/facts.d/sesame_public.txt':

@@ -12,16 +12,14 @@ define textgrid::resources::create_rdf_repository (
   $create_data = shellquote("type=native&Repository+ID=${name}&Repository+title=rdf+repo+for+${name}+data&Triple+indexes=spoc%2Cposc%2Copsc%2Csopc")
   $ttl_target = shellquote("http://localhost:${port}/openrdf-sesame/repositories/${name}/statements")
 
-  # need to wait for tomcat before creating repo  
-  # http://stackoverflow.com/questions/8244663/puppet-wait-for-a-service-to-be-ready
-  exec {"wait_for_sesame_${name}":
-    path    => ['/usr/bin','/bin','/usr/sbin'],
-    command => "/usr/bin/wget --spider --tries 10 --retry-connrefused http://localhost:${port}/openrdf-sesame/repositories",
+  textgrid::tools::wait_for_url_ready { "${name}_rep_ready_wait":
+    url     => "http://localhost:${port}/openrdf-sesame/repositories", 
+    require => Tomcat::War['openrdf-sesame.war'],
   }
   ~>
-  exec {"wait_for_workbench_${name}":
-    path    => ['/usr/bin','/bin','/usr/sbin'],
-    command => "/usr/bin/wget --spider --tries 10 --retry-connrefused http://localhost:${port}/openrdf-workbench/",
+  textgrid::tools::wait_for_url_ready { "${name}_workbench_ready_wait":
+    url     => "http://localhost:${port}/openrdf-workbench/", 
+    require => Tomcat::War['openrdf-workbench.war'],
   }
   ~>
   exec { "create_repo_${name}":
