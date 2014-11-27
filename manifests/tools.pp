@@ -5,4 +5,8 @@ class textgrid::tools {
     source  => 'puppet:///modules/textgrid/tools/wait_for_url_ready.sh',
   }
 
+  file { "/usr/local/src/tomcat-apr.patch":
+    source  => 'puppet:///modules/textgrid/tools/tomcat-apr.patch'
+  }
+
 }

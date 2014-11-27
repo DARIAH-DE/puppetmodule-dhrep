@@ -58,6 +58,8 @@ define textgrid::resources::servicetomcat (
   $init_dependencies = '',
 ){
 
+  require textgrid::tools
+
   # Check if group and user are already existing.
   # Just in case we have two tomcats using the same user and group
   # (e.g. tgcrud and tgcrud-public)
@@ -84,6 +86,13 @@ define textgrid::resources::servicetomcat (
     creates => "/home/${user}/${name}",
     user    => $user,
     require => Package['tomcat7-user'],
+  }
+  ~>
+  exec { "patching_${name}_for_apr":
+    path    => ['/usr/bin','/bin','/usr/sbin'],
+    command => "patch /home/${user}/${name}/conf/server.xml < /usr/local/src/tomcat-apr.patch",
+    refreshonly => true,
+    require => File['/usr/local/src/tomcat-apr.patch'],
   }
 
   file { "/etc/init.d/${name}":

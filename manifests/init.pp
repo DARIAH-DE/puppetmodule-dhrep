@@ -36,6 +36,7 @@ class textgrid {
     'openjdk-7-jdk':            ensure => present;
     'tomcat7':                  ensure => present;
     'tomcat7-user':             ensure => present;
+    'libtcnative-1':            ensure => present;               
     'emacs':                    ensure => present;
     'mc':                       ensure => present;
     'maven':                    ensure => present;
