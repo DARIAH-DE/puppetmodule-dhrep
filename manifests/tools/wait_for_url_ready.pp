@@ -22,10 +22,10 @@ define textgrid::tools::wait_for_url_ready (
 
   require textgrid::tools
 
-  notify { "${name}_urlwaiting_message":
-    message => "waiting for at most ${retries} seconds for ${url} to become ready",
-  }
-  ->
+  #notify { "${name}_urlwaiting_message":
+  #  message => "waiting for at most ${retries} seconds for ${url} to become ready",
+  #}
+  #->
   exec {"wait_for_url_ready_${name}":
     path        => ['/usr/bin','/bin','/usr/sbin', '/usr/local/bin'],
     command     => "/usr/local/bin/wait_for_url_ready.sh ${url} ${retries} ",

@@ -84,10 +84,29 @@ class textgrid {
 
   $textgridadmins = hiera_hash('textgridadmins')
   $admin_defaults = {
-    'groups' => ['sudo'],
+    'groups' => ['sudo', 'textgridadmins'],
   }
 
   create_resources(textgrid::users_addadmin, $textgridadmins, $admin_defaults)
+
+  # add passwordless sudoers (cmp. with cendari server puppet)
+  group { 'textgridadmins':
+    ensure => present,
+    gid    => 900,
+  }
+
+  augeas { 'textgridsudonopass':
+    context => '/files/etc/sudoers',
+    changes => [
+        # allow group cendariadmins to use sudo without password
+        'set spec[user = "%textgridadmins"]/user %textgridadmins',
+        'set spec[user = "%textgridadmins"]/host_group/host ALL',
+        'set spec[user = "%textgridadmins"]/host_group/command ALL',
+        'set spec[user = "%textgridadmins"]/host_group/command/runas_user ALL',
+        'set spec[user = "%textgridadmins"]/host_group/command/tag NOPASSWD',
+    ]
+  }
+
 
 
   # we want to use custom facts (TODO: is there an existing puppet plugin?)
