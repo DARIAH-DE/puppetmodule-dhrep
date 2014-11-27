@@ -39,6 +39,7 @@ class textgrid {
     'emacs':                    ensure => present;
     'mc':                       ensure => present;
     'maven':                    ensure => present;
+    'make':                     ensure => present;
   }
 
   # open http and https ports (other ports are closed via dariah-common firewall rules)
