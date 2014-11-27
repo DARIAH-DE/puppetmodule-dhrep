@@ -31,32 +31,50 @@ location /1.0/triplestore {
     limit_except GET {
        deny all;
     }
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/tgoaipmh {
     proxy_pass http://localhost:9097/tgoaipmh;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/tgsearch {
     gzip on;
     gzip_types text/plain application/xml;
     proxy_pass http://localhost:9090/tgsearch;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /dev/tgsearch {
     proxy_pass http://localhost:9096/tgsearch;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /dev/tgsearch-public {
     gzip on;
     gzip_types text/plain application/xml;
     proxy_pass http://localhost:9096/tgsearch-public;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/tgsearch-public {
     gzip on;
     gzip_types text/plain application/xml;
     proxy_pass http://localhost:9090/tgsearch-public;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/tgcrud {
@@ -67,6 +85,9 @@ location /1.0/tgcrud {
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
     proxy_pass http://localhost:9093/tgcrud;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/tgcrud-public {
@@ -77,28 +98,46 @@ location /1.0/tgcrud-public {
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
     proxy_pass http://localhost:9094/tgcrud-public;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/tgpublish {
     proxy_pass http://localhost:9094/tgpublish;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/tgpid {
     proxy_pass http://localhost:9094/tgpid;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/digilib {
     proxy_pass http://localhost:9092/digilibservice;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/iiif/manifests {
     gzip on;
     gzip_types text/plain application/json;
     proxy_pass http://localhost:9092/screpview;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/iiif/mirador {
     alias /var/www/nginx-root/textgridrep.de/iiif/mirador;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
 
 location /1.0/aggregator {
@@ -121,4 +160,7 @@ location /1.0/tgsearch-public/navigation/toplevel  {
 #    proxy_cache tgsearch;
 #    proxy_cache_valid 24h;
     proxy_pass http://localhost:9090/tgsearch-public/navigation/toplevel;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
 }
