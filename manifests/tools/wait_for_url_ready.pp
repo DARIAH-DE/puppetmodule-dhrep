@@ -16,7 +16,7 @@
 #
 define textgrid::tools::wait_for_url_ready (
   $url,
-  $retries = 20,
+  $retries = 30,
   $refreshonly = false,
 ) {
 

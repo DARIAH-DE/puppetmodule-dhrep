@@ -17,8 +17,9 @@ class textgrid::services::intern::tgelasticsearch (
   $cluster_name,
   $master_http_port = '9202',
   $master_tcp_port = '9302',
-  $es_version = '1.0.3',
-  $attachments_plugin_version = '2.0.0',
+  $es_version = '1.3.6',
+  $attachments_plugin_version = '2.3.2',
+  $highlighter_plugin_version = '0.0.13',
 ) {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
@@ -59,6 +60,10 @@ class textgrid::services::intern::tgelasticsearch (
     instances  => ['masternode', 'workhorse'],
   }
 
+  elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
+    module_dir => 'experimental-highlighter-elasticsearch-plugin',
+    instances  => ['masternode', 'workhorse'],
+  }
 
   # run only once
   unless $tgelastic_repos_initialized {
