@@ -20,7 +20,7 @@ objectClass: organizationalUnit
 
 # rbac, bindaccounts, textgrid.de
 dn: cn=rbac,ou=bindaccounts,dc=textgrid,dc=de
-userPassword: testing123
+userPassword: <%= scope.lookupvar('textgrid::services::tgauth::binddn_pass') %>
 objectClass: simpleSecurityObject
 objectClass: person
 sn: rbac
@@ -61,7 +61,7 @@ objectClass: top
 objectClass: inetOrgPerson
 sn: ShibConnector
 cn: ShibConnector
-userPassword: testing123
+userPassword: <%= scope.lookupvar('textgrid::services::tgauth::authz_shib_pw') %>
 
 # roles, rbac, textgrid.de
 dn: ou=roles,ou=rbac,dc=textgrid,dc=de
@@ -90,12 +90,6 @@ objectClass: top
 objectClass: rbacRole
 rbacPerformer: ShibConnector@application.int
 rbacName: sessionCreator
-
-# TextGrid-Admin, roles, rbac, textgrid.de
-dn: rbacName=TextGrid-Admin,ou=roles,ou=rbac,dc=textgrid,dc=de
-objectClass: top
-objectClass: rbacRole
-rbacName: TextGrid-Admin
 
 # sessions, rbac, textgrid.de
 dn: ou=sessions,ou=rbac,dc=textgrid,dc=de
@@ -130,28 +124,4 @@ dn: cn=resource,ou=counter,ou=rbac,dc=textgrid,dc=de
 objectClass: person
 sn: 0
 cn: resource
-
-# admin, users, textgrid.de
-dn: uid=admin,ou=users,dc=textgrid,dc=de
-TGacceptedTermsOfUse: TRUE
-givenName: Admin
-sn: Admin
-eduPersonPrincipalName: admin.admin@textgrid.de
-objectClass: top
-objectClass: inetOrgPerson
-objectClass: eduPerson
-objectClass: TextGridUser
-uid: admin
-TGWantsNewsletter: TRUE
-userPassword: testing123
-mail: admin@somewhere.ac.uk
-cn: Admin Adminster
-
-# attributewriter, bindaccounts, textgrid.de
-dn: cn=attributewriter,ou=bindaccounts,dc=textgrid,dc=de
-userPassword: testing123
-objectClass: simpleSecurityObject
-objectClass: person
-sn: attributewriter
-cn: attributewriter
 

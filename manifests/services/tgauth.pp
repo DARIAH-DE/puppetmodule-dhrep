@@ -222,7 +222,7 @@ class textgrid::services::tgauth (
 
       file { '/tmp/ldap-cn-config.ldif':
         ensure  => present,
-        content => template('textgrid//tmp/ldap-cn-config.ldif.erb'),
+        content => template('textgrid//ldap/ldap-cn-config.ldif.erb'),
         require => Service['slapd'],
       }
       ~>
@@ -238,7 +238,7 @@ class textgrid::services::tgauth (
       ~>
       file { '/tmp/ldap-rbac-template.ldif':
         ensure => present,
-        source => 'puppet:///modules/textgrid/ldap/rbac-data.ldif',
+        content => template('textgrid//ldap/rbac-data.ldif.erb'),
       }
       ~>
       # should only run once, if ldap template is added (with help of notify and refreshonly)

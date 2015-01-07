@@ -28,14 +28,14 @@ class textgrid::services::tgsearch {
   tomcat::war { 'tgsearch-public.war':
     war_ensure    => present,
     catalina_base => "/home/${tgname}/${tgname}",
-    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgsearch-public-webapp&v=3.3.1-SNAPSHOT&e=war',
+    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgsearch-public-webapp&v=3.3.2-SNAPSHOT&e=war',
     require       => Textgrid::Resources::Servicetomcat[$tgname],
   }
   ->
   tomcat::war { 'tgsearch.war':
     war_ensure    => present,
     catalina_base => "/home/${tgname}/${tgname}",
-    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgsearch-nonpublic-webapp&v=3.3.1-SNAPSHOT&e=war',
+    war_source    => 'http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=tgsearch-nonpublic-webapp&v=3.3.2-SNAPSHOT&e=war',
     require       => Textgrid::Resources::Servicetomcat[$tgname],
 #    notify        => Service['tomcat-tgsearch'],
   }
