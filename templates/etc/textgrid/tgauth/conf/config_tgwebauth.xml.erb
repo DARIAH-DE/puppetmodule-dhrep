@@ -26,9 +26,9 @@
     <!--rbacbase>http://localhost:8080/tgauth/</rbacbase-->
     <sessioncreator>
       <user>shibconnector@application.int</user>
-      <password><%= scope.lookupvar('textgrid::services::tgauth::authz_shib_pw') %></password>
+      <password><%= scope.lookupvar('textgrid::services::tgauth::va authz_shib_pw') %></password>
     </sessioncreator>
-    <setnamessecret><%= scope.lookupvar('textgrid::services::tgauth::authz_name_secret') %></setnamessecret>
+    <setnamessecret><%= scope.lookupvar('textgrid::services::tgauth::webauth_secret') %></setnamessecret>
   </authz>
 
 </conf>

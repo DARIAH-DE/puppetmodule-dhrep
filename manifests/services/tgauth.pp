@@ -24,7 +24,6 @@ class textgrid::services::tgauth (
   $rbac_base = '',
   $webauth_dariah_secret = '',
   $authz_shib_pw = '',
-  $authz_name_secret = '',
   $authz_instance = '',
   $slapd_rootpw = '',
 ){
