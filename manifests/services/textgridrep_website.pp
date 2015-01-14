@@ -31,6 +31,11 @@ class textgrid::services::textgridrep_website(
     recurse => true,
   }
   ->
+  file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite/sandbox':
+    ensure => link,
+    target => '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox',
+  }
+  ->
   file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite/js/config.js':
     ensure  => present,
     owner   => root,
@@ -38,6 +43,14 @@ class textgrid::services::textgridrep_website(
     mode    => '0644',
     content => template('textgrid/var/www/nginx-root/textgridrep-webseite/config.js.erb'),
   }  
+  ->
+  file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox/js/config.js':
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('textgrid/var/www/nginx-root/textgridrep-webseite-sandbox/config.js.erb'),
+  } 
 
   file { '/etc/nginx/sites-available/textgridrep':
     ensure  => present,
