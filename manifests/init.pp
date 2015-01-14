@@ -5,7 +5,9 @@
 # TODO  read https://dev2.dariah.eu/wiki/display/TGINT/textgrid-esx1.gwdg.de
 #       and write the manifests ;-)
 #
-class textgrid {
+class textgrid (
+  $hostname
+) {
 
   include '::dariahcommon'
 
@@ -19,6 +21,7 @@ class textgrid {
   include textgrid::services::digilib
   include textgrid::services::textgridrep_website
   include textgrid::services::tgoaipmh
+  include textgrid::services::aggregator
 
   include textgrid::services::intern::tgelasticsearch
   include textgrid::services::intern::sesame
