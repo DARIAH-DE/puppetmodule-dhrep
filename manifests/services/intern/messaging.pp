@@ -1,4 +1,11 @@
-class textgrid::services::intern::messaging {
+class textgrid::services::intern::messaging (
+
+  $enzmeta_textgrid_user='',
+  $enzmeta_textgrid_password='',
+  $bolrdf_textgrid_user='',
+  $bolrdf_textgrid_user='',
+
+){
 
   exec { 'git_clone_messagebeans':
     command => 'git clone git://git.projects.gwdg.de/textgrid-messagebeans.git /usr/local/src/messagebeans-git',
@@ -34,12 +41,20 @@ class textgrid::services::intern::messaging {
     ensure => directory,
   }
 
-  file { "/etc/textgrid/messagebeans/mdb.properties":
+  file { "/etc/textgrid/messagebeans/enzmeta.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/messagebeans/mdb.properties.erb'),
+    content => template('textgrid/etc/textgrid/messagebeans/enzmeta.properties.erb'),
+  }
+
+  file { "/etc/textgrid/messagebeans/bolrfd.properties":
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('textgrid/etc/textgrid/messagebeans/bolrdf.properties.erb'),
   }
 
 }
