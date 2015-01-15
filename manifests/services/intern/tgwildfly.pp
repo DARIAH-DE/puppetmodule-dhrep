@@ -7,6 +7,8 @@
 #       compare https://github.com/biemond/biemond-wildfly/blob/v0.1.7/manifests/install.pp#L37
 class textgrid::services::intern::tgwildfly {
 
+  $message_beans_version = '1.0.1-SNAPSHOT'
+
   # install wildfly
   class { 'wildfly::install':
     version           => '8.2.0',
@@ -53,12 +55,12 @@ class textgrid::services::intern::tgwildfly {
   # stage war
   ###
   staging::file { "message-beans.war":
-    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=1.0-SNAPSHOT&e=war",
-    target  => "/var/cache/textgrid/message-beans.war",
+    source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
+    target  => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
   }
   ~>
   file { "/home/wildfly/wildfly/standalone/deployments/message-beans.war":
-    source => "/var/cache/textgrid/message-beans.war",
+    source => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
   }
 
 }

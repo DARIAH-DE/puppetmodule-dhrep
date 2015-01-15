@@ -17,18 +17,18 @@ class textgrid::services::intern::tgelasticsearch (
   $cluster_name,
   $master_http_port = '9202',
   $master_tcp_port = '9302',
-  $es_version = '1.3.6',
-  $attachments_plugin_version = '2.3.2',
-  $highlighter_plugin_version = '0.0.13',
+  $repo_version = '1.4',
+  $attachments_plugin_version = '2.4.1',
+  $highlighter_plugin_version = '1.4.0',
 ) {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
   class { 'elasticsearch':
-    #manage_repo  => true,
-    #repo_version => '1.0',
-    #autoupgrade  => true,
-    package_url => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
+    manage_repo  => true,
+    repo_version => $repo_version,
+    autoupgrade  => true,
+    #package_url => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
     config      => {
       'cluster.name' => $cluster_name,
 # es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
