@@ -1,5 +1,5 @@
 textgrid.login =
 textgrid.password =
-authzinstance = vm1.textgrid.local
-tgcudUrl = http://vm1.textgrid.local/1.0/tgcrud/TGCrudService
-webauthUrl = http://vm1.textgrid.local/1.0/WebAuthN/TextGrid-WebAuth.php
+authzinstance = <%= scope.lookupvar('textgrid::services::tgauth::authz_instance') %>
+tgcudUrl = http://<%= scope.lookupvar('::fqdn') %>/1.0/tgcrud/TGCrudService
+webauthUrl = http://<%= scope.lookupvar('::fqdn') %>/1.0/WebAuthN/TextGrid-WebAuth.php
