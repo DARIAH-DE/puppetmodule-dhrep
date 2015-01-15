@@ -5,9 +5,7 @@
 # TODO  read https://dev2.dariah.eu/wiki/display/TGINT/textgrid-esx1.gwdg.de
 #       and write the manifests ;-)
 #
-class textgrid (
-  $hostname
-) {
+class textgrid {
 
   include '::dariahcommon'
 

@@ -1,8 +1,8 @@
 # The final endpoint that should be displayed in the generated WADL
-aggregator.endpoint.published=http://<%= scope.lookupvar('textgrid::hostname') %>/1.0/aggregator
+aggregator.endpoint.published=http://<%= scope.lookupvar('::fqdn') %>/1.0/aggregator
 
 # The confserv endpoint for the default endpoint, /aggregator
-aggregator.textgridrep.default=http://<%= scope.lookupvar('textgrid::hostname') %>/1.0/confserv
+aggregator.textgridrep.default=http://<%= scope.lookupvar('::fqdn') %>/1.0/confserv
 
 # The confserv endpoint for the develop endpoint, /aggregator/dev
 aggregator.textgridrep.dev=https://textgridlab.org/dev/confserv
