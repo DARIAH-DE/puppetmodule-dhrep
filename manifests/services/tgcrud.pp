@@ -10,6 +10,7 @@ class textgrid::services::tgcrud (
 ){
 
   include textgrid::services::intern::tgelasticsearch
+  include textgrid::services::intern::sesame
   include textgrid::services::intern::tgnoid
   include textgrid::services::intern::javagat
   include textgrid::services::tgauth
