@@ -2,7 +2,7 @@
 # #%L
 # TG-pid Service Implementation
 # %%
-# Copyright (C) 2014 TextGrid Consortion (http://www.textgrid.de), SUB GÃ¶ttingen (http://www.sub.uni-goettingen.de)
+# Copyright (C) 2015 TextGrid Consortion (http://www.textgrid.de), SUB Göttingen (http://www.sub.uni-goettingen.de)
 # %%
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as 
@@ -19,10 +19,10 @@
 # <http://www.gnu.org/licenses/lgpl-3.0.html>.
 # #L%
 ###
-gwdg.user = ***
-gwdg.pw = ***
-handleservice.endpoint = http://
-handleservice.path = ***
-handleservice.prefix = ***
-tg.responsible = ***
+gwdg.user = <%= scope.lookupvar('textgrid::services::tgpid::tgpid_user') %>
+gwdg.pw = <%= scope.lookupvar('textgrid::services::tgpid::tgpid_passwd') %>
+handleservice.endpoint = <%= scope.lookupvar('textgrid::services::tgpid::tgpid_endpoint') %>
+handleservice.path = <%= scope.lookupvar('textgrid::services::tgpid::tgpid_path') %>
+handleservice.prefix = <%= scope.lookupvar('textgrid::services::tgpid::tgpid_prefix') %>
+tg.responsible = <%= scope.lookupvar('textgrid::services::tgpid::tgpid_responsible') %>
 tgauth.endpoint = http://localhost:8080/tgauth/tgextra.php
