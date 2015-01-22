@@ -3,8 +3,14 @@
 # Class to install and configure tgpid.
 #
 class textgrid::services::tgpid (
-  $tgpid_name     = 'tgppid-service',
-  $tgpid_version  = '3.2.0',
+  $tgpid_name        = 'tgppid-service',
+  $tgpid_version     = '3.2.0',
+  $tgpid_user        = '',
+  $tgpid_passwd      = '',
+  $tgpid_endpoint    = 'http://pid.gwdg.de',
+  $tgpid_path        = '/handles/',
+  $tgpid_prefix      = '',
+  $tgpid_responsible = 'TextGrid',
 ){
 
   $tgname = 'tomcat-tgpublish'

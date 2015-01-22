@@ -16,16 +16,16 @@
 #   https://forge.puppetlabs.com/camptocamp/openldap
 #
 class textgrid::services::tgauth (
-  $ldap_host = '',
-  $binddn_pass = '',
-  $crud_secret = '',
-  $webauth_secret = '',
-  $sidcheck_secret = '',
-  $rbac_base = '',
+  $ldap_host             = '',
+  $binddn_pass           = '',
+  $crud_secret           = '',
+  $webauth_secret        = '',
+  $sidcheck_secret       = '',
+  $rbac_base             = '',
   $webauth_dariah_secret = '',
-  $authz_shib_pw = '',
-  $authz_instance = '',
-  $slapd_rootpw = '',
+  $authz_shib_pw         = '',
+  $authz_instance        = '',
+  $slapd_rootpw          = '',
 ){
 
   package {
