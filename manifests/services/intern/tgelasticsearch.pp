@@ -18,6 +18,7 @@ class textgrid::services::intern::tgelasticsearch (
   $master_http_port = '9202',
   $master_tcp_port = '9302',
   $repo_version = '1.4',
+  $attachments_plugin_version = '2.4.1',
   $highlighter_plugin_version = '1.4.0',
 ) {
 
@@ -52,6 +53,11 @@ class textgrid::services::intern::tgelasticsearch (
       'http.port'          => '9203',
       'transport.tcp.port' => '9303',
     }
+  }
+
+  elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
+    module_dir => 'mapper-attachments',
+    instances  => ['masternode', 'workhorse'],
   }
 
   elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
