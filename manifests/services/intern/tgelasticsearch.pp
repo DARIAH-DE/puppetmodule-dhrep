@@ -17,17 +17,19 @@ class textgrid::services::intern::tgelasticsearch (
   $cluster_name,
   $master_http_port = '9202',
   $master_tcp_port = '9302',
-  $repo_version = '1.4',
+  $repo_version = '1.4',  # not used for now, as experimental highlighter may break on minor version updates
+  $elasticsearch_version = '1.4.2'
   $attachments_plugin_version = '2.4.1',
-  $highlighter_plugin_version = '1.4.0',
+  $highlighter_plugin_version = '1.4.1',
 ) {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
   class { 'elasticsearch':
     manage_repo  => true,
-    repo_version => $repo_version,
-    autoupgrade  => true,
+    version =>  $elasticsearch_version,
+    #repo_version => $repo_version,
+    #autoupgrade  => true,
     #package_url => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
     config      => {
       'cluster.name' => $cluster_name,
