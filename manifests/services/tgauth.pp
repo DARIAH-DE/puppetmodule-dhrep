@@ -209,6 +209,13 @@ class textgrid::services::tgauth (
     content => template('textgrid//etc/ldap/ldap.conf.erb'),
   }
 
+  # ldap needs to know its own id for mulit-master replikation
+  augeas { "slapd_default":
+    changes => [
+      "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
+    ],
+  }
+
   # todo: changes group of /etc/ldap/schemas from root to staff, ok?
 #  file { '/etc/ldap/schema/':
 #    source  => '/usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac/ldap-schemas/',
