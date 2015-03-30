@@ -214,6 +214,7 @@ class textgrid::services::tgauth (
     changes => [
       "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
     ],
+    notify => Service['slapd'],
   }
 
   # todo: changes group of /etc/ldap/schemas from root to staff, ok?
