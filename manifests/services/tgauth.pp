@@ -26,6 +26,8 @@ class textgrid::services::tgauth (
   $authz_shib_pw         = '',
   $authz_instance        = '',
   $slapd_rootpw          = '',
+  $ldap_replication      = false,
+  $ldap_clusternodes     = [],
 ){
 
   package {
@@ -223,6 +225,13 @@ class textgrid::services::tgauth (
 #    recurse => true,
 #    require => Exec['git_clone_tgauth'],
 #  }
+
+  # test
+  file { '/tmp/ldap-cn-config-test.ldif':
+    ensure  => present,
+    content => template('textgrid//ldap/ldap-cn-config.ldif.erb'),
+    require => Service['slapd'],
+  }
 
   unless $tgauth_ldap_initialized {
       $slapd_rootpw_sha = sha1digest($slapd_rootpw)
