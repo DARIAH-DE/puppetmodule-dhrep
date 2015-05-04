@@ -76,4 +76,12 @@ class textgrid {
     ensure  => directory,
   }
 
+  $tgcache = '/var/cache/textgrid/'
+  # vagrant cachier changes this to symlink
+  unless $vagrant {
+    file { $tgcache :
+      ensure => directory,
+    }
+  }
+
 }
