@@ -13,7 +13,6 @@ class textgrid::services::intern::tgwildfly {
   class { 'wildfly':
     version           => '8.2.0',
     install_source    => 'http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.tar.gz',
-    install_file      => 'wildfly-8.2.0.Final.tar.gz',
     java_home         => '/usr/lib/jvm/java-7-openjdk-amd64',
     dirname           => '/home/wildfly/wildfly',
     mode              => 'standalone',
