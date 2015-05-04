@@ -7,7 +7,7 @@
 class textgrid::resources::apache {
 
   class { '::apache':
-    default_confd_files => false,
+    default_confd_files => true,
     mpm_module          => prefork,
     default_vhost       => false,
   }

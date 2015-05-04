@@ -11,7 +11,7 @@ class textgrid::services::digilib {
   $digilib_version = '1.7-SNAPSHOT'
 
   package {
-    'libvips15':       ensure => present; # this is needed by the prescaler, see textgrid::services::intern::messaging
+    'libvips':       ensure => present; # this is needed by the prescaler, see textgrid::services::intern::messaging
     'libvips-tools': ensure => present;
   }
 

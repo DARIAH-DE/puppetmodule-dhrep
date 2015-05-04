@@ -26,9 +26,9 @@ class textgrid::services::intern::tgelasticsearch (
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
   class { 'elasticsearch':
-    #manage_repo  => true,
+    manage_repo  => true,
     version =>  $elasticsearch_version,
-    #repo_version => $repo_version,
+    repo_version => $repo_version,
     #autoupgrade  => true,
     #package_url => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
     config      => {
