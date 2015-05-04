@@ -3,8 +3,16 @@ define textgrid::tools::tgstaging(
   $target,
   $creates = undef,
 ){
+
   $tgcache = '/var/cache/textgrid/'
 
+  # vagrant cachier changes this to symlink
+  unless $vagrant {
+    file { $tgcache :
+      ensure => directory,
+    }
+  }
+  
   staging::file { $name:
     source  => $source,
     target  => "${tgcache}/${name}",
