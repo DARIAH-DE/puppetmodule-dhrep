@@ -10,7 +10,7 @@ class textgrid::services::intern::tgwildfly {
   $message_beans_version = '1.0.1-SNAPSHOT'
 
   # install wildfly
-  class { 'wildfly::install':
+  class { 'wildfly':
     version           => '8.2.0',
     install_source    => 'http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.tar.gz',
     install_file      => 'wildfly-8.2.0.Final.tar.gz',
@@ -34,6 +34,7 @@ class textgrid::services::intern::tgwildfly {
 #  }
 
   # add user for tgcrud to connect
+  # TODO: use wildfly:config module, as commented out below, requires server restart
   exec { 'wildfly_add_tgrud_user':
     path        => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
     environment => ['JBOSS_HOME=/home/wildfly/wildfly', 'JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64'],
@@ -41,6 +42,17 @@ class textgrid::services::intern::tgwildfly {
     refreshonly => true,
     command     => '/home/wildfly/wildfly/bin/add-user.sh -a -s --user tgcrud --password secret --group guest',
   }
+
+#  wildfly::config::add_app_user { 'Adding appuser':
+#    username => 'tgcrud',
+#    password => 'secret'
+#  }
+
+#  wildfly::config::associate_groups_to_user { 'Associate groups to mgmtuser':
+#    username => 'tgcrud',
+#    groups   => 'guest'
+#  }
+
 
   # add tgcrud topic to jms
   exec { 'wildfly_add_tgcrud_topic':
