@@ -47,7 +47,11 @@ class textgrid::services::tgcrud_public (
     target  => "/var/cache/textgrid/tgcrud-public-${tgcrud_version}.war",
   }
   ~>
-
+  # strange thing this is necessary... TODO: why?
+  file { "/var/cache/textgrid/tgcrud-public-${tgcrud_version}.war":
+    mode    => '0644',
+  }
+  ~>
   ###
   # deploy war
   ###

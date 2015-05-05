@@ -10,9 +10,10 @@ class textgrid::services::intern::tgwildfly {
   $message_beans_version = '1.0.1-SNAPSHOT'
 
   # install wildfly
-  class { 'wildfly':
+  class { 'wildfly:install':
     version           => '8.2.0',
     install_source    => 'http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.tar.gz',
+    install_file      => 'wildfly-8.2.0.Final.tar.gz',
     java_home         => '/usr/lib/jvm/java-7-openjdk-amd64',
     dirname           => '/home/wildfly/wildfly',
     mode              => 'standalone',
@@ -25,39 +26,24 @@ class textgrid::services::intern::tgwildfly {
     public_http_port  => '18080',
     public_https_port => '18443',
     ajp_port          => '18009',
-    notify            => [Exec['wildfly_add_tgrud_user'],Exec['wildfly_add_tgcrud_topic']]
+#    notify            => [Exec['wildfly_add_tgrud_user'],Exec['wildfly_add_tgcrud_topic']],
   }
-
-#  Exec {
-#    logoutput => true,
-#  }
-
+  ~>
   # add user for tgcrud to connect
   # TODO: use wildfly:config module, as commented out below, requires server restart
   exec { 'wildfly_add_tgrud_user':
     path        => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
     environment => ['JBOSS_HOME=/home/wildfly/wildfly', 'JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64'],
-    require     => Class['wildfly'],
+#    require     => Class['wildfly'],
     refreshonly => true,
     command     => '/home/wildfly/wildfly/bin/add-user.sh -a -s --user tgcrud --password secret --group guest',
   }
-
-#  wildfly::config::add_app_user { 'Adding appuser':
-#    username => 'tgcrud',
-#    password => 'secret'
-#  }
-
-#  wildfly::config::associate_groups_to_user { 'Associate groups to mgmtuser':
-#    username => 'tgcrud',
-#    groups   => 'guest'
-#  }
-
-
+  ~>
   # add tgcrud topic to jms
   exec { 'wildfly_add_tgcrud_topic':
     path        => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
     environment => ['JBOSS_HOME=/home/wildfly/wildfly', 'JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64'],
-    require     => Class['wildfly'],
+#    require     => Class['wildfly'],
     refreshonly => true,
     command     => '/home/wildfly/wildfly/bin/jboss-cli.sh --controller=localhost:19990 --connect --command="jms-topic add --topic-address=tgcrudTopic --entries=topic/tgcrud,java:jboss/exported/jms/topic/tgcrud"',
   }
@@ -68,7 +54,7 @@ class textgrid::services::intern::tgwildfly {
   staging::file { "message-beans.war":
     source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
     target  => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
-    require => Class['wildfly'],
+    require => Class['wildfly:install'],
   }
   ~>
   file { "/home/wildfly/wildfly/standalone/deployments/message-beans.war":
