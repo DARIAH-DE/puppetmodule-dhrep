@@ -13,15 +13,14 @@ class textgrid::tgnginx (
 ) {
 
   package {
-    'nginx-extras': ensure => present;
-    'ssl-cert'   : ensure => present; # snakeoil cert for nginx
+    'nginx'    : ensure => present;
+    'ssl-cert' : ensure => present; # snakeoil cert for nginx
   }
 
   # Use with module jfryman/nginx (maybe later)
   #    class { 'nginx':
   #        http_cfg_append => {
   #            client_body_buffer_size => '512k',
-  #            chunkin                 => 'on',
   #        }
   #    }
 
