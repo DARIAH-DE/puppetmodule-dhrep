@@ -37,7 +37,7 @@ class textgrid::tgnginx (
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => Package['nginx-extras'],
+    require => Package['nginx'],
   }
   ->
   file { $proxy_conf_file:
@@ -67,7 +67,7 @@ class textgrid::tgnginx (
   service { 'nginx':
     ensure  => running,
     enable  => true,
-    require => [Package['nginx-extras'],Package['ssl-cert']],
+    require => [Package['nginx'],Package['ssl-cert']],
   }
 
 }
