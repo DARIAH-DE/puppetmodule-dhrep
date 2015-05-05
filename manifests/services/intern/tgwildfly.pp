@@ -10,7 +10,7 @@ class textgrid::services::intern::tgwildfly {
   $message_beans_version = '1.0.1-SNAPSHOT'
 
   # install wildfly
-  class { 'wildfly:install':
+  class { 'wildfly::install':
     version           => '8.2.0',
     install_source    => 'http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.tar.gz',
     install_file      => 'wildfly-8.2.0.Final.tar.gz',
@@ -54,7 +54,7 @@ class textgrid::services::intern::tgwildfly {
   staging::file { "message-beans.war":
     source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
     target  => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
-    require => Class['wildfly:install'],
+    require => Class['wildfly::install'],
   }
   ~>
   file { "/home/wildfly/wildfly/standalone/deployments/message-beans.war":
