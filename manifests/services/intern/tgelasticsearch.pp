@@ -18,7 +18,7 @@ class textgrid::services::intern::tgelasticsearch (
   $master_http_port = '9202',
   $master_tcp_port = '9302',
   $repo_version = '1.4',  # not used for now, as experimental highlighter may break on minor version updates
-  $elasticsearch_version = '1.4.2',
+  $elasticsearch_version = '1.4.1',
   $attachments_plugin_version = '2.4.1',
   $highlighter_plugin_version = '1.4.1',
 ) {
@@ -47,7 +47,7 @@ class textgrid::services::intern::tgelasticsearch (
       'transport.tcp.port' => $master_tcp_port,
     }
   }
-
+  
   elasticsearch::instance { 'workhorse':
     config => {
       'node.master'        => 'false',

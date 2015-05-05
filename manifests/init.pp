@@ -39,6 +39,7 @@ class textgrid {
     'mc':                       ensure => present;
     'maven':                    ensure => present;
     'make':                     ensure => present;
+    'apache2-utils':            ensure => present;
   }
 
   file { '/etc/textgrid':

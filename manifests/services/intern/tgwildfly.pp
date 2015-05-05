@@ -37,7 +37,7 @@ class textgrid::services::intern::tgwildfly {
   exec { 'wildfly_add_tgrud_user':
     path        => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
     environment => ['JBOSS_HOME=/home/wildfly/wildfly', 'JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64'],
-    require     => Class['wildfly::install'],
+    require     => Class['wildfly'],
     refreshonly => true,
     command     => '/home/wildfly/wildfly/bin/add-user.sh -a -s --user tgcrud --password secret --group guest',
   }
@@ -57,7 +57,7 @@ class textgrid::services::intern::tgwildfly {
   exec { 'wildfly_add_tgcrud_topic':
     path        => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
     environment => ['JBOSS_HOME=/home/wildfly/wildfly', 'JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64'],
-    require     => Class['wildfly::install'],
+    require     => Class['wildfly'],
     refreshonly => true,
     command     => '/home/wildfly/wildfly/bin/jboss-cli.sh --controller=localhost:19990 --connect --command="jms-topic add --topic-address=tgcrudTopic --entries=topic/tgcrud,java:jboss/exported/jms/topic/tgcrud"',
   }
@@ -68,6 +68,7 @@ class textgrid::services::intern::tgwildfly {
   staging::file { "message-beans.war":
     source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
     target  => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
+    require => Class['wildfly'],
   }
   ~>
   file { "/home/wildfly/wildfly/standalone/deployments/message-beans.war":
