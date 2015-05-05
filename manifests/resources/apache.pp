@@ -47,23 +47,20 @@ class textgrid::resources::apache {
     <Directory /var/www/>
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
-        Order allow,deny
-        allow from all
+        Require all granted
     </Directory>
 
     ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
     <Directory \"/usr/lib/cgi-bin\">
         AllowOverride None
         Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-        Order allow,deny
-        Allow from all
+        Require all granted
     </Directory>
 
     Alias /tgauth /var/www/tgauth/rbacSoap
     <Directory \"/var/www/tgauth/rbacSoap\">
       Options +FollowSymLinks -Indexes
-      Order Allow,Deny
-      Allow from all
+      Require all granted
     </Directory>
 
     # --------------------------------------------------------------------------
@@ -78,8 +75,7 @@ class textgrid::resources::apache {
       Require valid-user
       AllowOverride None
       Options +ExecCGI -Includes
-      Order allow,deny
-      Allow from all
+      Require all granted
     </Directory>
 
     # Make the server recognize links to htdocs/nd

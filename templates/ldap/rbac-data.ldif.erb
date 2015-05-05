@@ -63,6 +63,12 @@ sn: ShibConnector
 cn: ShibConnector
 userPassword: <%= scope.lookupvar('textgrid::services::tgauth::authz_shib_pw') %>
 
+# TextGrid-Admin, roles, rbac, textgrid.de
+dn: rbacName=TextGrid-Admin,ou=roles,ou=rbac,dc=textgrid,dc=de
+objectClass: top
+objectClass: rbacRole
+rbacName: TextGrid-Admin
+
 # roles, rbac, textgrid.de
 dn: ou=roles,ou=rbac,dc=textgrid,dc=de
 rbacOperation: administer
