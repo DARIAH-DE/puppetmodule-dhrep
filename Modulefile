@@ -15,5 +15,5 @@ dependency 'puppetlabs/stdlib', '>= 4.3.2'
 dependency 'puppetlabs/tomcat', ">=1.2.0"
 dependency 'maestrodev/wget', ">=1.5.6"
 dependency 'dariah/dariahcommon'
-dependency 'biemond/wildfly', '>=0.1.9'
+dependency 'biemond/wildfly', '=0.1.9'
 
