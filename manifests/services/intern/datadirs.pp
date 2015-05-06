@@ -18,18 +18,11 @@ class textgrid::services::intern::datadirs (
     mode   => '0755',
   }
 
-  # TODO: decide wether to mount stornext or create local data dir
-
-  #mount { '/media/stornext':
-  #device  => 'fs-base3.gwdg.de:/home/textgrid/',
-  #fstype  => 'nfs',
-  #ensure  => 'mounted',
-  #options => 'defaults',
-  #atboot  => true,
-  #require => [File['/mnt/storage'],Package['nfs-common']],
-  #}
 
   if($create_local_datadirs) {
+    ###
+    # local
+    ###
     file { '/data/public':
       ensure => directory,
       owner  => 'textgrid',
@@ -57,7 +50,28 @@ class textgrid::services::intern::datadirs (
       group   => 'ULSB',
       mode    => '0755',
     }
+
   } else {
+    ###
+    # nfs
+    ###
+    package { 'nfs-common':
+      ensure => present,
+    }
+    file { '/mnt/stornext':
+      ensure  => directory,
+      owner   => 'textgrid',
+      group   => 'ULSB',
+      mode    => '0755',
+    }    
+    mount { '/media/stornext':
+      device  => 'fs-base3.gwdg.de:/home/textgrid/',
+      fstype  => 'nfs',
+      ensure  => 'mounted',
+      options => 'defaults',
+      atboot  => true,
+      require => [File['/mnt/stornext'],Package['nfs-common']],
+    }
     file { '/data/public':
       ensure => 'link',
       target => $data_public_location
@@ -65,7 +79,8 @@ class textgrid::services::intern::datadirs (
     file { '/data/nonpublic':
       ensure => 'link',
       target => $data_nonpublic_location
-    }  
+    } 
+ 
   }
 
 }
