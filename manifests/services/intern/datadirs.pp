@@ -58,7 +58,7 @@ class textgrid::services::intern::datadirs (
     package { 'nfs-common':
       ensure => present,
     }
-    file { '/mnt/stornext':
+    file { '/media/stornext':
       ensure  => directory,
       owner   => 'textgrid',
       group   => 'ULSB',
@@ -70,7 +70,7 @@ class textgrid::services::intern::datadirs (
       ensure  => 'mounted',
       options => 'defaults',
       atboot  => true,
-      require => [File['/mnt/stornext'],Package['nfs-common']],
+      require => [File['/media/stornext'],Package['nfs-common']],
     }
     file { '/data/public':
       ensure => 'link',
