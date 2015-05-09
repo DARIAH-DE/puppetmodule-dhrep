@@ -60,9 +60,9 @@ class textgrid::services::intern::datadirs (
     }
     file { '/media/stornext':
       ensure  => directory,
-      owner   => 'textgrid',
-      group   => 'ULSB',
-      mode    => '0755',
+#      owner   => 'textgrid',
+#      group   => 'ULSB',
+#      mode    => '0755',
     }    
     mount { '/media/stornext':
       device  => 'fs-base3.gwdg.de:/home/textgrid/',
