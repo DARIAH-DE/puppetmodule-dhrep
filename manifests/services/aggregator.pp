@@ -23,7 +23,7 @@ class textgrid::services::aggregator (
   }
 
   staging::file { "aggregator-${aggregator_version}.war":
-    source  => "http://dev.digital-humanities.de/nexus/content/repositories/releases/info/textgrid/services/aggregator/1.4.3/aggregator-${aggregator_version}.war",
+    source  => "http://dev.digital-humanities.de/nexus/content/repositories/releases/info/textgrid/services/aggregator/${aggregator_version}/aggregator-${aggregator_version}.war",
     target  => "/var/cache/textgrid/aggregator-${aggregator_version}.war",
   }
   ->
