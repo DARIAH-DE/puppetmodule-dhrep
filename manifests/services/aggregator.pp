@@ -33,7 +33,12 @@ class textgrid::services::aggregator (
     war_source    => "/var/cache/textgrid/aggregator-${aggregator_version}.war",
     require       => Textgrid::Resources::Servicetomcat[$tgname],
   }
-
+  ~>
+  # strange thing this is necessary... TODO: why?
+  file { "/var/cache/textgrid/aggregator-${aggregator_version}.war":
+    mode    => '0644',
+  }
+  
   file { '/etc/textgrid/aggregator':
     ensure => directory,
     owner  => root,
