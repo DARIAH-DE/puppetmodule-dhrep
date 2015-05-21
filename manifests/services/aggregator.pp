@@ -2,14 +2,14 @@
 #
 # Class to install and configure aggregator
 #
-class textgrid::services::aggregator {
+class textgrid::services::aggregator (
+  $aggregator_version = '1.4.5',
+){
 
   $tgname = 'tomcat-aggregator'
   $http_port = '9095'
   $control_port = '9010'
   $jmx_port = '9995'
-  $aggregator_version = '1.4.3' 
-
 
   ###
   # user, home-dir and user-tomcat
