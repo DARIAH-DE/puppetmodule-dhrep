@@ -2,10 +2,6 @@
 
 <conf xmlns="http://textgrid.info/namespaces/middleware/tgwebauth">
   <authn type="community">
-    <!-- zunächst textgridlab.org (134.76.20.91) nutzen über /etc/hosts,
-	 später textgrid-users kopieren auf esx1 -->
-    <!-- der vorige Kommentar unbekannten Datums hat sich mit der 
-         heutigen (2014-08-20) Migration nach DARIAH erledigt :) -->
     <key name="host">auth.dariah.eu</key>
     <key name="port">389</key>
     <key name="binddn">uid=${login},ou=people,dc=dariah,dc=eu</key>

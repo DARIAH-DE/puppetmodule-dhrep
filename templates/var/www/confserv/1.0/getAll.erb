@@ -1,10 +1,8 @@
 {"conf":{"set":[
 	{"key":"tgpublish","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgpublish"},
 	{"key":"PasswordReset","value":"https:\/\/auth.dariah.eu\/cgi-bin\/selfservice\/ldapportal.pl?mode=pwreset"},
-	{"key":"CopyWorkflowTextGridURI","value":"textgrid:h4kg"},
 	{"key":"tgauth","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgauth\/tgextra.php"},
 	{"key":"tgextra-crud","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgauth\/tgextra-crud.php"},
-	{"key":"workflow","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/workflow\/GWESproxy.wsdl"},
 	{"key":"pwchange","value":"https:\/\/auth.dariah.eu\/cgi-bin\/selfservice\/ldapportal.pl?mode=welcome"},
 	{"key":"userdata","value":"https:\/\/auth.dariah.eu\/cgi-bin\/selfservice\/ldapportal.pl?mode=welcome"},
 	{"key":"ApprovedServicesTextGridURI","value":"textgrid:hk21"},
@@ -13,12 +11,10 @@
 	{"key":"tgsearch-public","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgsearch-public"},
 	{"key":"last-api-change","value":"2011-02-15"},
 	{"key":"tgcrud","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgcrud\/TGCrudService"},
-	{"key":"authz","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/WebAuthN\/WebAuthN2.php?authZinstance=<%= scope.lookupvar('textgrid::services::tgauth::authz_instance') %>"},
+	{"key":"authz","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/<%= scope.lookupvar('textgrid::services::tgauth::authn_scope') %>.php?authZinstance=<%= scope.lookupvar('textgrid::services::tgauth::authz_instance') %>"},
 	{"key":"info.textgrid.lemmatizer.service.endpoint","value":"http:\/\/clarin.ids-mannheim.de\/services\/textgrid\/lemmatizer" },
 	{"key":"info.textgrid.cosmas.service.endpoint","value":"http:\/\/clarin.ids-mannheim.de\/services\/textgrid\/cosmas" },
 	{"key":"digilib","value":"http:\/\/digilibtextgridservice.mpiwg-berlin.mpg.de\/digilibservice\/service?wsdl" },
-	{"key":"logservice","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tglog\/service"},
 	{"key":"aggregator","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/aggregator"},
 	{"key":"ztt","value":"http:\/\/ttle.ztt.fh-worms.de"}
 	]}}
-

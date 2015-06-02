@@ -25,6 +25,7 @@ class textgrid::services::tgauth (
   $webauth_dariah_secret = '',
   $authz_shib_pw         = '',
   $authz_instance        = '',
+  $authn_scope           = 'WebAuthN',
   $slapd_rootpw          = '',
   $ldap_replication      = false,
   $ldap_clusternodes     = [],
@@ -116,6 +117,7 @@ class textgrid::services::tgauth (
   file { '/var/www/tgauth':
     source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
     recurse => true,
+    mode    => '0644',
   }
 
   file {
@@ -174,22 +176,26 @@ class textgrid::services::tgauth (
   file { '/var/www/info.textgrid.middleware.tgauth.webauth':
     source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.webauth',
     recurse => true,
+    mode    => '0644',
   }
   ->
   file { '/var/www/info.textgrid.middleware.tgauth.webauth/i18n_cache':
     ensure => directory,
     owner  => 'www-data',
     group  => 'www-data',
+    mode   => '0755'
   }
 
   file { '/var/www/WebAuthN':
     ensure => link,
     target => '/var/www/info.textgrid.middleware.tgauth.webauth/WebAuthN/',
+    mode   => '0755'
   }
 
   file { '/var/www/secure':
     ensure => link,
     target => '/var/www/info.textgrid.middleware.tgauth.webauth/secure/',
+    mode   => '0755'
   }
 
   ###
