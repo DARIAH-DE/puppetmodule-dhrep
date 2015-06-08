@@ -74,6 +74,11 @@ class textgrid::services::tgcrud (
     target  => "/var/cache/textgrid/tgcrud-${tgcrud_version}.war",
   }
   ~>
+  # we need to change permissions! telekom security does require this!
+  file { "/var/cache/textgrid/tgcrud-${tgcrud_version}.war":
+    mode    => '0644',
+  }
+  ~>
   ###
   # deploy war
   ###

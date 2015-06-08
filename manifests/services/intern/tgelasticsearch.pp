@@ -21,6 +21,8 @@ class textgrid::services::intern::tgelasticsearch (
   $elasticsearch_version = '1.4.1',
   $attachments_plugin_version = '2.4.1',
   $highlighter_plugin_version = '1.4.1',
+  $es_min_mem = '256m',
+  $es_max_mem = '1g',
 ) {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
@@ -35,6 +37,10 @@ class textgrid::services::intern::tgelasticsearch (
       'cluster.name' => $cluster_name,
 # es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
 #      'network.host' => '127.0.0.1',
+    },
+    init_defaults      => { 
+      'ES_MIN_MEM' => $es_min_mem,
+      'ES_MAX_MEM' => $es_max_mem,
     },
     java_install => false,
   }

@@ -2,14 +2,14 @@
 #
 # Class to install and configure aggregator
 #
-class textgrid::services::aggregator {
+class textgrid::services::aggregator (
+  $aggregator_version = '1.4.5',
+){
 
   $tgname = 'tomcat-aggregator'
   $http_port = '9095'
   $control_port = '9010'
   $jmx_port = '9995'
-  $aggregator_version = '1.4.3' 
-
 
   ###
   # user, home-dir and user-tomcat
@@ -23,7 +23,7 @@ class textgrid::services::aggregator {
   }
 
   staging::file { "aggregator-${aggregator_version}.war":
-    source  => "http://dev.digital-humanities.de/nexus/content/repositories/releases/info/textgrid/services/aggregator/1.4.3/aggregator-${aggregator_version}.war",
+    source  => "http://dev.digital-humanities.de/nexus/content/repositories/releases/info/textgrid/services/aggregator/${aggregator_version}/aggregator-${aggregator_version}.war",
     target  => "/var/cache/textgrid/aggregator-${aggregator_version}.war",
   }
   ->
@@ -33,7 +33,12 @@ class textgrid::services::aggregator {
     war_source    => "/var/cache/textgrid/aggregator-${aggregator_version}.war",
     require       => Textgrid::Resources::Servicetomcat[$tgname],
   }
-
+  ~>
+  # strange thing this is necessary... TODO: why?
+  file { "/var/cache/textgrid/aggregator-${aggregator_version}.war":
+    mode    => '0644',
+  }
+  
   file { '/etc/textgrid/aggregator':
     ensure => directory,
     owner  => root,

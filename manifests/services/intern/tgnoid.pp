@@ -37,6 +37,10 @@ class textgrid::services::intern::tgnoid (
     shell      => '/bin/bash',
     managehome => true,
   }
+  ->
+  file { "/home/${noiduser}":
+    mode   => '0755',
+  }
 
   ###
   # create apache user for tgnoid

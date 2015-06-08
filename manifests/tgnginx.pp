@@ -13,15 +13,14 @@ class textgrid::tgnginx (
 ) {
 
   package {
-    'nginx-extras': ensure => present;
-    'ssl-cert'   : ensure => present; # snakeoil cert for nginx
+    'nginx'    : ensure => present;
+    'ssl-cert' : ensure => present; # snakeoil cert for nginx
   }
 
   # Use with module jfryman/nginx (maybe later)
   #    class { 'nginx':
   #        http_cfg_append => {
   #            client_body_buffer_size => '512k',
-  #            chunkin                 => 'on',
   #        }
   #    }
 
@@ -38,7 +37,7 @@ class textgrid::tgnginx (
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => Package['nginx-extras'],
+    require => Package['nginx'],
   }
   ->
   file { $proxy_conf_file:
@@ -68,7 +67,7 @@ class textgrid::tgnginx (
   service { 'nginx':
     ensure  => running,
     enable  => true,
-    require => [Package['nginx-extras'],Package['ssl-cert']],
+    require => [Package['nginx'],Package['ssl-cert']],
   }
 
 }

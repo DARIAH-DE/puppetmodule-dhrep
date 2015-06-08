@@ -42,6 +42,13 @@ class textgrid {
     'apache2-utils':            ensure => present;
   }
 
+  # open http and https ports (other ports are closed via dariah-common firewall rules)
+  firewall { '100 allow http and https access':
+    port   => [80, 443],
+    proto  => tcp,
+    action => accept,
+  }
+
   file { '/etc/textgrid':
     ensure => directory,
     owner  => root,

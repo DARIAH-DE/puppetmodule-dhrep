@@ -91,6 +91,12 @@ objectClass: rbacRole
 rbacPerformer: ShibConnector@application.int
 rbacName: sessionCreator
 
+# TextGrid-Admin, roles, rbac, textgrid.de
+dn: rbacName=TextGrid-Admin,ou=roles,ou=rbac,dc=textgrid,dc=de
+objectClass: top
+objectClass: rbacRole
+rbacName: TextGrid-Admin
+
 # sessions, rbac, textgrid.de
 dn: ou=sessions,ou=rbac,dc=textgrid,dc=de
 rbacPermission: rbacName=sessionCreator,rbacName=Anwendung,ou=roles,ou=rbac,dc

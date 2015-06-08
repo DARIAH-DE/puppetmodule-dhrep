@@ -63,9 +63,4 @@ error_page 404 /404.html;
 #       root /usr/share/nginx/www;
 #}
 
-# enable chunking
-error_page 411 = @my_411_error;
-location @my_411_error {
-    chunkin_resume;
-}
 
