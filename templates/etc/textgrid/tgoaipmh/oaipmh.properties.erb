@@ -1,0 +1,69 @@
+##########################
+## ElasticSearch config ##
+##########################
+
+elasticSearch.url = 127.0.0.1
+elasticSearch.port = <%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::master_tcp_port') %>
+elasticSearch.clusterName = <%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::cluster_name') %>
+elasticSearch.index = textgrid-public
+elasticSearch.type = metadata
+
+#######################
+##  Project Choosing ##
+#######################
+
+textgrid = true
+dariah = false
+
+##########################
+## Repositoy Properties ##
+##########################
+
+RepositoryName = TextGrid Repositorium
+BaseUrl = http://www.textgridrep.de
+DeletedRecordInfo = NO
+EarliestDateStamp = 2011-06-11T02:32:40Z
+Granularity = YYYY_MM_DD_THH_MM_SS_Z
+ProtocolVersion = 2.0
+AdminMail = textgrid-support@gwdg.de
+
+####################
+## Field Settings ##
+####################
+
+fields = created, format, identifier, dataContributor, textgridUri, project.id, relations.isDerivedFrom, title, pid.value, edition.isEditionOf, edition.agent.value, edition.license.licenseUri, edition.language, edition.source.bibliographicCitation.author.value, edition.source.bibliographicCitation.editor.value, edition.source.bibliographicCitation.editionTitle, edition.source.bibliographicCitation.placeOfPublication.value, edition.source.bibliographicCitation.publisher.value, edition.source.bibliographicCitation.editionNo, edition.source.bibliographicCitation.series, edition.source.bibliographicCitation.volume, edition.source.bibliographicCitation.issue, edition.source.bibliographicCitation.epage, edition.source.bibliographicCitation.spage, edition.source.bibliographicCitation.bibidentifier, work.abstract, work.genre, work.type, work.spatial.value, work.temporal.value, work.agent.value, work.subject.id.value
+workFields = created, work.abstract, relations.isDerivedFrom, textgridUri, work.genre, title, work.type, work.spatial.value, work.temporal.spatial, work.agent.value, work.subject.id.value
+
+########################
+## Dublin Core Fields ##
+########################
+
+contributorList = dataContributor
+coverageList = work.spatial.value, work.temporal.value
+creatorList = work.agent.value
+dateList = created
+descriptionList = work.abstract
+formatList = format
+identifierList = textgridUri, pid.value, identifier
+languageList = edition.language
+publisherList = edition.source.bibliographicCitation.publisher.value
+relationList = project.id, relations.isDerivedFrom
+relationsForWorkList = relations.isDerivedFrom, title, textgridUri
+rightsList = edition.license.licenseUri
+sourceList = edition.source.bibliographicCitation.author.value, edition.source.bibliographicCitation.editor.value, edition.source.bibliographicCitation.editionTitle, edition.source.bibliographicCitation.placeOfPublication.value, edition.source.bibliographicCitation.publisher.value, edition.source.bibliographicCitation.editionNo, edition.source.bibliographicCitation.series, edition.source.bibliographicCitation.volume, edition.source.bibliographicCitation.issue, edition.source.bibliographicCitation.epage, edition.source.bibliographicCitation.spage
+subjectList = work.subject.id.value
+titleList = title
+typeList = work.genre, work.type
+
+###########################
+## ListIdentifierSetting ##
+###########################
+
+rangeField = created
+identifierListFields = textgridUri, created, format
+formatField = format
+formatToFilter = text/tg.edition+tg.aggregation+xml
+dateOfObjectCreation = created
+relationToFurtherMetadataObject = edition.isEditionOf
+repositoryObjectURIPrefix = textgrid:
+identifierPrefix = textgridUri
