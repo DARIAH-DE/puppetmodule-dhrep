@@ -8,15 +8,15 @@
 class textgrid {
 
   include textgrid::services::tgsearch
-  include textgrid::services::tgcrud
-  include textgrid::services::tgcrud_public
-  include textgrid::services::tgpublish
+  include textgrid::services::crud
+  include textgrid::services::crud_public
+  include textgrid::services::publish
   include textgrid::services::tgpid
   include textgrid::services::tgauth
   include textgrid::services::confserv
   include textgrid::services::digilib
   include textgrid::services::textgridrep_website
-  include textgrid::services::tgoaipmh
+  include textgrid::services::oaipmh
   include textgrid::services::aggregator
 
   include textgrid::services::intern::tgelasticsearch
@@ -35,7 +35,7 @@ class textgrid {
     'openjdk-7-jdk':            ensure => present;
     'tomcat7':                  ensure => present;
     'tomcat7-user':             ensure => present;
-    'libtcnative-1':            ensure => present;               
+    'libtcnative-1':            ensure => present;
     'mc':                       ensure => present;
     'maven':                    ensure => present;
     'make':                     ensure => present;

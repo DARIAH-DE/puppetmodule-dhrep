@@ -289,7 +289,7 @@
 			</property>
 			<property>
 				<field>fakePids</field>
-				<value><%= scope.lookupvar('textgrid::services::tgpublish::fake_pids') %></value>
+				<value><%= scope.lookupvar('textgrid::services::publish::fake_pids') %></value>
 			</property>
 			<property>
 				<field>repeateTimes</field>
@@ -332,7 +332,7 @@
 		<class name="actionmodule.textgrid.publish.MoveToStaticGridStorage">
 			<property>
 				<field>tgcrudSecret</field>
-				<value><%= scope.lookupvar('textgrid::services::tgcrud::publish_secret') %></value>
+				<value><%= scope.lookupvar('textgrid::services::crud::publish_secret') %></value>
 				<description>The secret used to authenticate to the TG-crud#MOVESTATIC method.</description>
 			</property>
 		</class>

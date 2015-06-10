@@ -1,6 +1,0 @@
-# elastic search config
-elasticSearch.url = 127.0.0.1
-elasticSearch.port = <%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::master_tcp_port') %>
-elasticSearch.clusterName = <%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::cluster_name') %>
-elasticSearch.index = textgrid-public
-elasticSearch.type = metadata

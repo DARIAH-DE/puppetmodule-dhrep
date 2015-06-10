@@ -82,10 +82,10 @@ ID_SERVICE_PASS = <%= scope.lookupvar('textgrid::services::intern::tgnoid::tgcru
 ID_AUTOMAGIC_UNLOCKING_TIME = 1800000
 
 # Password for the #MOVEPUBLIC method.
-PUBLISH_SECRET = <%= scope.lookupvar('textgrid::services::tgcrud::publish_secret') %>
+PUBLISH_SECRET = <%= scope.lookupvar('textgrid::services::crud::publish_secret') %>
 
 # Settings for the message producer.
-USE_MESSAGING = <%= scope.lookupvar('textgrid::services::tgcrud::use_messaging') %>
+USE_MESSAGING = <%= scope.lookupvar('textgrid::services::crud::use_messaging') %>
 INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContextFactory 
 MESSAGING_PROVIDER_URL = http-remoting://127.0.0.1:18080
 MESSAGING_SECURITY_PRINCIPAL = tgcrud
