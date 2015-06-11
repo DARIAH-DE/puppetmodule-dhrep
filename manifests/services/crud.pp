@@ -20,8 +20,8 @@ class textgrid::services::crud (
   include textgrid::services::tomcat_crud
 
   $catname = $textgrid::services::tomcat_crud::catname
-  $user    = $crud_scope
-  $group   = 'ULSB'
+  $user    = $textgrid::services::tomcat_crud::user
+  $group   = $textgrid::services::tomcat_crud::group
 
   ###
   # config

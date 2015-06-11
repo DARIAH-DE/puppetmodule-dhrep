@@ -10,10 +10,11 @@ class textgrid::services::oaipmh (
 ){
 
   include textgrid::services::intern::tgelasticsearch
-
+  include textgrid::services::tomcat_oaipmh
+  
   $catname = $textgrid::services::tomcat_oaipmh::catname
-  $user    = $short
-  $group   = $short
+  $user    = $textgrid::services::tomcat_oaipmh::user
+  $group   = $textgrid::services::tomcat_oaipmh::group
  
   ###
   # config
@@ -26,7 +27,7 @@ class textgrid::services::oaipmh (
     mode   => '0755',
   }
 
-  file { "/etc/${scope}/${short}/oaipmh.properties':
+  file { "/etc/${scope}/${short}/oaipmh.properties":
     ensure  => present,
     owner   => root,
     group   => $group,
@@ -39,7 +40,7 @@ class textgrid::services::oaipmh (
   # logging
   ###
 
-  file { "/etc/${scope}/${short}/log4j.oaipmh.properties':
+  file { "/etc/${scope}/${short}/log4j.oaipmh.properties":
     ensure  => present,
     owner   => root,
     group   => $group,

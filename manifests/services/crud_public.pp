@@ -21,8 +21,8 @@ class textgrid::services::crud_public (
   include textgrid::services::tomcat_publish
 
   $catname = $textgrid::services::tomcat_publish::catname
-  $user    = $crud_scope
-  $group   = 'ULSB'
+  $user    = $textgrid::services::tomcat_publish::user
+  $group   = $textgrid::services::tomcat_publish::group
 
   ###
   # config
