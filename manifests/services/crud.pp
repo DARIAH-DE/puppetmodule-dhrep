@@ -3,12 +3,12 @@
 # Class to install and configure tgcrud/dhcrud
 #
 class textgrid::services::crud (
-  $crud_scope     = 'textgrid',
-  $crud_short     = 'tgcrud',
+  $scope          = 'textgrid',
+  $short          = 'tgcrud',
   $crud_name      = 'tgcrud-webapp',
   $crud_version   = '5.9.152-SNAPSHOT',
   $crud_group     = 'info.textgrid.middleware',
-  $use_messaging  = 'false',
+  $use_messaging  = false,
   $publish_secret = '',
 ){
 
@@ -27,29 +27,29 @@ class textgrid::services::crud (
   # config
   ###
 
-  file { "/etc/${crud_scope}/${crud_short}":
+  file { "/etc/${scope}/${short}":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
 
-  file { "/etc/${crud_scope}/${crud_short}/${crud_short}.properties":
+  file { "/etc/${scope}/${short}/${short}.properties":
     ensure  => present,
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${crud_scope}/etc/${crud_scope}/${crud_short}/${crud_short}.properties.erb"),
-    require => File["/etc/${crud_scope}/${crud_short}"],
+    content => template("${scope}/etc/${scope}/${short}/${short}.properties.erb"),
+    require => File["/etc/${scope}/${short}"],
   }
 
-  file { "/etc/${crud_scope}/${crud_short}/beans.properties":
+  file { "/etc/${scope}/${short}/beans.properties":
     ensure  => present,
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${crud_scope}/etc/${crud_scope}/${crud_short}/beans.properties.erb"),
-    require => File["/etc/${crud_scope}/${crud_short}"],
+    content => template("${scope}/etc/${scope}/${short}/beans.properties.erb"),
+    require => File["/etc/${scope}/${short}"],
   }
   ->
 
@@ -58,20 +58,20 @@ class textgrid::services::crud (
   # and restart tomcat
   ###
 
-  maven { "/var/cache/${crud_scope}/${crud_name}-${crud_version}.war":
+  maven { "/var/cache/${scope}/${crud_name}-${crud_version}.war":
     ensure     => latest,
     groupid    => $crud_group,
     artifactid => $crud_name,
     version    => $crud_version,
     packaging  => 'war',
-    repos      => ["http://dev.dariah.eu/nexus/content/repositories/snapshots/"],
+    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
     require    => Package['maven'],
     notify     => Exec['replace_crud_service'],
   }
   ->
   exec { 'replace_crud_service':
     path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${crud_scope}/${catname}/webapps/${crud_short} && sleep 2 && cp /var/cache/${crud_scope}/${crud_name}-${crud_version}.war /home/${crud_scope}/${catname}/webapps/${crud_short}.war",
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${crud_name}-${crud_version}.war /home/${scope}/${catname}/webapps/${short}.war",
     cwd         => '/root',
     user        => 'root',
     group       => 'root',
@@ -79,7 +79,7 @@ class textgrid::services::crud (
     refreshonly => true,
   }
   ->
-  file {"/home/${crud_scope}/${catname}/webapps/${crud_short}.war":
+  file {"/home/${scope}/${catname}/webapps/${short}.war":
     group  => $group,
     mode   => '0640',
     notify => Service[$catname],
@@ -89,21 +89,21 @@ class textgrid::services::crud (
   # logging
   ###
 
-  file { "/etc/${crud_scope}/${crud_short}/${crud_short}.log4j":
+  file { "/etc/${scope}/${short}/${short}.log4j":
     ensure  => present,
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${crud_scope}/etc/${crud_scope}/${crud_short}/${crud_short}.log4j.erb"),
-    require => File["/etc/${crud_scope}/${crud_short}"],
+    content => template("${scope}/etc/${scope}/${short}/${short}.log4j.erb"),
+    require => File["/etc/${scope}/${short}"],
   }
 
-  file { "/var/log/${crud_scope}/${crud_short}":
+  file { "/var/log/${scope}/${short}":
     ensure  => directory,
     owner   => $user,
     group   => $group,
     mode    => '0755',
-    require => File["/var/log/${crud_scope}"],
+    require => File["/var/log/${scope}"],
   }
 
 }

@@ -15,49 +15,49 @@
 #
 class textgrid::services::intern::tgelasticsearch (
   $cluster_name,
-  $master_http_port = '9202',
-  $master_tcp_port = '9302',
-  $repo_version = '1.4',  # not used for now, as experimental highlighter may break on minor version updates
-  $elasticsearch_version = '1.4.1',
+  $master_http_port           = '9202',
+  $master_tcp_port            = '9302',
+  $repo_version               = '1.4',  # not used for now, as experimental highlighter may break on minor version updates
+  $elasticsearch_version      = '1.4.1',
   $attachments_plugin_version = '2.4.1',
   $highlighter_plugin_version = '1.4.1',
-  $es_min_mem = '256m',
-  $es_max_mem = '1g',
+  $es_min_mem                 = '256m',
+  $es_max_mem                 = '1g',
 ) {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
   class { 'elasticsearch':
-    manage_repo  => true,
-    version =>  $elasticsearch_version,
-    repo_version => $repo_version,
-    #autoupgrade  => true,
-    #package_url => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
-    config      => {
+    manage_repo   => true,
+    version       => $elasticsearch_version,
+    repo_version  => $repo_version,
+    #autoupgrade   => true,
+    #package_url   => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
+    config        => {
       'cluster.name' => $cluster_name,
 # es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
 #      'network.host' => '127.0.0.1',
     },
-    init_defaults      => { 
+    init_defaults => {
       'ES_MIN_MEM' => $es_min_mem,
       'ES_MAX_MEM' => $es_max_mem,
     },
-    java_install => false,
+    java_install  => false,
   }
 
   elasticsearch::instance { 'masternode':
     config => {
-      'node.master'        => 'true',
-      'node.data'          => 'true',
+      'node.master'        => true,
+      'node.data'          => true,
       'http.port'          => $master_http_port,
       'transport.tcp.port' => $master_tcp_port,
     }
   }
-  
+
   elasticsearch::instance { 'workhorse':
     config => {
-      'node.master'        => 'false',
-      'node.data'          => 'true',
+      'node.master'        => false,
+      'node.data'          => true,
       'http.port'          => '9203',
       'transport.tcp.port' => '9303',
     }
@@ -75,7 +75,6 @@ class textgrid::services::intern::tgelasticsearch (
 
   # run only once
   unless $tgelastic_repos_initialized {
-
     # clone commons repo, which contains shell scripts to create textgrid elastic search indizes
     exec { 'git_clone_tgcommon':
       path    => ['/usr/bin','/bin','/usr/sbin'],
@@ -84,10 +83,10 @@ class textgrid::services::intern::tgelasticsearch (
       require => Package['git'],
     }
     ->
-    textgrid::tools::wait_for_url_ready { "wait_for_es_master":
-      url     => "http://localhost:${$master_http_port}/", 
+    textgrid::tools::wait_for_url_ready { 'wait_for_es_master':
+      url     => "http://localhost:${$master_http_port}/",
       require => Elasticsearch::Instance['masternode'],
-    }    
+    }
     ~>
     exec { 'create_public_es_index':
       path    => ['/usr/bin','/bin','/usr/sbin'],
@@ -104,7 +103,7 @@ class textgrid::services::intern::tgelasticsearch (
     }
     ~>
     file { '/etc/facter/facts.d/tgelastic_repos_initialized.txt':
-      content => "tgelastic_repos_initialized=true",
+      content => 'tgelastic_repos_initialized=true',
     }
   }
 

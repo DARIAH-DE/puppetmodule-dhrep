@@ -3,7 +3,7 @@
 # Class to install and configure the textgridrep website
 #
 class textgrid::services::textgridrep_website(
-  $tgrep_server_name = 'vm1rep vm1rep.textgrid.local',
+  $tgrep_server_name  = 'vm1rep vm1rep.textgrid.local',
   $tgrep_service_url  = 'http://vm1.textgrid.local/1.0',
 ) {
 
@@ -14,10 +14,10 @@ class textgrid::services::textgridrep_website(
   }
 
   file { '/var/www/nginx-root/textgridrep.de':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
   }
   ->
   exec { 'git_clone_textgridrep':
@@ -42,7 +42,7 @@ class textgrid::services::textgridrep_website(
     group   => root,
     mode    => '0644',
     content => template('textgrid/var/www/nginx-root/textgridrep-webseite/config.js.erb'),
-  }  
+  }
   ->
   file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox/js/config.js':
     ensure  => present,
@@ -50,7 +50,7 @@ class textgrid::services::textgridrep_website(
     group   => root,
     mode    => '0644',
     content => template('textgrid/var/www/nginx-root/textgridrep-webseite-sandbox/config.js.erb'),
-  } 
+  }
 
   file { '/etc/nginx/sites-available/textgridrep':
     ensure  => present,
@@ -74,6 +74,4 @@ class textgrid::services::textgridrep_website(
     notify => Service['nginx'],
   }
 
-
-  
 }

@@ -1,9 +1,12 @@
+# == Class: textgrid::services::intern::messaging
+#
+# Class to build up messaging.
+#
 class textgrid::services::intern::messaging (
-
-  $enzmeta_textgrid_user='',
-  $enzmeta_textgrid_password='',
-  $bolrdf_textgrid_user='',
-  $bolrdf_textgrid_user='',
+  $enzmeta_textgrid_user     = '',
+  $enzmeta_textgrid_password = '',
+  $bolrdf_textgrid_user      = '',
+  $bolrdf_textgrid_user      = '',
 
 ){
 
@@ -28,20 +31,20 @@ class textgrid::services::intern::messaging (
 #  }
   # mvn package wildfly:deploy -Dwildfly.port=19990
   
-  file { "/root/.m2":
+  file { '/root/.m2':
     ensure => directory,
   }
 
-  file { "/root/.m2/settings.xml":
+  file { '/root/.m2/settings.xml':
     ensure => present,
     source => 'puppet:///modules/textgrid/root/m2-settings.xml',
   }
 
-  file { "/etc/textgrid/messagebeans":
+  file { '/etc/textgrid/messagebeans':
     ensure => directory,
   }
 
-  file { "/etc/textgrid/messagebeans/enzmeta.properties":
+  file { '/etc/textgrid/messagebeans/enzmeta.properties':
     ensure  => present,
     owner   => root,
     group   => root,
@@ -49,7 +52,7 @@ class textgrid::services::intern::messaging (
     content => template('textgrid/etc/textgrid/messagebeans/enzmeta.properties.erb'),
   }
 
-  file { "/etc/textgrid/messagebeans/bolrfd.properties":
+  file { '/etc/textgrid/messagebeans/bolrfd.properties':
     ensure  => present,
     owner   => root,
     group   => root,

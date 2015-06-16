@@ -8,7 +8,7 @@ class textgrid::services::publish (
   $publish_name    = 'kolibri-tgpublish-service',
   $publish_version = '3.7.13-SNAPSHOT',
   $publish_group   = 'de.langzeitarchivierung.kolibri',
-  $fake_pids       = 'false',
+  $fake_pids       = false,
 ){
 
   $catname = $textgrid::services::tomcat_publish::catname
@@ -26,7 +26,7 @@ class textgrid::services::publish (
     artifactid => $publish_name,
     version    => $publish_version,
     packaging  => 'war',
-    repos      => ["http://dev.dariah.eu/nexus/content/repositories/snapshots/"],
+    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
     require    => Package['maven'],
     notify     => Exec['replace_publish_service'],
   }
@@ -125,10 +125,10 @@ class textgrid::services::publish (
   ###
 
   file { "/etc/${publish_scope}/${publish_short}/temp":
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
     require => File["/etc/${publish_scope}/${publish_short}"],
   }
 
@@ -137,10 +137,10 @@ class textgrid::services::publish (
   ###
 
   file { "/etc/${publish_scope}/${publish_short}/dest":
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
     require => File["/etc/${publish_scope}/${publish_short}"],
   }
 
@@ -149,10 +149,10 @@ class textgrid::services::publish (
   ###
 
   file { "/etc/${publish_scope}/${publish_short}/work":
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
     require => File["/etc/${publish_scope}/${publish_short}"],
   }
 

@@ -21,13 +21,13 @@ class textgrid::services::tomcat_oaipmh (
   # user, home-dir and user-tomcat
   ###
   textgrid::resources::servicetomcat { $catname:
-    user         => $user,
-    group        => $group,
-    gid          => '1011',
-    uid          => '1011',
-    http_port    => $http_port,
-    control_port => $control_port,
-    jmx_port     => $jmx_port,
+    user              => $user,
+    group             => $group,
+    gid               => '1011',
+    uid               => '1011',
+    http_port         => $http_port,
+    control_port      => $control_port,
+    jmx_port          => $jmx_port,
     defaults_template => 'textgrid/etc/default/tomcat.erb',
   }
 

@@ -5,14 +5,12 @@
 # and textgrid-public and adds initial triples.
 #
 class textgrid::services::intern::sesame {
-
-  $tgname = 'tomcat-sesame'
-  $http_port = '9091'
-  $control_port = '9006'
-  $jmx_port = '9991'
-
+  $tgname         = 'tomcat-sesame'
+  $http_port      = '9091'
+  $control_port   = '9006'
+  $jmx_port       = '9991'
   $sesame_version = '2.7.13'
-  $sesame_file = "openrdf-sesame-${sesame_version}-sdk.tar.gz"
+  $sesame_file    = "openrdf-sesame-${sesame_version}-sdk.tar.gz"
 
   #require textgrid::resources::create_rdf_repository
 
@@ -70,8 +68,8 @@ class textgrid::services::intern::sesame {
 
   unless $sesame_nonpublic_repo_created {
     textgrid::resources::create_rdf_repository{'textgrid-nonpublic':
-      port    => '9091',
-      user    => $tgname,
+      port => '9091',
+      user => $tgname,
     }
     ->
     file {'/etc/facter/facts.d/sesame_nonpublic.txt':
@@ -81,15 +79,13 @@ class textgrid::services::intern::sesame {
 
   unless $sesame_public_repo_created {
     textgrid::resources::create_rdf_repository{'textgrid-public':
-      port    => '9091',
-      user    => $tgname,
+      port => '9091',
+      user => $tgname,
     }
     ->
     file {'/etc/facter/facts.d/sesame_public.txt':
       content => 'sesame_public_repo_created=true',
     }
   }
-
-
 
 }

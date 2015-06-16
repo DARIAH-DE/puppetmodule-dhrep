@@ -39,7 +39,7 @@ class textgrid::services::intern::tgnoid (
   }
   ->
   file { "/home/${noiduser}":
-    mode   => '0755',
+    mode => '0755',
   }
 
   ###
@@ -51,31 +51,31 @@ class textgrid::services::intern::tgnoid (
   }
   ~>
   exec { 'change_noid_apache_credential_permissions':
-    command => 'chmod 600 /etc/apache2/tgnoid.htpasswd',
+    command     => 'chmod 600 /etc/apache2/tgnoid.htpasswd',
     refreshonly => true,
   }
   ~>
   exec { 'change_noid_apache_credential_owner':
-    command => 'chown www-data:root /etc/apache2/tgnoid.htpasswd',
+    command     => 'chown www-data:root /etc/apache2/tgnoid.htpasswd',
     refreshonly => true,
   }
 
   ###
   # do everything else via bash scripting
   ###
-  file { "/home/tgnoid/install_tgnoid.sh":
-    source => 'puppet:///modules/textgrid/tgnoid/install_tgnoid.sh',
-    mode   => '0744',
+  file { '/home/tgnoid/install_tgnoid.sh':
+    source  => 'puppet:///modules/textgrid/tgnoid/install_tgnoid.sh',
+    mode    => '0744',
     require => User[$noiduser],
-  } 
+  }
   ~>
-  file { "/home/tgnoid/tgnoid.patch":
+  file { '/home/tgnoid/tgnoid.patch':
     source => 'puppet:///modules/textgrid/tgnoid/tgnoid.patch',
   }
   ~>
   exec { 'install_tgnoid':
-    command => '/home/tgnoid/install_tgnoid.sh',
-    creates => '/home/tgnoid/htdocs/nd/textgrid/NOID',
+    command   => '/home/tgnoid/install_tgnoid.sh',
+    creates   => '/home/tgnoid/htdocs/nd/textgrid/NOID',
     logoutput => true,
   }
 

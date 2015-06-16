@@ -51,13 +51,13 @@ class textgrid::services::intern::tgwildfly {
   ###
   # stage war
   ###
-  staging::file { "message-beans.war":
+  staging::file { 'message-beans.war':
     source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
     target  => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
     require => Class['wildfly::install'],
   }
   ~>
-  file { "/home/wildfly/wildfly/standalone/deployments/message-beans.war":
+  file { '/home/wildfly/wildfly/standalone/deployments/message-beans.war':
     source => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
   }
 

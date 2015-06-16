@@ -11,7 +11,7 @@ class textgrid {
   include textgrid::services::crud
   include textgrid::services::crud_public
   include textgrid::services::publish
-  include textgrid::services::tgpid
+  include textgrid::services::pid
   include textgrid::services::tgauth
   include textgrid::services::confserv
   include textgrid::services::digilib

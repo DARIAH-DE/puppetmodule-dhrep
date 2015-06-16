@@ -17,7 +17,7 @@ class textgrid::services::tomcat_publish (
 
   $user         = $scope
   $group        = 'ULSB'
-  
+
   ###
   # user, home-dir and user-tomcat
   ###

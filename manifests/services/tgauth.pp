@@ -25,7 +25,6 @@ class textgrid::services::tgauth (
   $webauth_dariah_secret = '',
   $authz_shib_pw         = '',
   $authz_instance        = '',
-  $authn_scope           = 'WebAuthN',
   $slapd_rootpw          = '',
   $ldap_replication      = false,
   $ldap_clusternodes     = [],
@@ -218,11 +217,11 @@ class textgrid::services::tgauth (
   }
 
   # ldap needs to know its own id for mulit-master replikation
-  augeas { "slapd_default":
+  augeas { 'slapd_default':
     changes => [
       "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
     ],
-    notify => Service['slapd'],
+    notify  => Service['slapd'],
   }
 
   # todo: changes group of /etc/ldap/schemas from root to staff, ok?
@@ -259,7 +258,7 @@ class textgrid::services::tgauth (
       }
       ~>
       file { '/tmp/ldap-rbac-template.ldif':
-        ensure => present,
+        ensure  => present,
         content => template('textgrid//ldap/rbac-data.ldif.erb'),
       }
       ~>
