@@ -1,10 +1,10 @@
-# == Class: textgrid::services::tgsearch
+# == Class: textgrid::services::tgsearch_public
 #
-# Class to install and configure tgsearch.
+# Class to install and configure tgsearch public.
 #
-class textgrid::services::tgsearch (
+class textgrid::services::tgsearch_public (
   $short                = 'tgsearch',
-  $tgsearch_name        = 'tgsearch-nonpublic-webapp',
+  $tgsearch_name        = 'tgsearch-public-webapp',
   $tgsearch_version     = '3.4.0-SNAPSHOT',
   $tgsearch_group       = 'info.textgrid.middleware',
 ) {
@@ -27,20 +27,20 @@ class textgrid::services::tgsearch (
     mode   => '0755',
   }
 
-  file { "/etc/textgrid/${short}/${short}-nonpublic.properties":
+  file { "/etc/textgrid/${short}/${short}-public.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("textgrid/etc/textgrid/${short}/${short}-nonpublic.properties.erb"),
+    content => template("textgrid/etc/textgrid/${short}/${short}-public.properties.erb"),
   }
 
-  file { "/etc/textgrid/${short}/log4j.nonpublic.properties":
+  file { "/etc/textgrid/${short}/log4j.public.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("textgrid/etc/textgrid/${short}/log4j.nonpublic.properties.erb"),
+    content => template("textgrid/etc/textgrid/${short}/log4j.public.properties.erb"),
   }
 
   ###
@@ -48,7 +48,7 @@ class textgrid::services::tgsearch (
   # and restart tomcat (tgsearch-public and tgsearch-nonpublic)
   ###
 
-  maven { "/var/cache/textgrid/${tgsearch_name}-${tgsearch_version}.war":
+  maven { "/var/cache/textgrid/${tgsearch_name_public}-${tgsearch_version}.war":
     ensure     => latest,
     groupid    => $tgsearch_group,
     artifactid => $tgsearch_name,
@@ -56,12 +56,12 @@ class textgrid::services::tgsearch (
     packaging  => 'war',
     repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
     require    => Package['maven'],
-    notify     => Exec['replace_tgsearch_service'],
+    notify     => Exec['replace_tgsearch_service_public'],
   }
 
-  exec { 'replace_tgsearch_service':
+  exec { 'replace_tgsearch_service_public':
     path        => ['/usr/bin','/bin'],
-    command     => "rm -rf /home/${catname}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/textgrid/${tgsearch_name}-${tgsearch_version}.war /home/${catname}/${catname}/webapps/${short}.war",
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/${short}-public && sleep 2 && cp /var/cache/textgrid/${tgsearch_name_public}-${tgsearch_version}.war /home/${catname}/${catname}/webapps/${short}-public.war",
     cwd         => '/root',
     user        => 'root',
     group       => 'root',
@@ -69,10 +69,9 @@ class textgrid::services::tgsearch (
     refreshonly => true,
   }
   ->
-  file { "/home/${catname}/${catname}/webapps/${short}.war":
+  file { "/home/${catname}/${catname}/webapps/${short}-public.war":
     group  => $group,
     mode   => '0640',
-    notify => Service[$catname],
   }
 
 }

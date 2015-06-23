@@ -1,12 +1,11 @@
 # == Class: textgrid::services::tomcat_tgsearch
 #
-# Class to install and configure tgsearch's tomcat.
+# Class to install and configure tgsearch tomcat.
 #
 class textgrid::services::tomcat_tgsearch (
 ){
 
   $scope        = 'textgrid'
-  $short        = 'tgsearch'
   $catname      = 'tomcat-tgsearch'
   $http_port    = '9090'
   $control_port = '9005'
@@ -20,6 +19,7 @@ class textgrid::services::tomcat_tgsearch (
   ###
   # user, home-dir and user-tomcat
   ###
+
   textgrid::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,

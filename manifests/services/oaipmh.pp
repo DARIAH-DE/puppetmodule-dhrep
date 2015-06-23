@@ -36,12 +36,12 @@ class textgrid::services::oaipmh (
     content => template("${scope}/etc/${scope}/${short}/oaipmh.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
-  ->
 
   ###
   # use maven to fetch latest oaipmh service from nexus, copy war, set permissions,
   # and restart tomcat
   ###
+
   maven { "/var/cache/${scope}/${oaipmh_name}-${oaipmh_version}.war":
     ensure     => latest,
     groupid    => $oaipmh_group,
@@ -52,10 +52,10 @@ class textgrid::services::oaipmh (
     require    => Package['maven'],
     notify     => Exec['replace_oaipmh_service'],
   }
-  ->
+
   exec { 'replace_oaipmh_service':
     path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/oaipmh && sleep 2 && cp /var/cache/${scope}/${oaipmh_name}-${oaipmh_version}.war /home/${catname}/${catname}/webapps/${short}.war",
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${oaipmh_name}-${oaipmh_version}.war /home/${catname}/${catname}/webapps/${short}.war",
     cwd         => '/root',
     user        => 'root',
     group       => 'root',
@@ -67,6 +67,7 @@ class textgrid::services::oaipmh (
     group  => $group,
     mode   => '0640',
     notify => Service[$catname],
+    require => File["/etc/${scope}/${short}/oaipmh.properties"],
   }
 
   ###

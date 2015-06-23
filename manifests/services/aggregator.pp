@@ -3,55 +3,70 @@
 # Class to install and configure aggregator
 #
 class textgrid::services::aggregator (
+  $scope              = 'textgrid',
+  $short              = 'aggregator',
+  $aggregator_name    = 'aggregator',
   $aggregator_version = '1.4.5',
+  $aggregator_group   = 'info.textgrid.services',
 ){
 
-  $tgname = 'tomcat-aggregator'
-  $http_port = '9095'
-  $control_port = '9010'
-  $jmx_port = '9995'
+  include textgrid::services::tomcat_aggregator
+
+  $catname = $textgrid::services::tomcat_aggregator::catname
+  $user    = $textgrid::services::tomcat_aggregator::user
+  $group   = $textgrid::services::tomcat_aggregator::group
 
   ###
-  # user, home-dir and user-tomcat
+  # config
   ###
-  textgrid::resources::servicetomcat { $tgname:
-    gid          => '1014',
-    uid          => '1014',
-    http_port    => $http_port,
-    control_port => $control_port,
-    jmx_port     => $jmx_port,
-  }
 
-  staging::file { "aggregator-${aggregator_version}.war":
-    source => "http://dev.digital-humanities.de/nexus/content/repositories/releases/info/textgrid/services/aggregator/${aggregator_version}/aggregator-${aggregator_version}.war",
-    target => "/var/cache/textgrid/aggregator-${aggregator_version}.war",
-  }
-  ->
-  tomcat::war { 'aggregator.war':
-    war_ensure    => present,
-    catalina_base => "/home/${tgname}/${tgname}",
-    war_source    => "/var/cache/textgrid/aggregator-${aggregator_version}.war",
-    require       => Textgrid::Resources::Servicetomcat[$tgname],
-  }
-  ~>
-  # strange thing this is necessary... TODO: why?
-  file { "/var/cache/textgrid/aggregator-${aggregator_version}.war":
-    mode    => '0644',
-  }
-  
-  file { '/etc/textgrid/aggregator':
+  file { "/etc/${scope}/${short}":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-  
-  file { '/etc/textgrid/aggregator/aggregator.properties':
+
+  file { "/etc/${scope}/${short}/aggregator.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/aggregator/aggregator.properties.erb'),
+    content => template("${scope}/etc/${scope}/${short}/aggregator.properties.erb"),
+    require =>  File["/etc/${scope}/${short}"],
+  }
+
+  ###
+  # use maven to fetch latest aggregator service from nexus, copy war, set permissions,
+  # and restart tomcat
+  ###
+
+  maven { "/var/cache/${scope}/${aggregator_name}-${aggregator_version}.war":
+    ensure     => latest,
+    groupid    => $aggregator_group,
+    artifactid => $aggregator_name,
+    version    => $aggregator_version,
+    packaging  => 'war',
+    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
+    require    => Package['maven'],
+    notify     => Exec['replace_aggregator_service'],
+  }
+
+  exec { 'replace_aggregator_service':
+    path        => ['/usr/bin','/bin'],
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${aggregator_name}-${aggregator_version}.war /home/${catname}/${catname}/webapps/${short}.war",
+    cwd         => '/root',
+    user        => 'root',
+    group       => 'root',
+    require     => Exec["create_${catname}"],
+    refreshonly => true,
+  }
+  ->
+  file { "/home/${catname}/${catname}/webapps/${short}.war":
+    group  => $group,
+    mode   => '0640',
+    notify => Service[$catname],
+    require => File["/etc/${scope}/${short}/aggregator.properties"],
   }
 
 }

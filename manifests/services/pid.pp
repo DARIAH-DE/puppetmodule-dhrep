@@ -21,37 +21,6 @@ class textgrid::services::pid (
   $group   = $textgrid::services::tomcat_publish::group
 
   ###
-  # use maven to fetch latest pid service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-  maven { "/var/cache/${scope}/${pid_name}-${pid_version}.war":
-    ensure     => latest,
-    groupid    => $pid_group,
-    artifactid => $pid_name,
-    version    => $pid_version,
-    packaging  => 'war',
-    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
-    require    => Package['maven'],
-    notify     => Exec['replace_pid_service'],
-  }
-  ->
-  exec { 'replace_pid_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${pid_name}-${pid_version}.war /home/${scope}/${catname}/webapps/${short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file {"/home/${scope}/${catname}/webapps/${short}.war":
-    group  => $group,
-    mode   => '0640',
-    notify => Service[$catname],
-  }
-
-  ###
   # config
   ###
 
@@ -69,6 +38,39 @@ class textgrid::services::pid (
     mode    => '0640',
     content => template("${scope}/etc/${scope}/${short}/${short}.properties.erb"),
     require => File["/etc/${scope}/${short}"],
+  }
+
+  ###
+  # use maven to fetch latest pid service from nexus, copy war, set permissions,
+  # and restart tomcat
+  ###
+
+  maven { "/var/cache/${scope}/${pid_name}-${pid_version}.war":
+    ensure     => latest,
+    groupid    => $pid_group,
+    artifactid => $pid_name,
+    version    => $pid_version,
+    packaging  => 'war',
+    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
+    require    => Package['maven'],
+    notify     => Exec['replace_pid_service'],
+  }
+
+  exec { 'replace_pid_service':
+    path        => ['/usr/bin','/bin'],
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${pid_name}-${pid_version}.war /home/${scope}/${catname}/webapps/${short}.war",
+    cwd         => '/root',
+    user        => 'root',
+    group       => 'root',
+    require     => Exec["create_${catname}"],
+    refreshonly => true,
+  }
+  ->
+  file {"/home/${scope}/${catname}/webapps/${short}.war":
+    group  => $group,
+    mode   => '0640',
+    notify => Service[$catname],
+    require => File["/etc/${scope}/${short}/${short}.properties"],
   }
 
   ###

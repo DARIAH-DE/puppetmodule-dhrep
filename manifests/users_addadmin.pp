@@ -5,15 +5,15 @@
 # maybe useful as a dariah common define
 #
 define textgrid::users_addadmin (
-  $username=$title,
-  $uid=undef,
-  $groups=[],
-  $fullname='',
-  $affiliation='',
-  $mail='',
-  $sshkey_type='',
-  $sshkey='',
-  $shell='/bin/bash') 
+  $username    = $title,
+  $uid         = undef,
+  $groups      = [],
+  $fullname    = '',
+  $affiliation = '',
+  $mail        = '',
+  $sshkey_type = '',
+  $sshkey      = '',
+  $shell       = '/bin/bash') 
 {
 
   user { $username:

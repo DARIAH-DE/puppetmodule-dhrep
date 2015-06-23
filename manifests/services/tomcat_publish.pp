@@ -1,6 +1,6 @@
 # == Class: textgrid::services::tomcat_publish
 #
-# Class to install and configure tgpublish's or dhpublish's tomcat.
+# Class to install and configure tgpublish or dhpublish tomcat.
 #
 class textgrid::services::tomcat_publish (
 ){
@@ -21,6 +21,7 @@ class textgrid::services::tomcat_publish (
   ###
   # user, home-dir and user-tomcat
   ###
+
   textgrid::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,

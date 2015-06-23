@@ -12,40 +12,8 @@ class textgrid::services::publish (
 ){
 
   $catname = $textgrid::services::tomcat_publish::catname
-  $user    = $publish_scope
-  $group   = 'ULSB'
-
-  ###
-  # use maven to fetch latest publish service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/${publish_scope}/${publish_name}-${publish_version}.war":
-    ensure     => latest,
-    groupid    => $publish_group,
-    artifactid => $publish_name,
-    version    => $publish_version,
-    packaging  => 'war',
-    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
-    require    => Package['maven'],
-    notify     => Exec['replace_publish_service'],
-  }
-  ->
-  exec { 'replace_publish_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${publish_scope}/${catname}/webapps/${publish_short} && sleep 2 && cp /var/cache/${publish_scope}/${publish_name}-${publish_version}.war /home/${publish_scope}/${catname}/webapps/${publish_short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file {"/home/${publish_scope}/${catname}/webapps/${publish_short}.war":
-    group  => $group,
-    mode   => '0640',
-    notify => Service[$catname],
-  }
+  $user    = $textgrid::services::tomcat_publish::user
+  $group   = $textgrid::services::tomcat_publish::group
 
   ###
   # config
@@ -118,6 +86,39 @@ class textgrid::services::publish (
     mode    => '0640',
     content => template("${publish_scope}/etc/${publish_scope}/${publish_short}/conf/dias_formatregistry.xml.erb"),
     require => File["/etc/${publish_scope}/${publish_short}/conf"],
+  }
+
+  ###
+  # use maven to fetch latest publish service from nexus, copy war, set permissions,
+  # and restart tomcat
+  ###
+
+  maven { "/var/cache/${publish_scope}/${publish_name}-${publish_version}.war":
+    ensure     => latest,
+    groupid    => $publish_group,
+    artifactid => $publish_name,
+    version    => $publish_version,
+    packaging  => 'war',
+    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
+    require    => Package['maven'],
+    notify     => Exec['replace_publish_service'],
+  }
+
+  exec { 'replace_publish_service':
+    path        => ['/usr/bin','/bin'],
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${publish_scope}/${catname}/webapps/${publish_short} && sleep 2 && cp /var/cache/${publish_scope}/${publish_name}-${publish_version}.war /home/${publish_scope}/${catname}/webapps/${publish_short}.war",
+    cwd         => '/root',
+    user        => 'root',
+    group       => 'root',
+    require     => Exec["create_${catname}"],
+    refreshonly => true,
+  }
+  ->
+  file {"/home/${publish_scope}/${catname}/webapps/${publish_short}.war":
+    group   => $group,
+    mode    => '0640',
+    notify  => Service[$catname],
+    require => File["/etc/${publish_scope}/${publish_short}/conf/beans.properties.xml"],
   }
 
   ###

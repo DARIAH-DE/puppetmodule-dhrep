@@ -51,7 +51,6 @@ class textgrid::services::crud (
     content => template("${scope}/etc/${scope}/${short}/beans.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
-  ->
 
   ###
   # use maven to fetch latest crud service from nexus, copy war, set permissions,
@@ -68,7 +67,7 @@ class textgrid::services::crud (
     require    => Package['maven'],
     notify     => Exec['replace_crud_service'],
   }
-  ->
+
   exec { 'replace_crud_service':
     path        => ['/usr/bin','/bin'],
     command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${crud_name}-${crud_version}.war /home/${scope}/${catname}/webapps/${short}.war",
@@ -83,6 +82,7 @@ class textgrid::services::crud (
     group  => $group,
     mode   => '0640',
     notify => Service[$catname],
+    require => File["/etc/${scope}/${short}/beans.properties"],
   }
 
   ###

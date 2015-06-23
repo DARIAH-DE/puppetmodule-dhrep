@@ -50,10 +50,10 @@ define textgrid::resources::servicetomcat (
   $http_port,
   $control_port,
   $jmx_port,
-  $xmx = 1024,
-  $xms = 128,
-  $group = $name,
-  $user = $name,
+  $xmx               = 1024,
+  $xms               = 128,
+  $group             = $name,
+  $user              = $name,
   $defaults_template = 'textgrid/etc/default/tomcat.erb',
   $init_dependencies = '',
 ){
@@ -89,10 +89,10 @@ define textgrid::resources::servicetomcat (
   }
   ~>
   exec { "patching_${name}_for_apr":
-    path    => ['/usr/bin','/bin','/usr/sbin'],
-    command => "patch /home/${user}/${name}/conf/server.xml < /usr/local/src/tomcat-apr.patch",
+    path        => ['/usr/bin','/bin','/usr/sbin'],
+    command     => "patch /home/${user}/${name}/conf/server.xml < /usr/local/src/tomcat-apr.patch",
     refreshonly => true,
-    require => File['/usr/local/src/tomcat-apr.patch'],
+    require     => File['/usr/local/src/tomcat-apr.patch'],
   }
 
   file { "/etc/init.d/${name}":

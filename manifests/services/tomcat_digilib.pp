@@ -1,16 +1,16 @@
-# == Class: textgrid::services::tomcat_oaipmh
+# == Class: textgrid::services::tomcat_digilib
 #
-# Class to install and configure oaipmh tomcat.
+# Class to install and configure digilib tomcat.
 #
-class textgrid::services::tomcat_oaipmh (
+class textgrid::services::tomcat_digilib (
 ){
 
-  $catname      = 'tomcat-oaipmh'
-  $http_port    = '9097'
-  $control_port = '9012'
+  $catname      = 'tomcat-iiif'
+  $http_port    = '9092'
+  $control_port = '9007'
   $xmx          = '1024'
   $xms          = '128'
-  $jmx_port     = '9996'
+  $jmx_port     = '9992'
 
   $user         = $catname
   $group        = $catname
@@ -22,8 +22,8 @@ class textgrid::services::tomcat_oaipmh (
   textgrid::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
-    gid               => '1011',
-    uid               => '1011',
+    gid               => '1009',
+    uid               => '1009',
     http_port         => $http_port,
     control_port      => $control_port,
     jmx_port          => $jmx_port,
