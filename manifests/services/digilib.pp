@@ -81,9 +81,10 @@ class textgrid::services::digilib (
     notify  => Service[$catname],
     require => File['/etc/textgrid/digilib/digilib.properties'],
   }
-  ->
+  ~>
   textgrid::tools::wait_for_url_ready { 'wait_4_digilib_war_deployed':
     url         => "http://localhost:${http_port}/digilibservice/",
+    require     => Textgrid::Resources::Servicetomcat[$catname],
     refreshonly => true,
   }
   ->

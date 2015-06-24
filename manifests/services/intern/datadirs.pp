@@ -11,6 +11,7 @@ class textgrid::services::intern::datadirs (
   ###
   # the data dir
   ###
+
   file { '/data':
     ensure => directory,
     owner  => 'textgrid',
@@ -51,18 +52,22 @@ class textgrid::services::intern::datadirs (
     }
 
   } else {
+
     ###
     # nfs
     ###
+
     package { 'nfs-common':
       ensure => present,
     }
+
     file { '/media/stornext':
       ensure => directory,
 #      owner  => 'textgrid',
 #      group  => 'ULSB',
 #      mode   => '0755',
     }
+
     mount { '/media/stornext':
       ensure  => 'mounted',
       device  => 'fs-base3.gwdg.de:/home/textgrid/',
@@ -71,10 +76,12 @@ class textgrid::services::intern::datadirs (
       atboot  => true,
       require => [File['/media/stornext'],Package['nfs-common']],
     }
+
     file { '/data/public':
       ensure => 'link',
       target => $data_public_location
     }
+
     file { '/data/nonpublic':
       ensure => 'link',
       target => $data_nonpublic_location

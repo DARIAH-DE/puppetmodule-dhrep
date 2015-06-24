@@ -13,6 +13,10 @@ class textgrid::services::tomcat_crud (
   $xmx          = '1024'
   $xms          = '128'
   $jmx_port     = '9993'
+  $gid          = '29900'
+  $uid          = '49628'
+  $template     = "${scope}/etc/default/tomcat.${short}.erb"
+  $depcat       = 'wildfly'
 
   $user         = $scope
   $group        = 'ULSB'
@@ -24,14 +28,14 @@ class textgrid::services::tomcat_crud (
   textgrid::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
-    gid               => '29900',
-    uid               => '49628',
+    gid               => $gid,
+    uid               => $uid,
     http_port         => $http_port,
     control_port      => $control_port,
     jmx_port          => $jmx_port,
-    defaults_template => "${scope}/etc/default/tomcat.${short}.erb",
-    init_dependencies => 'wildfly',
-    require           => Service['wildfly'],
+    defaults_template => $template,
+    init_dependencies => $depcat,
+    require           => Service[$depcat],
   }
 
 }

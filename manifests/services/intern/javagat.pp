@@ -11,6 +11,7 @@ class textgrid::services::intern::javagat (
   ###
   # javagat
   ###
+
   textgrid::tools::tgstaging { "JavaGAT-${javagat_version}-binary.zip":
     source  => "http://gforge.cs.vu.nl/gf/download/frsrelease/154/1196/JavaGAT-${javagat_version}-binary.zip",
     target  => '/usr/local',

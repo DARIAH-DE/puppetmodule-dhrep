@@ -11,6 +11,9 @@ class textgrid::services::tomcat_aggregator (
   $xmx          = '1024'
   $xms          = '128'
   $jmx_port     = '9995'
+  $gid          = '1014'
+  $uid          = '1014'
+  $template     ='textgrid/etc/default/tomcat.erb'
 
   $user         = $catname
   $group        = $catname
@@ -22,12 +25,12 @@ class textgrid::services::tomcat_aggregator (
   textgrid::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
-    gid               => '1014',
-    uid               => '1014',
+    gid               => $gid,
+    uid               => $uid,
     http_port         => $http_port,
     control_port      => $control_port,
     jmx_port          => $jmx_port,
-    defaults_template => 'textgrid/etc/default/tomcat.erb',
+    defaults_template => $template,
   }
 
 }
