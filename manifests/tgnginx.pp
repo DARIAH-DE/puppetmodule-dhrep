@@ -30,7 +30,23 @@ class textgrid::tgnginx (
 
   file { '/var/www/nginx-root':
     ensure => directory,
-  } 
+  }
+
+  file { '/var/www/nginx-cache':
+    ensure => directory,
+    owner => 'www-data',
+    group => 'www-data',
+  }
+  file { '/var/www/nginx-cache/tgsearch':
+    ensure => directory,
+    owner => 'www-data',
+    group => 'www-data',
+  }
+  file { '/var/www/nginx-cache/aggregator':
+    ensure => directory,
+    owner => 'www-data',
+    group => 'www-data',
+  }
 
   file { '/etc/nginx/proxyconf':
     ensure  => directory,

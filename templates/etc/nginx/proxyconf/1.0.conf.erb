@@ -152,13 +152,29 @@ location /1.0/aggregator {
 #    proxy_set_header Host $http_host;
 }
 
+location /1.0/aggregator/html {
+    proxy_read_timeout 900s;
+    proxy_send_timeout 900s;
+    proxy_connect_timeout 120s;
+    proxy_pass http://localhost:9095/aggregator/html;
+
+    # cache aggregator html for 10 years ;-)
+    proxy_cache aggregator;
+    proxy_cache_valid 10y;
+
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host localhost:9095;
+#    proxy_set_header Host $http_host;
+}
+
 location /1.0/tgsearch-public/navigation/toplevel  {
 #    expires 24h;
     expires <%= scope.lookupvar('textgrid::tgnginx::tgsearch_toplevel_cache_expiration') %>;
     gzip on;
     gzip_types text/plain application/xml;
-#    proxy_cache tgsearch;
-#    proxy_cache_valid 24h;
+    proxy_cache tgsearch;
+    proxy_cache_valid 24h;
     proxy_pass http://localhost:9090/tgsearch-public/navigation/toplevel;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
