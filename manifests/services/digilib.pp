@@ -91,11 +91,13 @@ class textgrid::services::digilib (
   file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
     ensure  => link,
     target  => '/etc/textgrid/digilib/digilib.properties',
+#    require => File["/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes"],
   }
   ->
   file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
     ensure  => link,
     target  => '/etc/textgrid/digilib/digilib-service.properties',
+#    require => File["/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes"],
   }
 
   ###

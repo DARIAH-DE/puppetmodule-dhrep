@@ -5,7 +5,7 @@
 class textgrid::services::tomcat_digilib (
 ){
 
-  $catname      = 'tomcat-iiif'
+  $catname      = 'tomcat-digilib'
   $http_port    = '9092'
   $control_port = '9007'
   $xmx          = '1024'
