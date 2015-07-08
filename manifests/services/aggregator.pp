@@ -6,8 +6,10 @@ class textgrid::services::aggregator (
   $scope              = 'textgrid',
   $short              = 'aggregator',
   $aggregator_name    = 'aggregator',
-  $aggregator_version = '1.4.5',
+  $aggregator_version = '1.4.7-SNAPSHOT',
   $aggregator_group   = 'info.textgrid.services',
+# $maven_repository   = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
+  $maven_repository   = 'http://dev.digital-humanities.de/nexus/content/repositories/snapshots/',
 ){
 
   include textgrid::services::tomcat_aggregator
@@ -20,7 +22,7 @@ class textgrid::services::aggregator (
   # config
   ###
 
-  file { "/etc/${scope}/${short}":
+  file { '/etc/textgrid/aggregator':
     ensure => directory,
     owner  => root,
     group  => root,
@@ -47,7 +49,7 @@ class textgrid::services::aggregator (
     artifactid => $aggregator_name,
     version    => $aggregator_version,
     packaging  => 'war',
-    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
+    repos      => $maven_repository,
     require    => Package['maven'],
     notify     => Exec['replace_aggregator_service'],
   }
