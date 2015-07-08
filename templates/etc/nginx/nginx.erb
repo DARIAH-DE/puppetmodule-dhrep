@@ -71,9 +71,9 @@ http {
 
 	client_body_buffer_size 512k;
 
-	# proxy tgsearch toplevel aggregations and aggrrgator items
-	#proxy_buffer_size 64k;
-	#proxy_buffers 8 128k;
+	# proxy tgsearch toplevel aggregations and aggregator items
+	proxy_buffer_size 64k;
+	proxy_buffers 8 128k;
 	proxy_cache_path /var/www/nginx-cache/aggregator levels=1:2 keys_zone=tgsearch:500m;
   proxy_cache_path /var/www/nginx-cache/aggregator levels=1:2 keys_zone=aggregator:10m 
                          max_size=100g;
