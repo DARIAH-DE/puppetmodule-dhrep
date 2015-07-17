@@ -65,9 +65,9 @@ class textgrid::services::aggregator (
   }
   ->
   file { "/home/${catname}/${catname}/webapps/${short}.war":
-    group  => $group,
-    mode   => '0640',
-    notify => Service[$catname],
+    group   => $group,
+    mode    => '0640',
+    notify  => Service[$catname],
     require => File["/etc/${scope}/${short}/aggregator.properties"],
   }
 

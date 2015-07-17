@@ -3,13 +3,14 @@
 # Class to install and configure dhcrud-public or tgcrud-public
 #
 class textgrid::services::crud_public (
-  $scope          = 'textgrid',
-  $short          = 'tgcrud-public',
-  $crud_name      = 'tgcrud-webapp-public',
-  $crud_version   = '5.9.152-SNAPSHOT',
-  $crud_group     = 'info.textgrid.middleware',
-  $use_messaging  = false,
-  $publish_secret = '',
+  $scope            = 'textgrid',
+  $short            = 'tgcrud-public',
+  $crud_name        = 'tgcrud-webapp-public',
+  $crud_version     = '5.9.152-SNAPSHOT',
+  $crud_group       = 'info.textgrid.middleware',
+  $use_messaging    = false,
+  $publish_secret   = '',
+  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
   include textgrid::services::intern::tgelasticsearch
@@ -54,39 +55,6 @@ class textgrid::services::crud_public (
   }
 
   ###
-  # use maven to fetch latest crud service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/${scope}/${crud_name}-${crud_version}.war":
-    ensure     => latest,
-    groupid    => $crud_group,
-    artifactid => $crud_name,
-    version    => $crud_version,
-    packaging  => 'war',
-    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
-    require    => Package['maven'],
-    notify     => Exec['replace_crud_public_service'],
-  }
-
-  exec { 'replace_crud_public_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${crud_name}-${crud_version}.war /home/${scope}/${catname}/webapps/${short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file { "/home/${scope}/${catname}/webapps/${short}.war":
-    group  => $group,
-    mode   => '0640',
-    notify => Service[$catname],
-    require => File[ "/etc/${scope}/${short}/beans.properties"],
-  }
-
-  ###
   # logging
   ###
 
@@ -105,6 +73,39 @@ class textgrid::services::crud_public (
     group   => $group,
     mode    => '0755',
     require => File["/var/log/${scope}"],
+  }
+
+  ###
+  # use maven to fetch latest crud service from nexus, copy war, set permissions,
+  # and restart tomcat
+  ###
+
+  maven { "/var/cache/${scope}/${crud_name}-${crud_version}.war":
+    ensure     => latest,
+    groupid    => $crud_group,
+    artifactid => $crud_name,
+    version    => $crud_version,
+    packaging  => 'war',
+    repos      => $maven_repository,
+    require    => Package['maven'],
+    notify     => Exec['replace_crud_public_service'],
+  }
+
+  exec { 'replace_crud_public_service':
+    path        => ['/usr/bin','/bin'],
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${crud_name}-${crud_version}.war /home/${scope}/${catname}/webapps/${short}.war",
+    cwd         => '/root',
+    user        => 'root',
+    group       => 'root',
+    require     => Exec["create_${catname}"],
+    refreshonly => true,
+  }
+  ->
+  file { "/home/${scope}/${catname}/webapps/${short}.war":
+    group   => $group,
+    mode    => '0640',
+    notify  => Service[$catname],
+    require => File[ "/etc/${scope}/${short}/beans.properties"],
   }
 
 }

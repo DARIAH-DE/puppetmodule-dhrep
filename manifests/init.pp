@@ -7,17 +7,18 @@
 #
 class textgrid {
 
-  include textgrid::services::tgsearch
+  include textgrid::services::tgauth
+  include textgrid::services::aggregator
+  include textgrid::services::confserv
   include textgrid::services::crud
   include textgrid::services::crud_public
-  include textgrid::services::publish
-  include textgrid::services::pid
-  include textgrid::services::tgauth
-  include textgrid::services::confserv
   include textgrid::services::digilib
-  include textgrid::services::textgridrep_website
   include textgrid::services::oaipmh
-  include textgrid::services::aggregator
+  include textgrid::services::pid
+  include textgrid::services::publish
+  include textgrid::services::textgridrep_website
+  include textgrid::services::tgsearch
+  include textgrid::services::tgsearch_public
 
   include textgrid::services::intern::tgelasticsearch
   include textgrid::services::intern::sesame

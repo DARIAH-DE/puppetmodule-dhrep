@@ -28,9 +28,10 @@ define textgrid::tools::wait_for_url_ready (
   #->
   exec {"wait_for_url_ready_${name}":
     path        => ['/usr/bin','/bin','/usr/sbin', '/usr/local/bin'],
-    command     => "/usr/local/bin/wait_for_url_ready.sh ${url} ${retries} ",
+    command     => "/usr/local/bin/wait_for_url_ready.sh ${url} ${retries}",
     refreshonly => $refreshonly,
-#    logoutput => true,
+    require     => Package['wget'],
+#   logoutput   => true,
   }
 
 }

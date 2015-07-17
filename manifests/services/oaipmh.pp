@@ -3,11 +3,12 @@
 # Class to install and configure oaipmh
 #
 class textgrid::services::oaipmh (
-  $scope          = 'textgrid',
-  $short          = 'tgoaipmh',
-  $oaipmh_name    = 'oaipmh-webapp',
-  $oaipmh_version = '1.3.20-SNAPSHOT',
-  $oaipmh_group   = 'info.textgrid.middleware',
+  $scope            = 'textgrid',
+  $short            = 'tgoaipmh',
+  $oaipmh_name      = 'oaipmh-webapp',
+  $oaipmh_version   = '1.3.20-SNAPSHOT',
+  $oaipmh_group     = 'info.textgrid.middleware',
+  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
   include textgrid::services::intern::tgelasticsearch
@@ -38,39 +39,6 @@ class textgrid::services::oaipmh (
   }
 
   ###
-  # use maven to fetch latest oaipmh service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/${scope}/${oaipmh_name}-${oaipmh_version}.war":
-    ensure     => latest,
-    groupid    => $oaipmh_group,
-    artifactid => $oaipmh_name,
-    version    => $oaipmh_version,
-    packaging  => 'war',
-    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
-    require    => Package['maven'],
-    notify     => Exec['replace_oaipmh_service'],
-  }
-
-  exec { 'replace_oaipmh_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${oaipmh_name}-${oaipmh_version}.war /home/${catname}/${catname}/webapps/${short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file { "/home/${catname}/${catname}/webapps/${short}.war":
-    group  => $group,
-    mode   => '0640',
-    notify => Service[$catname],
-    require => File["/etc/${scope}/${short}/oaipmh.properties"],
-  }
-
-  ###
   # logging
   ###
 
@@ -89,6 +57,39 @@ class textgrid::services::oaipmh (
     group   => $group,
     mode    => '0775',
     require => File["/var/log/${scope}"],
+  }
+
+  ###
+  # use maven to fetch latest oaipmh service from nexus, copy war, set permissions,
+  # and restart tomcat
+  ###
+
+  maven { "/var/cache/${scope}/${oaipmh_name}-${oaipmh_version}.war":
+    ensure     => latest,
+    groupid    => $oaipmh_group,
+    artifactid => $oaipmh_name,
+    version    => $oaipmh_version,
+    packaging  => 'war',
+    repos      => $maven_repository,
+    require    => Package['maven'],
+    notify     => Exec['replace_oaipmh_service'],
+  }
+
+  exec { 'replace_oaipmh_service':
+    path        => ['/usr/bin','/bin'],
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${oaipmh_name}-${oaipmh_version}.war /home/${catname}/${catname}/webapps/${short}.war",
+    cwd         => '/root',
+    user        => 'root',
+    group       => 'root',
+    require     => Exec["create_${catname}"],
+    refreshonly => true,
+  }
+  ->
+  file { "/home/${catname}/${catname}/webapps/${short}.war":
+    group   => $group,
+    mode    => '0640',
+    notify  => Service[$catname],
+    require => File["/etc/${scope}/${short}/oaipmh.properties"],
   }
 
 }

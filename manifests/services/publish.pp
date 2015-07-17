@@ -3,12 +3,13 @@
 # Class to install and configure dhpublish and/or tgpublish.
 #
 class textgrid::services::publish (
-  $publish_scope   = 'textgrid',
-  $publish_short   = 'tgpublish',
-  $publish_name    = 'kolibri-tgpublish-service',
-  $publish_version = '3.7.13-SNAPSHOT',
-  $publish_group   = 'de.langzeitarchivierung.kolibri',
-  $fake_pids       = false,
+  $publish_scope    = 'textgrid',
+  $publish_short    = 'tgpublish',
+  $publish_name     = 'kolibri-tgpublish-service',
+  $publish_version  = '3.7.13-SNAPSHOT',
+  $publish_group    = 'de.langzeitarchivierung.kolibri',
+  $fake_pids        = false,
+  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
   $catname = $textgrid::services::tomcat_publish::catname
@@ -89,39 +90,6 @@ class textgrid::services::publish (
   }
 
   ###
-  # use maven to fetch latest publish service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/${publish_scope}/${publish_name}-${publish_version}.war":
-    ensure     => latest,
-    groupid    => $publish_group,
-    artifactid => $publish_name,
-    version    => $publish_version,
-    packaging  => 'war',
-    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
-    require    => Package['maven'],
-    notify     => Exec['replace_publish_service'],
-  }
-
-  exec { 'replace_publish_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${publish_scope}/${catname}/webapps/${publish_short} && sleep 2 && cp /var/cache/${publish_scope}/${publish_name}-${publish_version}.war /home/${publish_scope}/${catname}/webapps/${publish_short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file {"/home/${publish_scope}/${catname}/webapps/${publish_short}.war":
-    group   => $group,
-    mode    => '0640',
-    notify  => Service[$catname],
-    require => File["/etc/${publish_scope}/${publish_short}/conf/beans.properties.xml"],
-  }
-
-  ###
   # temp dir
   ###
 
@@ -167,6 +135,39 @@ class textgrid::services::publish (
     group   => $group,
     mode    => '0755',
     require => File["/var/log/${publish_scope}"],
+  }
+
+  ###
+  # use maven to fetch latest publish service from nexus, copy war, set permissions,
+  # and restart tomcat
+  ###
+
+  maven { "/var/cache/${publish_scope}/${publish_name}-${publish_version}.war":
+    ensure     => latest,
+    groupid    => $publish_group,
+    artifactid => $publish_name,
+    version    => $publish_version,
+    packaging  => 'war',
+    repos      => $maven_repository,
+    require    => Package['maven'],
+    notify     => Exec['replace_publish_service'],
+  }
+
+  exec { 'replace_publish_service':
+    path        => ['/usr/bin','/bin'],
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${publish_scope}/${catname}/webapps/${publish_short} && sleep 2 && cp /var/cache/${publish_scope}/${publish_name}-${publish_version}.war /home/${publish_scope}/${catname}/webapps/${publish_short}.war",
+    cwd         => '/root',
+    user        => 'root',
+    group       => 'root',
+    require     => Exec["create_${catname}"],
+    refreshonly => true,
+  }
+  ->
+  file {"/home/${publish_scope}/${catname}/webapps/${publish_short}.war":
+    group   => $group,
+    mode    => '0640',
+    notify  => Service[$catname],
+    require => File["/etc/${publish_scope}/${publish_short}/conf/beans.properties.xml"],
   }
 
 }

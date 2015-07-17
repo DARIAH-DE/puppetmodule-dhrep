@@ -3,10 +3,11 @@
 # Class to install and configure tgsearch.
 #
 class textgrid::services::tgsearch (
-  $short                = 'tgsearch',
-  $tgsearch_name        = 'tgsearch-nonpublic-webapp',
-  $tgsearch_version     = '3.4.0-SNAPSHOT',
-  $tgsearch_group       = 'info.textgrid.middleware',
+  $short            = 'tgsearch',
+  $tgsearch_name    = 'tgsearch-nonpublic-webapp',
+  $tgsearch_version = '3.4.0-SNAPSHOT',
+  $tgsearch_group   = 'info.textgrid.middleware',
+  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ) {
 
   include textgrid::services::intern::tgelasticsearch
@@ -27,25 +28,27 @@ class textgrid::services::tgsearch (
     mode   => '0755',
   }
 
-  file { "/etc/textgrid/${short}/${short}-nonpublic.properties":
+  file { "/etc/textgrid/${short}/${short}.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("textgrid/etc/textgrid/${short}/${short}-nonpublic.properties.erb"),
+    content => template("textgrid/etc/textgrid/${short}/${short}.properties.erb"),
+    require => File["/etc/textgrid/${short}"],
   }
 
-  file { "/etc/textgrid/${short}/log4j.nonpublic.properties":
+  file { "/etc/textgrid/${short}/log4j.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("textgrid/etc/textgrid/${short}/log4j.nonpublic.properties.erb"),
+    content => template("textgrid/etc/textgrid/${short}/log4j.properties.erb"),
+    require => File["/etc/textgrid/${short}"],
   }
 
   ###
   # use maven to fetch latest tgsearch service from nexus, copy war, set permissions,
-  # and restart tomcat (tgsearch-public and tgsearch-nonpublic)
+  # and restart tomcat tgsearch.
   ###
 
   maven { "/var/cache/textgrid/${tgsearch_name}-${tgsearch_version}.war":
@@ -54,14 +57,14 @@ class textgrid::services::tgsearch (
     artifactid => $tgsearch_name,
     version    => $tgsearch_version,
     packaging  => 'war',
-    repos      => ['http://dev.dariah.eu/nexus/content/repositories/snapshots/'],
+    repos      => $maven_reposirory,
     require    => Package['maven'],
     notify     => Exec['replace_tgsearch_service'],
   }
 
   exec { 'replace_tgsearch_service':
     path        => ['/usr/bin','/bin'],
-    command     => "rm -rf /home/${catname}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/textgrid/${tgsearch_name}-${tgsearch_version}.war /home/${catname}/${catname}/webapps/${short}.war",
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/textgrid/${tgsearch_name}-${tgsearch_version}.war /home/${catname}/${catname}/webapps/${short}.war",
     cwd         => '/root',
     user        => 'root',
     group       => 'root',
