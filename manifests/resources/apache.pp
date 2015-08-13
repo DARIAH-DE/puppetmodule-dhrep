@@ -13,7 +13,7 @@ class textgrid::resources::apache {
   }
 
   apache::listen { '8080': }
-    
+
   include apache::mod::php
   include apache::mod::rewrite
 
@@ -24,6 +24,21 @@ class textgrid::resources::apache {
       group  => root,
       mode   => '0644',
       notify => Service['apache2'],
+  }
+
+  # Shibboleth configuration for Apache
+  # (see dariahshibboleth/README.md)
+  $mod_shibd_so = $::apache::apache_version ?
+  {
+    '2.4'   => 'mod_shib_24.so',
+    default => 'mod_shib_22.so',
+  }
+  package { 'libapache2-mod-shib2':.
+    ensure => absent
+  }
+  ::apache::mod { 'shib2':
+    id  => 'mod_shib',
+    lib => $mod_shibd_so,
   }
 
   concat::fragment{'apache_default_head':
