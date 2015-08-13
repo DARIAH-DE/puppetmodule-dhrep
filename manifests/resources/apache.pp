@@ -33,7 +33,7 @@ class textgrid::resources::apache {
     '2.4'   => 'mod_shib_24.so',
     default => 'mod_shib_22.so',
   }
-  package { 'libapache2-mod-shib2':.
+  package { 'libapache2-mod-shib2':
     ensure => absent
   }
   ::apache::mod { 'shib2':
