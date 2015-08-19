@@ -64,12 +64,10 @@ class textgrid::services::intern::tgelasticsearch (
   }
 
   elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
-    module_dir => 'mapper-attachments',
     instances  => ['masternode', 'workhorse'],
   }
 
   elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
-    module_dir => 'experimental-highlighter-elasticsearch-plugin',
     instances  => ['masternode', 'workhorse'],
   }
 
