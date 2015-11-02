@@ -1,9 +1,9 @@
-# == Define: textgrid::resources::create_rdf_repository
+# == Define: dhrep::resources::create_rdf_repository
 #
 # Creates a sesame repository adds initial triples.
 #
 
-define textgrid::resources::create_rdf_repository (
+define dhrep::resources::create_rdf_repository (
   $port = '9091',
   $user = 'tomcat-sesame'
 ) {

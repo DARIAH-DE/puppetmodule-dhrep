@@ -1,4 +1,4 @@
-# == Define: textgrid::resources::servicetomcat
+# == Define: dhrep::resources::servicetomcat
 #
 # Create a new user and tomcat-home and add tomcat-user-instance
 # uses debian package tomcat7-user
@@ -44,7 +44,7 @@
 #   <!--APR library loader. Documentation at /docs/apr.html -->
 #   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
 #
-define textgrid::resources::servicetomcat (
+define dhrep::resources::servicetomcat (
   $gid,
   $uid,
   $http_port,
@@ -58,7 +58,7 @@ define textgrid::resources::servicetomcat (
   $init_dependencies = '',
 ){
 
-  require textgrid::tools
+  require dhrep::tools
 
   # Check if group and user are already existing.
   # Just in case we have two tomcats using the same user and group

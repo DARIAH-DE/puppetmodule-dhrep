@@ -1,10 +1,10 @@
-# == Class: textgrid::resources::apache
+# == Class: dhrep::resources::apache
 #
 # install and configure apache for textgrid
 #
 # mainly used by tgauth with mod php and tgnoid with mod-cgi
 #
-class textgrid::resources::apache {
+class dhrep::resources::apache {
 
   class { '::apache':
     default_confd_files => true,
