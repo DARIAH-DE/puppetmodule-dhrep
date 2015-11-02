@@ -37,7 +37,7 @@ class dhrep::services::crud_public (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/tgcrud.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/tgcrud.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
@@ -46,7 +46,7 @@ class dhrep::services::crud_public (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/beans.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/beans.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
@@ -59,7 +59,7 @@ class dhrep::services::crud_public (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/tgcrud.log4j.erb"),
+    content => template("dhrep/etc/${scope}/${short}/tgcrud.log4j.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
