@@ -22,7 +22,7 @@ class dhrep::services::aggregator (
   # config
   ###
 
-  file { '/etc/${scope}/aggregator':
+  file { "/etc/${scope}/aggregator":
     ensure => directory,
     owner  => root,
     group  => root,
