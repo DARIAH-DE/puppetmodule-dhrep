@@ -32,7 +32,7 @@ class dhrep::services::tgsearch (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("textgrid/etc/textgrid/${short}/${short}.properties.erb"),
+    content => template("dhrep/etc/textgrid/${short}/${short}.properties.erb"),
     require => File["/etc/textgrid/${short}"],
   }
 
@@ -41,7 +41,7 @@ class dhrep::services::tgsearch (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("textgrid/etc/textgrid/${short}/log4j.properties.erb"),
+    content => template("dhrep/etc/textgrid/${short}/log4j.properties.erb"),
     require => File["/etc/textgrid/${short}"],
   }
 
