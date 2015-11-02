@@ -79,7 +79,7 @@ class dhrep::services::intern::tgelasticsearch (
     }
     ->
     dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
-      url     => "http://localhost:${$master_http_port}/",
+      url     => "http://localhost:${dhrep::params::tgelasticsearch_master_http_port}/",
       require => Elasticsearch::Instance['masternode'],
     }
     ~>
