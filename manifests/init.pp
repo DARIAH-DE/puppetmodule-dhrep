@@ -20,10 +20,10 @@ class dhrep (
 
 
   class { 'dhrep::services::tgauth':
-    scope       =>   $scope,
-    binddn_pass =>   $tgauth_binddn_pass,
-    crud_secret =>   $tgauth_crud_secret,
-    slapd_root_pw => $tgauth_slapd_root_pw,
+    scope        => $scope,
+    binddn_pass  => $tgauth_binddn_pass,
+    crud_secret  => $tgauth_crud_secret,
+    slapd_rootpw => $tgauth_slapd_rootpw,
   }
 
   class { 'dhrep::services::aggregator':
