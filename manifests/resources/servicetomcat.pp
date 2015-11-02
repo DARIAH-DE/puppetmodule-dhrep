@@ -33,7 +33,7 @@
 #   usergroup which the service belongs to (will be created), defaults to $name if not set 
 #
 # [*defaults_template*]
-#   defaults file template for /etc/defaults, if different from textgrid/etc/default/tomcat.erb
+#   defaults file template for /etc/defaults, if different from dhrep/etc/default/tomcat.erb
 #
 # [*init_dependencies*]
 #   services which should be started before this tomcat, added as dependency to init.d script, separate with whitespace if more than one
@@ -54,7 +54,7 @@ define dhrep::resources::servicetomcat (
   $xms               = 128,
   $group             = $name,
   $user              = $name,
-  $defaults_template = 'textgrid/etc/default/tomcat.erb',
+  $defaults_template = 'dhrep/etc/default/tomcat.erb',
   $init_dependencies = '',
 ){
 
