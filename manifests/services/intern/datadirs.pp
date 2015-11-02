@@ -15,8 +15,8 @@ class dhrep::services::intern::datadirs (
 
   file { '/data':
     ensure => directory,
-    owner  => 'textgrid',
-    group  => 'ULSB',
+    owner  => 'storage',
+    group  => 'storage',
     mode   => '0755',
   }
 
