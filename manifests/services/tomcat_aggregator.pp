@@ -1,8 +1,8 @@
-# == Class: textgrid::services::tomcat_aggregator
+# == Class: dhrep::services::tomcat_aggregator
 #
 # Class to install and configure aggregator tomcat.
 #
-class textgrid::services::tomcat_aggregator (
+class dhrep::services::tomcat_aggregator (
 ){
 
   $catname      = 'tomcat-aggregator'
@@ -22,7 +22,7 @@ class textgrid::services::tomcat_aggregator (
   # user, home-dir and user-tomcat
   ###
 
-  textgrid::resources::servicetomcat { $catname:
+  dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
     gid               => $gid,

@@ -1,9 +1,9 @@
-# == Class: textgrid::services::publish
+# == Class: dhrep::services::publish
 #
 # Class to install and configure dhpublish and/or tgpublish.
 #
-class textgrid::services::publish (
-  $publish_scope    = 'textgrid',
+class dhrep::services::publish (
+  $publish_scope    = undef,
   $publish_short    = 'tgpublish',
   $publish_name     = 'kolibri-tgpublish-service',
   $publish_version  = '3.7.13-SNAPSHOT',
@@ -12,9 +12,9 @@ class textgrid::services::publish (
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
-  $catname = $textgrid::services::tomcat_publish::catname
-  $user    = $textgrid::services::tomcat_publish::user
-  $group   = $textgrid::services::tomcat_publish::group
+  $catname = $dhrep::services::tomcat_publish::catname
+  $user    = $dhrep::services::tomcat_publish::user
+  $group   = $dhrep::services::tomcat_publish::group
 
   ###
   # config

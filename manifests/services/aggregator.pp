@@ -1,9 +1,9 @@
-# == Class: textgrid::services::aggregator
+# == Class: dhrep::services::aggregator
 #
 # Class to install and configure aggregator
 #
-class textgrid::services::aggregator (
-  $scope              = 'textgrid',
+class dhrep::services::aggregator (
+  $scope              = undef,
   $short              = 'aggregator',
   $aggregator_name    = 'aggregator',
   $aggregator_version = '1.4.7-SNAPSHOT',
@@ -12,11 +12,11 @@ class textgrid::services::aggregator (
   $maven_repository   = 'http://dev.digital-humanities.de/nexus/content/repositories/snapshots/',
 ){
 
-  include textgrid::services::tomcat_aggregator
+  include dhrep::services::tomcat_aggregator
 
-  $catname = $textgrid::services::tomcat_aggregator::catname
-  $user    = $textgrid::services::tomcat_aggregator::user
-  $group   = $textgrid::services::tomcat_aggregator::group
+  $catname = $dhrep::services::tomcat_aggregator::catname
+  $user    = $dhrep::services::tomcat_aggregator::user
+  $group   = $dhrep::services::tomcat_aggregator::group
 
   ###
   # config

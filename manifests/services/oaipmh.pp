@@ -1,9 +1,9 @@
-# == Class: textgrid::services::oaipmh
+# == Class: dhrep::services::oaipmh
 #
 # Class to install and configure oaipmh
 #
-class textgrid::services::oaipmh (
-  $scope            = 'textgrid',
+class dhrep::services::oaipmh (
+  $scope            = undef,
   $short            = 'tgoaipmh',
   $oaipmh_name      = 'oaipmh-webapp',
   $oaipmh_version   = '1.3.20-SNAPSHOT',
@@ -11,12 +11,12 @@ class textgrid::services::oaipmh (
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
-  include textgrid::services::intern::tgelasticsearch
-  include textgrid::services::tomcat_oaipmh
+  include dhrep::services::intern::tgelasticsearch
+  include dhrep::services::tomcat_oaipmh
 
-  $catname = $textgrid::services::tomcat_oaipmh::catname
-  $user    = $textgrid::services::tomcat_oaipmh::user
-  $group   = $textgrid::services::tomcat_oaipmh::group
+  $catname = $dhrep::services::tomcat_oaipmh::catname
+  $user    = $dhrep::services::tomcat_oaipmh::user
+  $group   = $dhrep::services::tomcat_oaipmh::group
 
   ###
   # config

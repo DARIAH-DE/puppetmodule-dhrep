@@ -1,4 +1,4 @@
-# == Class: textgrid::services::tgsearch
+# == Class: dhrep::services::tgsearch
 #
 # Class to install and configure tgauth.
 # 
@@ -15,7 +15,7 @@
 #   https://forge.puppetlabs.com/torian/ldap
 #   https://forge.puppetlabs.com/camptocamp/openldap
 #
-class textgrid::services::tgauth (
+class dhrep::services::tgauth (
   $ldap_host             = '',
   $binddn_pass           = '',
   $crud_secret           = '',
@@ -38,7 +38,7 @@ class textgrid::services::tgauth (
 
   # TODO: possibly we want a require here
   # http://localhost:9292/puppet/latest/reference/lang_relationships.html#the-require-function
-  include textgrid::resources::apache
+  include dhrep::resources::apache
 
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin'],

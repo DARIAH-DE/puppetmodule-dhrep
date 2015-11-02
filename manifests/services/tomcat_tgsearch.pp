@@ -1,8 +1,8 @@
-# == Class: textgrid::services::tomcat_tgsearch
+# == Class: dhrep::services::tomcat_tgsearch
 #
 # Class to install and configure tgsearch tomcat.
 #
-class textgrid::services::tomcat_tgsearch (
+class dhrep::services::tomcat_tgsearch (
 ){
 
   $scope        = 'textgrid'
@@ -23,7 +23,7 @@ class textgrid::services::tomcat_tgsearch (
   # user, home-dir and user-tomcat
   ###
 
-  textgrid::resources::servicetomcat { $catname:
+  dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
     gid               => $gid,

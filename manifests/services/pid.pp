@@ -1,9 +1,9 @@
-# == Class: textgrid::services::pid
+# == Class: dhrep::services::pid
 #
 # Class to install and configure dhpid or tgpid.
 #
-class textgrid::services::pid (
-  $scope            = 'textgrid',
+class dhrep::services::pid (
+  $scope            = undef,
   $short            = 'tgpid',
   $pid_name         = 'tgpid-service',
   $pid_version      = '3.5.2-SNAPSHOT',
@@ -17,9 +17,9 @@ class textgrid::services::pid (
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
-  $catname = $textgrid::services::tomcat_publish::catname
-  $user    = $textgrid::services::tomcat_publish::scope
-  $group   = $textgrid::services::tomcat_publish::group
+  $catname = $dhrep::services::tomcat_publish::catname
+  $user    = $dhrep::services::tomcat_publish::scope
+  $group   = $dhrep::services::tomcat_publish::group
 
   ###
   # config

@@ -1,8 +1,8 @@
-# == Class: textgrid::services::tgsearch_public
+# == Class: dhrep::services::tgsearch_public
 #
 # Class to install and configure tgsearch public.
 #
-class textgrid::services::tgsearch_public (
+class dhrep::services::tgsearch_public (
   $short            = 'tgsearch-public',
   $tgsearch_name    = 'tgsearch-public-webapp',
   $tgsearch_version = '3.4.0-SNAPSHOT',
@@ -10,12 +10,12 @@ class textgrid::services::tgsearch_public (
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ) {
 
-  include textgrid::services::intern::tgelasticsearch
-  include textgrid::services::tomcat_tgsearch
+  include dhrep::services::intern::tgelasticsearch
+  include dhrep::services::tomcat_tgsearch
 
-  $catname = $textgrid::services::tomcat_tgsearch::catname
-  $user    = $textgrid::services::tomcat_tgsearch::user
-  $group   = $textgrid::services::tomcat_tgsearch::group
+  $catname = $dhrep::services::tomcat_tgsearch::catname
+  $user    = $dhrep::services::tomcat_tgsearch::user
+  $group   = $dhrep::services::tomcat_tgsearch::group
 
   ###
   # config

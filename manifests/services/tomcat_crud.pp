@@ -1,8 +1,8 @@
-# == Class: textgrid::services::tomcat_crud
+# == Class: dhrep::services::tomcat_crud
 #
 # Class to install and configure dhcrud or tgcrud tomcat.
 #
-class textgrid::services::tomcat_crud (
+class dhrep::services::tomcat_crud (
 ){
 
   $scope        = 'textgrid'
@@ -25,7 +25,7 @@ class textgrid::services::tomcat_crud (
   # user, home-dir and user-tomcat
   ###
 
-  textgrid::resources::servicetomcat { $catname:
+  dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
     gid               => $gid,

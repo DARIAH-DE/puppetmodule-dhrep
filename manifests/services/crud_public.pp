@@ -1,9 +1,9 @@
-# == Class: textgrid::services::crud_public
+# == Class: dhrep::services::crud_public
 #
 # Class to install and configure dhcrud-public or tgcrud-public
 #
-class textgrid::services::crud_public (
-  $scope            = 'textgrid',
+class dhrep::services::crud_public (
+  $scope            = undef,
   $short            = 'tgcrud-public',
   $crud_name        = 'tgcrud-webapp-public',
   $crud_version     = '5.9.152-SNAPSHOT',
@@ -13,17 +13,17 @@ class textgrid::services::crud_public (
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
-  include textgrid::services::intern::tgelasticsearch
-  include textgrid::services::intern::sesame
-  include textgrid::services::intern::tgnoid
-  include textgrid::services::intern::javagat
-  include textgrid::services::tgauth
-  include textgrid::services::tomcat_crud
-  include textgrid::services::tomcat_publish
+  include dhrep::services::intern::tgelasticsearch
+  include dhrep::services::intern::sesame
+  include dhrep::services::intern::tgnoid
+  include dhrep::services::intern::javagat
+  include dhrep::services::tgauth
+  include dhrep::services::tomcat_crud
+  include dhrep::services::tomcat_publish
 
-  $catname = $textgrid::services::tomcat_publish::catname
-  $user    = $textgrid::services::tomcat_publish::user
-  $group   = $textgrid::services::tomcat_publish::group
+  $catname = $dhrep::services::tomcat_publish::catname
+  $user    = $dhrep::services::tomcat_publish::user
+  $group   = $dhrep::services::tomcat_publish::group
 
   ###
   # config

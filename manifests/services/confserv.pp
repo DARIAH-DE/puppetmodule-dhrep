@@ -1,4 +1,4 @@
-# == Class: textgrid::services::tgsearch
+# == Class: dhrep::services::tgsearch
 #
 # Class to create confserv entries
 # 
@@ -7,7 +7,7 @@
 # [*service_base_url*]
 #   the url where the services are accessible from tglab
 #
-class textgrid::services::confserv (
+class dhrep::services::confserv (
   $service_base_url = '',
 ){
 

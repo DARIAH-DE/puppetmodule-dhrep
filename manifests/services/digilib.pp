@@ -1,8 +1,8 @@
-# == Class: textgrid::services::digilib
+# == Class: dhrep::services::digilib
 #
 # Class to install and configure digilib
 #
-class textgrid::services::digilib (
+class dhrep::services::digilib (
   $digilib_name     = 'digilib-service',
   $digilib_version  = '1.7-SNAPSHOT',
   $digilib_group    = 'info.textgrid.services',
@@ -10,16 +10,16 @@ class textgrid::services::digilib (
 ){
 
   package {
-    'libvips37':     ensure => present; # this is needed by the prescaler, see textgrid::services::intern::messaging
+    'libvips37':     ensure => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
     'libvips-tools': ensure => present;
   }
 
-  include textgrid::services::tomcat_digilib
+  include dhrep::services::tomcat_digilib
 
-  $catname   = $textgrid::services::tomcat_digilib::catname
-  $user      = $textgrid::services::tomcat_digilib::user
-  $group     = $textgrid::services::tomcat_digilib::group
-  $http_port = $textgrid::services::tomcat_digilib::http_port
+  $catname   = $dhrep::services::tomcat_digilib::catname
+  $user      = $dhrep::services::tomcat_digilib::user
+  $group     = $dhrep::services::tomcat_digilib::group
+  $http_port = $dhrep::services::tomcat_digilib::http_port
 
   ###
   # config
@@ -98,14 +98,14 @@ class textgrid::services::digilib (
   file { "/home/${catname}/${catname}/webapps/digilibservice.war":
     group   => $group,
     mode    => '0640',
-#    notify  => Textgrid::Tools::Wait_for_url_ready['wait_4_digilib_war_deployed'],
+#    notify  => dhrep::Tools::Wait_for_url_ready['wait_4_digilib_war_deployed'],
     notify  => Service[$catname],
     require => File['/etc/textgrid/digilib/digilib.properties'],
   }
 
-#  textgrid::tools::wait_for_url_ready { 'wait_4_digilib_war_deployed':
+#  dhrep::tools::wait_for_url_ready { 'wait_4_digilib_war_deployed':
 #    url         => "http://localhost:${http_port}/digilibservice/",
-#    require     => Textgrid::Resources::Servicetomcat[$catname],
+#    require     => dhrep::Resources::Servicetomcat[$catname],
 #    refreshonly => true,
  # }
   #->

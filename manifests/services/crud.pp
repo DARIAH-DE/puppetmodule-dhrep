@@ -1,9 +1,9 @@
-# == Class: textgrid::services::crud
+# == Class: dhrep::services::crud
 #
 # Class to install and configure tgcrud/dhcrud
 #
-class textgrid::services::crud (
-  $scope            = 'textgrid',
+class dhrep::services::crud (
+  $scope            = undef,
   $short            = 'tgcrud',
   $crud_name        = 'tgcrud-webapp',
   $crud_version     = '5.9.152-SNAPSHOT',
@@ -13,16 +13,16 @@ class textgrid::services::crud (
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
-  include textgrid::services::intern::tgelasticsearch
-  include textgrid::services::intern::sesame
-  include textgrid::services::intern::tgnoid
-  include textgrid::services::intern::javagat
-  include textgrid::services::tgauth
-  include textgrid::services::tomcat_crud
+  include dhrep::services::intern::tgelasticsearch
+  include dhrep::services::intern::sesame
+  include dhrep::services::intern::tgnoid
+  include dhrep::services::intern::javagat
+  include dhrep::services::tgauth
+  include dhrep::services::tomcat_crud
 
-  $catname = $textgrid::services::tomcat_crud::catname
-  $user    = $textgrid::services::tomcat_crud::user
-  $group   = $textgrid::services::tomcat_crud::group
+  $catname = $dhrep::services::tomcat_crud::catname
+  $user    = $dhrep::services::tomcat_crud::user
+  $group   = $dhrep::services::tomcat_crud::group
 
   ###
   # config
