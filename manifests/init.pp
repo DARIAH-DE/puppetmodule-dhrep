@@ -29,12 +29,12 @@ class dhrep (
   }
 
   class { 'dhrep::services::crud':
-    scope => $scope,
+    scope   => $scope,
     require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']]
   }
 
   class { 'dhrep::services::crud_public':
-    scope => $scope,
+    scope   => $scope,
     require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
   }
 
@@ -43,7 +43,7 @@ class dhrep (
   }
 
   class { 'dhrep::services::oaipmh':
-    scope => $scope,
+    scope   => $scope,
     require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
   }
 
@@ -74,7 +74,7 @@ class dhrep (
 
     class { 'dhrep::services::textgridrep_website': }
     
-    class { 'dhrep::services::tgsearch': 
+    class { 'dhrep::services::tgsearch':
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
     }
     class { 'dhrep::services::tgsearch_public':
@@ -82,7 +82,7 @@ class dhrep (
     }
 
     class { 'dhrep::services::intern::tgnoid':
-      before => Class['dhrep::services::crud'],
+      before        => Class['dhrep::services::crud'],
       tgcrud_secret => $tgcrud_secret,
     }
 
