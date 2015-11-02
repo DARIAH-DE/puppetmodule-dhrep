@@ -12,12 +12,12 @@ define dhrep::resources::create_rdf_repository (
   $create_data = shellquote("type=native&Repository+ID=${name}&Repository+title=rdf+repo+for+${name}+data&Triple+indexes=spoc%2Cposc%2Copsc%2Csopc")
   $ttl_target = shellquote("http://localhost:${port}/openrdf-sesame/repositories/${name}/statements")
 
-  textgrid::tools::wait_for_url_ready { "${name}_rep_ready_wait":
+  dhrep::tools::wait_for_url_ready { "${name}_rep_ready_wait":
     url     => "http://localhost:${port}/openrdf-sesame/repositories", 
     require => Tomcat::War['openrdf-sesame.war'],
   }
   ~>
-  textgrid::tools::wait_for_url_ready { "${name}_workbench_ready_wait":
+  dhrep::tools::wait_for_url_ready { "${name}_workbench_ready_wait":
     url     => "http://localhost:${port}/openrdf-workbench/", 
     require => Tomcat::War['openrdf-workbench.war'],
   }

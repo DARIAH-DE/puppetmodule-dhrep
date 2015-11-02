@@ -82,7 +82,7 @@ class dhrep::services::intern::tgelasticsearch (
       require => Package['git'],
     }
     ->
-    textgrid::tools::wait_for_url_ready { 'wait_for_es_master':
+    dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
       url     => "http://localhost:${$master_http_port}/",
       require => Elasticsearch::Instance['masternode'],
     }
