@@ -13,25 +13,25 @@ class textgrid (
     scope => $scope,
   }
 
-  include textgrid::services::aggregator
-  include textgrid::services::confserv
-  include textgrid::services::crud
-  include textgrid::services::crud_public
-  include textgrid::services::digilib
-  include textgrid::services::oaipmh
-  include textgrid::services::pid
-  include textgrid::services::publish
-  include textgrid::services::textgridrep_website
-  include textgrid::services::tgsearch
-  include textgrid::services::tgsearch_public
+  #  include textgrid::services::aggregator
+  #  include textgrid::services::confserv
+  #  include textgrid::services::crud
+  #  include textgrid::services::crud_public
+  #  include textgrid::services::digilib
+  #  include textgrid::services::oaipmh
+  #  include textgrid::services::pid
+  #  include textgrid::services::publish
+  #  include textgrid::services::textgridrep_website
+  #  include textgrid::services::tgsearch
+  #  include textgrid::services::tgsearch_public
 
-  include textgrid::services::intern::tgelasticsearch
-  include textgrid::services::intern::sesame
-  include textgrid::services::intern::tgwildfly
-  include textgrid::services::intern::messaging
-  include textgrid::services::intern::tgnoid
+  #  include textgrid::services::intern::tgelasticsearch
+  #  include textgrid::services::intern::sesame
+  #  include textgrid::services::intern::tgwildfly
+  #  include textgrid::services::intern::messaging
+  #  include textgrid::services::intern::tgnoid
 
-  include textgrid::tgnginx
+  #  include textgrid::tgnginx
 
   package {
     'openjdk-6-jdk':            ensure => absent;
@@ -92,7 +92,7 @@ class textgrid (
 
   $tgcache = '/var/cache/textgrid/'
   # vagrant cachier changes this to symlink
-  unless $vagrant {
+  unless $::vagrant {
     file { $tgcache :
       ensure => directory,
     }
