@@ -1,4 +1,4 @@
-# == Define: textgrid::tools::wait_for_url_ready
+# == Define: dhrep::tools::wait_for_url_ready
 #
 # wait for a url to become available, e.g. a war deployed in tomcat
 #
@@ -14,13 +14,13 @@
 # [*refreshonly*]
 #   if this script should only run on notification, defaults to false
 #
-define textgrid::tools::wait_for_url_ready (
+define dhrep::tools::wait_for_url_ready (
   $url,
   $retries     = 30,
   $refreshonly = false,
 ) {
 
-  require textgrid::tools
+  require dhrep::tools
 
   #notify { "${name}_urlwaiting_message":
   #  message => "waiting for at most ${retries} seconds for ${url} to become ready",

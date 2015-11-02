@@ -1,4 +1,4 @@
-define textgrid::tools::tgstaging(
+define dhrep::tools::tgstaging(
   $source,
   $target,
   $creates = undef,
