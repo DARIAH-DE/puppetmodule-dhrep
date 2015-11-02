@@ -70,7 +70,7 @@ class dhrep::services::intern::sesame (
   }
 
   unless $sesame_nonpublic_repo_created {
-    textgrid::resources::create_rdf_repository{'textgrid-nonpublic':
+    dhrep::resources::create_rdf_repository{'textgrid-nonpublic':
       port => '9091',
       user => $tgname,
     }
@@ -81,7 +81,7 @@ class dhrep::services::intern::sesame (
   }
 
   unless $sesame_public_repo_created {
-    textgrid::resources::create_rdf_repository{'textgrid-public':
+    dhrep::resources::create_rdf_repository{'textgrid-public':
       port => '9091',
       user => $tgname,
     }
