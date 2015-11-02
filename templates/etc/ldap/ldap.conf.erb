@@ -10,8 +10,8 @@
 
 # added by sfu 2031-12-20
 BASE dc=textgrid,dc=de
-URI ldap://<%= scope.lookupvar('textgrid::services::tgauth::ldap_host') %>
-HOST <%= scope.lookupvar('textgrid::services::tgauth::ldap_host') %>
+URI ldap://<%= scope.lookupvar('dhrep::services::tgauth::ldap_host') %>
+HOST <%= scope.lookupvar('dhrep::services::tgauth::ldap_host') %>
 
 #SIZELIMIT	12
 #TIMELIMIT	15

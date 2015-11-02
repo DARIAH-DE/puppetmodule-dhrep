@@ -5,7 +5,7 @@
 // main page (users can use https) because of same domain policy for
 // xhr calls includes proto
 var tgProtoHost = window.location.protocol + '//' + window.location.host;
-var servicesURL = '<%= scope.lookupvar('textgrid::services::textgridrep_website::tgrep_service_url') %>';
+var servicesURL = '<%= scope.lookupvar('dhrep::services::textgridrep_website::tgrep_service_url') %>';
 var tgsearchURL = servicesURL + '/tgsearch-public/';
 var tgcrudURL =  servicesURL + '/tgcrud-public/';
 var voyantURL = tgProtoHost + '/voyant/';

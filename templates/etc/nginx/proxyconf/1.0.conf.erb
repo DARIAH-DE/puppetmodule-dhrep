@@ -170,7 +170,7 @@ location /1.0/aggregator/html {
 
 location /1.0/tgsearch-public/navigation/toplevel  {
 #    expires 24h;
-    expires <%= scope.lookupvar('textgrid::tgnginx::tgsearch_toplevel_cache_expiration') %>;
+    expires <%= scope.lookupvar('dhrep::tgnginx::tgsearch_toplevel_cache_expiration') %>;
     gzip on;
     gzip_types text/plain application/xml;
     proxy_cache tgsearch;

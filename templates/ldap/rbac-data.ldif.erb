@@ -20,7 +20,7 @@ objectClass: organizationalUnit
 
 # rbac, bindaccounts, textgrid.de
 dn: cn=rbac,ou=bindaccounts,dc=textgrid,dc=de
-userPassword: <%= scope.lookupvar('textgrid::services::tgauth::binddn_pass') %>
+userPassword: <%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %>
 objectClass: simpleSecurityObject
 objectClass: person
 sn: rbac
@@ -61,7 +61,7 @@ objectClass: top
 objectClass: inetOrgPerson
 sn: ShibConnector
 cn: ShibConnector
-userPassword: <%= scope.lookupvar('textgrid::services::tgauth::authz_shib_pw') %>
+userPassword: <%= scope.lookupvar('dhrep::services::tgauth::authz_shib_pw') %>
 
 # roles, rbac, textgrid.de
 dn: ou=roles,ou=rbac,dc=textgrid,dc=de

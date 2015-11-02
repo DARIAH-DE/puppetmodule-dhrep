@@ -289,7 +289,7 @@
 			</property>
 			<property>
 				<field>fakePids</field>
-				<value><%= scope.lookupvar('textgrid::services::publish::fake_pids') %></value>
+				<value><%= scope.lookupvar('dhrep::services::publish::fake_pids') %></value>
 			</property>
 			<property>
 				<field>repeateTimes</field>
@@ -310,29 +310,29 @@
 		<class name="actionmodule.textgrid.publish.CopyElasticSearchIndex">
 			<property>
 				<field>elasticSearchReadHost</field>
-				<value>http://localhost:<%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-nonpublic/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-nonpublic/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to read metadtaa from (non-public instance).</description>
 			</property>
 			<property>
 				<field>elasticSearchWriteHost</field>
-				<value>http://localhost:<%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-public/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-public/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
 				<field>elasticSearchClusterNameReadHost</field>
-				<value><%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::cluster_name') %></value>
+				<value><%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %></value>
 				<description>The ElasticSearch cluster name</description>
 			</property>
 			<property>
 				<field>elasticSearchClusterNameWriteHost</field>
-				<value><%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::cluster_name') %></value>
+				<value><%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %></value>
 				<description>The ElasticSearch cluster name</description>
 			</property>
 		</class>
 		<class name="actionmodule.textgrid.publish.MoveToStaticGridStorage">
 			<property>
 				<field>tgcrudSecret</field>
-				<value><%= scope.lookupvar('textgrid::services::crud::publish_secret') %></value>
+				<value><%= scope.lookupvar('dhrep::services::crud::publish_secret') %></value>
 				<description>The secret used to authenticate to the TG-crud#MOVESTATIC method.</description>
 			</property>
 		</class>
@@ -344,7 +344,7 @@
 			</property>
 			<property>
 				<field>tgauthSecret</field>
-				<value><%= scope.lookupvar('textgrid::services::tgauth::crud_secret') %></value>
+				<value><%= scope.lookupvar('dhrep::services::tgauth::crud_secret') %></value>
 				<description>The secret the TG-auth needs for publishing. Only TG-crud is allowed to!</description>
 			</property>
 		</class>
@@ -398,12 +398,12 @@
 			</property>
 			<property>
 				<field>elasticSearchHost</field>
-				<value>http://localhost:<%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-public/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-public/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
 				<field>elasticSearchClusterName</field>
-				<value><%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::cluster_name') %></value>
+				<value><%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %></value>
 				<description>The ElasticSearch cluster name</description>
 			</property>
 			<property>

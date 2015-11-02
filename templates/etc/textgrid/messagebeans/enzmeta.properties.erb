@@ -1,8 +1,8 @@
-authzinstance = <%= scope.lookupvar('textgrid::services::tgauth::authz_instance') %>
+authzinstance = <%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>
 tgcrudUrl = http://<%= scope.lookupvar('::fqdn') %>/1.0/tgcrud/TGCrudService
 webauthUrl = http://<%= scope.lookupvar('::fqdn') %>/1.0/WebAuthN/TextGrid-WebAuth.php
 elasticSearch.url = 127.0.0.1
-elasticSearch.port = <%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::master_tcp_port') %>
-elasticSearch.clusterName = <%= scope.lookupvar('textgrid::services::intern::tgelasticsearch::cluster_name') %>
+elasticSearch.port = <%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::master_tcp_port') %>
+elasticSearch.clusterName = <%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %>
 elasticSearch.index = textgrid-public
 elasticSearch.type = metadata

@@ -19,10 +19,10 @@
 # <http://www.gnu.org/licenses/lgpl-3.0.html>.
 # #L%
 ###
-gwdg.user = <%= scope.lookupvar('textgrid::services::pid::pid_user') %>
-gwdg.pw = <%= scope.lookupvar('textgrid::services::pid::pid_passwd') %>
-handleservice.endpoint = <%= scope.lookupvar('textgrid::services::pid::pid_endpoint') %>
-handleservice.path = <%= scope.lookupvar('textgrid::services::pid::pid_path') %>
-handleservice.prefix = <%= scope.lookupvar('textgrid::services::pid::pid_prefix') %>
-tg.responsible = <%= scope.lookupvar('textgrid::services::pid::pid_responsible') %>
+gwdg.user = <%= scope.lookupvar('dhrep::services::pid::pid_user') %>
+gwdg.pw = <%= scope.lookupvar('dhrep::services::pid::pid_passwd') %>
+handleservice.endpoint = <%= scope.lookupvar('dhrep::services::pid::pid_endpoint') %>
+handleservice.path = <%= scope.lookupvar('dhrep::services::pid::pid_path') %>
+handleservice.prefix = <%= scope.lookupvar('dhrep::services::pid::pid_prefix') %>
+tg.responsible = <%= scope.lookupvar('dhrep::services::pid::pid_responsible') %>
 tgauth.endpoint = http://localhost:8080/tgauth/tgextra.php
