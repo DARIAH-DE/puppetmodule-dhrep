@@ -1,0 +1,32 @@
+{
+  "name": "dariah-dhrep",
+  "version": "0.2.0",
+  "author": "Maximilian Brodhun, Stefan E. Funk, Carsten Thiel, Ubbo Veentrjer",
+  "license": "Apache-2.0",
+  "summary": "DARIAH-DE puppet module for the TextGrid and DARIAH repository.",
+  "source": "https://projects.gwdg.de/projects/textgrid-puppetmodule/repository",
+  "project_page": "https://projects.gwdg.de/projects/textgrid-puppetmodule",
+  "issues_url": "https://projects.gwdg.de/projects/textgrid-puppetmodule/issues",
+  "tags": ["dariah", "textgrid","repository"],
+  "operatingsystem_support": [
+    {
+    "operatingsystem": "Ubuntu",
+    "operatingsystemrelease": [ "14.04" ]
+    }
+   ],
+  "dependencies": [
+    { "name": "puppetlabs/apache", "version_requirement": ">=1.2.0" },
+    { "name": "puppetlabs/apt", "version_requirement": ">=1.8.0" },
+    { "name": "puppetlabs/concat", "version_requirement": ">=1.2.3" },
+    { "name": "puppetlabs/stdlib", "version_requirement": ">=4.6.0" },
+    { "name": "puppetlabs/tomcat", "version_requirement": ">=1.2.0" },
+    { "name": "elasticsearch/elasticsearch", "version_requirement": ">=0.4.0" },
+    { "name": "maestrodev/maven", "version_requirement": ">=1.2.2" },
+    { "name": "maestrodev/wget", "version_requirement": ">=1.5.6" },
+    { "name": "nanliu/staging", "version_requirement": ">=1.0.2" },
+    { "name": "biemond/wildfly", "version_requirement": ">=0.1.9" },
+    { "name": "dariah/dariahcommon", "version_requirement": ">=0.0.1" }
+  ]
+}
+
+
