@@ -5,9 +5,14 @@
 # TODO  read https://dev2.dariah.eu/wiki/display/TGINT/textgrid-esx1.gwdg.de
 #       and write the manifests ;-)
 #
-class textgrid {
+class textgrid (
+  $scope = 'textgrid'
+){
 
-  include textgrid::services::tgauth
+  class { 'textgrid::services::tgauth':
+    scope => $scope,
+  }
+
   include textgrid::services::aggregator
   include textgrid::services::confserv
   include textgrid::services::crud
