@@ -10,7 +10,12 @@ class dhrep (
   $tgauth_binddn_pass = undef,
   $tgauth_crud_secret = undef,
   $tgelasticsearch_cluster_name = undef,
-  $tgcrud_secret = undef,
+
+  $tgauth_slapd_rootpw = undef,
+  $tgauth_authz_shib_pw = undef,
+  $tgauth_webauth_secret = undef,
+  $tgnoid_tgcrud_secret = undef,
+
 ){
 
 
@@ -83,7 +88,7 @@ class dhrep (
 
     class { 'dhrep::services::intern::tgnoid':
       before        => Class['dhrep::services::crud'],
-      tgcrud_secret => $tgcrud_secret,
+      tgcrud_secret => $tgnoid_tgcrud_secret,
     }
 
   }

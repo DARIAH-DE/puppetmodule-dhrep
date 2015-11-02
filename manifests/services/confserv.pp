@@ -8,7 +8,7 @@
 #   the url where the services are accessible from tglab
 #
 class dhrep::services::confserv (
-  $service_base_url = '',
+  $service_base_url = "http:\\/\\/${::fqdn}\\/1.0",
 ){
 
   file { '/var/www/confserv':

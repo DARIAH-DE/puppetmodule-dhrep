@@ -17,13 +17,12 @@
 #
 class dhrep::services::tgauth (
   $scope = undef,
-  $ldap_host             = '',
+  $ldap_host             = 'localhost',
   $binddn_pass           = '',
   $crud_secret           = '',
   $webauth_secret        = '',
   $sidcheck_secret       = '',
-  $rbac_base             = '',
-  $webauth_dariah_secret = '',
+  $rbac_base             = "http://${::fqdn}/1.0/tgauth/",
   $authz_shib_pw         = '',
   $authz_instance        = '',
   $slapd_rootpw          = '',

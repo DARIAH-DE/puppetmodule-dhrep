@@ -15,15 +15,14 @@
 #
 class dhrep::services::intern::tgelasticsearch (
   $scope                      = undef,
-  $cluster_name,
+  $cluster_name               = 'testing',
   $master_http_port           = '9202',
   $master_tcp_port            = '9302',
-  $repo_version               = '1.4',  # not used for now, as experimental highlighter may break on minor version updates
-  $elasticsearch_version      = '1.4.1',
-  $attachments_plugin_version = '2.4.1',
-  $highlighter_plugin_version = '1.4.1',
-  $es_min_mem                 = '256m',
-  $es_max_mem                 = '1g',
+  $repo_version               = '1.7',
+  $elasticsearch_version      = '1.7.0',
+  $attachments_plugin_version = '2.7.0',
+  $highlighter_plugin_version = '1.7.0',
+  $es_heap_size               = '256m',
 ) {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
@@ -40,8 +39,7 @@ class dhrep::services::intern::tgelasticsearch (
 #      'network.host' => '127.0.0.1',
     },
     init_defaults => {
-      'ES_MIN_MEM' => $es_min_mem,
-      'ES_MAX_MEM' => $es_max_mem,
+      'ES_HEAP_SIZE' => $es_heap_size,
     },
     java_install  => false,
   }
@@ -73,7 +71,7 @@ class dhrep::services::intern::tgelasticsearch (
   }
 
   # run only once
-  unless $tgelastic_repos_initialized {
+  unless $::tgelastic_repos_initialized {
     # clone commons repo, which contains shell scripts to create textgrid elastic search indizes
     exec { 'git_clone_tgcommon':
       path    => ['/usr/bin','/bin','/usr/sbin'],
