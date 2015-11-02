@@ -17,8 +17,8 @@ class dhrep::services::crud (
   include dhrep::services::tomcat_crud
 
   $catname = $dhrep::services::tomcat_crud::catname
-  $user    = $dhrep::services::tomcat_crud::user
-  $group   = $dhrep::services::tomcat_crud::group
+  $user    = 'storage'
+  $group   = 'storage'
 
   ###
   # config

@@ -18,8 +18,8 @@ class dhrep::services::tomcat_crud (
   $template     = "dhrep/etc/default/tomcat.${short}.erb"
   $depcat       = 'wildfly'
 
-  $user         = $scope
-  $group        = 'ULSB'
+  $user         = 'storage'
+  $group        = 'storage'
 
   ###
   # user, home-dir and user-tomcat

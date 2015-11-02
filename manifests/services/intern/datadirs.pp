@@ -26,29 +26,29 @@ class dhrep::services::intern::datadirs (
     ###
     file { '/data/public':
       ensure => directory,
-      owner  => 'textgrid',
-      group  => 'ULSB',
+      owner  => 'storage',
+      group  => 'storage',
       mode   => '0755',
     }
 
     file { '/data/nonpublic':
       ensure => directory,
-      owner  => 'textgrid',
-      group  => 'ULSB',
+      owner  => 'storage',
+      group  => 'storage',
       mode   => '0755',
     }
 
     file { '/data/public/productive':
       ensure => directory,
-      owner  => 'textgrid',
-      group  => 'ULSB',
+      owner  => 'storage',
+      group  => 'storage',
       mode   => '0755',
     }
 
     file { '/data/nonpublic/productive':
       ensure => directory,
-      owner  => 'textgrid',
-      group  => 'ULSB',
+      owner  => 'storage',
+      group  => 'storage',
       mode   => '0755',
     }
 
@@ -64,8 +64,8 @@ class dhrep::services::intern::datadirs (
 
     file { '/media/stornext':
       ensure => directory,
-#      owner  => 'textgrid',
-#      group  => 'ULSB',
+#      owner  => 'storage',
+#      group  => 'storage',
 #      mode   => '0755',
     }
 

@@ -18,8 +18,8 @@ class dhrep::services::crud_public (
   include dhrep::services::tomcat_publish
 
   $catname = $dhrep::services::tomcat_publish::catname
-  $user    = $dhrep::services::tomcat_publish::user
-  $group   = $dhrep::services::tomcat_publish::group
+  $user    = 'storage'
+  $group   = 'storage'
 
   ###
   # config
