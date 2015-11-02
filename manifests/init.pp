@@ -6,19 +6,24 @@
 #       and write the manifests ;-)
 #
 class dhrep (
-  $scope = 'textgrid'
+  $scope              = 'textgrid',
+  $tgauth_binddn_pass = undef,
+  $tgauth_crud_secret = undef,
+  $tgelasticsearch_cluster_name = undef,
 ){
 
   class { 'dhrep::services::tgauth':
-    scope => $scope,
+    scope       => $scope,
+    binddn_pass => $tgauth_binddn_pass,
+    crud_secret => $tgauth_crud_secret,
   }
 
   class { 'dhrep::services::aggregator':
     scope => $scope,
   }
 
-  class { 'dhrep::services::confserv':
-    scope => $scope,
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::confserv': }
   }
 
   class { 'dhrep::services::crud':
@@ -45,21 +50,19 @@ class dhrep (
     scope => $scope,
   }
 
-  class { 'dhrep::services::textgridrep_website':
-    scope => $scope,
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::textgridrep_website': }
   }
 
-  class { 'dhrep::services::tgsearch':
-    scope => $scope,
-  }
-
-  class { 'dhrep::services::tgsearch_public':
-    scope => $scope,
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::tgsearch': }
+    class { 'dhrep::services::tgsearch_public': }
   }
 
 
   class { 'dhrep::services::intern::tgelasticsearch':
-    scope => $scope,
+    scope        => $scope,
+    cluster_name => $tgelasticsearch_cluster_name,
   }
 
   class { 'dhrep::services::intern::sesame':
@@ -71,8 +74,9 @@ class dhrep (
   class { 'dhrep::services::intern::messaging':
     scope => $scope,
   }
-  class { 'dhrep::services::intern::tgnoid':
-    scope => $scope,
+
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::intern::tgnoid': }
   }
 
   #  include textgrid::tgnginx

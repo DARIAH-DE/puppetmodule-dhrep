@@ -16,6 +16,7 @@
 #   https://forge.puppetlabs.com/camptocamp/openldap
 #
 class dhrep::services::tgauth (
+  $scope = undef,
   $ldap_host             = '',
   $binddn_pass           = '',
   $crud_secret           = '',

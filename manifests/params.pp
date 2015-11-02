@@ -13,7 +13,21 @@ class dhrep::params {
     'dariah'   => '/etc/dariah'
   }
 
-  $dhrep::params::confdir[$scope]
+  $crud_name = {
+    'textgrid' => 'tgcrud-webapp',
+    'dariah'   => 'dhcrud-webapp'
+  }
+  $crud_public_name = {
+    'textgrid' => 'tgcrud-webapp-public',
+    'dariah'   => 'dhcrud-webapp-public'
+  }
+
+  $publish_name = {
+    'textgrid' => 'kolibri-tgpublish-service',
+    'dariah'   => 'kolibri-dhpublish-service'
+  }
+
+
 
   $config = {
     'oaipmh'    => {
