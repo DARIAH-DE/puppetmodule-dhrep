@@ -5,31 +5,75 @@
 # TODO  read https://dev2.dariah.eu/wiki/display/TGINT/textgrid-esx1.gwdg.de
 #       and write the manifests ;-)
 #
-class textgrid (
+class dhrep (
   $scope = 'textgrid'
 ){
 
-  class { 'textgrid::services::tgauth':
+  class { 'dhrep::services::tgauth':
     scope => $scope,
   }
 
-  #  include textgrid::services::aggregator
-  #  include textgrid::services::confserv
-  #  include textgrid::services::crud
-  #  include textgrid::services::crud_public
-  #  include textgrid::services::digilib
-  #  include textgrid::services::oaipmh
-  #  include textgrid::services::pid
-  #  include textgrid::services::publish
-  #  include textgrid::services::textgridrep_website
-  #  include textgrid::services::tgsearch
-  #  include textgrid::services::tgsearch_public
+  class { 'dhrep::services::aggregator':
+    scope => $scope,
+  }
 
-  #  include textgrid::services::intern::tgelasticsearch
-  #  include textgrid::services::intern::sesame
-  #  include textgrid::services::intern::tgwildfly
-  #  include textgrid::services::intern::messaging
-  #  include textgrid::services::intern::tgnoid
+  class { 'dhrep::services::confserv':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::crud':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::crud_public':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::digilib':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::oaipmh':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::pid':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::publish':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::textgridrep_website':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::tgsearch':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::tgsearch_public':
+    scope => $scope,
+  }
+
+
+  class { 'dhrep::services::intern::tgelasticsearch':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::intern::sesame':
+    scope => $scope,
+  }
+  class { 'dhrep::services::intern::tgwildfly':
+    scope => $scope,
+  }
+  class { 'dhrep::services::intern::messaging':
+    scope => $scope,
+  }
+  class { 'dhrep::services::intern::tgnoid':
+    scope => $scope,
+  }
 
   #  include textgrid::tgnginx
 
