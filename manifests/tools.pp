@@ -1,4 +1,4 @@
-class textgrid::tools {
+class dhrep::tools {
 
   file { "/usr/local/bin/wait_for_url_ready.sh":
     mode    => '0744',
@@ -6,7 +6,7 @@ class textgrid::tools {
   }
 
   file { "/usr/local/src/tomcat-apr.patch":
-    source  => 'puppet:///modules/textgrid/tools/tomcat-apr.patch'
+    source  => 'puppet:///modules/dhrep/tools/tomcat-apr.patch'
   }
 
 }

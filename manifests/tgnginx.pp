@@ -1,14 +1,14 @@
-# == Class: textgrid::tgnginx
+# == Class: dhrep::tgnginx
 #
 # install and configure nginx.
 #
 # set proxyconfig for forwarding local services via port 80 
 #
-class textgrid::tgnginx (
+class dhrep::tgnginx (
   $proxy_conf_file = '/etc/nginx/proxyconf/1.0.conf',
-  $proxy_conf_template = 'textgrid/etc/nginx/proxyconf/1.0.conf.erb',
-  $nginx_conf_template = 'textgrid/etc/nginx/nginx.erb',
-  $default_site_template = 'textgrid/etc/nginx/sites-available/default.erb',
+  $proxy_conf_template = 'dhrep/etc/nginx/proxyconf/1.0.conf.erb',
+  $nginx_conf_template = 'dhrep/etc/nginx/nginx.erb',
+  $default_site_template = 'dhrep/etc/nginx/sites-available/default.erb',
   $tgsearch_toplevel_cache_expiration = '24h',
 ) {
 
