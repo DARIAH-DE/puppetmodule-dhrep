@@ -19,6 +19,12 @@ class dhrep (
 ) inherits dhrep::params {
 
   # internal services containing variables used by other modules need to be evaluated in order
+  class { 'dhrep::services::tgauth':
+    scope        => $scope,
+    binddn_pass  => $tgauth_binddn_pass,
+    crud_secret  => $tgauth_crud_secret,
+    slapd_rootpw => $tgauth_slapd_rootpw,
+  }
   class { 'dhrep::services::intern::tgelasticsearch':
     scope        => $scope,
     cluster_name => $tgelasticsearch_cluster_name,
@@ -38,13 +44,6 @@ class dhrep (
       before        => Class['dhrep::services::crud'],
       tgcrud_secret => $tgnoid_tgcrud_secret,
     }
-  }
-
-  class { 'dhrep::services::tgauth':
-    scope        => $scope,
-    binddn_pass  => $tgauth_binddn_pass,
-    crud_secret  => $tgauth_crud_secret,
-    slapd_rootpw => $tgauth_slapd_rootpw,
   }
 
   class { 'dhrep::services::aggregator':
