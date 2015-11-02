@@ -38,7 +38,7 @@ class dhrep::services::intern::messaging (
 
   file { '/root/.m2/settings.xml':
     ensure => present,
-    source => 'puppet:///modules/textgrid/root/m2-settings.xml',
+    source => 'puppet:///modules/dhrep/root/m2-settings.xml',
   }
 
   file { '/etc/textgrid/messagebeans':
@@ -50,7 +50,7 @@ class dhrep::services::intern::messaging (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/messagebeans/enzmeta.properties.erb'),
+    content => template('dhrep/etc/textgrid/messagebeans/enzmeta.properties.erb'),
   }
 
   file { '/etc/textgrid/messagebeans/bolrfd.properties':
@@ -58,7 +58,7 @@ class dhrep::services::intern::messaging (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/messagebeans/bolrdf.properties.erb'),
+    content => template('dhrep/etc/textgrid/messagebeans/bolrdf.properties.erb'),
   }
 
 }

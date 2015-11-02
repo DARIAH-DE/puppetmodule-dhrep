@@ -41,7 +41,7 @@ class dhrep::services::textgridrep_website(
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/nginx-root/textgridrep-webseite/config.js.erb'),
+    content => template('dhrep/var/www/nginx-root/textgridrep-webseite/config.js.erb'),
   }
   ->
   file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox/js/config.js':
@@ -49,7 +49,7 @@ class dhrep::services::textgridrep_website(
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/nginx-root/textgridrep-webseite-sandbox/config.js.erb'),
+    content => template('dhrep/var/www/nginx-root/textgridrep-webseite-sandbox/config.js.erb'),
   }
 
   file { '/etc/nginx/sites-available/textgridrep':
@@ -57,7 +57,7 @@ class dhrep::services::textgridrep_website(
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/nginx/sites-available/textgridrep.erb'),
+    content => template('dhrep/etc/nginx/sites-available/textgridrep.erb'),
   }
   ->
   file { '/etc/nginx/proxyconf/textgridrep.common.conf':
@@ -65,7 +65,7 @@ class dhrep::services::textgridrep_website(
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/nginx/proxyconf/textgridrep.common.conf.erb'),
+    content => template('dhrep/etc/nginx/proxyconf/textgridrep.common.conf.erb'),
   }
   ->
   file { '/etc/nginx/sites-enabled/textgridrep':

@@ -97,7 +97,7 @@ define dhrep::resources::servicetomcat (
 
   file { "/etc/init.d/${name}":
     ensure  => present,
-    content => template('textgrid/etc/init.d/tomcat.Debian.erb'),
+    content => template('dhrep/etc/init.d/tomcat.Debian.erb'),
     owner   => 'root',
     group   => 'root',
     mode    => '0755',

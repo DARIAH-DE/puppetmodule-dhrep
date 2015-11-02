@@ -63,7 +63,7 @@ class dhrep::services::intern::sesame {
     ensure  => present,
     owner   => $user,
     mode    => '0644',
-    source  => 'puppet:///modules/textgrid/rdf/mime.ttl',
+    source  => 'puppet:///modules/dhrep/rdf/mime.ttl',
     require => User[$tgname]
   }
 

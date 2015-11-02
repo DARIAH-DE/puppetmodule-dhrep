@@ -65,13 +65,13 @@ class dhrep::services::intern::tgnoid (
   # do everything else via bash scripting
   ###
   file { '/home/tgnoid/install_tgnoid.sh':
-    source  => 'puppet:///modules/textgrid/tgnoid/install_tgnoid.sh',
+    source  => 'puppet:///modules/dhrep/tgnoid/install_tgnoid.sh',
     mode    => '0744',
     require => User[$noiduser],
   }
   ~>
   file { '/home/tgnoid/tgnoid.patch':
-    source => 'puppet:///modules/textgrid/tgnoid/tgnoid.patch',
+    source => 'puppet:///modules/dhrep/tgnoid/tgnoid.patch',
   }
   ~>
   exec { 'install_tgnoid':

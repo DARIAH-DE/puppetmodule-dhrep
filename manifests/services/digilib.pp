@@ -37,7 +37,7 @@ class dhrep::services::digilib (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/digilib/digilib.properties.erb'),
+    content => template('dhrep/etc/textgrid/digilib/digilib.properties.erb'),
     require => File['/etc/textgrid/digilib'],
   }
 
@@ -46,7 +46,7 @@ class dhrep::services::digilib (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/digilib/digilib-service.properties.erb'),
+    content => template('dhrep/etc/textgrid/digilib/digilib-service.properties.erb'),
     require => File['/etc/textgrid/digilib'],
   }
 
