@@ -3,7 +3,7 @@
 # Class to install and configure dhpublish and/or tgpublish.
 #
 class dhrep::services::publish (
-  $publish_scope    = undef,
+  $scope    = undef,
   $publish_short    = 'tgpublish',
   $publish_name     = 'kolibri-tgpublish-service',
   $publish_version  = '3.7.13-SNAPSHOT',
@@ -20,121 +20,121 @@ class dhrep::services::publish (
   # config
   ###
 
-  file { "/etc/${publish_scope}/${publish_short}":
+  file { "/etc/${scope}/${publish_short}":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
   
-  file { "/etc/${publish_scope}/${publish_short}/conf":
+  file { "/etc/${scope}/${publish_short}/conf":
     ensure  => directory,
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => File["/etc/${publish_scope}/${publish_short}"],
+    require => File["/etc/${scope}/${publish_short}"],
   }
 
-  file { "/etc/${publish_scope}/${publish_short}/conf/config.xml":
+  file { "/etc/${scope}/${publish_short}/conf/config.xml":
     ensure  => present,
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${publish_scope}/etc/${publish_scope}/${publish_short}/conf/config.xml.erb"),
-    require => File["/etc/${publish_scope}/${publish_short}/conf"],
+    content => template("dhrep/etc/${scope}/${publish_short}/conf/config.xml.erb"),
+    require => File["/etc/${scope}/${publish_short}/conf"],
   }
 
-  file { "/etc/${publish_scope}/${publish_short}/conf/beans.properties.xml":
+  file { "/etc/${scope}/${publish_short}/conf/beans.properties.xml":
     ensure  => present,
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${publish_scope}/etc/${publish_scope}/${publish_short}/conf/beans.properties.erb"),
-    require => File["/etc/${publish_scope}/${publish_short}/conf"],
+    content => template("dhrep/etc/${scope}/${publish_short}/conf/beans.properties.erb"),
+    require => File["/etc/${scope}/${publish_short}/conf"],
   }
   
-  file { "/etc/${publish_scope}/${publish_short}/conf/policies.xml":
+  file { "/etc/${scope}/${publish_short}/conf/policies.xml":
     ensure  => present,
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${publish_scope}/etc/${publish_scope}/${publish_short}/conf/policies.xml.erb"),
-    require => File["/etc/${publish_scope}/${publish_short}/conf"],
+    content => template("dhrep/etc/${scope}/${publish_short}/conf/policies.xml.erb"),
+    require => File["/etc/${scope}/${publish_short}/conf"],
   }
 
-  file { "/etc/${publish_scope}/${publish_short}/conf/mets_template.xml":
+  file { "/etc/${scope}/${publish_short}/conf/mets_template.xml":
     ensure  => present,
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${publish_scope}/etc/${publish_scope}/${publish_short}/conf/mets_template.xml.erb"),
-    require => File["/etc/${publish_scope}/${publish_short}/conf"],
+    content => template("dhrep/etc/${scope}/${publish_short}/conf/mets_template.xml.erb"),
+    require => File["/etc/${scope}/${publish_short}/conf"],
   }
 
-  file { "/etc/${publish_scope}/${publish_short}/conf/map_dias2jhove.xml":
+  file { "/etc/${scope}/${publish_short}/conf/map_dias2jhove.xml":
     ensure  => present,
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${publish_scope}/etc/${publish_scope}/${publish_short}/conf/map_dias2jhove.xml.erb"),
-    require => File["/etc/${publish_scope}/${publish_short}/conf"],
+    content => template("dhrep/etc/${scope}/${publish_short}/conf/map_dias2jhove.xml.erb"),
+    require => File["/etc/${scope}/${publish_short}/conf"],
   }
 
-  file { "/etc/${publish_scope}/${publish_short}/conf/dias_formatregistry.xml":
+  file { "/etc/${scope}/${publish_short}/conf/dias_formatregistry.xml":
     ensure  => present,
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${publish_scope}/etc/${publish_scope}/${publish_short}/conf/dias_formatregistry.xml.erb"),
-    require => File["/etc/${publish_scope}/${publish_short}/conf"],
+    content => template("dhrep/etc/${scope}/${publish_short}/conf/dias_formatregistry.xml.erb"),
+    require => File["/etc/${scope}/${publish_short}/conf"],
   }
 
   ###
   # temp dir
   ###
 
-  file { "/etc/${publish_scope}/${publish_short}/temp":
+  file { "/etc/${scope}/${publish_short}/temp":
     ensure  => directory,
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => File["/etc/${publish_scope}/${publish_short}"],
+    require => File["/etc/${scope}/${publish_short}"],
   }
 
   ###
   # dest dir
   ###
 
-  file { "/etc/${publish_scope}/${publish_short}/dest":
+  file { "/etc/${scope}/${publish_short}/dest":
     ensure  => directory,
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => File["/etc/${publish_scope}/${publish_short}"],
+    require => File["/etc/${scope}/${publish_short}"],
   }
 
   ###
   # work dir
   ###
 
-  file { "/etc/${publish_scope}/${publish_short}/work":
+  file { "/etc/${scope}/${publish_short}/work":
     ensure  => directory,
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => File["/etc/${publish_scope}/${publish_short}"],
+    require => File["/etc/${scope}/${publish_short}"],
   }
 
   ###
   # logging
   ###
 
-  file { "/var/log/${publish_scope}/${publish_short}":
+  file { "/var/log/${scope}/${publish_short}":
     ensure  => directory,
     owner   => $user,
     group   => $group,
     mode    => '0755',
-    require => File["/var/log/${publish_scope}"],
+    require => File["/var/log/${scope}"],
   }
 
   ###
@@ -142,7 +142,7 @@ class dhrep::services::publish (
   # and restart tomcat
   ###
 
-  maven { "/var/cache/${publish_scope}/${publish_name}-${publish_version}.war":
+  maven { "/var/cache/${scope}/${publish_name}-${publish_version}.war":
     ensure     => latest,
     groupid    => $publish_group,
     artifactid => $publish_name,
@@ -155,7 +155,7 @@ class dhrep::services::publish (
 
   exec { 'replace_publish_service':
     path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${publish_scope}/${catname}/webapps/${publish_short} && sleep 2 && cp /var/cache/${publish_scope}/${publish_name}-${publish_version}.war /home/${publish_scope}/${catname}/webapps/${publish_short}.war",
+    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${publish_short} && sleep 2 && cp /var/cache/${scope}/${publish_name}-${publish_version}.war /home/${scope}/${catname}/webapps/${publish_short}.war",
     cwd         => '/root',
     user        => 'root',
     group       => 'root',
@@ -163,11 +163,11 @@ class dhrep::services::publish (
     refreshonly => true,
   }
   ->
-  file {"/home/${publish_scope}/${catname}/webapps/${publish_short}.war":
+  file {"/home/${scope}/${catname}/webapps/${publish_short}.war":
     group   => $group,
     mode    => '0640',
     notify  => Service[$catname],
-    require => File["/etc/${publish_scope}/${publish_short}/conf/beans.properties.xml"],
+    require => File["/etc/${scope}/${publish_short}/conf/beans.properties.xml"],
   }
 
 }

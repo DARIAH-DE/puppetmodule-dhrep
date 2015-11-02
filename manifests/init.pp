@@ -12,6 +12,7 @@ class dhrep (
   $tgelasticsearch_cluster_name = undef,
 ){
 
+
   class { 'dhrep::services::tgauth':
     scope       => $scope,
     binddn_pass => $tgauth_binddn_pass,
@@ -28,10 +29,12 @@ class dhrep (
 
   class { 'dhrep::services::crud':
     scope => $scope,
+    require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']]
   }
 
   class { 'dhrep::services::crud_public':
     scope => $scope,
+    require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
   }
 
   class { 'dhrep::services::digilib':
@@ -40,6 +43,7 @@ class dhrep (
 
   class { 'dhrep::services::oaipmh':
     scope => $scope,
+    require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
   }
 
   class { 'dhrep::services::pid':
@@ -49,16 +53,6 @@ class dhrep (
   class { 'dhrep::services::publish':
     scope => $scope,
   }
-
-  if $scope == 'textgrid' {
-    class { 'dhrep::services::textgridrep_website': }
-  }
-
-  if $scope == 'textgrid' {
-    class { 'dhrep::services::tgsearch': }
-    class { 'dhrep::services::tgsearch_public': }
-  }
-
 
   class { 'dhrep::services::intern::tgelasticsearch':
     scope        => $scope,
@@ -76,7 +70,20 @@ class dhrep (
   }
 
   if $scope == 'textgrid' {
-    class { 'dhrep::services::intern::tgnoid': }
+
+    class { 'dhrep::services::textgridrep_website': }
+    
+    class { 'dhrep::services::tgsearch': 
+      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
+    }
+    class { 'dhrep::services::tgsearch_public':
+      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
+    }
+
+    class { 'dhrep::services::intern::tgnoid':
+      before => Class['dhrep::services::crud'],
+    }
+
   }
 
   #  include textgrid::tgnginx

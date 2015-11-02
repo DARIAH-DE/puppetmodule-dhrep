@@ -10,7 +10,6 @@ class dhrep::services::tgsearch (
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ) {
 
-  include dhrep::services::intern::tgelasticsearch
   include dhrep::services::tomcat_tgsearch
 
   $catname = $dhrep::services::tomcat_tgsearch::catname

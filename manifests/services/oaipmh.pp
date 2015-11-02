@@ -11,7 +11,6 @@ class dhrep::services::oaipmh (
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
-  include dhrep::services::intern::tgelasticsearch
   include dhrep::services::tomcat_oaipmh
 
   $catname = $dhrep::services::tomcat_oaipmh::catname

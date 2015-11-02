@@ -13,11 +13,7 @@ class dhrep::services::crud_public (
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
-  include dhrep::services::intern::tgelasticsearch
-  include dhrep::services::intern::sesame
-  include dhrep::services::intern::tgnoid
   include dhrep::services::intern::javagat
-  include dhrep::services::tgauth
   include dhrep::services::tomcat_crud
   include dhrep::services::tomcat_publish
 

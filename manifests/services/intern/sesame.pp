@@ -4,8 +4,10 @@
 # Creates initial repos textgrid-nonpublic 
 # and textgrid-public and adds initial triples.
 #
-class dhrep::services::intern::sesame {
-  $scope          = undef,
+class dhrep::services::intern::sesame (
+  $scope          = undef
+){
+
   $tgname         = 'tomcat-sesame'
   $http_port      = '9091'
   $control_port   = '9006'

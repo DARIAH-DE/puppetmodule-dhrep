@@ -3,6 +3,7 @@
 # Class to install and configure digilib
 #
 class dhrep::services::digilib (
+  $scope            = undef,
   $digilib_name     = 'digilib-service',
   $digilib_version  = '1.7-SNAPSHOT',
   $digilib_group    = 'info.textgrid.services',
