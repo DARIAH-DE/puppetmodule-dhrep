@@ -22,7 +22,7 @@ class dhrep::services::aggregator (
   # config
   ###
 
-  file { '/etc/textgrid/aggregator':
+  file { '/etc/${scope}/aggregator':
     ensure => directory,
     owner  => root,
     group  => root,
@@ -34,7 +34,7 @@ class dhrep::services::aggregator (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${scope}/etc/${scope}/${short}/aggregator.properties.erb"),
+    content => template("dhrep/etc/textgrid/${short}/aggregator.properties.erb"),
     require =>  File["/etc/${scope}/${short}"],
   }
 
