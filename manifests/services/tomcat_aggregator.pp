@@ -3,6 +3,7 @@
 # Class to install and configure aggregator tomcat.
 #
 class dhrep::services::tomcat_aggregator (
+  $scope        = undef,
 ){
 
   $catname      = 'tomcat-aggregator'
@@ -13,7 +14,7 @@ class dhrep::services::tomcat_aggregator (
   $jmx_port     = '9995'
   $gid          = '1014'
   $uid          = '1014'
-  $template     ='textgrid/etc/default/tomcat.erb'
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   $user         = $catname
   $group        = $catname

@@ -3,9 +3,9 @@
 # Class to install and configure tgsearch tomcat.
 #
 class dhrep::services::tomcat_tgsearch (
+  $scope        = undef,
 ){
 
-  $scope        = 'textgrid'
   $catname      = 'tomcat-tgsearch'
   $http_port    = '9090'
   $control_port = '9005'
@@ -14,7 +14,7 @@ class dhrep::services::tomcat_tgsearch (
   $jmx_port     = '9990'
   $gid          = '1007'
   $uid          = '1007'
-  $template     = "${scope}/etc/default/tomcat.erb"
+  $template     = 'dhrep/etc/default/tomcat.erb'
   
   $user         = $catname
   $group        = $catname

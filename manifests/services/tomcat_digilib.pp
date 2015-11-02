@@ -3,6 +3,7 @@
 # Class to install and configure digilib tomcat.
 #
 class dhrep::services::tomcat_digilib (
+  $scope        = undef,
 ){
 
   $catname      = 'tomcat-digilib'
@@ -13,7 +14,7 @@ class dhrep::services::tomcat_digilib (
   $jmx_port     = '9992'
   $gid          = '1009'
   $uid          = '1009'
-  $template     = 'textgrid/etc/default/tomcat.erb'
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   $user         = $catname
   $group        = $catname
