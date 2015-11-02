@@ -10,7 +10,7 @@ class dhrep::services::publish (
   $publish_group    = 'de.langzeitarchivierung.kolibri',
   $fake_pids        = false,
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
-){
+) inherits dhrep::params {
 
   $catname = $dhrep::services::tomcat_publish::catname
   $user    = $dhrep::services::tomcat_publish::user

@@ -15,15 +15,13 @@
 #
 class dhrep::services::intern::tgelasticsearch (
   $scope                      = undef,
-  $cluster_name               = 'testing',
-  $master_http_port           = '9202',
-  $master_tcp_port            = '9302',
+  $cluster_name               = undef,
   $repo_version               = '1.7',
   $elasticsearch_version      = '1.7.0',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
   $es_heap_size               = '256m',
-) {
+) inherits dhrep::params {
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
@@ -48,8 +46,8 @@ class dhrep::services::intern::tgelasticsearch (
     config => {
       'node.master'        => true,
       'node.data'          => true,
-      'http.port'          => $master_http_port,
-      'transport.tcp.port' => $master_tcp_port,
+      'http.port'          => $dhrep::params::tgelasticsearch_master_http_port,
+      'transport.tcp.port' => $dhrep::params::tgelasticsearch_master_tcp_port,
     }
   }
 
@@ -57,8 +55,8 @@ class dhrep::services::intern::tgelasticsearch (
     config => {
       'node.master'        => false,
       'node.data'          => true,
-      'http.port'          => '9203',
-      'transport.tcp.port' => '9303',
+      'http.port'          => $dhrep::params::tgelasticsearch_workhorse_http_port,
+      'transport.tcp.port' => $dhrep::params::tgelasticsearch_workhorse_tcp_port,
     }
   }
 

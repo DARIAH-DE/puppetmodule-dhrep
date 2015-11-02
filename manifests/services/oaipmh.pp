@@ -9,7 +9,7 @@ class dhrep::services::oaipmh (
   $oaipmh_version   = '1.3.20-SNAPSHOT',
   $oaipmh_group     = 'info.textgrid.middleware',
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
-){
+) inherits dhrep::params {
 
   include dhrep::services::tomcat_oaipmh
 

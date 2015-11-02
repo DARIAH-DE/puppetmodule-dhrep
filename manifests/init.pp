@@ -9,15 +9,36 @@ class dhrep (
   $scope              = 'textgrid',
   $tgauth_binddn_pass = undef,
   $tgauth_crud_secret = undef,
-  $tgelasticsearch_cluster_name = undef,
+  $tgelasticsearch_cluster_name = 'testing',
   $tgauth_slapd_rootpw = undef,
   $tgauth_authz_shib_pw = undef,
   $tgauth_webauth_secret = undef,
   $tgnoid_tgcrud_secret = undef,
   $crud_publish_secret = undef,
   $datadirs_create_local_datadirs = undef,
-){
+) inherits dhrep::params {
 
+  # internal services containing variables used by other modules need to be evaluated in order
+  class { 'dhrep::services::intern::tgelasticsearch':
+    scope        => $scope,
+    cluster_name => $tgelasticsearch_cluster_name,
+  }
+  class { 'dhrep::services::intern::sesame':
+    scope => $scope,
+  }
+  class { 'dhrep::services::intern::tgwildfly':
+    scope => $scope,
+  }
+  class { 'dhrep::services::intern::messaging':
+    scope => $scope,
+  }
+
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::intern::tgnoid':
+      before        => Class['dhrep::services::crud'],
+      tgcrud_secret => $tgnoid_tgcrud_secret,
+    }
+  }
 
   class { 'dhrep::services::tgauth':
     scope        => $scope,
@@ -62,21 +83,6 @@ class dhrep (
     scope => $scope,
   }
 
-  class { 'dhrep::services::intern::tgelasticsearch':
-    scope        => $scope,
-    cluster_name => $tgelasticsearch_cluster_name,
-  }
-
-  class { 'dhrep::services::intern::sesame':
-    scope => $scope,
-  }
-  class { 'dhrep::services::intern::tgwildfly':
-    scope => $scope,
-  }
-  class { 'dhrep::services::intern::messaging':
-    scope => $scope,
-  }
-
   if $scope == 'textgrid' {
 
     class { 'dhrep::services::intern::datadirs':
@@ -90,11 +96,6 @@ class dhrep (
     }
     class { 'dhrep::services::tgsearch_public':
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
-    }
-
-    class { 'dhrep::services::intern::tgnoid':
-      before        => Class['dhrep::services::crud'],
-      tgcrud_secret => $tgnoid_tgcrud_secret,
     }
 
   }

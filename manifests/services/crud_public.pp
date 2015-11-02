@@ -11,7 +11,7 @@ class dhrep::services::crud_public (
   $use_messaging    = true,
   $publish_secret   = undef,
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
-){
+) inherits dhrep::params {
 
   include dhrep::services::intern::javagat
   include dhrep::services::tomcat_crud
