@@ -33,7 +33,7 @@ class dhrep::services::oaipmh (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/oaipmh.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/oaipmh.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
@@ -46,7 +46,7 @@ class dhrep::services::oaipmh (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/log4j.oaipmh.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/log4j.oaipmh.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 

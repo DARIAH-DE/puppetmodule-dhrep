@@ -37,7 +37,7 @@ class dhrep::services::pid (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/${short}.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/${short}.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
