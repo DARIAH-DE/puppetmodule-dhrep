@@ -69,7 +69,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/tgauth/conf/rbac.conf.erb'),
+    content => template('dhrep/etc/textgrid/tgauth/conf/rbac.conf.erb'),
   }
 
   file { '/etc/textgrid/tgauth/conf/rbacSoap.conf':
@@ -77,7 +77,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/tgauth/conf/rbacSoap.conf.erb'),
+    content => template('dhrep/etc/textgrid/tgauth/conf/rbacSoap.conf.erb'),
   }
 
   file { '/etc/textgrid/tgauth/conf/system.conf':
@@ -85,7 +85,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/tgauth/conf/system.conf.erb'),
+    content => template('dhrep/etc/textgrid/tgauth/conf/system.conf.erb'),
   }
 
   file { '/etc/textgrid/tgauth/conf/config_tgwebauth.xml':
@@ -93,7 +93,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/tgauth/conf/config_tgwebauth.xml.erb'),
+    content => template('dhrep/etc/textgrid/tgauth/conf/config_tgwebauth.xml.erb'),
   }
 
   file { '/var/www/tgauth/conf':
@@ -134,7 +134,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl.erb'),
   }
 
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl':
@@ -142,7 +142,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl.erb'),
   }
 
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl':
@@ -150,7 +150,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl.erb'),
   }
 
   file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl':
@@ -158,7 +158,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl.erb'),
   }
 
   file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl':
@@ -166,7 +166,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
   }
 
   ###
@@ -201,7 +201,7 @@ class dhrep::services::tgauth (
   # Nutzungsordnung
   ###
   file { '/var/Nutzungsordnung_en_200611.txt.html':
-    source => 'puppet:///modules/textgrid/var/Nutzungsordnung_en_200611.txt.html',
+    source => 'puppet:///modules/dhrep/var/Nutzungsordnung_en_200611.txt.html',
     mode   => '0644',
   }
 
@@ -213,7 +213,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid//etc/ldap/ldap.conf.erb'),
+    content => template('dhrep/etc/ldap/ldap.conf.erb'),
   }
 
   # ldap needs to know its own id for mulit-master replikation
@@ -234,7 +234,7 @@ class dhrep::services::tgauth (
   # test
   file { '/tmp/ldap-cn-config-test.ldif':
     ensure  => present,
-    content => template('textgrid//ldap/ldap-cn-config.ldif.erb'),
+    content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
     require => Service['slapd'],
   }
 
@@ -243,12 +243,12 @@ class dhrep::services::tgauth (
 
       file { '/tmp/ldap-cn-config.ldif':
         ensure  => present,
-        content => template('textgrid//ldap/ldap-cn-config.ldif.erb'),
+        content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
         require => Service['slapd'],
       }
       ~>
       file { '/tmp/tgldapconf.sh':
-        source => 'puppet:///modules/textgrid/ldap/tgldapconf.sh',
+        source => 'puppet:///modules/dhrep/ldap/tgldapconf.sh',
         mode   => '0744',
       }
       ~>
@@ -259,7 +259,7 @@ class dhrep::services::tgauth (
       ~>
       file { '/tmp/ldap-rbac-template.ldif':
         ensure  => present,
-        content => template('textgrid//ldap/rbac-data.ldif.erb'),
+        content => template('dhrep/ldap/rbac-data.ldif.erb'),
       }
       ~>
       # should only run once, if ldap template is added (with help of notify and refreshonly)
