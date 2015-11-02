@@ -51,14 +51,14 @@ class dhrep::services::intern::sesame (
     war_ensure    => present,
     catalina_base => "/home/${tgname}/${tgname}",
     war_source    => "/home/${tgname}/openrdf-sesame-${sesame_version}/war/openrdf-workbench.war",
-    require       => [Textgrid::Resources::Servicetomcat[$tgname]],
+    require       => [Dhrep::Resources::Servicetomcat[$tgname]],
   }
   ~>
   tomcat::war { 'openrdf-sesame.war':
     war_ensure    => present,
     catalina_base => "/home/${tgname}/${tgname}",
     war_source    => "/home/${tgname}/openrdf-sesame-${sesame_version}/war/openrdf-sesame.war",
-    require       => [Textgrid::Resources::Servicetomcat[$tgname],Tomcat::War['openrdf-workbench.war']],
+    require       => [Dhrep::Resources::Servicetomcat[$tgname],Tomcat::War['openrdf-workbench.war']],
   }
 
   file { "/home/${tgname}/mime.ttl":
