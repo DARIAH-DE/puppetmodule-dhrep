@@ -25,7 +25,7 @@ class dhrep::services::tgauth (
   $rbac_base             = "http://${::fqdn}/1.0/tgauth/",
   $authz_shib_pw         = '',
   $authz_instance        = '',
-  $slapd_rootpw          = '',
+  $slapd_rootpw          = undef,
   $ldap_replication      = false,
   $ldap_clusternodes     = [],
 ){

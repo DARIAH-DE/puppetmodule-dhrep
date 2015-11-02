@@ -6,10 +6,10 @@ class dhrep::services::crud (
   $scope            = undef,
   $short            = 'tgcrud',
   $crud_name        = 'tgcrud-webapp',
-  $crud_version     = '5.9.152-SNAPSHOT',
+  $crud_version     = '5.9.205-SNAPSHOT',
   $crud_group       = 'info.textgrid.middleware',
-  $use_messaging    = false,
-  $publish_secret   = '',
+  $use_messaging    = true,
+  $publish_secret   = undef,
   $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 

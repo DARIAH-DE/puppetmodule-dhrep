@@ -10,19 +10,20 @@ class dhrep (
   $tgauth_binddn_pass = undef,
   $tgauth_crud_secret = undef,
   $tgelasticsearch_cluster_name = undef,
-
   $tgauth_slapd_rootpw = undef,
   $tgauth_authz_shib_pw = undef,
   $tgauth_webauth_secret = undef,
   $tgnoid_tgcrud_secret = undef,
-
+  $crud_publish_secret = undef,
+  $datadirs_create_local_datadirs = undef,
 ){
 
 
   class { 'dhrep::services::tgauth':
-    scope       => $scope,
-    binddn_pass => $tgauth_binddn_pass,
-    crud_secret => $tgauth_crud_secret,
+    scope       =>   $scope,
+    binddn_pass =>   $tgauth_binddn_pass,
+    crud_secret =>   $tgauth_crud_secret,
+    slapd_root_pw => $tgauth_slapd_root_pw,
   }
 
   class { 'dhrep::services::aggregator':
@@ -35,6 +36,7 @@ class dhrep (
 
   class { 'dhrep::services::crud':
     scope   => $scope,
+    publish_secret => $crud_publish_secret,
     require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']]
   }
 
@@ -76,6 +78,10 @@ class dhrep (
   }
 
   if $scope == 'textgrid' {
+
+    class { 'dhrep::services::intern::datadirs':
+      create_local_datadirs => $datadirs_create_local_datadirs,
+    }
 
     class { 'dhrep::services::textgridrep_website': }
     

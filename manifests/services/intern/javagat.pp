@@ -7,8 +7,6 @@ class dhrep::services::intern::javagat (
   $javagat_version = '2.1.1',
 ){
 
-  include dhrep::services::intern::datadirs
-
   ###
   # javagat
   ###
