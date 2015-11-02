@@ -1,10 +1,11 @@
-# == Class: textgrid::services::intern::sesame
+# == Class: dhrep::services::intern::sesame
 #
 # Class to install and configure sesame.
 # Creates initial repos textgrid-nonpublic 
 # and textgrid-public and adds initial triples.
 #
-class textgrid::services::intern::sesame {
+class dhrep::services::intern::sesame {
+  $scope          = undef,
   $tgname         = 'tomcat-sesame'
   $http_port      = '9091'
   $control_port   = '9006'
@@ -14,7 +15,7 @@ class textgrid::services::intern::sesame {
 
   #require textgrid::resources::create_rdf_repository
 
-  textgrid::resources::servicetomcat { $tgname:
+  dhrep::resources::servicetomcat { $tgname:
     gid          => '1008',
     uid          => '1008',
     http_port    => $http_port,
@@ -22,7 +23,7 @@ class textgrid::services::intern::sesame {
     jmx_port     => $jmx_port,
   }
 
-  textgrid::tools::tgstaging { $sesame_file:
+  dhrep::tools::tgstaging { $sesame_file:
     source  => "http://sourceforge.net/projects/sesame/files/Sesame%202/${sesame_version}/${sesame_file}/download",
     target  => "/home/${tgname}",
     creates => "/home/${tgname}/openrdf-sesame-${sesame_version}",

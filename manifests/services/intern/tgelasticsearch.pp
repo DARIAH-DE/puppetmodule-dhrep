@@ -1,4 +1,4 @@
-# == Class: textgrid::services::intern::tgelasticsearch
+# == Class: dhrep::services::intern::tgelasticsearch
 #
 # Class to install and configure elasticsearch
 # 
@@ -13,7 +13,8 @@
 # [*master_tcp_port*]
 #   elastic search tcp transport port (masternode)
 #
-class textgrid::services::intern::tgelasticsearch (
+class dhrep::services::intern::tgelasticsearch (
+  $scope                      = undef,
   $cluster_name,
   $master_http_port           = '9202',
   $master_tcp_port            = '9302',

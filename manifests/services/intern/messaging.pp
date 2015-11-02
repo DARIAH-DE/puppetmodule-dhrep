@@ -1,8 +1,9 @@
-# == Class: textgrid::services::intern::messaging
+# == Class: dhrep::services::intern::messaging
 #
 # Class to build up messaging.
 #
-class textgrid::services::intern::messaging (
+class dhrep::services::intern::messaging (
+  $scope                     = undef,
   $enzmeta_textgrid_user     = '',
   $enzmeta_textgrid_password = '',
   $bolrdf_textgrid_user      = '',

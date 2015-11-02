@@ -1,8 +1,9 @@
-# == Class: textgrid::services::intern::datadirs
+# == Class: dhrep::services::intern::datadirs
 #
-# Class to install and configure TG-cruds data folders.
+# Class to install and configure DH-cruds data folders.
 #
-class textgrid::services::intern::datadirs (
+class dhrep::services::intern::datadirs (
+  $scope                   = undef,
   $create_local_datadirs   = true,
   $data_public_location    = '',
   $data_nonpublic_location = '',

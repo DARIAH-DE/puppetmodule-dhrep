@@ -1,4 +1,4 @@
-# == Class: textgrid::services::intern::tgnoid
+# == Class: dhrep::services::intern::tgnoid
 #
 # Class to install and configure the NOID.
 # Creates initial minter textgrid.
@@ -6,7 +6,8 @@
 # TODO:
 #   add checks to bash script
 #
-class textgrid::services::intern::tgnoid (
+class dhrep::services::intern::tgnoid (
+  $scope         = undef,
   $tgcrud_secret
 ){
 
@@ -18,7 +19,7 @@ class textgrid::services::intern::tgnoid (
     'libberkeleydb-perl': ensure => present;
   }
 
-  require textgrid::resources::apache
+  require dhrep::resources::apache
 
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin','/usr/local/bin'],
