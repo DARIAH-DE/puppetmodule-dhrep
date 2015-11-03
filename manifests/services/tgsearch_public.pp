@@ -36,7 +36,7 @@ class dhrep::services::tgsearch_public (
     require => File["/etc/textgrid/${short}"],
   }
 
-  file { "/etc/textgrid/${short}/log4..public.properties":
+  file { "/etc/textgrid/${short}/log4.public.properties":
     ensure  => present,
     owner   => root,
     group   => root,
