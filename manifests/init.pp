@@ -88,8 +88,10 @@ class dhrep (
       create_local_datadirs => $datadirs_create_local_datadirs,
     }
 
-    class { 'dhrep::services::textgridrep_website': }
-    
+    class { 'dhrep::static::textgridrep_website': }
+
+    class { 'dhrep::static::textgridlab_org': }
+
     class { 'dhrep::services::tgsearch':
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
     }

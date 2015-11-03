@@ -6,7 +6,7 @@ root /var/www/nginx-root/textgridrep.de/textgridrep-webseite/;
 index index.html index.htm;
 
 # Make site accessible from http(s)://textgridrep.de/
-server_name <%= scope.lookupvar('dhrep::services::textgridrep_website::tgrep_server_name') %>;
+server_name <%= scope.lookupvar('dhrep::static::textgridrep_website::tgrep_server_name') %>;
 
 # rewrite /textgrid: uris, so they are serverd by tgcrud
 #rewrite ^/(textgrid:.*)$ /browse.html?id=$1 last;
@@ -62,5 +62,3 @@ error_page 404 /404.html;
 #location = /50x.html {
 #       root /usr/share/nginx/www;
 #}
-
-
