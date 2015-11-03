@@ -137,6 +137,19 @@ class dhrep::services::publish (
     require => File["/var/log/${scope}"],
   }
 
+  logrotate::rule { $name:
+    path         => "/var/log/${scope}/${short}/${short}.log",
+    require      => File["/var/log/${scope}/${short}"],
+    rotate       => 365,
+    rotate_every => 'week',
+    compress     => true,
+    copytruncate => true,
+    missingok    => true,
+    ifempty      => true,
+    dateext      => true,
+    dateformat   => '.%Y-%m-%d'
+  }
+
   ###
   # use maven to fetch latest publish service from nexus, copy war, set permissions,
   # and restart tomcat

@@ -121,4 +121,17 @@ define dhrep::resources::servicetomcat (
     require => Exec["create_${name}"],
   }
 
+  logrotate::rule { $name:
+    path         => "/home/${user}/${name}/logs/catalina.out",
+    require      => Exec["create_${name}"],
+    rotate       => 365,
+    rotate_every => 'week',
+    compress     => true,
+    copytruncate => true,
+    missingok    => true,
+    ifempty      => true,
+    dateext      => true,
+    dateformat   => '.%Y-%m-%d'
+  }
+
 }

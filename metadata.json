@@ -25,7 +25,8 @@
     { "name": "maestrodev/wget", "version_requirement": ">=1.5.6" },
     { "name": "nanliu/staging", "version_requirement": ">=1.0.2" },
     { "name": "biemond/wildfly", "version_requirement": ">=0.1.9" },
-    { "name": "dariah/dariahcommon", "version_requirement": ">=0.0.1" }
+    { "name": "dariah/dariahcommon", "version_requirement": ">=0.0.1" },
+    { "name" : "rodjek/logrotate", "version_requirement": ">=1.1.1" }
   ]
 }
 
