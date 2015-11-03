@@ -27,16 +27,16 @@ class dhrep::services::tgsearch (
     mode   => '0755',
   }
 
-  file { "/etc/textgrid/${short}/${short}.properties":
+  file { "/etc/textgrid/${short}/tgsearch-nonpublic.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("dhrep/etc/textgrid/${short}/${short}.properties.erb"),
+    content => template("dhrep/etc/textgrid/${short}/tgsearch.properties.erb"),
     require => File["/etc/textgrid/${short}"],
   }
 
-  file { "/etc/textgrid/${short}/log4j.properties":
+  file { "/etc/textgrid/${short}/log4j.nonpublic.properties":
     ensure  => present,
     owner   => root,
     group   => root,

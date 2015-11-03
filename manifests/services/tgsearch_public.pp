@@ -27,7 +27,7 @@ class dhrep::services::tgsearch_public (
     mode   => '0755',
   }
 
-  file { "/etc/textgrid/${short}/tgsearch.properties":
+  file { "/etc/textgrid/${short}/tgsearch-public.properties":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -41,7 +41,7 @@ class dhrep::services::tgsearch_public (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("dhrep/etc/textgrid/${short}/log4j.properties.erb"),
+    content => template("dhrep/etc/textgrid/${short}/log4j.public.properties.erb"),
     require => File["/etc/textgrid/${short}"],
   }
 
