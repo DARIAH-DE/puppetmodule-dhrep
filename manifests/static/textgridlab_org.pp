@@ -30,15 +30,5 @@ class dhrep::static::textgridlab_org(
     creates => '/var/www/nginx-root/textgridlab.org/schema',
     require => Package['git'],
   }
-#  ->
-#  file { '/var/www/nginx-root/textgridlab.org/':
-#    source  => 'file:///var/www/nginx-root/textgridrep.de/textgridrep-webseite',
-#    recurse => true,
-#  }
-#  ->
-#  file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite/sandbox':
-#    ensure => link,
-#    target => '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox',
-#  }
 
 }
