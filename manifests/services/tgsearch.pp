@@ -24,29 +24,30 @@ class dhrep::services::tgsearch (
   # config
   ###
 
-  file { "/etc/textgrid/${short}":
+  file { "/etc/textgrid/tgsearch":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
 
-  file { "/etc/textgrid/${short}/tgsearch-nonpublic.properties":
+  file { "/etc/textgrid/tgsearch/tgsearch-nonpublic.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template("dhrep/etc/textgrid/${short}/tgsearch.properties.erb"),
-    require => File["/etc/textgrid/${short}"],
+    require => File["/etc/textgrid/tgsearch"],
+    notify  => Service['tomcat-tgsearch'],
   }
 
-  file { "/etc/textgrid/${short}/log4j.nonpublic.properties":
+  file { "/etc/textgrid/tgsearch/log4j.nonpublic.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template("dhrep/etc/textgrid/${short}/log4j.properties.erb"),
-    require => File["/etc/textgrid/${short}"],
+    require => File["/etc/textgrid/tgsearch"],
   }
 
   file { "/home/${catname}/${catname}/webapps/${short}.war": 
