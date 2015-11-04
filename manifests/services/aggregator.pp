@@ -41,9 +41,10 @@ class dhrep::services::aggregator (
   }
 
   # symlink war from deb package to tomcat webapps dir
-  file { "/home/${catname}/${catname}/webapps/${short}.war": 
+  file { "/home/${user}/${catname}/webapps/${short}.war": 
     ensure => 'link',
     target => "/var/${scope}/webapps/${short}.war", 
+    require => File["/etc/${scope}/${short}/aggregator.properties"],
   }
 
 }

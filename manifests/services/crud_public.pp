@@ -6,12 +6,15 @@ class dhrep::services::crud_public (
   $scope            = undef,
   $short            = 'tgcrud-public',
   $crud_name        = 'tgcrud-webapp-public',
-  $crud_version     = '5.9.205-SNAPSHOT',
-  $crud_group       = 'info.textgrid.middleware',
+  $crud_version     = 'latest',
   $use_messaging    = true,
   $publish_secret   = undef,
-  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ) inherits dhrep::params {
+
+  package { $crud_name:
+    ensure  => $crud_version,
+    require => Exec['update_dariah_ubunturepository'],
+  }
 
   include dhrep::services::intern::javagat
   include dhrep::services::tomcat_crud
@@ -84,36 +87,10 @@ class dhrep::services::crud_public (
     dateformat   => '.%Y-%m-%d'
   }
 
-  ###
-  # use maven to fetch latest crud service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/${scope}/${crud_name}-${crud_version}.war":
-    ensure     => latest,
-    groupid    => $crud_group,
-    artifactid => $crud_name,
-    version    => $crud_version,
-    packaging  => 'war',
-    repos      => $maven_repository,
-    require    => Package['maven'],
-    notify     => Exec['replace_crud_public_service'],
-  }
-
-  exec { 'replace_crud_public_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${crud_name}-${crud_version}.war /home/${scope}/${catname}/webapps/${short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file { "/home/${scope}/${catname}/webapps/${short}.war":
-    group   => $group,
-    mode    => '0640',
-    notify  => Service[$catname],
+  # symlink war from deb package to tomcat webapps dir
+  file { "/home/${user}/${catname}/webapps/${short}.war": 
+    ensure => 'link',
+    target => "/var/${scope}/webapps/${short}.war", 
     require => File[ "/etc/${scope}/${short}/beans.properties"],
   }
 

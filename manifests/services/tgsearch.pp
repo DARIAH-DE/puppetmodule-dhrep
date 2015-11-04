@@ -51,7 +51,7 @@ class dhrep::services::tgsearch (
   }
 
   # symlink war from deb package to tomcat webapps dir
-  file { "/home/${catname}/${catname}/webapps/${short}.war": 
+  file { "/home/${user}/${catname}/webapps/${short}.war": 
     ensure => 'link',
     target => "/var/${scope}/webapps/tgsearch-nonpublic.war", 
   }
