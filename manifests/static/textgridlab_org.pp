@@ -41,7 +41,7 @@ class dhrep::static::textgridlab_org(
     mode    => '0755',
   }
   ->
-  file { '/var/www/nginx-root/doc/index.html':
+  file { '/var/www/nginx-root/textgridlab.org/doc/index.html':
     source => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/doc/index.html',
     mode   => '0644',
   }
