@@ -4,15 +4,16 @@
 #
 class dhrep::services::digilib (
   $scope            = undef,
+  $short            = 'digilibservice',
   $digilib_name     = 'digilib-service',
-  $digilib_version  = '1.7-SNAPSHOT',
-  $digilib_group    = 'info.textgrid.services',
-  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
+  $digilib_version  = 'latest',
 ){
 
   package {
-    'libvips37':     ensure => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
-    'libvips-tools': ensure => present;
+    'libvips37':     ensure  => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
+    'libvips-tools': ensure  => present;
+    $digilib_name:   ensure  => $digilib_version, 
+                     require => Exec['update_dariah_ubunturepository'],
   }
 
   include dhrep::services::tomcat_digilib
@@ -70,37 +71,10 @@ class dhrep::services::digilib (
     mode   => '0755',
   }
 
-  ###
-  # use maven to fetch latest digilib service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/textgrid/${digilib_name}-${digilib_version}.war":
-    ensure     => latest,
-    groupid    => $digilib_group,
-    artifactid => $digilib_name,
-    version    => $digilib_version,
-    packaging  => 'war',
-    repos      => $maven_repository,
-    require    => Package['maven'],
-    notify     => Exec['replace_digilib_service'],
-  }
-
-  exec { 'replace_digilib_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/digilibservice && sleep 2 && cp /var/cache/textgrid/${digilib_name}-${digilib_version}.war /home/${catname}/${catname}/webapps/digilibservice.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file { "/home/${catname}/${catname}/webapps/digilibservice.war":
-    group   => $group,
-    mode    => '0640',
-#    notify  => dhrep::Tools::Wait_for_url_ready['wait_4_digilib_war_deployed'],
-    notify  => Service[$catname],
+  # symlink war from deb package to tomcat webapps dir
+  file { "/home/${user}/${catname}/webapps/${short}.war": 
+    ensure => 'link',
+    target => "/var/${scope}/webapps/${short}.war", 
     require => File['/etc/textgrid/digilib/digilib.properties'],
   }
 
