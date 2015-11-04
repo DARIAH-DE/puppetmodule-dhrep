@@ -50,6 +50,7 @@ class dhrep::services::tgsearch (
     require => File["/etc/textgrid/tgsearch"],
   }
 
+  # symlink war from deb package to tomcat webapps dir
   file { "/home/${catname}/${catname}/webapps/${short}.war": 
     ensure => 'link',
     target => "/var/${scope}/webapps/tgsearch-nonpublic.war", 
