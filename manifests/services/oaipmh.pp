@@ -14,7 +14,6 @@ class dhrep::services::oaipmh (
     require => Exec['update_dariah_ubunturepository'],
   }
 
-
   include dhrep::services::tomcat_oaipmh
 
   $catname = $dhrep::services::tomcat_oaipmh::catname
