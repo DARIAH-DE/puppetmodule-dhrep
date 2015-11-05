@@ -74,7 +74,8 @@ class dhrep::services::digilib (
   # symlink war from deb package to tomcat webapps dir
   file { "/home/${user}/${catname}/webapps/${short}.war": 
     ensure => 'link',
-    target => "/var/${scope}/webapps/${short}.war", 
+    target => "/var/${scope}/webapps/${short}.war",
+    notify  => Service[$catname],
     require => File['/etc/textgrid/digilib/digilib.properties'],
   }
 

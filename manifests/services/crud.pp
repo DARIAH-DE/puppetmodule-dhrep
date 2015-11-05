@@ -90,6 +90,7 @@ class dhrep::services::crud (
   file { "/home/${user}/${catname}/webapps/${short}.war": 
     ensure => 'link',
     target => "/var/${scope}/webapps/${short}.war",
+    notify  => Service[$catname],
     require => File[ "/etc/${scope}/${short}/beans.properties"],
   }
 
