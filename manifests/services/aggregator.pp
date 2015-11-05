@@ -9,16 +9,16 @@ class dhrep::services::aggregator (
   $aggregator_version = 'latest',
 ){
 
-  package { $aggregator_name:
-    ensure  => $aggregator_version,
-    require => Exec['update_dariah_ubunturepository'],
-  }
-
   include dhrep::services::tomcat_aggregator
 
   $catname = $dhrep::services::tomcat_aggregator::catname
   $user    = $dhrep::services::tomcat_aggregator::user
   $group   = $dhrep::services::tomcat_aggregator::group
+
+  package { $aggregator_name:
+    ensure  => $aggregator_version,
+    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -42,10 +42,10 @@ class dhrep::services::aggregator (
 
   # symlink war from deb package to tomcat webapps dir
   file { "/home/${user}/${catname}/webapps/${short}.war": 
-    ensure => 'link',
-    target => "/var/${scope}/webapps/${short}.war",
-    notify  => Service[$catname],
-    require => File["/etc/${scope}/${short}/aggregator.properties"],
+    ensure  => 'link',
+    target  => "/var/${scope}/webapps/${short}.war",
+#    notify  => Service[$catname],
+    require => [File["/etc/${scope}/${short}/aggregator.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
 }

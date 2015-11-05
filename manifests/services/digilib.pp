@@ -9,19 +9,19 @@ class dhrep::services::digilib (
   $digilib_version  = 'latest',
 ){
 
-  package {
-    'libvips37':     ensure  => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
-    'libvips-tools': ensure  => present;
-    $digilib_name:   ensure  => $digilib_version, 
-                     require => Exec['update_dariah_ubunturepository'],
-  }
-
   include dhrep::services::tomcat_digilib
 
   $catname   = $dhrep::services::tomcat_digilib::catname
   $user      = $dhrep::services::tomcat_digilib::user
   $group     = $dhrep::services::tomcat_digilib::group
   $http_port = $dhrep::services::tomcat_digilib::http_port
+
+  package {
+    'libvips37':     ensure  => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
+    'libvips-tools': ensure  => present;
+    $digilib_name:   ensure  => $digilib_version, 
+                     require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -73,10 +73,10 @@ class dhrep::services::digilib (
 
   # symlink war from deb package to tomcat webapps dir
   file { "/home/${user}/${catname}/webapps/${short}.war": 
-    ensure => 'link',
-    target => "/var/${scope}/webapps/${short}.war",
-    notify  => Service[$catname],
-    require => File['/etc/textgrid/digilib/digilib.properties'],
+    ensure  => 'link',
+    target  => "/var/${scope}/webapps/${short}.war",
+#    notify  => Service[$catname],
+    require => [File['/etc/textgrid/digilib/digilib.properties'],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
 #  dhrep::tools::wait_for_url_ready { 'wait_4_digilib_war_deployed':

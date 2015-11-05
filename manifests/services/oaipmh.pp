@@ -9,16 +9,16 @@ class dhrep::services::oaipmh (
   $oaipmh_version   = 'latest',
 ) inherits dhrep::params {
 
-  package { $oaipmh_name:
-    ensure  => $oaipmh_version,
-    require => Exec['update_dariah_ubunturepository'],
-  }
-
   include dhrep::services::tomcat_oaipmh
 
   $catname = $dhrep::services::tomcat_oaipmh::catname
   $user    = $dhrep::services::tomcat_oaipmh::user
   $group   = $dhrep::services::tomcat_oaipmh::group
+
+  package { $oaipmh_name:
+    ensure  => $oaipmh_version,
+    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -76,10 +76,10 @@ class dhrep::services::oaipmh (
 
   # symlink war from deb package to tomcat webapps dir
   file { "/home/${user}/${catname}/webapps/${short}.war": 
-    ensure => 'link',
-    target => "/var/${scope}/webapps/${short}.war",
-    notify  => Service[$catname],
-    require => File["/etc/${scope}/${short}/oaipmh.properties"],
+    ensure  => 'link',
+    target  => "/var/${scope}/webapps/${short}.war",
+#    notify  => Service[$catname],
+    require => [File["/etc/${scope}/${short}/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
 }

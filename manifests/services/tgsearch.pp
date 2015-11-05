@@ -9,16 +9,16 @@ class dhrep::services::tgsearch (
   $tgsearch_version = 'latest',
 ) {
 
-  package { $tgsearch_name:
-    ensure  => $tgsearch_version,
-    require => Exec['update_dariah_ubunturepository'],
-  }
-
   include dhrep::services::tomcat_tgsearch
 
   $catname = $dhrep::services::tomcat_tgsearch::catname
   $user    = $dhrep::services::tomcat_tgsearch::user
   $group   = $dhrep::services::tomcat_tgsearch::group
+
+  package { $tgsearch_name:
+    ensure  => $tgsearch_version,
+    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -52,9 +52,10 @@ class dhrep::services::tgsearch (
 
   # symlink war from deb package to tomcat webapps dir
   file { "/home/${user}/${catname}/webapps/${short}.war": 
-    ensure => 'link',
-    target => "/var/${scope}/webapps/tgsearch-nonpublic.war",
-    notify  => Service[$catname],
+    ensure  => 'link',
+    target  => "/var/${scope}/webapps/tgsearch-nonpublic.war",
+#    notify  => Service[$catname],
+    require => Dhrep::Resources::Servicetomcat[$catname],
   }
 
 }

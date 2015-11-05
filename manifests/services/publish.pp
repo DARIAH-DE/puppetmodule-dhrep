@@ -10,14 +10,14 @@ class dhrep::services::publish (
   $fake_pids        = false,
 ) inherits dhrep::params {
 
-  package { $publish_name:
-    ensure  => $publish_version,
-    require => Exec['update_dariah_ubunturepository'],
-  }
-
   $catname = $dhrep::services::tomcat_publish::catname
   $user    = $dhrep::services::tomcat_publish::user
   $group   = $dhrep::services::tomcat_publish::group
+
+  package { $publish_name:
+    ensure  => $publish_version,
+    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -155,10 +155,10 @@ class dhrep::services::publish (
 
   # symlink war from deb package to tomcat webapps dir
   file { "/home/${user}/${catname}/webapps/${publish_short}.war": 
-    ensure => 'link',
-    target => "/var/${scope}/webapps/${publish_short}.war",
-    notify  => Service[$catname],
-    require => File["/etc/${scope}/${publish_short}/conf/beans.properties"],
+    ensure  => 'link',
+    target  => "/var/${scope}/webapps/${publish_short}.war",
+#    notify  => Service[$catname],
+    require => [File["/etc/${scope}/${publish_short}/conf/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
 }

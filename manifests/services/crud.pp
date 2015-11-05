@@ -11,17 +11,17 @@ class dhrep::services::crud (
   $publish_secret   = undef,
 ) inherits dhrep::params {
 
-  package { $crud_name:
-    ensure  => $crud_version,
-    require => Exec['update_dariah_ubunturepository'],
-  }
-
   include dhrep::services::intern::javagat
   include dhrep::services::tomcat_crud
 
   $catname = $dhrep::services::tomcat_crud::catname
   $user    = 'storage'
   $group   = 'storage'
+
+  package { $crud_name:
+    ensure  => $crud_version,
+    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -90,8 +90,8 @@ class dhrep::services::crud (
   file { "/home/${user}/${catname}/webapps/${short}.war": 
     ensure => 'link',
     target => "/var/${scope}/webapps/${short}.war",
-    notify  => Service[$catname],
-    require => File[ "/etc/${scope}/${short}/beans.properties"],
+#    notify  => Service[$catname],
+    require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
 }

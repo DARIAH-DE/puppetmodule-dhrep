@@ -11,18 +11,18 @@ class dhrep::services::crud_public (
   $publish_secret   = undef,
 ) inherits dhrep::params {
 
-  package { $crud_name:
-    ensure  => $crud_version,
-    require => Exec['update_dariah_ubunturepository'],
-  }
-
   include dhrep::services::intern::javagat
   include dhrep::services::tomcat_crud
   include dhrep::services::tomcat_publish
 
   $catname = $dhrep::services::tomcat_publish::catname
-  $user    = 'storage'
-  $group   = 'storage'
+  $user    = $dhrep::services::tomcat_publish::user
+  $group   = $dhrep::services::tomcat_publish::group
+
+  package { $crud_name:
+    ensure  => $crud_version,
+    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -89,10 +89,10 @@ class dhrep::services::crud_public (
 
   # symlink war from deb package to tomcat webapps dir
   file { "/home/${user}/${catname}/webapps/${short}.war": 
-    ensure => 'link',
-    target => "/var/${scope}/webapps/${short}.war",
-    notify  => Service[$catname],
-    require => File[ "/etc/${scope}/${short}/beans.properties"],
+    ensure  => 'link',
+    target  => "/var/${scope}/webapps/${short}.war",
+#    notify  => Service[$catname],
+    require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
 }
