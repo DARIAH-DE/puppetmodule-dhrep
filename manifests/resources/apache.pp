@@ -16,6 +16,7 @@ class dhrep::resources::apache {
 
   include apache::mod::php
   include apache::mod::rewrite
+  include apache::mod::cgi
 
   # TODO: sites-available & a2ensite
   $defaultvhost = "/etc/apache2/sites-enabled/25-${::fqdn}.conf"
@@ -79,9 +80,29 @@ class dhrep::resources::apache {
     </Directory>
 
     # --------------------------------------------------------------------------
+    # TextGrid Marketplace configuration
+    # --------------------------------------------------------------------------
+
+    <Directory /var/www/marketplace/>
+      Options Indexes FollowSymLinks MultiViews
+      AllowOverride All
+      Order allow,deny
+      allow from all
+    </Directory>
+    <Directory \"/var/www/marketplace/cgi/\">
+      SetHandler cgi-script
+      AllowOverride All
+      Options +ExecCGI
+    </Directory>
+
+    # --------------------------------------------------------------------------
+    # End of TextGrid Marketplace configuration
+    # --------------------------------------------------------------------------
+
+    # --------------------------------------------------------------------------
     # All the NOID configuration things following here for minting TextGrid URIs
     # --------------------------------------------------------------------------
-   
+
     # ScriptAlias /cgi-bin/ /home/tgnoid/htdocs/nd/
     <Directory \"/home/tgnoid/htdocs/nd/\">
       AuthType Basic
@@ -99,7 +120,7 @@ class dhrep::resources::apache {
 
     # Define all the rewrite maps, start every program once on server start
     # RewriteMap rslv_textgrid prg:/home/tgnoid/htdocs/nd/noidr_textgrid
-    
+
     # --------------------------------------------------------------------------
     # End of NOID configuration
     # --------------------------------------------------------------------------
@@ -115,7 +136,6 @@ class dhrep::resources::apache {
     ",
     order   => 010,
   }
-
 
   concat::fragment{'apache_default_tail':
     target  => $defaultvhost,

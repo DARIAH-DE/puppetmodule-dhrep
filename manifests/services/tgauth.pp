@@ -103,6 +103,8 @@ class dhrep::services::tgauth (
 
   ###
   # /var/www/tgauth
+  #
+  # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
   ###
 
   exec { 'git_clone_tgauth':
@@ -119,8 +121,7 @@ class dhrep::services::tgauth (
     mode    => '0644',
   }
 
-  file {
-    '/var/www/tgauth/rbacSoap/wsdl':
+  file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure => directory,
     owner  => root,
     group  => root,
