@@ -10,6 +10,11 @@ location /1.0/tgrep {
     alias /var/www/nginx-root/textgridrep.de/textgridrep-webseite;
 }
 
+# only for local testing...
+location /1.0/tgorg {
+    alias /var/www/nginx-root/textgridlab.org;
+}
+
 location /1.0/tgauth {
     proxy_pass http://localhost:8080/tgauth;
 }
