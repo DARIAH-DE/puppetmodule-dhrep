@@ -6,11 +6,14 @@ class dhrep::services::publish (
   $scope    = undef,
   $publish_short    = 'tgpublish',
   $publish_name     = 'kolibri-tgpublish-service',
-  $publish_version  = '3.7.13-SNAPSHOT',
-  $publish_group    = 'de.langzeitarchivierung.kolibri',
+  $publish_version  = 'latest',
   $fake_pids        = false,
-  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ) inherits dhrep::params {
+
+  package { $publish_name:
+    ensure  => $publish_version,
+    require => Exec['update_dariah_ubunturepository'],
+  }
 
   $catname = $dhrep::services::tomcat_publish::catname
   $user    = $dhrep::services::tomcat_publish::user
@@ -44,7 +47,7 @@ class dhrep::services::publish (
     require => File["/etc/${scope}/${publish_short}/conf"],
   }
 
-  file { "/etc/${scope}/${publish_short}/conf/beans.properties.xml":
+  file { "/etc/${scope}/${publish_short}/conf/beans.properties":
     ensure  => present,
     owner   => root,
     group   => $group,
@@ -150,37 +153,12 @@ class dhrep::services::publish (
     dateformat   => '.%Y-%m-%d'
   }
 
-  ###
-  # use maven to fetch latest publish service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/${scope}/${publish_name}-${publish_version}.war":
-    ensure     => latest,
-    groupid    => $publish_group,
-    artifactid => $publish_name,
-    version    => $publish_version,
-    packaging  => 'war',
-    repos      => $maven_repository,
-    require    => Package['maven'],
-    notify     => Exec['replace_publish_service'],
-  }
-
-  exec { 'replace_publish_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${publish_short} && sleep 2 && cp /var/cache/${scope}/${publish_name}-${publish_version}.war /home/${scope}/${catname}/webapps/${publish_short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file {"/home/${scope}/${catname}/webapps/${publish_short}.war":
-    group   => $group,
-    mode    => '0640',
+  # symlink war from deb package to tomcat webapps dir
+  file { "/home/${user}/${catname}/webapps/${publish_short}.war": 
+    ensure => 'link',
+    target => "/var/${scope}/webapps/${publish_short}.war",
     notify  => Service[$catname],
-    require => File["/etc/${scope}/${publish_short}/conf/beans.properties.xml"],
+    require => File["/etc/${scope}/${publish_short}/conf/beans.properties"],
   }
 
 }
