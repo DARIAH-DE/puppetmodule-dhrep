@@ -1,0 +1,81 @@
+# == Class: dhrep::services::intern::tgmarketplace
+#
+# Class to install and configure the TextGrid Marketplace.
+# 
+class dhrep::services::intern::tgmarketplace (
+){
+
+  $owner = www-data
+  $group = www-data
+
+  package {
+    'libapache2-mod-python': ensure => present;
+    'python3': ensure               => present;
+    'python3-lxml': ensure          => present;
+  }
+
+  require dhrep::resources::apache
+
+  Exec {
+    path => ['/usr/bin','/bin','/usr/sbin','/usr/local/bin'],
+  }
+
+  #
+  # Clone marketplace from GIT and copy to var/www/
+  #
+  # TODO Use release-tag in any way?
+  # TODO Cloning does not yield automatic updates via pull!!
+  #
+  exec { 'git_clone_textgrid_marketplace':
+    command => 'git clone git://git.projects.gwdg.de/textgridlab-marketplace.git /usr/local/src/textgrid-marketplace-git',
+    creates => '/usr/local/src/textgrid-marketplace-git',
+    require => Package['git'],
+  }
+  ->
+  file { '/var/www/marketplace':
+    ensure => directory,
+    owner  => $owner,
+    group  => $group,
+    mode   => '0755',
+  }
+  file { '/var/www/marketplace/cgi':
+    ensure  => directory,
+    owner   => $owner,
+    group   => $group,
+    mode    => '0755',
+    require => File['/var/www/marketplace'],
+  }
+  # .htaccess and config file from template.
+  file { '/var/www/marketplace/.htaccess':
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template('dhrep/var/www/marketplace/.htaccess.erb'),
+    require => File['/var/www/marketplace'],
+  }
+  file { '/var/www/marketplace/cgi/ms.conf':
+    ensure  => present,
+    owner   => $owner,
+    group   => $group,
+    mode    => '0644',
+    content => template('dhrep/var/www/marketplace/cgi/ms.conf.erb'),
+    require => File['/var/www/marketplace/cgi'],
+  }
+  # Other files from cloned GIT repo.
+  file { '/var/www/marketplace/tg32.png':
+    source  => 'file:///usr/local/src/textgrid-marketplace-git/tg32.png',
+    owner   => $owner,
+    group   => $group,
+    mode    => '0644',
+    require => File['/var/www/marketplace'],
+  }
+  file { '/var/www/marketplace/cgi/msInterface.cgi':
+    source  => 'file:///usr/local/src/textgrid-marketplace-git/msInterface.cgi',
+    owner   => $owner,
+    group   => $group,
+    mode    => '0755',
+    require => File['/var/www/marketplace/cgi'],
+  }
+
+}

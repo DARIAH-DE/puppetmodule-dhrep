@@ -101,6 +101,8 @@ class dhrep (
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
     }
 
+    class { 'dhrep::services::intern::tgmarketplace': }
+
   }
 
   #  include textgrid::tgnginx

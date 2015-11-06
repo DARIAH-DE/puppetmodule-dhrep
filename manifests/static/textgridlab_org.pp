@@ -23,18 +23,47 @@ class dhrep::static::textgridlab_org(
   ->
 
   #
-  # Clone metadata schemas from git (TODO get files from a certain 1.0 tag?)
+  # Clone metadata schemas from GIT and copy tp car/www/
   #
-  exec { 'git_clone_textgridlab_metadata':
-    command => 'git clone git://git.projects.gwdg.de/textgrid-metadata.git /var/www/nginx-root/textgridlab.org/schema',
-    creates => '/var/www/nginx-root/textgridlab.org/schema',
+  # TODO Get files from a certain 1.0 tag!
+  # TODO Cloning does not yield automatic updates via pull!!
+  #
+  exec { 'git_clone_textgrid_metadata':
+    command => 'git clone git://git.projects.gwdg.de/textgrid-metadata.git /usr/local/src/textgrid-metadata-git',
+    creates => '/usr/local/src/textgrid-metadata-git',
     require => Package['git'],
   }
   ->
   file { '/var/www/nginx-root/textgridlab.org/schema':
+    ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
+  }
+  file { '/var/www/nginx-root/textgridlab.org/schema/rdf.xsd':
+    source  => 'file:///usr/local/src/textgrid-metadata-git/rdf.xsd',
+    mode    => '0644',
+    require => File['/var/www/nginx-root/textgridlab.org/schema'],
+  }
+  file { '/var/www/nginx-root/textgridlab.org/schema/textgrid-metadata_2010.xsd':
+    source  => 'file:///usr/local/src/textgrid-metadata-git/textgrid-metadata_2010.xsd',
+    mode    => '0644',
+    require => File['/var/www/nginx-root/textgridlab.org/schema'],
+  }
+  file { '/var/www/nginx-root/textgridlab.org/schema/textgrid-metadata-agent_2010.xsd':
+    source  => 'file:///usr/local/src/textgrid-metadata-git/textgrid-metadata-agent_2010.xsd',
+    mode    => '0644',
+    require => File['/var/www/nginx-root/textgridlab.org/schema'],
+  }
+  file { '/var/www/nginx-root/textgridlab.org/schema/textgrid-metadata-language_v2_2010.xsd':
+    source  => 'file:///usr/local/src/textgrid-metadata-git/textgrid-metadata-language_v2_2010.xsd',
+    mode    => '0644',
+    require => File['/var/www/nginx-root/textgridlab.org/schema'],
+  }
+  file { '/var/www/nginx-root/textgridlab.org/schema/textgrid-metadata-script_2010.xsd':
+    source  => 'file:///usr/local/src/textgrid-metadata-git/textgrid-metadata-script_2010.xsd',
+    mode    => '0644',
+    require => File['/var/www/nginx-root/textgridlab.org/schema'],
   }
 
   #
@@ -51,10 +80,6 @@ class dhrep::static::textgridlab_org(
     mode    => '0644',
     require => File['/var/www/nginx-root/textgridlab.org/doc'],
   }
-
-  #
-  # TODO Marketplace
-  #
 
   #
   # HTML files: index.html, favicon.ico, jira.html, error sites, and images
@@ -116,22 +141,34 @@ class dhrep::static::textgridlab_org(
   # Repstatus
   #
   file { '/var/www/nginx-root/textgridlab.org/repstatus.html':
-    source => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/repstatus.html',
-    mode   => '0644',
+    source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/repstatus.html',
+    mode    => '0644',
     require => File['/var/www/nginx-root/textgridlab.org'],
   }
   file { '/var/www/nginx-root/textgridlab.org/repstatus.css':
-    source => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/repstatus.css',
-    mode   => '0644',
+    source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/repstatus.css',
+    mode    => '0644',
     require => File['/var/www/nginx-root/textgridlab.org'],
   }
 
   #
   # TODO Update site
   #
+  file { '/var/www/nginx-root/textgridlab.org/updates':
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+  }
 
   #
   # TODO TG-lab download files
   #
+  file { '/var/www/nginx-root/textgridlab.org/download':
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+  }
 
 }
