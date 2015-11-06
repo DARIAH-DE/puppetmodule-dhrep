@@ -28,6 +28,7 @@ class dhrep::services::tgauth (
   $slapd_rootpw          = undef,
   $ldap_replication      = false,
   $ldap_clusternodes     = [],
+  $no_shib_login         = false,
 ){
 
   package {
