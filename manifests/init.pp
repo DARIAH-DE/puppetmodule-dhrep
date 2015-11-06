@@ -12,6 +12,7 @@ class dhrep (
   $tgelasticsearch_cluster_name = 'testing',
   $tgauth_slapd_rootpw = undef,
   $tgauth_authz_shib_pw = undef,
+  $tgauth_authz_instance = undef,
   $tgauth_webauth_secret = undef,
   $tgnoid_tgcrud_secret = undef,
   $crud_publish_secret = undef,
@@ -20,10 +21,11 @@ class dhrep (
 
   # internal services containing variables used by other modules need to be evaluated in order
   class { 'dhrep::services::tgauth':
-    scope        => $scope,
-    binddn_pass  => $tgauth_binddn_pass,
-    crud_secret  => $tgauth_crud_secret,
-    slapd_rootpw => $tgauth_slapd_rootpw,
+    scope          => $scope,
+    binddn_pass    => $tgauth_binddn_pass,
+    crud_secret    => $tgauth_crud_secret,
+    slapd_rootpw   => $tgauth_slapd_rootpw,
+    authz_instance => $tgauth_authz_instance,
   }
   class { 'dhrep::services::intern::tgelasticsearch':
     scope        => $scope,
