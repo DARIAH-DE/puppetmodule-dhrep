@@ -50,7 +50,7 @@ class dhrep::resources::apache {
 #####################
 
 <VirtualHost *:8080>
-    ServerName ${::fqdn}
+    ServerName https://${::fqdn}
     ServerAdmin webmaster@localhost
     UseCanonicalName On
 
@@ -73,6 +73,24 @@ class dhrep::resources::apache {
         Require all granted
     </Directory>
 
+    # --------------------------------------------------------------------------
+    # All the TG-auth and RBAC configuration
+    # --------------------------------------------------------------------------
+
+# DO WE NEED THAT??? TAKEN FROM TEST1-CONFIG!!
+#
+#    <Location /secure>
+#      AuthType shibboleth
+#      ShibRequestSetting requireSession 1
+#      require valid-user
+#    </Location>
+#
+#    <Location /1.0/secure>
+#      AuthType shibboleth
+#      ShibRequestSetting requireSession 1
+#      require valid-user
+#    </Location>
+
     Alias /tgauth /var/www/tgauth/rbacSoap
     <Directory \"/var/www/tgauth/rbacSoap\">
       Options +FollowSymLinks -Indexes
@@ -94,10 +112,6 @@ class dhrep::resources::apache {
       AllowOverride All
       Options +ExecCGI
     </Directory>
-
-    # --------------------------------------------------------------------------
-    # End of TextGrid Marketplace configuration
-    # --------------------------------------------------------------------------
 
     # --------------------------------------------------------------------------
     # All the NOID configuration things following here for minting TextGrid URIs

@@ -49,9 +49,9 @@ class dhrep::services::intern::tgmarketplace (
   # .htaccess and config file from template.
   file { '/var/www/marketplace/.htaccess':
     ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
+    owner   => $owner,
+    group   => $group,
+    mode    => '0640',
     content => template('dhrep/var/www/marketplace/.htaccess.erb'),
     require => File['/var/www/marketplace'],
   }
@@ -83,6 +83,22 @@ class dhrep::services::intern::tgmarketplace (
     mode    => '0644',
     content => template('dhrep/var/www/marketplace/cgi/ms.conf.erb'),
     require => File['/var/www/marketplace/cgi'],
+  }
+  # Symlink to /etc/textgrid/marketplace, create folder before.
+  file { '/etc/textgrid/marketplace':
+    ensure => directory,
+    owner  => $owner,
+    group  => $group,
+    mode   => '0755',
+    require => File['/etc/textgrid'],
+  }
+  file { '/etc/textgrid/marketplace/ms.conf':
+    ensure  => 'link',
+    owner   => $owner,
+    group   => $group,
+    mode    => '0644',
+    target  => '/var/www/marketplace/cgi/ms.conf',
+    require => [File['/etc/textgrid/marketplace'],File['/var/www/marketplace/cgi/ms.conf']],
   }
   # Other files from cloned GIT repo.
   file { '/var/www/marketplace/tg32.png':
