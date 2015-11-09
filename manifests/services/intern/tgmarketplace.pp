@@ -3,6 +3,7 @@
 # Class to install and configure the TextGrid Marketplace.
 # 
 class dhrep::services::intern::tgmarketplace (
+  $time = ['23', '02'],
 ){
 
   $owner = www-data
@@ -54,6 +55,27 @@ class dhrep::services::intern::tgmarketplace (
     content => template('dhrep/var/www/marketplace/.htaccess.erb'),
     require => File['/var/www/marketplace'],
   }
+  # Logging and logrotate
+  file { '/var/log/textgrid/marketplace':
+    ensure  => directory,
+    owner   => $owner,
+    group   => $group,
+    mode    => '0755',
+    require => File['/var/log/textgrid'],
+  }
+  logrotate::rule { marketplace:
+    path         => '/var/log/textgrid/marketplace/msInterface.log',
+    require      => File['/var/log/textgrid/marketplace'],
+    rotate       => 365,
+    rotate_every => 'week',
+    compress     => true,
+    copytruncate => true,
+    missingok    => true,
+    ifempty      => true,
+    dateext      => true,
+    dateformat   => '.%Y-%m-%d'
+  }
+  # Configuration
   file { '/var/www/marketplace/cgi/ms.conf':
     ensure  => present,
     owner   => $owner,
@@ -76,6 +98,15 @@ class dhrep::services::intern::tgmarketplace (
     group   => $group,
     mode    => '0755',
     require => File['/var/www/marketplace/cgi'],
+  }
+  # Cron for automatical cache reloading
+  cron { 'marketplace-cach-reload':
+    ensure  => present,
+    command => 'curl http://vm1/marketplace/cgi/msInterface.cgi?action=cache_reload',
+    user    => 'root',
+    hour    => $time[0],
+    minute  => $time[1],
+    weekday => 0,
   }
 
 }
