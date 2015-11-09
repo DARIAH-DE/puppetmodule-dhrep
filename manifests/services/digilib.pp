@@ -20,7 +20,7 @@ class dhrep::services::digilib (
     'libvips37':     ensure  => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
     'libvips-tools': ensure  => present;
     $digilib_name:   ensure  => $digilib_version, 
-                     require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+                     require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
   ###

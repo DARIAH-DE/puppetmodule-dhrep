@@ -16,7 +16,7 @@ class dhrep::services::publish (
 
   package { $publish_name:
     ensure  => $publish_version,
-    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
   ###

@@ -21,7 +21,7 @@ class dhrep::services::pid (
 
   package { $pid_name:
     ensure  => $pid_version,
-    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
   ###

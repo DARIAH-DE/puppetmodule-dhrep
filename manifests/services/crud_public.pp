@@ -21,7 +21,7 @@ class dhrep::services::crud_public (
 
   package { $crud_name:
     ensure  => $crud_version,
-    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
   ###

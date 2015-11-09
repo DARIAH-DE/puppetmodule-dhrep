@@ -17,7 +17,7 @@ class dhrep::services::aggregator (
 
   package { $aggregator_name:
     ensure  => $aggregator_version,
-    require => [Exec['update_dariah_ubunturepository'],Dhrep::Resources::Servicetomcat[$catname]],
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
   ###

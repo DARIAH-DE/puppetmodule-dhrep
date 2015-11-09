@@ -11,7 +11,7 @@ class dhrep::services::tgsearch_public (
 
   package { $tgsearch_name:
     ensure  => $tgsearch_version,
-    require => Exec['update_dariah_ubunturepository'],
+    require => Exec['update_dariah_apt_repository'],
   }
 
   include dhrep::services::tomcat_tgsearch
