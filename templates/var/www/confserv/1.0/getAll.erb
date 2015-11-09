@@ -8,11 +8,15 @@
 	{"key":"tgsearch","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgsearch"},
 	{"key":"tgsearch-public","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgsearch-public"},
 	{"key":"last-api-change","value":"2011-02-15"},
-	{"key":"tgcrud","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgcrud\/TGCrudService"},
-	{"key":"authz","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/Shibboleth.sso/Login?target=\/1.0\/secure/\TextGrid-WebAuth.php?authZinstance=<%= scope.lookupvar('textgrid::services::tgauth::authz_instance') %>"},
+	{"key":"tgcrud","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/tgcrud\/TGCrudService"},
+	<% if scope.lookupvar('dhrep::services::tgauth::no_shib_login') -%>
+		{"key":"authz","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/WebAuthN\/WebAuthN.php?authZinstance=<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>"},
+	<% else -%>
+		{"key":"authz","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/Shibboleth.sso\/Login?target=\/1.0\/secure/\TextGrid-WebAuth.php?authZinstance=<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>"},
+	<% end -%>
 	{"key":"info.textgrid.lemmatizer.service.endpoint","value":"http:\/\/clarin.ids-mannheim.de\/services\/textgrid\/lemmatizer" },
 	{"key":"info.textgrid.cosmas.service.endpoint","value":"http:\/\/clarin.ids-mannheim.de\/services\/textgrid\/cosmas" },
 	{"key":"digilib","value":"http:\/\/digilibtextgridservice.mpiwg-berlin.mpg.de\/digilibservice\/service?wsdl" },
 	{"key":"aggregator","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/aggregator"},
 	{"key":"ztt","value":"http:\/\/ttle.ztt.fh-worms.de"}
-	]}}
+]}}

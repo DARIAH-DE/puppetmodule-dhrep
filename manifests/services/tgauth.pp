@@ -15,8 +15,9 @@
 #   https://forge.puppetlabs.com/torian/ldap
 #   https://forge.puppetlabs.com/camptocamp/openldap
 #
-class textgrid::services::tgauth (
-  $ldap_host             = '',
+class dhrep::services::tgauth (
+  $scope                 = undef,
+  $ldap_host             = 'localhost',
   $binddn_pass           = '',
   $crud_secret           = '',
   $webauth_secret        = '',
