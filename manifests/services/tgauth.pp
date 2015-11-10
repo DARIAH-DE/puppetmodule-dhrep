@@ -283,4 +283,68 @@ class dhrep::services::tgauth (
     require => Package['slapd'],
   }
 
+  # Configure LDAP backup and unused logfile removing.
+  file { '/var/textgrid/backups/' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    require => File['/var/textgrid'],
+  }
+  file { '/var/textgrid/backups/ldap' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    require => File['/var/textgrid/backups'],
+  }
+  file { '/opt/dhrep' :
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0700',
+  }
+  file { '/opt/dhrep/ldap-backup-script.sh' :
+    source  => 'puppet:///modules/dhrep/opt/dhrep/ldap-backup-script.sh',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => [File['/opt/dhrep'],File['/var/textgrid/backups/ldap']]
+  }
+  cron { 'ldap-backup' :
+    command => '/opt/dhrep/ldap-backup-script.sh',
+    user    => 'root',
+    hour    => 22,
+    minute  => 03,
+  }
+
+  # Configure LDAP statistics.
+  file { '/var/textgrid/statistics' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File['/var/textgrid'],
+  }
+  file { '/var/textgrid/statistics/ldap' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File['/var/textgrid'],
+  }
+  file { '/opt/dhrep/ldap-statistic-script.sh' :
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    content => template('dhrep/opt/dhrep/ldap-statistic-script.pl.erb'),
+    require => [File['/opt/dhrep'],File['/var/textgrid/statistics']],
+  }
+  cron { 'ldap-statistic' :
+    command => '/opt/dhrep/ldap-statistic-script.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt',
+    user    => 'root',
+    hour    => 23,
+    minute  => 53,
+  }
+
 }

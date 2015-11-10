@@ -27,7 +27,6 @@ class dhrep::params {
     'dariah'   => 'kolibri-dhpublish-service'
   }
 
-
   $tgelasticsearch_master_http_port    = '9202'
   $tgelasticsearch_master_tcp_port     = '9302'
   $tgelasticsearch_workhorse_http_port = '9203'
@@ -43,6 +42,4 @@ class dhrep::params {
     }
   }
 
-
 }
-
