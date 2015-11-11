@@ -6,7 +6,7 @@
 #       and write the manifests ;-)
 #
 class dhrep (
-  $scope              = 'textgrid',
+  $scope = 'textgrid',
   $tgauth_binddn_pass = undef,
   $tgauth_crud_secret = undef,
   $tgelasticsearch_cluster_name = 'testing',
@@ -17,6 +17,7 @@ class dhrep (
   $tgnoid_tgcrud_secret = undef,
   $crud_publish_secret = undef,
   $datadirs_create_local_datadirs = undef,
+  $confserv_service_base_url = undef,
 ) inherits dhrep::params {
 
   # internal services containing variables used by other modules need to be evaluated in order
@@ -27,17 +28,25 @@ class dhrep (
     slapd_rootpw   => $tgauth_slapd_rootpw,
     authz_instance => $tgauth_authz_instance,
   }
+
   class { 'dhrep::services::intern::tgelasticsearch':
     scope        => $scope,
     cluster_name => $tgelasticsearch_cluster_name,
   }
+
   class { 'dhrep::services::intern::sesame':
     scope => $scope,
   }
+
   class { 'dhrep::services::intern::tgwildfly':
     scope => $scope,
   }
+
   class { 'dhrep::services::intern::messaging':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::aggregator':
     scope => $scope,
   }
 
@@ -48,23 +57,16 @@ class dhrep (
     }
   }
 
-  class { 'dhrep::services::aggregator':
-    scope => $scope,
-  }
-
-  if $scope == 'textgrid' {
-    class { 'dhrep::services::confserv': }
-  }
-
   class { 'dhrep::services::crud':
-    scope   => $scope,
+    scope          => $scope,
     publish_secret => $crud_publish_secret,
-    require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']]
+    require        => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
   }
 
   class { 'dhrep::services::crud_public':
     scope   => $scope,
-    require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
+    require => [Class['dhrep::services::intern::tgelasticsearch'],
+                Class['dhrep::services::intern::sesame']]
   }
 
   class { 'dhrep::services::digilib':
@@ -85,6 +87,9 @@ class dhrep (
   }
 
   if $scope == 'textgrid' {
+    class { 'dhrep::services::confserv':
+      service_base_url => $confserv_service_base_url,
+    }
 
     class { 'dhrep::services::intern::datadirs':
       create_local_datadirs => $datadirs_create_local_datadirs,
@@ -103,6 +108,7 @@ class dhrep (
 
     class { 'dhrep::services::intern::tgmarketplace': }
 
+    class { 'dhrep::tools::check_services': }
   }
 
   #  include textgrid::tgnginx

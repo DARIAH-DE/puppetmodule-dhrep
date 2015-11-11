@@ -1,6 +1,6 @@
 # == Class: dhrep::services::intern::datadirs
 #
-# Class to install and configure DH-cruds data folders.
+# Class to install and configure DH- or TG-crud data folders.
 #
 class dhrep::services::intern::datadirs (
   $scope                   = undef,
