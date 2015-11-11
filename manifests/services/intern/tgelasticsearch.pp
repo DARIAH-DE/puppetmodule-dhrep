@@ -21,7 +21,7 @@ class dhrep::services::intern::tgelasticsearch (
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
   $es_heap_size               = '256m',
-) inherits dhrep::params {
+) inherits dhrep::params {  
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
@@ -86,14 +86,14 @@ class dhrep::services::intern::tgelasticsearch (
     exec { 'create_public_es_index':
       path    => ['/usr/bin','/bin','/usr/sbin'],
       cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${master_http_port}",
+      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${dhrep::params::tgelasticsearch_master_http_port}",
       require => [Package['curl']],
     }
     ~>
     exec { 'create_nonpublic_es_index':
       path    => ['/usr/bin','/bin','/usr/sbin'],
       cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${master_http_port}",
+      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${dhrep::params::tgelasticsearch_master_http_port}",
       require => [Package['curl']],
     }
     ~>
