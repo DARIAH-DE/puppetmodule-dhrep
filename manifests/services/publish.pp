@@ -3,7 +3,7 @@
 # Class to install and configure dhpublish and/or tgpublish.
 #
 class dhrep::services::publish (
-  $scope    = undef,
+  $scope            = undef,
   $publish_short    = 'tgpublish',
   $publish_name     = 'kolibri-tgpublish-service',
   $publish_version  = 'latest',
@@ -29,7 +29,7 @@ class dhrep::services::publish (
     group  => root,
     mode   => '0755',
   }
-  
+
   file { "/etc/${scope}/${publish_short}/conf":
     ensure  => directory,
     owner   => root,
@@ -55,7 +55,7 @@ class dhrep::services::publish (
     content => template("dhrep/etc/${scope}/${publish_short}/conf/beans.properties.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
   }
-  
+
   file { "/etc/${scope}/${publish_short}/conf/policies.xml":
     ensure  => present,
     owner   => root,
