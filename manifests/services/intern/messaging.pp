@@ -1,8 +1,9 @@
-# == Class: textgrid::services::intern::messaging
+# == Class: dhrep::services::intern::messaging
 #
 # Class to build up messaging.
 #
-class textgrid::services::intern::messaging (
+class dhrep::services::intern::messaging (
+  $scope                     = undef,
   $enzmeta_textgrid_user     = '',
   $enzmeta_textgrid_password = '',
   $bolrdf_textgrid_user      = '',
@@ -37,7 +38,7 @@ class textgrid::services::intern::messaging (
 
   file { '/root/.m2/settings.xml':
     ensure => present,
-    source => 'puppet:///modules/textgrid/root/m2-settings.xml',
+    source => 'puppet:///modules/dhrep/root/m2-settings.xml',
   }
 
   file { '/etc/textgrid/messagebeans':
@@ -49,7 +50,7 @@ class textgrid::services::intern::messaging (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/messagebeans/enzmeta.properties.erb'),
+    content => template('dhrep/etc/textgrid/messagebeans/enzmeta.properties.erb'),
   }
 
   file { '/etc/textgrid/messagebeans/bolrfd.properties':
@@ -57,7 +58,7 @@ class textgrid::services::intern::messaging (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/messagebeans/bolrdf.properties.erb'),
+    content => template('dhrep/etc/textgrid/messagebeans/bolrdf.properties.erb'),
   }
 
 }

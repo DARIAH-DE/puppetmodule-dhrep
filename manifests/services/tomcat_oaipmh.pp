@@ -1,8 +1,8 @@
-# == Class: textgrid::services::tomcat_oaipmh
+# == Class: dhrep::services::tomcat_oaipmh
 #
 # Class to install and configure oaipmh tomcat.
 #
-class textgrid::services::tomcat_oaipmh (
+class dhrep::services::tomcat_oaipmh (
 ){
 
   $catname      = 'tomcat-oaipmh'
@@ -13,7 +13,7 @@ class textgrid::services::tomcat_oaipmh (
   $jmx_port     = '9996'
   $gid          = '1011'
   $uid          = '1011'
-  $template     = 'textgrid/etc/default/tomcat.erb'
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   $user         = $catname
   $group        = $catname
@@ -22,7 +22,7 @@ class textgrid::services::tomcat_oaipmh (
   # user, home-dir and user-tomcat
   ###
 
-  textgrid::resources::servicetomcat { $catname:
+  dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
     gid               => $gid,

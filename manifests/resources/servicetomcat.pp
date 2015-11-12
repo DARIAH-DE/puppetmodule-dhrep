@@ -1,4 +1,4 @@
-# == Define: textgrid::resources::servicetomcat
+# == Define: dhrep::resources::servicetomcat
 #
 # Create a new user and tomcat-home and add tomcat-user-instance
 # uses debian package tomcat7-user
@@ -33,7 +33,7 @@
 #   usergroup which the service belongs to (will be created), defaults to $name if not set 
 #
 # [*defaults_template*]
-#   defaults file template for /etc/defaults, if different from textgrid/etc/default/tomcat.erb
+#   defaults file template for /etc/defaults, if different from dhrep/etc/default/tomcat.erb
 #
 # [*init_dependencies*]
 #   services which should be started before this tomcat, added as dependency to init.d script, separate with whitespace if more than one
@@ -44,7 +44,7 @@
 #   <!--APR library loader. Documentation at /docs/apr.html -->
 #   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
 #
-define textgrid::resources::servicetomcat (
+define dhrep::resources::servicetomcat (
   $gid,
   $uid,
   $http_port,
@@ -54,11 +54,11 @@ define textgrid::resources::servicetomcat (
   $xms               = 128,
   $group             = $name,
   $user              = $name,
-  $defaults_template = 'textgrid/etc/default/tomcat.erb',
+  $defaults_template = 'dhrep/etc/default/tomcat.erb',
   $init_dependencies = '',
 ){
 
-  require textgrid::tools
+  require dhrep::tools
 
   # Check if group and user are already existing.
   # Just in case we have two tomcats using the same user and group
@@ -97,7 +97,7 @@ define textgrid::resources::servicetomcat (
 
   file { "/etc/init.d/${name}":
     ensure  => present,
-    content => template('textgrid/etc/init.d/tomcat.Debian.erb'),
+    content => template('dhrep/etc/init.d/tomcat.Debian.erb'),
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
@@ -119,6 +119,19 @@ define textgrid::resources::servicetomcat (
     ensure  => running,
     enable  => true,
     require => Exec["create_${name}"],
+  }
+
+  logrotate::rule { $name:
+    path         => "/home/${user}/${name}/logs/catalina.out",
+    require      => Exec["create_${name}"],
+    rotate       => 365,
+    rotate_every => 'week',
+    compress     => true,
+    copytruncate => true,
+    missingok    => true,
+    ifempty      => true,
+    dateext      => true,
+    dateformat   => '.%Y-%m-%d'
   }
 
 }

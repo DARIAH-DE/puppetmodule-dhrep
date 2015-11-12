@@ -1,8 +1,9 @@
-# == Class: textgrid::services::tomcat_digilib
+# == Class: dhrep::services::tomcat_digilib
 #
 # Class to install and configure digilib tomcat.
 #
-class textgrid::services::tomcat_digilib (
+class dhrep::services::tomcat_digilib (
+  $scope        = undef,
 ){
 
   $catname      = 'tomcat-digilib'
@@ -13,7 +14,7 @@ class textgrid::services::tomcat_digilib (
   $jmx_port     = '9992'
   $gid          = '1009'
   $uid          = '1009'
-  $template     = 'textgrid/etc/default/tomcat.erb'
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   $user         = $catname
   $group        = $catname
@@ -22,7 +23,7 @@ class textgrid::services::tomcat_digilib (
   # user, home-dir and user-tomcat
   ###
 
-  textgrid::resources::servicetomcat { $catname:
+  dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
     gid               => $gid,

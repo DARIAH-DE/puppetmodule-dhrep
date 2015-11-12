@@ -2735,7 +2735,7 @@
 
 	<wsdl:service name="tgextra">
 		<wsdl:port binding="tns:binding_tgextra" name="tgextra">
-			<soap:address location="<%= scope.lookupvar('textgrid::services::tgauth::rbac_local_base') %>tgextra.php" />
+			<soap:address location="<%= scope.lookupvar('dhrep::services::tgauth::rbac_local_base') %>tgextra.php" />
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>

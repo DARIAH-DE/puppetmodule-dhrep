@@ -1,22 +1,24 @@
-# == Class: textgrid::services::oaipmh
+# == Class: dhrep::services::oaipmh
 #
 # Class to install and configure oaipmh
 #
-class textgrid::services::oaipmh (
-  $scope            = 'textgrid',
+class dhrep::services::oaipmh (
+  $scope            = undef,
   $short            = 'tgoaipmh',
   $oaipmh_name      = 'oaipmh-webapp',
-  $oaipmh_version   = '1.3.20-SNAPSHOT',
-  $oaipmh_group     = 'info.textgrid.middleware',
-  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
-){
+  $oaipmh_version   = 'latest',
+) inherits dhrep::params {
 
-  include textgrid::services::intern::tgelasticsearch
-  include textgrid::services::tomcat_oaipmh
+  include dhrep::services::tomcat_oaipmh
 
-  $catname = $textgrid::services::tomcat_oaipmh::catname
-  $user    = $textgrid::services::tomcat_oaipmh::user
-  $group   = $textgrid::services::tomcat_oaipmh::group
+  $catname = $dhrep::services::tomcat_oaipmh::catname
+  $user    = $dhrep::services::tomcat_oaipmh::user
+  $group   = $dhrep::services::tomcat_oaipmh::group
+
+  package { $oaipmh_name:
+    ensure  => $oaipmh_version,
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -34,7 +36,7 @@ class textgrid::services::oaipmh (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/oaipmh.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/oaipmh.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
@@ -47,7 +49,7 @@ class textgrid::services::oaipmh (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/log4j.oaipmh.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/log4j.oaipmh.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
@@ -59,37 +61,25 @@ class textgrid::services::oaipmh (
     require => File["/var/log/${scope}"],
   }
 
-  ###
-  # use maven to fetch latest oaipmh service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/${scope}/${oaipmh_name}-${oaipmh_version}.war":
-    ensure     => latest,
-    groupid    => $oaipmh_group,
-    artifactid => $oaipmh_name,
-    version    => $oaipmh_version,
-    packaging  => 'war',
-    repos      => $maven_repository,
-    require    => Package['maven'],
-    notify     => Exec['replace_oaipmh_service'],
+  logrotate::rule { $short:
+    path         => "/var/log/${scope}/${short}/${short}.log",
+    require      => File["/var/log/${scope}/${short}"],
+    rotate       => 365,
+    rotate_every => 'week',
+    compress     => true,
+    copytruncate => true,
+    missingok    => true,
+    ifempty      => true,
+    dateext      => true,
+    dateformat   => '.%Y-%m-%d'
   }
 
-  exec { 'replace_oaipmh_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${oaipmh_name}-${oaipmh_version}.war /home/${catname}/${catname}/webapps/${short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file { "/home/${catname}/${catname}/webapps/${short}.war":
-    group   => $group,
-    mode    => '0640',
-    notify  => Service[$catname],
-    require => File["/etc/${scope}/${short}/oaipmh.properties"],
+  # symlink war from deb package to tomcat webapps dir
+  file { "/home/${user}/${catname}/webapps/${short}.war": 
+    ensure  => 'link',
+    target  => "/var/${scope}/webapps/${short}.war",
+#    notify  => Service[$catname],
+    require => [File["/etc/${scope}/${short}/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
 }

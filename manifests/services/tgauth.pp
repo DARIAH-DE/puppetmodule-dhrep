@@ -1,4 +1,4 @@
-# == Class: textgrid::services::tgsearch
+# == Class: dhrep::services::tgsearch
 #
 # Class to install and configure tgauth.
 # 
@@ -22,13 +22,13 @@ class dhrep::services::tgauth (
   $crud_secret           = '',
   $webauth_secret        = '',
   $sidcheck_secret       = '',
-  $rbac_base             = '',
-  $webauth_dariah_secret = '',
+  $rbac_base             = "http://${::fqdn}/1.0/tgauth/",
   $authz_shib_pw         = '',
   $authz_instance        = '',
-  $slapd_rootpw          = '',
+  $slapd_rootpw          = undef,
   $ldap_replication      = false,
   $ldap_clusternodes     = [],
+  $no_shib_login         = false,
 ){
 
   package {
@@ -39,7 +39,7 @@ class dhrep::services::tgauth (
 
   # TODO: possibly we want a require here
   # http://localhost:9292/puppet/latest/reference/lang_relationships.html#the-require-function
-  include textgrid::resources::apache
+  include dhrep::resources::apache
 
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin'],
@@ -70,7 +70,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/tgauth/conf/rbac.conf.erb'),
+    content => template('dhrep/etc/textgrid/tgauth/conf/rbac.conf.erb'),
   }
 
   file { '/etc/textgrid/tgauth/conf/rbacSoap.conf':
@@ -78,7 +78,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/tgauth/conf/rbacSoap.conf.erb'),
+    content => template('dhrep/etc/textgrid/tgauth/conf/rbacSoap.conf.erb'),
   }
 
   file { '/etc/textgrid/tgauth/conf/system.conf':
@@ -86,7 +86,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/tgauth/conf/system.conf.erb'),
+    content => template('dhrep/etc/textgrid/tgauth/conf/system.conf.erb'),
   }
 
   file { '/etc/textgrid/tgauth/conf/config_tgwebauth.xml':
@@ -94,7 +94,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/tgauth/conf/config_tgwebauth.xml.erb'),
+    content => template('dhrep/etc/textgrid/tgauth/conf/config_tgwebauth.xml.erb'),
   }
 
   file { '/var/www/tgauth/conf':
@@ -104,6 +104,8 @@ class dhrep::services::tgauth (
 
   ###
   # /var/www/tgauth
+  #
+  # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
   ###
 
   exec { 'git_clone_tgauth':
@@ -120,8 +122,7 @@ class dhrep::services::tgauth (
     mode    => '0644',
   }
 
-  file {
-    '/var/www/tgauth/rbacSoap/wsdl':
+  file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure => directory,
     owner  => root,
     group  => root,
@@ -135,7 +136,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl.erb'),
   }
 
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl':
@@ -143,7 +144,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl.erb'),
   }
 
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl':
@@ -151,7 +152,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl.erb'),
   }
 
   file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl':
@@ -159,7 +160,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl.erb'),
   }
 
   file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl':
@@ -167,7 +168,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
+    content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
   }
 
   ###
@@ -202,7 +203,7 @@ class dhrep::services::tgauth (
   # Nutzungsordnung
   ###
   file { '/var/Nutzungsordnung_en_200611.txt.html':
-    source => 'puppet:///modules/textgrid/var/Nutzungsordnung_en_200611.txt.html',
+    source => 'puppet:///modules/dhrep/var/Nutzungsordnung_en_200611.txt.html',
     mode   => '0644',
   }
 
@@ -214,7 +215,7 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid//etc/ldap/ldap.conf.erb'),
+    content => template('dhrep/etc/ldap/ldap.conf.erb'),
   }
 
   # ldap needs to know its own id for mulit-master replikation
@@ -235,7 +236,7 @@ class dhrep::services::tgauth (
   # test
   file { '/tmp/ldap-cn-config-test.ldif':
     ensure  => present,
-    content => template('textgrid//ldap/ldap-cn-config.ldif.erb'),
+    content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
     require => Service['slapd'],
   }
 
@@ -244,12 +245,12 @@ class dhrep::services::tgauth (
 
       file { '/tmp/ldap-cn-config.ldif':
         ensure  => present,
-        content => template('textgrid//ldap/ldap-cn-config.ldif.erb'),
+        content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
         require => Service['slapd'],
       }
       ~>
       file { '/tmp/tgldapconf.sh':
-        source => 'puppet:///modules/textgrid/ldap/tgldapconf.sh',
+        source => 'puppet:///modules/dhrep/ldap/tgldapconf.sh',
         mode   => '0744',
       }
       ~>
@@ -260,7 +261,7 @@ class dhrep::services::tgauth (
       ~>
       file { '/tmp/ldap-rbac-template.ldif':
         ensure  => present,
-        content => template('textgrid//ldap/rbac-data.ldif.erb'),
+        content => template('dhrep/ldap/rbac-data.ldif.erb'),
       }
       ~>
       # should only run once, if ldap template is added (with help of notify and refreshonly)
@@ -280,6 +281,70 @@ class dhrep::services::tgauth (
     ensure  => running,
     enable  => true,
     require => Package['slapd'],
+  }
+
+  # Configure LDAP backup and unused logfile removing.
+  file { '/var/textgrid/backups/' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    require => File['/var/textgrid'],
+  }
+  file { '/var/textgrid/backups/ldap' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    require => File['/var/textgrid/backups'],
+  }
+  file { '/opt/dhrep' :
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0700',
+  }
+  file { '/opt/dhrep/ldap-backup-script.sh' :
+    source  => 'puppet:///modules/dhrep/opt/dhrep/ldap-backup-script.sh',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => [File['/opt/dhrep'],File['/var/textgrid/backups/ldap']]
+  }
+  cron { 'ldap-backup' :
+    command => '/opt/dhrep/ldap-backup-script.sh',
+    user    => 'root',
+    hour    => 22,
+    minute  => 03,
+  }
+
+  # Configure LDAP statistics.
+  file { '/var/textgrid/statistics' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File['/var/textgrid'],
+  }
+  file { '/var/textgrid/statistics/ldap' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File['/var/textgrid'],
+  }
+  file { '/opt/dhrep/ldap-statistic-script.sh' :
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    content => template('dhrep/opt/dhrep/ldap-statistic-script.pl.erb'),
+    require => [File['/opt/dhrep'],File['/var/textgrid/statistics']],
+  }
+  cron { 'ldap-statistic' :
+    command => '/opt/dhrep/ldap-statistic-script.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt',
+    user    => 'root',
+    hour    => 23,
+    minute  => 53,
   }
 
 }

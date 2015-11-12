@@ -1,25 +1,28 @@
-# == Class: textgrid::services::pid
+# == Class: dhrep::services::pid
 #
 # Class to install and configure dhpid or tgpid.
 #
-class textgrid::services::pid (
-  $scope            = 'textgrid',
+class dhrep::services::pid (
+  $scope            = undef,
   $short            = 'tgpid',
   $pid_name         = 'tgpid-service',
-  $pid_version      = '3.5.2-SNAPSHOT',
-  $pid_group        = 'info.textgrid.middleware',
+  $pid_version      = 'latest',
   $pid_user         = '',
   $pid_passwd       = '',
   $pid_endpoint     = 'http://pid.gwdg.de',
   $pid_path         = '/handles/',
   $pid_prefix       = '',
   $pid_responsible  = 'TextGrid',
-  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
 ){
 
-  $catname = $textgrid::services::tomcat_publish::catname
-  $user    = $textgrid::services::tomcat_publish::scope
-  $group   = $textgrid::services::tomcat_publish::group
+  $catname = $dhrep::services::tomcat_publish::catname
+  $user    = $dhrep::services::tomcat_publish::user
+  $group   = $dhrep::services::tomcat_publish::group
+
+  package { $pid_name:
+    ensure  => $pid_version,
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -37,7 +40,7 @@ class textgrid::services::pid (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/${short}.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/${short}.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
@@ -53,37 +56,25 @@ class textgrid::services::pid (
     require => File["/var/log/${scope}"],
   }
 
-  ###
-  # use maven to fetch latest pid service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/${scope}/${pid_name}-${pid_version}.war":
-    ensure     => latest,
-    groupid    => $pid_group,
-    artifactid => $pid_name,
-    version    => $pid_version,
-    packaging  => 'war',
-    repos      => $maven_repository,
-    require    => Package['maven'],
-    notify     => Exec['replace_pid_service'],
+  logrotate::rule { $short:
+    path         => "/var/log/${scope}/${short}/${short}.log",
+    require      => File["/var/log/${scope}/${short}"],
+    rotate       => 365,
+    rotate_every => 'week',
+    compress     => true,
+    copytruncate => true,
+    missingok    => true,
+    ifempty      => true,
+    dateext      => true,
+    dateformat   => '.%Y-%m-%d'
   }
 
-  exec { 'replace_pid_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${pid_name}-${pid_version}.war /home/${scope}/${catname}/webapps/${short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file {"/home/${scope}/${catname}/webapps/${short}.war":
-    group   => $group,
-    mode    => '0640',
-    notify  => Service[$catname],
-    require => File["/etc/${scope}/${short}/${short}.properties"],
+  # symlink war from deb package to tomcat webapps dir
+  file { "/home/${user}/${catname}/webapps/${short}.war": 
+    ensure => 'link',
+    target => "/var/${scope}/webapps/${short}.war",
+#    notify  => Service[$catname],
+    require => [File["/etc/${scope}/${short}/${short}.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
 }

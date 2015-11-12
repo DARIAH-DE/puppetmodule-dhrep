@@ -1,4 +1,4 @@
-# == Class: textgrid::services::tgsearch
+# == Class: dhrep::services::tgsearch
 #
 # Class to create confserv entries
 # 
@@ -7,8 +7,8 @@
 # [*service_base_url*]
 #   the url where the services are accessible from tglab
 #
-class textgrid::services::confserv (
-  $service_base_url = '',
+class dhrep::services::confserv (
+  $service_base_url = "https:\\/\\/${::fqdn}\\/1.0",
 ){
 
   file { '/var/www/confserv':
@@ -32,7 +32,7 @@ class textgrid::services::confserv (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/confserv/1.0/getAll.erb'),
+    content => template('dhrep/var/www/confserv/1.0/getAll.erb'),
   }
 
   file { '/var/www/confserv/1.0/getAllJ':

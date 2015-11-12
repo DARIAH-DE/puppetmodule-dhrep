@@ -1,25 +1,27 @@
-# == Class: textgrid::services::digilib
+# == Class: dhrep::services::digilib
 #
 # Class to install and configure digilib
 #
-class textgrid::services::digilib (
+class dhrep::services::digilib (
+  $scope            = undef,
+  $short            = 'digilibservice',
   $digilib_name     = 'digilib-service',
-  $digilib_version  = '1.7-SNAPSHOT',
-  $digilib_group    = 'info.textgrid.services',
-  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
+  $digilib_version  = 'latest',
 ){
 
+  include dhrep::services::tomcat_digilib
+
+  $catname   = $dhrep::services::tomcat_digilib::catname
+  $user      = $dhrep::services::tomcat_digilib::user
+  $group     = $dhrep::services::tomcat_digilib::group
+  $http_port = $dhrep::services::tomcat_digilib::http_port
+
   package {
-    'libvips37':     ensure => present; # this is needed by the prescaler, see textgrid::services::intern::messaging
-    'libvips-tools': ensure => present;
+    'libvips37':     ensure  => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
+    'libvips-tools': ensure  => present;
+    $digilib_name:   ensure  => $digilib_version, 
+                     require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
   }
-
-  include textgrid::services::tomcat_digilib
-
-  $catname   = $textgrid::services::tomcat_digilib::catname
-  $user      = $textgrid::services::tomcat_digilib::user
-  $group     = $textgrid::services::tomcat_digilib::group
-  $http_port = $textgrid::services::tomcat_digilib::http_port
 
   ###
   # config
@@ -37,7 +39,7 @@ class textgrid::services::digilib (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/digilib/digilib.properties.erb'),
+    content => template('dhrep/etc/textgrid/digilib/digilib.properties.erb'),
     require => File['/etc/textgrid/digilib'],
   }
 
@@ -46,7 +48,7 @@ class textgrid::services::digilib (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/textgrid/digilib/digilib-service.properties.erb'),
+    content => template('dhrep/etc/textgrid/digilib/digilib-service.properties.erb'),
     require => File['/etc/textgrid/digilib'],
   }
 
@@ -69,43 +71,17 @@ class textgrid::services::digilib (
     mode   => '0755',
   }
 
-  ###
-  # use maven to fetch latest digilib service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/textgrid/${digilib_name}-${digilib_version}.war":
-    ensure     => latest,
-    groupid    => $digilib_group,
-    artifactid => $digilib_name,
-    version    => $digilib_version,
-    packaging  => 'war',
-    repos      => $maven_repository,
-    require    => Package['maven'],
-    notify     => Exec['replace_digilib_service'],
+  # symlink war from deb package to tomcat webapps dir
+  file { "/home/${user}/${catname}/webapps/${short}.war": 
+    ensure  => 'link',
+    target  => "/var/${scope}/webapps/${short}.war",
+#    notify  => Service[$catname],
+    require => [File['/etc/textgrid/digilib/digilib.properties'],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
-  exec { 'replace_digilib_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${catname}/${catname}/webapps/digilibservice && sleep 2 && cp /var/cache/textgrid/${digilib_name}-${digilib_version}.war /home/${catname}/${catname}/webapps/digilibservice.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file { "/home/${catname}/${catname}/webapps/digilibservice.war":
-    group   => $group,
-    mode    => '0640',
-#    notify  => Textgrid::Tools::Wait_for_url_ready['wait_4_digilib_war_deployed'],
-    notify  => Service[$catname],
-    require => File['/etc/textgrid/digilib/digilib.properties'],
-  }
-
-#  textgrid::tools::wait_for_url_ready { 'wait_4_digilib_war_deployed':
+#  dhrep::tools::wait_for_url_ready { 'wait_4_digilib_war_deployed':
 #    url         => "http://localhost:${http_port}/digilibservice/",
-#    require     => Textgrid::Resources::Servicetomcat[$catname],
+#    require     => dhrep::Resources::Servicetomcat[$catname],
 #    refreshonly => true,
  # }
   #->

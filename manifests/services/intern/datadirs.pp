@@ -1,8 +1,9 @@
-# == Class: textgrid::services::intern::datadirs
+# == Class: dhrep::services::intern::datadirs
 #
-# Class to install and configure TG-cruds data folders.
+# Class to install and configure DH- or TG-crud data folders.
 #
-class textgrid::services::intern::datadirs (
+class dhrep::services::intern::datadirs (
+  $scope                   = undef,
   $create_local_datadirs   = true,
   $data_public_location    = '',
   $data_nonpublic_location = '',
@@ -14,8 +15,8 @@ class textgrid::services::intern::datadirs (
 
   file { '/data':
     ensure => directory,
-    owner  => 'textgrid',
-    group  => 'ULSB',
+    owner  => 'storage',
+    group  => 'storage',
     mode   => '0755',
   }
 
@@ -25,29 +26,29 @@ class textgrid::services::intern::datadirs (
     ###
     file { '/data/public':
       ensure => directory,
-      owner  => 'textgrid',
-      group  => 'ULSB',
+      owner  => 'storage',
+      group  => 'storage',
       mode   => '0755',
     }
 
     file { '/data/nonpublic':
       ensure => directory,
-      owner  => 'textgrid',
-      group  => 'ULSB',
+      owner  => 'storage',
+      group  => 'storage',
       mode   => '0755',
     }
 
     file { '/data/public/productive':
       ensure => directory,
-      owner  => 'textgrid',
-      group  => 'ULSB',
+      owner  => 'storage',
+      group  => 'storage',
       mode   => '0755',
     }
 
     file { '/data/nonpublic/productive':
       ensure => directory,
-      owner  => 'textgrid',
-      group  => 'ULSB',
+      owner  => 'storage',
+      group  => 'storage',
       mode   => '0755',
     }
 
@@ -63,8 +64,8 @@ class textgrid::services::intern::datadirs (
 
     file { '/media/stornext':
       ensure => directory,
-#      owner  => 'textgrid',
-#      group  => 'ULSB',
+#      owner  => 'storage',
+#      group  => 'storage',
 #      mode   => '0755',
     }
 

@@ -1,4 +1,4 @@
-# == Class: textgrid::services::intern::tgnoid
+# == Class: dhrep::services::intern::tgnoid
 #
 # Class to install and configure the NOID.
 # Creates initial minter textgrid.
@@ -6,7 +6,8 @@
 # TODO:
 #   add checks to bash script
 #
-class textgrid::services::intern::tgnoid (
+class dhrep::services::intern::tgnoid (
+  $scope         = undef,
   $tgcrud_secret
 ){
 
@@ -18,7 +19,7 @@ class textgrid::services::intern::tgnoid (
     'libberkeleydb-perl': ensure => present;
   }
 
-  require textgrid::resources::apache
+  require dhrep::resources::apache
 
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin','/usr/local/bin'],
@@ -64,13 +65,13 @@ class textgrid::services::intern::tgnoid (
   # do everything else via bash scripting
   ###
   file { '/home/tgnoid/install_tgnoid.sh':
-    source  => 'puppet:///modules/textgrid/tgnoid/install_tgnoid.sh',
+    source  => 'puppet:///modules/dhrep/tgnoid/install_tgnoid.sh',
     mode    => '0744',
     require => User[$noiduser],
   }
   ~>
   file { '/home/tgnoid/tgnoid.patch':
-    source => 'puppet:///modules/textgrid/tgnoid/tgnoid.patch',
+    source => 'puppet:///modules/dhrep/tgnoid/tgnoid.patch',
   }
   ~>
   exec { 'install_tgnoid':

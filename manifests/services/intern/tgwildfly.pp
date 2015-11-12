@@ -1,11 +1,13 @@
-# == Class: textgrid::services::intern::tgwildfly
+# == Class: dhrep::services::intern::tgwildfly
 #
 # Class to install and configure wildfly, 
 # adds also tgcrud user for jms
 # 
 # TODO: default pw for wildfly system user
 #       compare https://github.com/biemond/biemond-wildfly/blob/v0.1.7/manifests/install.pp#L37
-class textgrid::services::intern::tgwildfly {
+class dhrep::services::intern::tgwildfly (
+  $scope = undef,
+){
 
   $message_beans_version = '1.0.1-SNAPSHOT'
 

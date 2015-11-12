@@ -1,10 +1,10 @@
-# == Class: textgrid::resources::apache
+# == Class: dhrep::resources::apache
 #
 # install and configure apache for textgrid
 #
 # mainly used by tgauth with mod php and tgnoid with mod-cgi
 #
-class textgrid::resources::apache {
+class dhrep::resources::apache {
 
   class { '::apache':
     default_confd_files => true,
@@ -16,6 +16,7 @@ class textgrid::resources::apache {
 
   include apache::mod::php
   include apache::mod::rewrite
+  include apache::mod::cgi
 
   # TODO: sites-available & a2ensite
   $defaultvhost = "/etc/apache2/sites-enabled/25-${::fqdn}.conf"
@@ -49,7 +50,7 @@ class textgrid::resources::apache {
 #####################
 
 <VirtualHost *:8080>
-    ServerName ${::fqdn}
+    ServerName https://${::fqdn}
     ServerAdmin webmaster@localhost
     UseCanonicalName On
 
@@ -72,6 +73,24 @@ class textgrid::resources::apache {
         Require all granted
     </Directory>
 
+    # --------------------------------------------------------------------------
+    # All the TG-auth and RBAC configuration
+    # --------------------------------------------------------------------------
+
+# DO WE NEED THAT??? TAKEN FROM TEST1-CONFIG!!
+#
+#    <Location /secure>
+#      AuthType shibboleth
+#      ShibRequestSetting requireSession 1
+#      require valid-user
+#    </Location>
+#
+#    <Location /1.0/secure>
+#      AuthType shibboleth
+#      ShibRequestSetting requireSession 1
+#      require valid-user
+#    </Location>
+
     Alias /tgauth /var/www/tgauth/rbacSoap
     <Directory \"/var/www/tgauth/rbacSoap\">
       Options +FollowSymLinks -Indexes
@@ -79,9 +98,25 @@ class textgrid::resources::apache {
     </Directory>
 
     # --------------------------------------------------------------------------
+    # TextGrid Marketplace configuration
+    # --------------------------------------------------------------------------
+
+    <Directory /var/www/marketplace/>
+      Options Indexes FollowSymLinks MultiViews
+      AllowOverride All
+      Order allow,deny
+      allow from all
+    </Directory>
+    <Directory \"/var/www/marketplace/cgi/\">
+      SetHandler cgi-script
+      AllowOverride All
+      Options +ExecCGI
+    </Directory>
+
+    # --------------------------------------------------------------------------
     # All the NOID configuration things following here for minting TextGrid URIs
     # --------------------------------------------------------------------------
-   
+
     # ScriptAlias /cgi-bin/ /home/tgnoid/htdocs/nd/
     <Directory \"/home/tgnoid/htdocs/nd/\">
       AuthType Basic
@@ -99,7 +134,7 @@ class textgrid::resources::apache {
 
     # Define all the rewrite maps, start every program once on server start
     # RewriteMap rslv_textgrid prg:/home/tgnoid/htdocs/nd/noidr_textgrid
-    
+
     # --------------------------------------------------------------------------
     # End of NOID configuration
     # --------------------------------------------------------------------------
@@ -115,7 +150,6 @@ class textgrid::resources::apache {
     ",
     order   => 010,
   }
-
 
   concat::fragment{'apache_default_tail':
     target  => $defaultvhost,

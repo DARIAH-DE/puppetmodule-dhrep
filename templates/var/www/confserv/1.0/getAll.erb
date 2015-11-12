@@ -1,22 +1,22 @@
 {"conf":{"set":[
-	{"key":"tgpublish","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgpublish"},
+	{"key":"tgpublish","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/tgpublish"},
 	{"key":"PasswordReset","value":"https:\/\/auth.dariah.eu\/cgi-bin\/selfservice\/ldapportal.pl?mode=pwreset"},
-	{"key":"tgauth","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgauth\/tgextra.php"},
-	{"key":"tgextra-crud","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgauth\/tgextra-crud.php"},
+	{"key":"tgauth","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/tgauth\/tgextra.php"},
+	{"key":"tgextra-crud","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/tgauth\/tgextra-crud.php"},
 	{"key":"pwchange","value":"https:\/\/auth.dariah.eu\/cgi-bin\/selfservice\/ldapportal.pl?mode=welcome"},
 	{"key":"userdata","value":"https:\/\/auth.dariah.eu\/cgi-bin\/selfservice\/ldapportal.pl?mode=welcome"},
-	{"key":"tgsearch","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgsearch"},
-	{"key":"tgsearch-public","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/tgsearch-public"},
+	{"key":"tgsearch","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/tgsearch"},
+	{"key":"tgsearch-public","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/tgsearch-public"},
 	{"key":"last-api-change","value":"2011-02-15"},
 	{"key":"tgcrud","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/tgcrud\/TGCrudService"},
-	<% if scope.lookupvar('dhrep::services::tgauth::no_shib_login') -%>
-		{"key":"authz","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/WebAuthN\/WebAuthN.php?authZinstance=<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>"},
-	<% else -%>
-		{"key":"authz","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/Shibboleth.sso\/Login?target=\/1.0\/secure/\TextGrid-WebAuth.php?authZinstance=<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>"},
-	<% end -%>
+<% if scope.lookupvar('dhrep::services::tgauth::no_shib_login') -%>
+	{"key":"authz","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/WebAuthN\/WebAuthN.php?authZinstance=<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>"},
+<% else -%>
+	{"key":"authz","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/Shibboleth.sso\/Login?target=\/1.0\/secure/\TextGrid-WebAuth.php?authZinstance=<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>"},
+<% end -%>
 	{"key":"info.textgrid.lemmatizer.service.endpoint","value":"http:\/\/clarin.ids-mannheim.de\/services\/textgrid\/lemmatizer" },
 	{"key":"info.textgrid.cosmas.service.endpoint","value":"http:\/\/clarin.ids-mannheim.de\/services\/textgrid\/cosmas" },
 	{"key":"digilib","value":"http:\/\/digilibtextgridservice.mpiwg-berlin.mpg.de\/digilibservice\/service?wsdl" },
-	{"key":"aggregator","value":"<%= scope.lookupvar('textgrid::services::confserv::service_base_url') %>\/aggregator"},
+	{"key":"aggregator","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/aggregator"},
 	{"key":"ztt","value":"http:\/\/ttle.ztt.fh-worms.de"}
 ]}}

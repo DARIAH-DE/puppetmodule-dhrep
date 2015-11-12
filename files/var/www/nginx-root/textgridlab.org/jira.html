@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Jira-ID-Suche</title>
+    <meta charset="utf-8" />
+  </head>
+
+  <body>
+    <h1>Jira-ID-Suche</h1>
+    <p>Sucht in unserem <a href="https://projects.gwdg.de/projects/tg/issues">Chili-Project TG</a> nach einer ID aus dem Jira.</p>
+    <form method="GET" action="https://projects.gwdg.de/projects/tg/issues">
+      <input type="hidden" name="set_filter" value="1"/> <!-- neue Suche -->
+      <input type="hidden" name="f[]" value="cf_4"/>     <!-- custom-feld jira-id -->
+      <!--input type="hidden" name="op[cf_4]" value="="/-->   <!-- Filteroperator -->
+      <label for="v[cf_4][]">Jira-ID des Bugs</label>
+      <select name="op[cf_4]" value="=">
+        <option value="=">=</option>
+        <option value="~">enthält</option>
+      </select>
+      <input type="text" name="v[cf_4][]" placeholder="TG-1234" autofocus="autofocus"/>              <!-- Filterwert für das Feld -->
+
+      <!-- Diese Spalten sollen angezeigt werden: -->
+      <input type="hidden" name="c[]" value="cf_4"/>
+      <input type="hidden" name="c[]" value="tracker"/>
+      <input type="hidden" name="c[]" value="status"/>
+      <input type="hidden" name="c[]" value="priority"/>
+      <input type="hidden" name="c[]" value="subject"/>
+      <input type="hidden" name="c[]" value="assigned_to"/>
+      <input type="hidden" name="c[]" value="updated_on"/>
+      <input type="hidden" name="c[]" value="fixed_version"/>
+      <button type="submit">Suchen</button>
+    </form>
+  </body>
+</html>

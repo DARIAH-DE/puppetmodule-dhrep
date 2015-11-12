@@ -1,11 +1,11 @@
-# == Class: textgrid::services::tomcat_publish
+# == Class: dhrep::services::tomcat_publish
 #
 # Class to install and configure tgpublish or dhpublish tomcat.
 #
-class textgrid::services::tomcat_publish (
+class dhrep::services::tomcat_publish (
+  $scope        = undef,
 ){
 
-  $scope        = 'textgrid'
   $short        = 'tgpublish'
   $catname      = 'tomcat-tgpublish'
   $depcat       = 'tomcat-tgcrud'
@@ -16,16 +16,16 @@ class textgrid::services::tomcat_publish (
   $jmx_port     = '9994'
   $gid          = '29900'
   $uid          = '49628'
-  $template     = "${scope}/etc/default/tomcat.${short}.erb"
+  $template     = "dhrep/etc/default/tomcat.${short}.erb"
 
-  $user         = $scope
-  $group        = 'ULSB'
+  $user         = 'storage'
+  $group        = 'storage'
 
   ###
   # user, home-dir and user-tomcat
   ###
 
-  textgrid::resources::servicetomcat { $catname:
+  dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
     gid               => $gid,

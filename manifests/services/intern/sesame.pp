@@ -1,10 +1,13 @@
-# == Class: textgrid::services::intern::sesame
+# == Class: dhrep::services::intern::sesame
 #
 # Class to install and configure sesame.
 # Creates initial repos textgrid-nonpublic 
 # and textgrid-public and adds initial triples.
 #
-class textgrid::services::intern::sesame {
+class dhrep::services::intern::sesame (
+  $scope          = undef
+){
+
   $tgname         = 'tomcat-sesame'
   $http_port      = '9091'
   $control_port   = '9006'
@@ -14,7 +17,7 @@ class textgrid::services::intern::sesame {
 
   #require textgrid::resources::create_rdf_repository
 
-  textgrid::resources::servicetomcat { $tgname:
+  dhrep::resources::servicetomcat { $tgname:
     gid          => '1008',
     uid          => '1008',
     http_port    => $http_port,
@@ -22,7 +25,7 @@ class textgrid::services::intern::sesame {
     jmx_port     => $jmx_port,
   }
 
-  textgrid::tools::tgstaging { $sesame_file:
+  dhrep::tools::tgstaging { $sesame_file:
     source  => "http://sourceforge.net/projects/sesame/files/Sesame%202/${sesame_version}/${sesame_file}/download",
     target  => "/home/${tgname}",
     creates => "/home/${tgname}/openrdf-sesame-${sesame_version}",
@@ -48,26 +51,26 @@ class textgrid::services::intern::sesame {
     war_ensure    => present,
     catalina_base => "/home/${tgname}/${tgname}",
     war_source    => "/home/${tgname}/openrdf-sesame-${sesame_version}/war/openrdf-workbench.war",
-    require       => [Textgrid::Resources::Servicetomcat[$tgname]],
+    require       => [Dhrep::Resources::Servicetomcat[$tgname]],
   }
   ~>
   tomcat::war { 'openrdf-sesame.war':
     war_ensure    => present,
     catalina_base => "/home/${tgname}/${tgname}",
     war_source    => "/home/${tgname}/openrdf-sesame-${sesame_version}/war/openrdf-sesame.war",
-    require       => [Textgrid::Resources::Servicetomcat[$tgname],Tomcat::War['openrdf-workbench.war']],
+    require       => [Dhrep::Resources::Servicetomcat[$tgname],Tomcat::War['openrdf-workbench.war']],
   }
 
   file { "/home/${tgname}/mime.ttl":
     ensure  => present,
     owner   => $user,
     mode    => '0644',
-    source  => 'puppet:///modules/textgrid/rdf/mime.ttl',
+    source  => 'puppet:///modules/dhrep/rdf/mime.ttl',
     require => User[$tgname]
   }
 
   unless $sesame_nonpublic_repo_created {
-    textgrid::resources::create_rdf_repository{'textgrid-nonpublic':
+    dhrep::resources::create_rdf_repository{'textgrid-nonpublic':
       port => '9091',
       user => $tgname,
     }
@@ -78,7 +81,7 @@ class textgrid::services::intern::sesame {
   }
 
   unless $sesame_public_repo_created {
-    textgrid::resources::create_rdf_repository{'textgrid-public':
+    dhrep::resources::create_rdf_repository{'textgrid-public':
       port => '9091',
       user => $tgname,
     }

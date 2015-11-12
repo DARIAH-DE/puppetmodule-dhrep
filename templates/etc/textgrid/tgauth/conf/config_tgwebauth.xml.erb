@@ -11,20 +11,20 @@
     <key name="name">DARIAH Community Authentication Server</key>
     <key name="setAttributesDN">cn=Manager,dc=dariah,dc=eu</key>
     <!-- Secret is used for updating attributes only! -->
-    <key name="setAttributesPW"><%= scope.lookupvar('textgrid::services::tgauth::webauth_dariah_secret') %></key>
+    <key name="setAttributesPW"><%= scope.lookupvar('dhrep::services::tgauth::webauth_dariah_secret') %></key>
   </authn>
 
-  <authz instance="<%= scope.lookupvar('textgrid::services::tgauth::authz_instance') %>">
+  <authz instance="<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>">
     <termsOfUse>
       <version>1.0b</version>
       <text>/var/Nutzungsordnung_en_200611.txt.html</text>
     </termsOfUse>
-    <rbacbase><%= scope.lookupvar('textgrid::services::tgauth::rbac_base') %></rbacbase>
+    <rbacbase><%= scope.lookupvar('dhrep::services::tgauth::rbac_base') %></rbacbase>
     <sessioncreator>
       <user>shibconnector@application.int</user>
-      <password><%= scope.lookupvar('textgrid::services::tgauth::authz_shib_pw') %></password>
+      <password><%= scope.lookupvar('dhrep::services::tgauth::authz_shib_pw') %></password>
     </sessioncreator>
-    <setnamessecret><%= scope.lookupvar('textgrid::services::tgauth::webauth_secret') %></setnamessecret>
+    <setnamessecret><%= scope.lookupvar('dhrep::services::tgauth::webauth_secret') %></setnamessecret>
   </authz>
 
 </conf>

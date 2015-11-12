@@ -1,11 +1,11 @@
-# == Class: textgrid::services::tomcat_crud
+# == Class: dhrep::services::tomcat_crud
 #
 # Class to install and configure dhcrud or tgcrud tomcat.
 #
-class textgrid::services::tomcat_crud (
+class dhrep::services::tomcat_crud (
+  $scope        = undef,
 ){
 
-  $scope        = 'textgrid'
   $short        = 'tgcrud'
   $catname      = 'tomcat-tgcrud'
   $http_port    = '9093'
@@ -15,17 +15,17 @@ class textgrid::services::tomcat_crud (
   $jmx_port     = '9993'
   $gid          = '29900'
   $uid          = '49628'
-  $template     = "${scope}/etc/default/tomcat.${short}.erb"
+  $template     = "dhrep/etc/default/tomcat.${short}.erb"
   $depcat       = 'wildfly'
 
-  $user         = $scope
-  $group        = 'ULSB'
+  $user         = 'storage'
+  $group        = 'storage'
 
   ###
   # user, home-dir and user-tomcat
   ###
 
-  textgrid::resources::servicetomcat { $catname:
+  dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
     gid               => $gid,

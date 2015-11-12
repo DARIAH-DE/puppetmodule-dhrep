@@ -5,28 +5,113 @@
 # TODO  read https://dev2.dariah.eu/wiki/display/TGINT/textgrid-esx1.gwdg.de
 #       and write the manifests ;-)
 #
-class textgrid {
+class dhrep (
+  $scope = 'textgrid',
+  $tgauth_binddn_pass = undef,
+  $tgauth_crud_secret = undef,
+  $tgelasticsearch_cluster_name = 'testing',
+  $tgauth_slapd_rootpw = undef,
+  $tgauth_authz_shib_pw = undef,
+  $tgauth_authz_instance = undef,
+  $tgauth_webauth_secret = undef,
+  $tgnoid_tgcrud_secret = undef,
+  $crud_publish_secret = undef,
+  $datadirs_create_local_datadirs = undef,
+  $confserv_service_base_url = undef,
+) inherits dhrep::params {
 
-  include textgrid::services::tgauth
-  include textgrid::services::aggregator
-  include textgrid::services::confserv
-  include textgrid::services::crud
-  include textgrid::services::crud_public
-  include textgrid::services::digilib
-  include textgrid::services::oaipmh
-  include textgrid::services::pid
-  include textgrid::services::publish
-  include textgrid::services::textgridrep_website
-  include textgrid::services::tgsearch
-  include textgrid::services::tgsearch_public
+  # internal services containing variables used by other modules need to be evaluated in order
+  class { 'dhrep::services::tgauth':
+    scope          => $scope,
+    binddn_pass    => $tgauth_binddn_pass,
+    crud_secret    => $tgauth_crud_secret,
+    slapd_rootpw   => $tgauth_slapd_rootpw,
+    authz_instance => $tgauth_authz_instance,
+  }
 
-  include textgrid::services::intern::tgelasticsearch
-  include textgrid::services::intern::sesame
-  include textgrid::services::intern::tgwildfly
-  include textgrid::services::intern::messaging
-  include textgrid::services::intern::tgnoid
+  class { 'dhrep::services::intern::tgelasticsearch':
+    scope        => $scope,
+    cluster_name => $tgelasticsearch_cluster_name,
+  }
 
-  include textgrid::tgnginx
+  class { 'dhrep::services::intern::sesame':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::intern::tgwildfly':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::intern::messaging':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::aggregator':
+    scope => $scope,
+  }
+
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::intern::tgnoid':
+      before        => Class['dhrep::services::crud'],
+      tgcrud_secret => $tgnoid_tgcrud_secret,
+    }
+  }
+
+  class { 'dhrep::services::crud':
+    scope          => $scope,
+    publish_secret => $crud_publish_secret,
+    require        => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
+  }
+
+  class { 'dhrep::services::crud_public':
+    scope   => $scope,
+    require => [Class['dhrep::services::intern::tgelasticsearch'],
+                Class['dhrep::services::intern::sesame']]
+  }
+
+  class { 'dhrep::services::digilib':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::oaipmh':
+    scope   => $scope,
+    require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
+  }
+
+  class { 'dhrep::services::pid':
+    scope => $scope,
+  }
+
+  class { 'dhrep::services::publish':
+    scope => $scope,
+  }
+
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::confserv':
+      service_base_url => $confserv_service_base_url,
+    }
+
+    class { 'dhrep::services::intern::datadirs':
+      create_local_datadirs => $datadirs_create_local_datadirs,
+    }
+
+    class { 'dhrep::static::textgridrep_website': }
+
+    class { 'dhrep::static::textgridlab_org': }
+
+    class { 'dhrep::services::tgsearch':
+      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
+    }
+    class { 'dhrep::services::tgsearch_public':
+      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
+    }
+
+    class { 'dhrep::services::intern::tgmarketplace': }
+
+    class { 'dhrep::tools::check_services': }
+  }
+
+  #  include textgrid::tgnginx
 
   package {
     'openjdk-6-jdk':            ensure => absent;
@@ -87,7 +172,7 @@ class textgrid {
 
   $tgcache = '/var/cache/textgrid/'
   # vagrant cachier changes this to symlink
-  unless $vagrant {
+  unless $::vagrant {
     file { $tgcache :
       ensure => directory,
     }

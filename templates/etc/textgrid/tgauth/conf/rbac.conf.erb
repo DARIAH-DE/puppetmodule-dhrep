@@ -2,13 +2,13 @@
 <configuration>
 
   <section name="user">
-    <var name="host"><%= scope.lookupvar('textgrid::services::tgauth::ldap_host') %></var>
+    <var name="host"><%= scope.lookupvar('dhrep::services::tgauth::ldap_host') %></var>
     <var name="port">389</var>
     <var name="version">3</var>
     <var name="tls">no</var>
     <var name="base">ou=people,ou=rbac,dc=textgrid,dc=de</var>
     <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('textgrid::services::tgauth::binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
     <var name="filter">(objectClass=inetorgperson)</var>
 
     <!-- Possile values are "uid", "cn", "sn" or any other used in the
@@ -20,13 +20,13 @@
   </section>
 
   <section name="role">
-    <var name="host"><%= scope.lookupvar('textgrid::services::tgauth::ldap_host') %></var>
+    <var name="host"><%= scope.lookupvar('dhrep::services::tgauth::ldap_host') %></var>
     <var name="port">389</var>
     <var name="version">3</var>
     <var name="tls">no</var>
     <var name="base">ou=roles,ou=rbac,dc=textgrid,dc=de</var>
     <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('textgrid::services::tgauth::binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
     <var name="namingattribute">rbacname</var>
     <var name="filter">(objectClass=rbacrole)</var>
 
@@ -35,25 +35,25 @@
   </section>
 
   <section name="session">
-    <var name="host"><%= scope.lookupvar('textgrid::services::tgauth::ldap_host') %></var>
+    <var name="host"><%= scope.lookupvar('dhrep::services::tgauth::ldap_host') %></var>
     <var name="port">389</var>
     <var name="version">3</var>
     <var name="tls">no</var>
     <var name="base">ou=sessions,ou=rbac,dc=textgrid,dc=de</var>
     <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('textgrid::services::tgauth::binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
     <var name="namingattribute">rbacname</var>
     <var name="filter">(objectClass=rbacsession)</var>
   </section>
 
   <section name="resource">
-    <var name="host"><%= scope.lookupvar('textgrid::services::tgauth::ldap_host') %></var>
+    <var name="host"><%= scope.lookupvar('dhrep::services::tgauth::ldap_host') %></var>
     <var name="port">389</var>
     <var name="version">3</var>
     <var name="tls">no</var>
     <var name="base">ou=rbac,dc=textgrid,dc=de</var>
     <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('textgrid::services::tgauth::binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
     <var name="namingattribute">rbacname</var>
     <var name="aliasattribute">tgresourceuri</var>
     <var name="filter">(objectClass=rbacresource)</var>

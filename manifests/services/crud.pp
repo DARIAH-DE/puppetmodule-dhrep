@@ -1,28 +1,27 @@
-# == Class: textgrid::services::crud
+# == Class: dhrep::services::crud
 #
 # Class to install and configure tgcrud/dhcrud
 #
-class textgrid::services::crud (
-  $scope            = 'textgrid',
+class dhrep::services::crud (
+  $scope            = undef,
   $short            = 'tgcrud',
   $crud_name        = 'tgcrud-webapp',
-  $crud_version     = '5.9.152-SNAPSHOT',
-  $crud_group       = 'info.textgrid.middleware',
-  $use_messaging    = false,
-  $publish_secret   = '',
-  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/snapshots/',
-){
+  $crud_version     = 'latest',
+  $use_messaging    = true,
+  $publish_secret   = undef,
+) inherits dhrep::params {
 
-  include textgrid::services::intern::tgelasticsearch
-  include textgrid::services::intern::sesame
-  include textgrid::services::intern::tgnoid
-  include textgrid::services::intern::javagat
-  include textgrid::services::tgauth
-  include textgrid::services::tomcat_crud
+  include dhrep::services::intern::javagat
+  include dhrep::services::tomcat_crud
 
-  $catname = $textgrid::services::tomcat_crud::catname
-  $user    = $textgrid::services::tomcat_crud::user
-  $group   = $textgrid::services::tomcat_crud::group
+  $catname = $dhrep::services::tomcat_crud::catname
+  $user    = 'storage'
+  $group   = 'storage'
+
+  package { $crud_name:
+    ensure  => $crud_version,
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
+  }
 
   ###
   # config
@@ -40,7 +39,7 @@ class textgrid::services::crud (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/${short}.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/${short}.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
@@ -49,7 +48,7 @@ class textgrid::services::crud (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/beans.properties.erb"),
+    content => template("dhrep/etc/${scope}/${short}/beans.properties.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
@@ -62,7 +61,7 @@ class textgrid::services::crud (
     owner   => root,
     group   => $group,
     mode    => '0640',
-    content => template("${scope}/etc/${scope}/${short}/${short}.log4j.erb"),
+    content => template("dhrep/etc/${scope}/${short}/${short}.log4j.erb"),
     require => File["/etc/${scope}/${short}"],
   }
 
@@ -74,37 +73,25 @@ class textgrid::services::crud (
     require => File["/var/log/${scope}"],
   }
 
-  ###
-  # use maven to fetch latest crud service from nexus, copy war, set permissions,
-  # and restart tomcat
-  ###
-
-  maven { "/var/cache/${scope}/${crud_name}-${crud_version}.war":
-    ensure     => latest,
-    groupid    => $crud_group,
-    artifactid => $crud_name,
-    version    => $crud_version,
-    packaging  => 'war',
-    repos      => $maven_repository,
-    require    => Package['maven'],
-    notify     => Exec['replace_crud_service'],
+  logrotate::rule { $short:
+    path         => "/var/log/${scope}/${short}/${short}.log",
+    require      => File["/var/log/${scope}/${short}"],
+    rotate       => 365,
+    rotate_every => 'week',
+    compress     => true,
+    copytruncate => true,
+    missingok    => true,
+    ifempty      => true,
+    dateext      => true,
+    dateformat   => '.%Y-%m-%d'
   }
 
-  exec { 'replace_crud_service':
-    path        => ['/usr/bin','/bin'],
-    command     => "/etc/init.d/${catname} stop && rm -rf /home/${scope}/${catname}/webapps/${short} && sleep 2 && cp /var/cache/${scope}/${crud_name}-${crud_version}.war /home/${scope}/${catname}/webapps/${short}.war",
-    cwd         => '/root',
-    user        => 'root',
-    group       => 'root',
-    require     => Exec["create_${catname}"],
-    refreshonly => true,
-  }
-  ->
-  file {"/home/${scope}/${catname}/webapps/${short}.war":
-    group   => $group,
-    mode    => '0640',
-    notify  => Service[$catname],
-    require => File["/etc/${scope}/${short}/beans.properties"],
+  # symlink war from deb package to tomcat webapps dir
+  file { "/home/${user}/${catname}/webapps/${short}.war": 
+    ensure => 'link',
+    target => "/var/${scope}/webapps/${short}.war",
+#    notify  => Service[$catname],
+    require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
 }

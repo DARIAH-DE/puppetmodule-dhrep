@@ -1,8 +1,9 @@
-# == Class: textgrid::services::tomcat_aggregator
+# == Class: dhrep::services::tomcat_aggregator
 #
 # Class to install and configure aggregator tomcat.
 #
-class textgrid::services::tomcat_aggregator (
+class dhrep::services::tomcat_aggregator (
+  $scope        = undef,
 ){
 
   $catname      = 'tomcat-aggregator'
@@ -13,7 +14,7 @@ class textgrid::services::tomcat_aggregator (
   $jmx_port     = '9995'
   $gid          = '1014'
   $uid          = '1014'
-  $template     ='textgrid/etc/default/tomcat.erb'
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   $user         = $catname
   $group        = $catname
@@ -22,7 +23,7 @@ class textgrid::services::tomcat_aggregator (
   # user, home-dir and user-tomcat
   ###
 
-  textgrid::resources::servicetomcat { $catname:
+  dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
     gid               => $gid,

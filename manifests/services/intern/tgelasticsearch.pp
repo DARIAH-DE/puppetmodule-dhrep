@@ -1,4 +1,4 @@
-# == Class: textgrid::services::intern::tgelasticsearch
+# == Class: dhrep::services::intern::tgelasticsearch
 #
 # Class to install and configure elasticsearch
 # 
@@ -13,17 +13,15 @@
 # [*master_tcp_port*]
 #   elastic search tcp transport port (masternode)
 #
-class textgrid::services::intern::tgelasticsearch (
-  $cluster_name,
-  $master_http_port           = '9202',
-  $master_tcp_port            = '9302',
-  $repo_version               = '1.4',  # not used for now, as experimental highlighter may break on minor version updates
-  $elasticsearch_version      = '1.4.1',
-  $attachments_plugin_version = '2.4.1',
-  $highlighter_plugin_version = '1.4.1',
-  $es_min_mem                 = '256m',
-  $es_max_mem                 = '1g',
-) {
+class dhrep::services::intern::tgelasticsearch (
+  $scope                      = undef,
+  $cluster_name               = undef,
+  $repo_version               = '1.7',
+  $elasticsearch_version      = '1.7.0',
+  $attachments_plugin_version = '2.7.0',
+  $highlighter_plugin_version = '1.7.0',
+  $es_heap_size               = '512m',
+) inherits dhrep::params {  
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
@@ -39,8 +37,7 @@ class textgrid::services::intern::tgelasticsearch (
 #      'network.host' => '127.0.0.1',
     },
     init_defaults => {
-      'ES_MIN_MEM' => $es_min_mem,
-      'ES_MAX_MEM' => $es_max_mem,
+      'ES_HEAP_SIZE' => $es_heap_size,
     },
     java_install  => false,
   }
@@ -49,8 +46,8 @@ class textgrid::services::intern::tgelasticsearch (
     config => {
       'node.master'        => true,
       'node.data'          => true,
-      'http.port'          => $master_http_port,
-      'transport.tcp.port' => $master_tcp_port,
+      'http.port'          => $dhrep::params::tgelasticsearch_master_http_port,
+      'transport.tcp.port' => $dhrep::params::tgelasticsearch_master_tcp_port,
     }
   }
 
@@ -58,8 +55,8 @@ class textgrid::services::intern::tgelasticsearch (
     config => {
       'node.master'        => false,
       'node.data'          => true,
-      'http.port'          => '9203',
-      'transport.tcp.port' => '9303',
+      'http.port'          => $dhrep::params::tgelasticsearch_workhorse_http_port,
+      'transport.tcp.port' => $dhrep::params::tgelasticsearch_workhorse_tcp_port,
     }
   }
 
@@ -72,7 +69,7 @@ class textgrid::services::intern::tgelasticsearch (
   }
 
   # run only once
-  unless $tgelastic_repos_initialized {
+  unless $::tgelastic_repos_initialized {
     # clone commons repo, which contains shell scripts to create textgrid elastic search indizes
     exec { 'git_clone_tgcommon':
       path    => ['/usr/bin','/bin','/usr/sbin'],
@@ -81,22 +78,22 @@ class textgrid::services::intern::tgelasticsearch (
       require => Package['git'],
     }
     ->
-    textgrid::tools::wait_for_url_ready { 'wait_for_es_master':
-      url     => "http://localhost:${$master_http_port}/",
+    dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
+      url     => "http://localhost:${dhrep::params::tgelasticsearch_master_http_port}/",
       require => Elasticsearch::Instance['masternode'],
     }
     ~>
     exec { 'create_public_es_index':
       path    => ['/usr/bin','/bin','/usr/sbin'],
       cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${master_http_port}",
+      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${dhrep::params::tgelasticsearch_master_http_port}",
       require => [Package['curl']],
     }
     ~>
     exec { 'create_nonpublic_es_index':
       path    => ['/usr/bin','/bin','/usr/sbin'],
       cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${master_http_port}",
+      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${dhrep::params::tgelasticsearch_master_http_port}",
       require => [Package['curl']],
     }
     ~>

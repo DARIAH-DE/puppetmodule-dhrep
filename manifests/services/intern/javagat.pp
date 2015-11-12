@@ -1,18 +1,17 @@
-# == Class: textgrid::services::intern::javagat
+# == Class: dhrep::services::intern::javagat
 #
 # Class to install and configure JavaGAT.
 #
-class textgrid::services::intern::javagat (
+class dhrep::services::intern::javagat (
+  $scope           = undef,
   $javagat_version = '2.1.1',
 ){
-
-  include textgrid::services::intern::datadirs
 
   ###
   # javagat
   ###
 
-  textgrid::tools::tgstaging { "JavaGAT-${javagat_version}-binary.zip":
+  dhrep::tools::tgstaging { "JavaGAT-${javagat_version}-binary.zip":
     source  => "http://gforge.cs.vu.nl/gf/download/frsrelease/154/1196/JavaGAT-${javagat_version}-binary.zip",
     target  => '/usr/local',
     creates => "/usr/local/JavaGAT-${javagat_version}",

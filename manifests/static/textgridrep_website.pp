@@ -1,13 +1,13 @@
-# == Class: textgrid::services::textgridrep_website
+# == Class: dhrep::static::textgridrep_website
 #
 # Class to install and configure the textgridrep website
 #
-class textgrid::services::textgridrep_website(
+class dhrep::static::textgridrep_website(
   $tgrep_server_name  = 'vm1rep vm1rep.textgrid.local',
   $tgrep_service_url  = 'http://vm1.textgrid.local/1.0',
 ) {
 
-  include textgrid::tgnginx
+  include dhrep::tgnginx
 
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin'],
@@ -41,7 +41,7 @@ class textgrid::services::textgridrep_website(
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/nginx-root/textgridrep-webseite/config.js.erb'),
+    content => template('dhrep/var/www/nginx-root/textgridrep-webseite/config.js.erb'),
   }
   ->
   file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox/js/config.js':
@@ -49,7 +49,7 @@ class textgrid::services::textgridrep_website(
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/var/www/nginx-root/textgridrep-webseite-sandbox/config.js.erb'),
+    content => template('dhrep/var/www/nginx-root/textgridrep-webseite-sandbox/config.js.erb'),
   }
 
   file { '/etc/nginx/sites-available/textgridrep':
@@ -57,7 +57,7 @@ class textgrid::services::textgridrep_website(
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/nginx/sites-available/textgridrep.erb'),
+    content => template('dhrep/etc/nginx/sites-available/textgridrep.erb'),
   }
   ->
   file { '/etc/nginx/proxyconf/textgridrep.common.conf':
@@ -65,7 +65,7 @@ class textgrid::services::textgridrep_website(
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('textgrid/etc/nginx/proxyconf/textgridrep.common.conf.erb'),
+    content => template('dhrep/etc/nginx/proxyconf/textgridrep.common.conf.erb'),
   }
   ->
   file { '/etc/nginx/sites-enabled/textgridrep':

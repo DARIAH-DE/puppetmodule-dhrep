@@ -4,7 +4,7 @@
 # copied from cendari::defaults::defaults::users_addadmin
 # maybe useful as a dariah common define
 #
-define textgrid::users_addadmin (
+define dhrep::users_addadmin (
   $username    = $title,
   $uid         = undef,
   $groups      = [],
