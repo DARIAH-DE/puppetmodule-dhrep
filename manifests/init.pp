@@ -27,6 +27,8 @@ class dhrep (
     crud_secret    => $tgauth_crud_secret,
     slapd_rootpw   => $tgauth_slapd_rootpw,
     authz_instance => $tgauth_authz_instance,
+    authz_shib_pw  => $tgauth_authz_shib_pw,
+    webauth_secret => $tgauth_webauth_secret,
   }
 
   class { 'dhrep::services::intern::tgelasticsearch':
