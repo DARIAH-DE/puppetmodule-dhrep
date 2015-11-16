@@ -10,6 +10,7 @@ class dhrep (
   $tgauth_binddn_pass = undef,
   $tgauth_crud_secret = undef,
   $tgelasticsearch_cluster_name = 'testing',
+  $tgelasticsearch_es_heap_size = undef,
   $tgauth_slapd_rootpw = undef,
   $tgauth_authz_shib_pw = undef,
   $tgauth_authz_instance = undef,
@@ -34,6 +35,7 @@ class dhrep (
   class { 'dhrep::services::intern::tgelasticsearch':
     scope        => $scope,
     cluster_name => $tgelasticsearch_cluster_name,
+    es_heap_size => $tgelasticsearch_es_heap_size,
   }
 
   class { 'dhrep::services::intern::sesame':
