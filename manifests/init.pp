@@ -10,7 +10,7 @@ class dhrep (
   $tgauth_binddn_pass = undef,
   $tgauth_crud_secret = undef,
   $tgelasticsearch_cluster_name = 'testing',
-  $tgelasticsearch_es_heap_size = undef,
+  $tgelasticsearch_es_heap_size = $dhrep::params::tgelasticsearch_es_heap_size,
   $tgauth_slapd_rootpw = undef,
   $tgauth_authz_shib_pw = undef,
   $tgauth_authz_instance = undef,

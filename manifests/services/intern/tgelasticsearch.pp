@@ -20,7 +20,7 @@ class dhrep::services::intern::tgelasticsearch (
   $elasticsearch_version      = '1.7.0',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
-  $es_heap_size               = '512m',
+  $es_heap_size               = $dhrep::params::tgelasticsearch_es_heap_size,
 ) inherits dhrep::params {  
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master

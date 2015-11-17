@@ -31,6 +31,7 @@ class dhrep::params {
   $tgelasticsearch_master_tcp_port     = '9302'
   $tgelasticsearch_workhorse_http_port = '9203'
   $tgelasticsearch_workhorse_tcp_port  = '9303'
+  $tgelasticsearch_es_heap_size        = '512m'
 
   $config = {
     'oaipmh'    => {
