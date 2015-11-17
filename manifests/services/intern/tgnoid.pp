@@ -7,7 +7,7 @@
 #   add checks to bash script
 #
 class dhrep::services::intern::tgnoid (
-  $scope         = undef,
+  $scope         = 'textgrid',
   $tgcrud_secret
 ){
 
@@ -18,8 +18,6 @@ class dhrep::services::intern::tgnoid (
   package {
     'libberkeleydb-perl': ensure => present;
   }
-
-  require dhrep::resources::apache
 
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin','/usr/local/bin'],
@@ -78,6 +76,40 @@ class dhrep::services::intern::tgnoid (
     command   => '/home/tgnoid/install_tgnoid.sh',
     creates   => '/home/tgnoid/htdocs/nd/textgrid/NOID',
     logoutput => true,
+  }
+
+  ###
+  # apache config, apache should be setup by dhrep::init
+  ###  
+  file { "/etc/apache2/${scope}/default_vhost_includes/tgnoid.conf":
+    content => "
+    # --------------------------------------------------------------------------
+    # All the NOID configuration things following here for minting TextGrid URIs
+    # --------------------------------------------------------------------------
+
+    # ScriptAlias /cgi-bin/ /home/tgnoid/htdocs/nd/
+    <Directory \"/home/tgnoid/htdocs/nd/\">
+      AuthType Basic
+      AuthName \"The TextGrid URI NOID Service\"
+      AuthUserFile /etc/apache2/tgnoid.htpasswd
+      Require valid-user
+      AllowOverride None
+      Options +ExecCGI -Includes
+      Require all granted
+    </Directory>
+
+    # Make the server recognize links to htdocs/nd
+    ScriptAliasMatch ^/nd/noidr(.*) \"/home/tgnoid/htdocs/nd/noidr\$1\"
+    ScriptAliasMatch ^/nd/noidu(.*) \"/home/tgnoid/htdocs/nd/noidu\$1\"
+
+    # Define all the rewrite maps, start every program once on server start
+    # RewriteMap rslv_textgrid prg:/home/tgnoid/htdocs/nd/noidr_textgrid
+
+    # --------------------------------------------------------------------------
+    # End of NOID configuration
+    # --------------------------------------------------------------------------
+    ",
+    notify => Service['apache2']
   }
 
 }

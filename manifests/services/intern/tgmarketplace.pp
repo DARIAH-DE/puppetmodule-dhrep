@@ -3,7 +3,8 @@
 # Class to install and configure the TextGrid Marketplace.
 # 
 class dhrep::services::intern::tgmarketplace (
-  $time = ['23', '02'],
+  $scope = 'textgrid',
+  $time  = ['23', '02'],
 ){
 
   $owner = www-data
@@ -14,8 +15,6 @@ class dhrep::services::intern::tgmarketplace (
     'python3': ensure               => present;
     'python3-lxml': ensure          => present;
   }
-
-  require dhrep::resources::apache
 
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin','/usr/local/bin'],
@@ -123,6 +122,30 @@ class dhrep::services::intern::tgmarketplace (
     hour    => $time[0],
     minute  => $time[1],
     weekday => 0,
+  }
+
+  ###
+  # apache config, apache should be setup by dhrep::init
+  ###  
+  file { "/etc/apache2/${scope}/default_vhost_includes/tgmarketplace.conf":
+    content => "
+    # --------------------------------------------------------------------------
+    # TextGrid Marketplace configuration
+    # --------------------------------------------------------------------------
+
+    <Directory /var/www/marketplace/>
+      Options Indexes FollowSymLinks MultiViews
+      AllowOverride All
+      Order allow,deny
+      allow from all
+    </Directory>
+    <Directory \"/var/www/marketplace/cgi/\">
+      SetHandler cgi-script
+      AllowOverride All
+      Options +ExecCGI
+    </Directory>
+    ",
+    notify => Service['apache2']
   }
 
 }

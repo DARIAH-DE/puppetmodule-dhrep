@@ -37,10 +37,6 @@ class dhrep::services::tgauth (
     'php5-ldap':            ensure => present;
   }
 
-  # TODO: possibly we want a require here
-  # http://localhost:9292/puppet/latest/reference/lang_relationships.html#the-require-function
-  include dhrep::resources::apache
-
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin'],
   }
@@ -281,6 +277,36 @@ class dhrep::services::tgauth (
     ensure  => running,
     enable  => true,
     require => Package['slapd'],
+  }
+
+  # apache config, apache should be there (e.g. by dhrep::init.pp or dariah profile::apache)
+  file { "/etc/apache2/${scope}/default_vhost_includes/tgauth.conf":
+    content => "
+    # --------------------------------------------------------------------------
+    # All the TG-auth and RBAC configuration
+    # --------------------------------------------------------------------------
+
+    # DO WE NEED THAT??? TAKEN FROM TEST1-CONFIG!!
+    #
+    #    <Location /secure>
+    #      AuthType shibboleth
+    #      ShibRequestSetting requireSession 1
+    #      require valid-user
+    #    </Location>
+    #
+    #    <Location /1.0/secure>
+    #      AuthType shibboleth
+    #      ShibRequestSetting requireSession 1
+    #      require valid-user
+    #    </Location>
+
+    Alias /tgauth /var/www/tgauth/rbacSoap
+    <Directory \"/var/www/tgauth/rbacSoap\">
+      Options +FollowSymLinks -Indexes
+      Require all granted
+    </Directory>
+    ",
+    notify => Service['apache2']
   }
 
   # Configure LDAP backup and unused logfile removing.

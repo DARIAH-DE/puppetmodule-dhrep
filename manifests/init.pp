@@ -38,6 +38,10 @@ class dhrep (
     es_heap_size => $tgelasticsearch_es_heap_size,
   }
 
+  class { 'dhrep::resources::apache': 
+    scope => $scope,
+  }
+
   class { 'dhrep::services::intern::sesame':
     scope => $scope,
   }
@@ -91,6 +95,7 @@ class dhrep (
   }
 
   if $scope == 'textgrid' {
+
     class { 'dhrep::services::confserv':
       service_base_url => $confserv_service_base_url,
     }
