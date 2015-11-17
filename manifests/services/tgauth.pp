@@ -16,7 +16,7 @@
 #   https://forge.puppetlabs.com/camptocamp/openldap
 #
 class dhrep::services::tgauth (
-  $scope                 = undef,
+  $scope,
   $ldap_host             = 'localhost',
   $binddn_pass           = '',
   $crud_secret           = '',
@@ -49,23 +49,23 @@ class dhrep::services::tgauth (
   # conf to etc
   ###
 
-  file { '/etc/textgrid/tgauth':
+  file { "/etc/${scope}/tgauth":
     ensure  => directory,
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => File['/etc/textgrid'],
+    require => File["/etc/${scope}"],
   }
 
-  file { '/etc/textgrid/tgauth/conf':
+  file { "/etc/${scope}/tgauth/conf":
     ensure  => directory,
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => File['/etc/textgrid/tgauth'],
+    require => File["/etc/${scope}/tgauth"],
   }
 
-  file { '/etc/textgrid/tgauth/conf/rbac.conf':
+  file { "/etc/${scope}/tgauth/conf/rbac.conf":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -73,7 +73,7 @@ class dhrep::services::tgauth (
     content => template('dhrep/etc/textgrid/tgauth/conf/rbac.conf.erb'),
   }
 
-  file { '/etc/textgrid/tgauth/conf/rbacSoap.conf':
+  file { "/etc/${scope}/tgauth/conf/rbacSoap.conf":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -81,7 +81,7 @@ class dhrep::services::tgauth (
     content => template('dhrep/etc/textgrid/tgauth/conf/rbacSoap.conf.erb'),
   }
 
-  file { '/etc/textgrid/tgauth/conf/system.conf':
+  file { "/etc/${scope}/tgauth/conf/system.conf":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -89,7 +89,7 @@ class dhrep::services::tgauth (
     content => template('dhrep/etc/textgrid/tgauth/conf/system.conf.erb'),
   }
 
-  file { '/etc/textgrid/tgauth/conf/config_tgwebauth.xml':
+  file { "/etc/${scope}/tgauth/conf/config_tgwebauth.xml":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -99,7 +99,7 @@ class dhrep::services::tgauth (
 
   file { '/var/www/tgauth/conf':
     ensure => link,
-    target => '/etc/textgrid/tgauth/conf',
+    target => "/etc/${scope}/tgauth/conf",
   }
 
   ###

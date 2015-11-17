@@ -139,7 +139,7 @@ class dhrep (
     action => accept,
   }
 
-  file { '/etc/textgrid':
+  file { "/etc/${scope}":
     ensure => directory,
     owner  => root,
     group  => root,
