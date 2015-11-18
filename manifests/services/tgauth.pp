@@ -35,6 +35,8 @@ class dhrep::services::tgauth (
     'slapd':                ensure => present;
     'ldap-utils':           ensure => present;
     'php5-ldap':            ensure => present;
+    'db5.3-util':           ensure => present;
+    'mailutils':            ensure => present;
   }
 
   Exec {
@@ -359,7 +361,7 @@ class dhrep::services::tgauth (
     mode    => '0755',
     require => File['/var/textgrid'],
   }
-  file { '/opt/dhrep/ldap-statistic-script.sh' :
+  file { '/opt/dhrep/ldap-statistic-script.pl' :
     owner   => 'root',
     group   => 'root',
     mode    => '0755',

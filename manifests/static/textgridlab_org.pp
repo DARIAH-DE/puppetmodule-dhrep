@@ -67,7 +67,7 @@ class dhrep::static::textgridlab_org(
   }
 
   #
-  # TODO Automated middleware and puppet documentation!
+  # TextGridRep Documentation (common index file and folder)
   #
   file { '/var/www/nginx-root/textgridlab.org/doc':
     ensure  => directory,
@@ -80,6 +80,23 @@ class dhrep::static::textgridlab_org(
     mode    => '0644',
     require => File['/var/www/nginx-root/textgridlab.org/doc'],
   }
+
+  #
+  # TextGridRep API Documentation DEB package (Sphinx-based)
+  #
+  package { "textgrid-doc":
+    ensure  => latest,
+    require => Exec['update_dariah_apt_repository'],
+  }
+  ->
+  file { '/var/www/nginx-root/textgridlab.org/doc/services':
+    ensure => link,
+    target => '/var/www/doc/services',
+  }
+
+  #
+  # TODO Automated Puppet documentation!
+  #
 
   #
   # HTML files: index.html, favicon.ico, jira.html, error sites, and images
