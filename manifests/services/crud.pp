@@ -86,12 +86,49 @@ class dhrep::services::crud (
     dateformat   => '.%Y-%m-%d'
   }
 
+  ###
   # symlink war from deb package to tomcat webapps dir
+  ###
   file { "/home/${user}/${catname}/webapps/${short}.war": 
     ensure => 'link',
     target => "/var/${scope}/webapps/${short}.war",
 #    notify  => Service[$catname],
     require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
+  }
+
+  ###
+  # crud comment and analyse scrpits
+  #
+  file { '/opt/dhrep/crud-analyse-script.pl':
+    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-analyse-script.pl',
+    owner   => $user,
+    group   => $group,
+    mode    => '0700',
+    require => File['/opt/dhrep'],
+  }
+  file { '/opt/dhrep/crud-comment-script.pl':
+    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-comment-script.pl',
+    owner   => $user,
+    group   => $group,
+    mode    => '0700',
+    require => [File['/opt/dhrep'],File['/opt/dhrep/crud-analyse-script.pl']],
+  }
+
+  ###
+  # cron for crud comment and analyse
+  ###
+  cron { 'crud-comment' :
+    command => '/opt/dhrep/crud-comment-script.pl',
+    user    => $user,
+    hour    => 4,
+    minute  => 3,
+    require => File['/opt/dhrep/crud-comment-script.pl'],
+  }
+  cron { 'crud-analyse' :
+    command => '/opt/dhrep/crud-analyse-script.pl -l /var/log/textgrid/tgcrud/rollback.log -c /var/log/textgrid/tgcrud/logcomments.log',
+    user    => $user,
+    minute  => '*/5',
+    require => File['/opt/dhrep/crud-analyse-script.pl'],
   }
 
 }

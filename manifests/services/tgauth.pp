@@ -330,13 +330,13 @@ class dhrep::services::tgauth (
     ensure => directory,
     owner  => 'root',
     group  => 'root',
-    mode   => '0700',
+    mode   => '0775',
   }
   file { '/opt/dhrep/ldap-backup-script.sh' :
     source  => 'puppet:///modules/dhrep/opt/dhrep/ldap-backup-script.sh',
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
+    mode    => '0700',
     require => [File['/opt/dhrep'],File['/var/textgrid/backups/ldap']]
   }
   cron { 'ldap-backup' :
@@ -351,20 +351,20 @@ class dhrep::services::tgauth (
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
+    mode    => '0700',
     require => File['/var/textgrid'],
   }
   file { '/var/textgrid/statistics/ldap' :
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
+    mode    => '0700',
     require => File['/var/textgrid'],
   }
   file { '/opt/dhrep/ldap-statistic-script.pl' :
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
+    mode    => '0700',
     content => template('dhrep/opt/dhrep/ldap-statistic-script.pl.erb'),
     require => [File['/opt/dhrep'],File['/var/textgrid/statistics']],
   }
