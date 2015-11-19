@@ -373,6 +373,7 @@ class dhrep::services::tgauth (
     user    => 'root',
     hour    => 23,
     minute  => 53,
+    day     => 01,
   }
 
 }
