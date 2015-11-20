@@ -369,11 +369,11 @@ class dhrep::services::tgauth (
     require => [File['/opt/dhrep'],File['/var/textgrid/statistics']],
   }
   cron { 'ldap-statistic' :
-    command => '/opt/dhrep/ldap-statistic-script.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt',
-    user    => 'root',
-    hour    => 23,
-    minute  => 53,
-    day     => 01,
+    command  => '/opt/dhrep/ldap-statistic-script.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt',
+    user     => 'root',
+    hour     => 23,
+    minute   => 53,
+    monthday => 01,
   }
 
 }
