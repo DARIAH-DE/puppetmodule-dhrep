@@ -340,7 +340,7 @@ class dhrep::services::tgauth (
     require => [File['/opt/dhrep'],File['/var/textgrid/backups/ldap']]
   }
   cron { 'ldap-backup' :
-    command => '/opt/dhrep/ldap-backup-script.sh',
+    command => '/opt/dhrep/ldap-backup-script.sh > /dev/null',
     user    => 'root',
     hour    => 22,
     minute  => 03,
@@ -369,7 +369,7 @@ class dhrep::services::tgauth (
     require => [File['/opt/dhrep'],File['/var/textgrid/statistics']],
   }
   cron { 'ldap-statistic' :
-    command  => '/opt/dhrep/ldap-statistic-script.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt',
+    command  => '/opt/dhrep/ldap-statistic-script.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt > /dev/null',
     user     => 'root',
     hour     => 23,
     minute   => 53,

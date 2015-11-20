@@ -118,14 +118,14 @@ class dhrep::services::crud (
   # cron for crud comment and analyse
   ###
   cron { 'crud-comment' :
-    command => '/opt/dhrep/crud-comment-script.pl',
+    command => '/opt/dhrep/crud-comment-script.pl > /dev/null',
     user    => $user,
     hour    => 4,
     minute  => 3,
     require => File['/opt/dhrep/crud-comment-script.pl'],
   }
   cron { 'crud-analyse' :
-    command => '/opt/dhrep/crud-analyse-script.pl -l /var/log/textgrid/tgcrud/rollback.log -c /var/log/textgrid/tgcrud/logcomments.log',
+    command => '/opt/dhrep/crud-analyse-script.pl -l /var/log/textgrid/tgcrud/rollback.log -c /var/log/textgrid/tgcrud/logcomments.log > /dev/null',
     user    => $user,
     minute  => '*/5',
     require => File['/opt/dhrep/crud-analyse-script.pl'],
