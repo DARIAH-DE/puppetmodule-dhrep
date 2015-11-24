@@ -32,7 +32,8 @@ class dhrep::services::intern::tgelasticsearch (
     #autoupgrade   => true,
     #package_url   => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
     config        => {
-      'cluster.name' => $cluster_name,
+      'cluster.name'                         => $cluster_name,
+      'discovery.zen.ping.multicast.enabled' => false,
 # es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
 #      'network.host' => '127.0.0.1',
     },
@@ -44,19 +45,21 @@ class dhrep::services::intern::tgelasticsearch (
 
   elasticsearch::instance { 'masternode':
     config => {
-      'node.master'        => true,
-      'node.data'          => true,
-      'http.port'          => $dhrep::params::tgelasticsearch_master_http_port,
-      'transport.tcp.port' => $dhrep::params::tgelasticsearch_master_tcp_port,
+      'node.master'                      => true,
+      'node.data'                        => true,
+      'http.port'                        => $dhrep::params::tgelasticsearch_master_http_port,
+      'transport.tcp.port'               => $dhrep::params::tgelasticsearch_master_tcp_port,
+      'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${dhrep::params::tgelasticsearch_workhorse_tcp_port}",
     }
   }
 
   elasticsearch::instance { 'workhorse':
     config => {
-      'node.master'        => false,
-      'node.data'          => true,
-      'http.port'          => $dhrep::params::tgelasticsearch_workhorse_http_port,
-      'transport.tcp.port' => $dhrep::params::tgelasticsearch_workhorse_tcp_port,
+      'node.master'                      => false,
+      'node.data'                        => true,
+      'http.port'                        => $dhrep::params::tgelasticsearch_workhorse_http_port,
+      'transport.tcp.port'               => $dhrep::params::tgelasticsearch_workhorse_tcp_port,
+      'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${dhrep::params::tgelasticsearch_master_tcp_port}",
     }
   }
 
