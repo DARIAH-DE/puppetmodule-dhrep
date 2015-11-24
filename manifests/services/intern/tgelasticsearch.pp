@@ -105,4 +105,40 @@ class dhrep::services::intern::tgelasticsearch (
     }
   }
 
+  ###
+  # collectd for elasticsearch
+  ###
+
+  # install the collectd plugin for elasticsearch
+  vcsrepo { '/opt/collectd-elasticsearch':
+    ensure   => present,
+    owner    => 'root',
+    group    => 'root',
+    provider => git,
+    source   => 'https://github.com/phobos182/collectd-elasticsearch.git',
+  }
+
+  @file { '/etc/collectd/conf.d/88-elastic.conf':
+    tag     => 'femonitoring_collectd',
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    content => "<LoadPlugin \"python\">
+    Globals true
+</LoadPlugin>
+
+<Plugin \"python\">
+    ModulePath \"/opt/collectd-elasticsearch/\"
+
+    Import \"elasticsearch\"
+
+    <Module \"elasticsearch\">
+        Verbose false
+        Version \"1.0\"
+        Cluster \"elasticsearch\"
+    </Module>
+</Plugin>
+",
+  }
+
 }
