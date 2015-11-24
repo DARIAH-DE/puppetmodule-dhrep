@@ -179,22 +179,40 @@ class dhrep::services::tgauth (
   }
   ->
   file { '/var/www/info.textgrid.middleware.tgauth.webauth/i18n_cache':
-    ensure => directory,
-    owner  => 'www-data',
-    group  => 'www-data',
-    mode   => '0755'
+    ensure  => directory,
+    owner   => 'www-data',
+    group   => 'www-data',
+    mode    => '0755',
+    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
   }
 
   file { '/var/www/WebAuthN':
-    ensure => link,
-    target => '/var/www/info.textgrid.middleware.tgauth.webauth/WebAuthN/',
-    mode   => '0755'
+    ensure  => link,
+    target  => '/var/www/info.textgrid.middleware.tgauth.webauth/WebAuthN/',
+    mode    => '0755',
+    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
   }
 
   file { '/var/www/secure':
-    ensure => link,
-    target => '/var/www/info.textgrid.middleware.tgauth.webauth/secure/',
-    mode   => '0755'
+    ensure  => link,
+    target  => '/var/www/info.textgrid.middleware.tgauth.webauth/secure/',
+    mode    => '0755',
+    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+  }
+
+  file { '/var/www/1.0':
+    ensure  => directory,
+    owner   => 'www-data',
+    group   => 'www-data',
+    mode    => '0755',
+    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+  }
+
+  file { '/var/www/1.0/secure':
+    ensure  => link,
+    target  => '/var/www/secure/',
+    mode    => '0755',
+    require => File['/var/www/1.0'],
   }
 
   ###
@@ -288,19 +306,17 @@ class dhrep::services::tgauth (
     # All the TG-auth and RBAC configuration
     # --------------------------------------------------------------------------
 
-    # DO WE NEED THAT??? TAKEN FROM TEST1-CONFIG!!
-    #
-    #    <Location /secure>
-    #      AuthType shibboleth
-    #      ShibRequestSetting requireSession 1
-    #      require valid-user
-    #    </Location>
-    #
-    #    <Location /1.0/secure>
-    #      AuthType shibboleth
-    #      ShibRequestSetting requireSession 1
-    #      require valid-user
-    #    </Location>
+    <Location /secure>
+      AuthType shibboleth
+      ShibRequestSetting requireSession 1
+      require valid-user
+    </Location>
+
+    <Location /1.0/secure>
+      AuthType shibboleth
+      ShibRequestSetting requireSession 1
+      require valid-user
+    </Location>
 
     Alias /tgauth /var/www/tgauth/rbacSoap
     <Directory \"/var/www/tgauth/rbacSoap\">

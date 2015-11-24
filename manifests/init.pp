@@ -115,7 +115,7 @@ class dhrep (
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
     }
 
-    class { 'dhrep::services::intern::tgmarketplace': }
+    class { 'dhrep::services::tgmarketplace': }
 
     class { 'dhrep::tools::check_services': }
   }
