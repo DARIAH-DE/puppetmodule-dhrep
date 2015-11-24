@@ -81,6 +81,10 @@ class dhrep (
     scope => $scope,
   }
 
+  class { 'dhrep::services::iiifmd':
+    scope => $scope,
+  }
+
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
     require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
@@ -118,6 +122,7 @@ class dhrep (
     class { 'dhrep::services::tgmarketplace': }
 
     class { 'dhrep::tools::check_services': }
+
   }
 
   #  include textgrid::tgnginx
