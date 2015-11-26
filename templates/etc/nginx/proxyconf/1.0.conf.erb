@@ -165,7 +165,14 @@ location /1.0/tgsearch-public/navigation/toplevel  {
     proxy_set_header        Host $http_host;
 }
 
-# Marketplace configuration
 location /marketplace {
     proxy_pass http://localhost:8080/marketplace;
+}
+
+location /tgnsearch {
+    proxy_pass http://ref.dariah.eu/tgnsearch
+}
+
+location /pndsearch {
+    proxy_pass http://ref.dariah.eu/pndsearch
 }
