@@ -19,6 +19,7 @@ class dhrep (
   $crud_publish_secret = undef,
   $datadirs_create_local_datadirs = undef,
   $confserv_service_base_url = undef,
+  $oracle_jdk8 = false,
 ) inherits dhrep::params {
 
   # internal services containing variables used by other modules need to be evaluated in order
@@ -127,12 +128,57 @@ class dhrep (
 
   #  include textgrid::tgnginx
 
+  ###
+  # java8 we want,
+  # openjdk-r does not seem to be up to date, so oracle for now
+  ###
+
+  #  apt::ppa { 'ppa:openjdk-r/ppa': }
+  #  package {
+  #    'openjdk-8-jdk':            ensure => present;
+  #  }
+  #  ->
+
+  if $oracle_jdk8 {
+    # copied from https://github.com/Spantree/puppet-java8/blob/master/manifests/init.pp
+    # ubuntu specific, for debian look at above link
+    # accept license
+    file { '/tmp/java.preseed':
+      source => 'puppet:///modules/liferay/oracle-java.preseed',
+      mode   => '0600',
+      backup => false,
+    }
+
+    apt::ppa { 'ppa:webupd8team/java': }
+    ->
+    package {
+      'oracle-java8-installer':
+        ensure       => present,
+        responsefile => '/tmp/java.preseed',
+        require      => [Apt::Ppa['ppa:webupd8team/java'],File['/tmp/java.preseed']],
+    }
+    ->
+    package { 'oracle-java8-set-default': ensure => present }
+
+  } else {
+    apt::ppa { 'ppa:webupd8team/java': ensure => absent }
+    package { 
+      'oracle-java8-set-default': ensure => absent;
+      'oracle-java8-installer':   ensure => absent;
+    }
+  }
+
+  ###
+  # /java8
+  ###
+
   package {
     'openjdk-6-jdk':            ensure => absent;
     'openjdk-6-jre':            ensure => absent;
     'openjdk-6-jre-headless':   ensure => absent;
     'openjdk-6-jre-lib':        ensure => absent;
     'openjdk-7-jdk':            ensure => present;
+    'default-jre-headless':     ensure => present; # creates symlink /usr/lib/jvm/default-java
     'tomcat7':                  ensure => present;
     'tomcat7-user':             ensure => present;
     'libtcnative-1':            ensure => present;
