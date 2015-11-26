@@ -45,6 +45,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/config.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
+    notify  => Service['tomcat-tgpublish'],
   }
 
   file { "/etc/${scope}/${publish_short}/conf/beans.properties":
@@ -63,6 +64,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/policies.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
+    notify  => Service['tomcat-tgpublish'],
   }
 
   file { "/etc/${scope}/${publish_short}/conf/mets_template.xml":
@@ -72,6 +74,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/mets_template.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
+    notify  => Service['tomcat-tgpublish'],
   }
 
   file { "/etc/${scope}/${publish_short}/conf/map_dias2jhove.xml":
@@ -81,6 +84,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/map_dias2jhove.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
+    notify  => Service['tomcat-tgpublish'],
   }
 
   file { "/etc/${scope}/${publish_short}/conf/dias_formatregistry.xml":
@@ -90,6 +94,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/dias_formatregistry.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
+    notify  => Service['tomcat-tgpublish'],
   }
 
   ###
