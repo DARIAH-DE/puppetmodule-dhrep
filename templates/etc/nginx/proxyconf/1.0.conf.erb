@@ -52,22 +52,6 @@ location /1.0/tgsearch {
     proxy_set_header        Host $http_host;
 }
 
-location /dev/tgsearch {
-    proxy_pass http://localhost:9096/tgsearch;
-    proxy_set_header        X-Real-IP $remote_addr;
-    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header        Host $http_host;
-}
-
-location /dev/tgsearch-public {
-    gzip on;
-    gzip_types text/plain application/xml;
-    proxy_pass http://localhost:9096/tgsearch-public;
-    proxy_set_header        X-Real-IP $remote_addr;
-    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header        Host $http_host;
-}
-
 location /1.0/tgsearch-public {
     gzip on;
     gzip_types text/plain application/xml;
@@ -184,7 +168,4 @@ location /1.0/tgsearch-public/navigation/toplevel  {
 # Marketplace configuration
 location /marketplace {
     proxy_pass http://localhost:8080/marketplace;
-}
-location /catalogs/api/p {
-    proxy_pass http://localhost:8080/marketplace/cgi/msInterface.cgi?action=catalogs;
 }

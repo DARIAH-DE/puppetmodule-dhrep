@@ -99,36 +99,36 @@ class dhrep::services::crud (
   ###
   # crud comment and analyse scrpits
   #
-  file { '/opt/dhrep/crud-analyse-script.pl':
-    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-analyse-script.pl',
+  file { '/opt/dhrep/crud-analyse.pl':
+    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-analyse.pl',
     owner   => $user,
     group   => $group,
     mode    => '0700',
     require => File['/opt/dhrep'],
   }
-  file { '/opt/dhrep/crud-comment-script.pl':
-    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-comment-script.pl',
+  file { '/opt/dhrep/crud-comment.pl':
+    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-comment.pl',
     owner   => $user,
     group   => $group,
     mode    => '0700',
-    require => [File['/opt/dhrep'],File['/opt/dhrep/crud-analyse-script.pl']],
+    require => [File['/opt/dhrep'],File['/opt/dhrep/crud-analyse.pl']],
   }
 
   ###
   # cron for crud comment and analyse
   ###
   cron { 'crud-comment' :
-    command => '/opt/dhrep/crud-comment-script.pl > /dev/null',
+    command => '/opt/dhrep/crud-comment.pl > /dev/null',
     user    => $user,
     hour    => 4,
     minute  => 3,
-    require => File['/opt/dhrep/crud-comment-script.pl'],
+    require => File['/opt/dhrep/crud-comment.pl'],
   }
   cron { 'crud-analyse' :
-    command => '/opt/dhrep/crud-analyse-script.pl -l /var/log/textgrid/tgcrud/rollback.log -c /var/log/textgrid/tgcrud/logcomments.log > /dev/null',
+    command => '/opt/dhrep/crud-analyse.pl -l /var/log/textgrid/tgcrud/rollback.log -c /var/log/textgrid/tgcrud/logcomments.log > /dev/null',
     user    => $user,
     minute  => '*/5',
-    require => File['/opt/dhrep/crud-analyse-script.pl'],
+    require => File['/opt/dhrep/crud-analyse.pl'],
   }
 
 }

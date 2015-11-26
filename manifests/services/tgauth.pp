@@ -348,15 +348,15 @@ class dhrep::services::tgauth (
     group  => 'root',
     mode   => '0775',
   }
-  file { '/opt/dhrep/ldap-backup-script.sh' :
-    source  => 'puppet:///modules/dhrep/opt/dhrep/ldap-backup-script.sh',
+  file { '/opt/dhrep/ldap-backup.sh' :
+    source  => 'puppet:///modules/dhrep/opt/dhrep/ldap-backup.sh',
     owner   => 'root',
     group   => 'root',
     mode    => '0700',
     require => [File['/opt/dhrep'],File['/var/textgrid/backups/ldap']]
   }
   cron { 'ldap-backup' :
-    command => '/opt/dhrep/ldap-backup-script.sh > /dev/null',
+    command => '/opt/dhrep/ldap-backup.sh > /dev/null',
     user    => 'root',
     hour    => 22,
     minute  => 03,
@@ -377,15 +377,15 @@ class dhrep::services::tgauth (
     mode    => '0700',
     require => File['/var/textgrid'],
   }
-  file { '/opt/dhrep/ldap-statistic-script.pl' :
+  file { '/opt/dhrep/ldap-statistic.pl' :
     owner   => 'root',
     group   => 'root',
     mode    => '0700',
-    content => template('dhrep/opt/dhrep/ldap-statistic-script.pl.erb'),
+    content => template('dhrep/opt/dhrep/ldap-statistic.pl.erb'),
     require => [File['/opt/dhrep'],File['/var/textgrid/statistics']],
   }
   cron { 'ldap-statistic' :
-    command  => '/opt/dhrep/ldap-statistic-script.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt > /dev/null',
+    command  => '/opt/dhrep/ldap-statistic.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt > /dev/null',
     user     => 'root',
     hour     => 23,
     minute   => 53,
