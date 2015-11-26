@@ -1,145 +1,159 @@
 #!/bin/bash
 
-SERVER="http://vm1/1.0"
-#SERVER="http://textgridlab.org/1.0"
+SERVER="http://localhost"
+OK="$(tput setaf 2)OK$(tput sgr0)"
+FAILED="$(tput setaf 1)FAILED!$(tput sgr0)"
 
 #
 # tgauth
 #
 FILE="tgextra.wsdl"
-AUTH=$SERVER"/tgauth/wsdl/"$FILE
-echo "Checking TG-auch on "$AUTH
+AUTH=$SERVER"/1.0/tgauth/wsdl/"$FILE
+echo "checking $(tput setaf 5)tgauth$(tput sgr0) on "$AUTH
 wget -q $AUTH
 if [ -s $FILE ]; then
     rm $FILE
-    echo "    $(tput setaf 2)TG-auth OK$(tput sgr0)"
+    echo "    $OK"
 else
-    echo "    $(tput setaf 1)TG-auth FAILED!$(tput sgr0)"
+    echo "    $FAILED"
 fi
 
 #
 # tgauth pubic
 #
 FILE="tgextra-crud.wsdl"
-AUTH=$SERVER"/tgauth/wsdl/"$FILE
-echo "Checking TG-auth crud on "$AUTH
+AUTH=$SERVER"/1.0/tgauth/wsdl/"$FILE
+echo "checking $(tput setaf 5)tgauth_crud$(tput sgr0) on "$AUTH
 wget -q $AUTH
 if [ -s $FILE ]; then
     rm $FILE
-    echo "    $(tput setaf 2)TG-auth crud OK$(tput sgr0)"
+    echo "    $OK"
 else
-    echo "    $(tput setaf 1)TG-auth crud FAILED!$(tput sgr0)"
+    echo "    $FAILED"
 fi
+
 #
 # tgcrud
 #
 FILE="version"
-CRUD=$SERVER"/tgcrud/rest/"$FILE
-echo "Checking TG-crud service on "$CRUD
+CRUD=$SERVER"/1.0/tgcrud/rest/"$FILE
+echo "checking $(tput setaf 5)tgcrud$(tput sgr0) service on "$CRUD
 wget -q $CRUD
 if [ -s $FILE ]; then
-    echo -n "    " 
+    echo -n "    $OK ["
     cat $FILE
     rm $FILE
-    echo
-    echo "    $(tput setaf 2)TG-crud OK$(tput sgr0)"
+    echo "]"
 else
-    echo "    $(tput setaf 1)TG-crud FAILED!$(tput sgr0)"
+    echo "    $FAILED"
 fi
 
 #
 # tgcrud public
 #
 FILE="version"
-CRUD=$SERVER"/tgcrud-public/rest/"$FILE
-echo "Checking TG-crud public service on "$CRUD
+CRUD=$SERVER"/1.0/tgcrud-public/rest/"$FILE
+echo "checking $(tput setaf 5)tgcrud public$(tput sgr0) service on "$CRUD
 wget -q $CRUD
 if [ -s $FILE ]; then
-    echo -n "    " 
+    echo -n "    $OK ["
     cat $FILE
     rm $FILE
-    echo
-    echo "    $(tput setaf 2)TG-crud public OK$(tput sgr0)"
+    echo "]"
 else
-    echo "    $(tput setaf 1)TG-crud public FAILED!$(tput sgr0)"
+    echo "    $FAILED"
 fi
 
 #
 # tgsearch
 #
 FILE="search?q=fu"
-SEARCH=$SERVER"/tgsearch/"$FILE
-echo "Checking TG-search on "$SEARCH
+SEARCH=$SERVER"/1.0/tgsearch/"$FILE
+echo "checking $(tput setaf 5)tgsearch$(tput sgr0) on "$SEARCH
 wget -q $SEARCH
 if [ -s $FILE ]; then
     rm $FILE
-    echo "    $(tput setaf 2)TG-search OK$(tput sgr0)"
+    echo "    $OK"
 else
-    echo "    $(tput setaf 1)TG-search FAILED!$(tput sgr0)"
+    echo "    $FAILED"
 fi
 
 #
 # tgsearch public
 #
 FILE="search?q=fu"
-SEARCH=$SERVER"/tgsearch-public/"$FILE
-echo "Checking TG-search public on "$SEARCH
+SEARCH=$SERVER"/1.0/tgsearch-public/"$FILE
+echo "checking $(tput setaf 5)tgsearch public$(tput sgr0) on "$SEARCH
 wget -q $SEARCH
 if [ -s $FILE ]; then
     rm $FILE
-    echo "    $(tput setaf 2)TG-search public OK$(tput sgr0)"
+    echo "    $OK"
 else
-    echo "    $(tput setaf 1)TG-search public FAILED!$(tput sgr0)"
+    echo "    $FAILED"
 fi
 
 #
-# aggregator
+# TODO aggregator
 #
 
 #
 # tgpublish
 #
 FILE="version"
-PUBLISH=$SERVER"/tgpublish/"$FILE
-echo "Checking TG-publish on "$PUBLISH
+PUBLISH=$SERVER"/1.0/tgpublish/"$FILE
+echo "checking $(tput setaf 5)tgpublish$(tput sgr0) on "$PUBLISH
 wget -q $PUBLISH
 if [ -s $FILE ]; then
-    echo -n "    "
+    echo -n "    $OK ["
     cat $FILE
     rm $FILE
-    echo
-    echo "    $(tput setaf 2)TG-publish OK$(tput sgr0)"
+    echo "]"
 else
-    echo "    $(tput setaf 1)TG-publish FAILED!$(tput sgr0)"
+    echo "    $FAILED"
 fi
 
 #
 # tgoaipmh
 #
 FILE="oai?verb=Identify"
-OAIPMH=$SERVER"/tgoaipmh/"$FILE
-echo "Checking TG-oaipmh on "$OAIPMH
+OAIPMH=$SERVER"/1.0/tgoaipmh/"$FILE
+echo "checking $(tput setaf 5)tgoaipmh$(tput sgr0) on "$OAIPMH
 wget -q $OAIPMH
 if [ -s $FILE ]; then
     rm $FILE
-    echo "    $(tput setaf 2)TG-oaipmh OK$(tput sgr0)"
+    echo "    $OK"
 else
-    echo "    $(tput setaf 1)TG-oaipmh FAILED!$(tput sgr0)"
+    echo "    $FAILED"
 fi
 
 #
 # tgpid
 #
 FILE="version"
-OAIPMH=$SERVER"/tgpid/"$FILE
-echo "Checking TG-pid on "$OAIPMH
-wget -q $OAIPMH
+TGPID=$SERVER"/1.0/tgpid/"$FILE
+echo "checking $(tput setaf 5)tgpid$(tput sgr0) on "$TPID
+wget -q $TGPID
 if [ -s $FILE ]; then
-    echo -n "    " 
+    echo -n "    $OK ["
     cat $FILE
     rm $FILE
-    echo
-    echo "    $(tput setaf 2)TG-pid OK$(tput sgr0)"
+    echo "]"
 else
-    echo "    $(tput setaf 1)TG-pid FAILED!$(tput sgr0)"
+    echo "    $FAILED"
+fi
+
+#
+# static metadata schema
+#
+FILE="textgrid-metadata_2010.xsd"
+SCHEMA=$SERVER"/schema/"$FILE
+EQSI=30757
+echo "checking $(tput setaf 5)static metadata schema$(tput sgr0) on "$SCHEMA
+wget -q $SCHEMA
+SIZE=$(stat -c%s "$FILE")
+rm $FILE
+if [ $SIZE -eq $EQSI ]; then
+    echo "    $OK [$SIZE == $EQSI]"
+else
+    echo "    $FAILED [$SIZE != $EQSI]"
 fi
