@@ -29,6 +29,7 @@ class dhrep::services::tgauth (
   $ldap_replication      = false,
   $ldap_clusternodes     = [],
   $no_shib_login         = false,
+  $malloc                = '', # tcmalloc or jemalloc, default to glibc
 ){
 
   package {
@@ -240,6 +241,68 @@ class dhrep::services::tgauth (
       "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
     ],
     notify  => Service['slapd'],
+  }
+
+  ###
+  # use tcmalloc http://highlandsun.com/hyc/malloc/
+  # http://directory.fedoraproject.org/docs/389ds/FAQ/memory-usage-research.html
+  # or jmalloc  http://directory.fedoraproject.org/docs/389ds/FAQ/jemalloc-testing.html 
+  # or keep default: glibc
+  ###
+
+  $archlibdir = $::architecture ? {
+    'i386'  => 'i386-linux-gnu',
+    'amd64' => 'x86_64-linux-gnu',
+  }
+
+  $preload_jemalloc_line = "export LD_PRELOAD=\"/usr/lib/${archlibdir}/libjemalloc.so.1\""
+  $preload_tcmalloc_line = 'export LD_PRELOAD="/usr/lib/libtcmalloc_minimal.so.4"'
+
+  case $malloc {
+    'tcmalloc': {
+        package { 'libtcmalloc-minimal4': ensure => present; }
+        ->
+        file_line { 'slapd_absent_jemalloc':
+          ensure => absent,
+          path   => '/etc/default/slapd',
+          line   => $preload_jemalloc_line,
+        }
+        ->
+        file_line { 'slapd_tcmalloc':
+          path   => '/etc/default/slapd',
+          line   => $preload_tcmalloc_line,
+          notify => Service['slapd'],
+        }
+     }
+     'jemalloc': {
+        package { 'libjemalloc1': ensure => present; }
+        ->
+        file_line { 'slapd_absent_tcmalloc':
+          ensure => absent,
+          path   => '/etc/default/slapd',
+          line   => $preload_tcmalloc_line,
+        }
+        ->
+        file_line { 'slapd_jemalloc':
+          path   => '/etc/default/slapd',
+          line   => $preload_jemalloc_line,
+          notify => Service['slapd'],
+        }
+     }
+     default: {
+        file_line { 'slapd_absent_jemalloc':
+          ensure => absent,
+          path   => '/etc/default/slapd',
+          line   => $preload_tcmalloc_line,
+          notify => Service['slapd'],
+        }
+        file_line { 'slapd_absent_tcmalloc':
+          ensure => absent,
+          path   => '/etc/default/slapd',
+          line   => $preload_jemalloc_line,
+          notify => Service['slapd'],
+        }
+     }
   }
 
   # todo: changes group of /etc/ldap/schemas from root to staff, ok?
