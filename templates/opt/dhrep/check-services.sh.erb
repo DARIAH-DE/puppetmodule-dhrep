@@ -18,7 +18,7 @@ else
 fi
 
 #
-# tgauth pubic
+# tgauth public
 #
 FILE="tgextra-crud.wsdl"
 AUTH=$SERVER"/tgauth/wsdl/"$FILE
@@ -30,6 +30,7 @@ if [ -s $FILE ]; then
 else
     echo "    $(tput setaf 1)TG-auth crud FAILED!$(tput sgr0)"
 fi
+
 #
 # tgcrud
 #

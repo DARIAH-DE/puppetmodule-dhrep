@@ -9,12 +9,12 @@ class dhrep (
   $scope = 'textgrid',
   $tgauth_binddn_pass = undef,
   $tgauth_crud_secret = undef,
-  $tgelasticsearch_cluster_name = 'testing',
-  $tgelasticsearch_es_heap_size = $dhrep::params::tgelasticsearch_es_heap_size,
   $tgauth_slapd_rootpw = undef,
   $tgauth_authz_shib_pw = undef,
   $tgauth_authz_instance = undef,
   $tgauth_webauth_secret = undef,
+  $tgelasticsearch_cluster_name = 'testing',
+  $tgelasticsearch_es_heap_size = $dhrep::params::tgelasticsearch_es_heap_size,
   $tgnoid_tgcrud_secret = undef,
   $crud_publish_secret = undef,
   $datadirs_create_local_datadirs = undef,
@@ -95,7 +95,7 @@ class dhrep (
   }
 
   class { 'dhrep::services::publish':
-    scope => $scope,
+    scope     => $scope,
   }
 
   if $scope == 'textgrid' {
