@@ -53,7 +53,7 @@ class dhrep::services::tgmarketplace (
     mode    => '0640',
     content => template('dhrep/var/www/marketplace/.htaccess.erb'),
     require => File['/var/www/marketplace'],
-    notify  => Service['Apache2'],
+    notify  => Service['apache2'],
   }
   # Logging and logrotate
   file { '/var/log/textgrid/marketplace':
