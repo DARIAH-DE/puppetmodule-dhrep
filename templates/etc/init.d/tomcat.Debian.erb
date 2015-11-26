@@ -61,32 +61,37 @@ fi
 TOMCAT7_USER=<%= @user %>
 TOMCAT7_GROUP=nogroup
 
-# this is a work-around until there is a suitable runtime replacement 
+# this is a work-around until there is a suitable runtime replacement
 # for dpkg-architecture for arch:all packages
-# this function sets the variable OPENJDKS
-find_openjdks()
+# this function sets the variable JDK_DIRS
+find_jdks()
 {
-        for jvmdir in /usr/lib/jvm/java-7-openjdk-*
+    for java_version in 9 8 7
+    do
+        for jvmdir in /usr/lib/jvm/java-${java_version}-oracle \
+                      /usr/lib/jvm/java-${java_version}-openjdk-* \
+                      /usr/lib/jvm/jdk-${java_version}-oracle-* \
+                      /usr/lib/jvm/jre-${java_version}-oracle-*
         do
-                if [ -d "${jvmdir}" -a "${jvmdir}" != "/usr/lib/jvm/java-7-openjdk-common" ]
-                then
-                        OPENJDKS=$jvmdir
-                fi
+            if [ -d "${jvmdir}" ]
+            then
+                JDK_DIRS="${JDK_DIRS} ${jvmdir}"
+            fi
         done
-        for jvmdir in /usr/lib/jvm/java-6-openjdk-*
-        do
-                if [ -d "${jvmdir}" -a "${jvmdir}" != "/usr/lib/jvm/java-6-openjdk-common" ]
-                then
-                        OPENJDKS="${OPENJDKS} ${jvmdir}"
-                fi
-        done
+    done
+
+    # Add older non multi arch installations
+    JDK_DIRS="${JDK_DIRS} /usr/lib/jvm/java-7-oracle"
 }
 
-OPENJDKS=""
-find_openjdks
 # The first existing directory is used for JAVA_HOME (if JAVA_HOME is not
 # defined in $DEFAULT)
-JDK_DIRS="/usr/lib/jvm/default-java ${OPENJDKS} /usr/lib/jvm/java-6-openjdk /usr/lib/jvm/java-6-sun"
+#JDK_DIRS="/usr/lib/jvm/default-java"
+
+find_jdks
+
+#JDK_DIRS="/usr/lib/jvm/default-java ${OPENJDKS} /usr/lib/jvm/java-6-openjdk /usr/lib/jvm/java-6-sun"
+
 
 # Look for the right JVM to use
 for jdir in $JDK_DIRS; do
