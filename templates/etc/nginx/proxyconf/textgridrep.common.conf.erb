@@ -8,7 +8,7 @@ index index.html index.htm;
 # Make site accessible from http(s)://textgridrep.de/
 server_name <%= scope.lookupvar('dhrep::static::textgridrep_website::tgrep_server_name') %>;
 
-# rewrite /textgrid: uris, so they are serverd by tgcrud
+# rewrite /textgrid: uris, so they are served by tgcrud
 #rewrite ^/(textgrid:.*)$ /browse.html?id=$1 last;
 rewrite ^/(textgrid:[a-z0-9\.]+)$ /services/tgcrud-public/rest/$1/data last;
 rewrite ^/(textgrid:[a-z0-9\.]+)/data$ /services/tgcrud-public/rest/$1/data last;

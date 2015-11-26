@@ -1,8 +1,8 @@
-# == Class: dhrep::services::intern::tgmarketplace
+# == Class: dhrep::services::tgmarketplace
 #
 # Class to install and configure the TextGrid Marketplace.
 # 
-class dhrep::services::intern::tgmarketplace (
+class dhrep::services::tgmarketplace (
   $scope = 'textgrid',
   $time  = ['23', '02'],
 ){
@@ -118,7 +118,7 @@ class dhrep::services::intern::tgmarketplace (
   # Cron for automatical cache reloading
   cron { 'marketplace-cach-reload':
     ensure  => present,
-    command => 'curl http://vm1/marketplace/cgi/msInterface.cgi?action=cache_reload',
+    command => "curl http://${fqdn}/marketplace/cgi/msInterface.cgi?action=cache_reload",
     user    => 'root',
     hour    => $time[0],
     minute  => $time[1],

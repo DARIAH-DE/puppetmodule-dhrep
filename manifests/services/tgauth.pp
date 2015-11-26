@@ -29,6 +29,7 @@ class dhrep::services::tgauth (
   $ldap_replication      = false,
   $ldap_clusternodes     = [],
   $no_shib_login         = false,
+  $malloc                = '', # tcmalloc or jemalloc, default to glibc
 ){
 
   package {
@@ -179,22 +180,40 @@ class dhrep::services::tgauth (
   }
   ->
   file { '/var/www/info.textgrid.middleware.tgauth.webauth/i18n_cache':
-    ensure => directory,
-    owner  => 'www-data',
-    group  => 'www-data',
-    mode   => '0755'
+    ensure  => directory,
+    owner   => 'www-data',
+    group   => 'www-data',
+    mode    => '0755',
+    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
   }
 
   file { '/var/www/WebAuthN':
-    ensure => link,
-    target => '/var/www/info.textgrid.middleware.tgauth.webauth/WebAuthN/',
-    mode   => '0755'
+    ensure  => link,
+    target  => '/var/www/info.textgrid.middleware.tgauth.webauth/WebAuthN/',
+    mode    => '0755',
+    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
   }
 
   file { '/var/www/secure':
-    ensure => link,
-    target => '/var/www/info.textgrid.middleware.tgauth.webauth/secure/',
-    mode   => '0755'
+    ensure  => link,
+    target  => '/var/www/info.textgrid.middleware.tgauth.webauth/secure/',
+    mode    => '0755',
+    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+  }
+
+  file { '/var/www/1.0':
+    ensure  => directory,
+    owner   => 'www-data',
+    group   => 'www-data',
+    mode    => '0755',
+    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+  }
+
+  file { '/var/www/1.0/secure':
+    ensure  => link,
+    target  => '/var/www/secure/',
+    mode    => '0755',
+    require => File['/var/www/1.0'],
   }
 
   ###
@@ -222,6 +241,68 @@ class dhrep::services::tgauth (
       "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
     ],
     notify  => Service['slapd'],
+  }
+
+  ###
+  # use tcmalloc http://highlandsun.com/hyc/malloc/
+  # http://directory.fedoraproject.org/docs/389ds/FAQ/memory-usage-research.html
+  # or jmalloc  http://directory.fedoraproject.org/docs/389ds/FAQ/jemalloc-testing.html 
+  # or keep default: glibc
+  ###
+
+  $archlibdir = $::architecture ? {
+    'i386'  => 'i386-linux-gnu',
+    'amd64' => 'x86_64-linux-gnu',
+  }
+
+  $preload_jemalloc_line = "export LD_PRELOAD=\"/usr/lib/${archlibdir}/libjemalloc.so.1\""
+  $preload_tcmalloc_line = 'export LD_PRELOAD="/usr/lib/libtcmalloc_minimal.so.4"'
+
+  case $malloc {
+    'tcmalloc': {
+        package { 'libtcmalloc-minimal4': ensure => present; }
+        ->
+        file_line { 'slapd_absent_jemalloc':
+          ensure => absent,
+          path   => '/etc/default/slapd',
+          line   => $preload_jemalloc_line,
+        }
+        ->
+        file_line { 'slapd_tcmalloc':
+          path   => '/etc/default/slapd',
+          line   => $preload_tcmalloc_line,
+          notify => Service['slapd'],
+        }
+     }
+     'jemalloc': {
+        package { 'libjemalloc1': ensure => present; }
+        ->
+        file_line { 'slapd_absent_tcmalloc':
+          ensure => absent,
+          path   => '/etc/default/slapd',
+          line   => $preload_tcmalloc_line,
+        }
+        ->
+        file_line { 'slapd_jemalloc':
+          path   => '/etc/default/slapd',
+          line   => $preload_jemalloc_line,
+          notify => Service['slapd'],
+        }
+     }
+     default: {
+        file_line { 'slapd_absent_jemalloc':
+          ensure => absent,
+          path   => '/etc/default/slapd',
+          line   => $preload_tcmalloc_line,
+          notify => Service['slapd'],
+        }
+        file_line { 'slapd_absent_tcmalloc':
+          ensure => absent,
+          path   => '/etc/default/slapd',
+          line   => $preload_jemalloc_line,
+          notify => Service['slapd'],
+        }
+     }
   }
 
   # todo: changes group of /etc/ldap/schemas from root to staff, ok?
@@ -288,19 +369,17 @@ class dhrep::services::tgauth (
     # All the TG-auth and RBAC configuration
     # --------------------------------------------------------------------------
 
-    # DO WE NEED THAT??? TAKEN FROM TEST1-CONFIG!!
-    #
-    #    <Location /secure>
-    #      AuthType shibboleth
-    #      ShibRequestSetting requireSession 1
-    #      require valid-user
-    #    </Location>
-    #
-    #    <Location /1.0/secure>
-    #      AuthType shibboleth
-    #      ShibRequestSetting requireSession 1
-    #      require valid-user
-    #    </Location>
+    <Location /secure>
+      AuthType shibboleth
+      ShibRequestSetting requireSession 1
+      require valid-user
+    </Location>
+
+    <Location /1.0/secure>
+      AuthType shibboleth
+      ShibRequestSetting requireSession 1
+      require valid-user
+    </Location>
 
     Alias /tgauth /var/www/tgauth/rbacSoap
     <Directory \"/var/www/tgauth/rbacSoap\">
@@ -330,17 +409,17 @@ class dhrep::services::tgauth (
     ensure => directory,
     owner  => 'root',
     group  => 'root',
-    mode   => '0700',
+    mode   => '0775',
   }
-  file { '/opt/dhrep/ldap-backup-script.sh' :
-    source  => 'puppet:///modules/dhrep/opt/dhrep/ldap-backup-script.sh',
+  file { '/opt/dhrep/ldap-backup.sh' :
+    source  => 'puppet:///modules/dhrep/opt/dhrep/ldap-backup.sh',
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
+    mode    => '0700',
     require => [File['/opt/dhrep'],File['/var/textgrid/backups/ldap']]
   }
   cron { 'ldap-backup' :
-    command => '/opt/dhrep/ldap-backup-script.sh',
+    command => '/opt/dhrep/ldap-backup.sh > /dev/null',
     user    => 'root',
     hour    => 22,
     minute  => 03,
@@ -351,28 +430,29 @@ class dhrep::services::tgauth (
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
+    mode    => '0700',
     require => File['/var/textgrid'],
   }
   file { '/var/textgrid/statistics/ldap' :
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
+    mode    => '0700',
     require => File['/var/textgrid'],
   }
-  file { '/opt/dhrep/ldap-statistic-script.pl' :
+  file { '/opt/dhrep/ldap-statistic.pl' :
     owner   => 'root',
     group   => 'root',
-    mode    => '0755',
-    content => template('dhrep/opt/dhrep/ldap-statistic-script.pl.erb'),
+    mode    => '0700',
+    content => template('dhrep/opt/dhrep/ldap-statistic.pl.erb'),
     require => [File['/opt/dhrep'],File['/var/textgrid/statistics']],
   }
   cron { 'ldap-statistic' :
-    command => '/opt/dhrep/ldap-statistic-script.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt',
-    user    => 'root',
-    hour    => 23,
-    minute  => 53,
+    command  => '/opt/dhrep/ldap-statistic.pl -a -c /var/textgrid/statistics/ldap/rbacusers-`date --iso`.csv -u /var/textgrid/statistics/ldap/rbacusers-`date --iso`.txt > /dev/null',
+    user     => 'root',
+    hour     => 23,
+    minute   => 53,
+    monthday => 01,
   }
 
 }

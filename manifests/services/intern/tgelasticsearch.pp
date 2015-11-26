@@ -32,7 +32,8 @@ class dhrep::services::intern::tgelasticsearch (
     #autoupgrade   => true,
     #package_url   => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
     config        => {
-      'cluster.name' => $cluster_name,
+      'cluster.name'                         => $cluster_name,
+      'discovery.zen.ping.multicast.enabled' => false,
 # es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
 #      'network.host' => '127.0.0.1',
     },
@@ -44,19 +45,21 @@ class dhrep::services::intern::tgelasticsearch (
 
   elasticsearch::instance { 'masternode':
     config => {
-      'node.master'        => true,
-      'node.data'          => true,
-      'http.port'          => $dhrep::params::tgelasticsearch_master_http_port,
-      'transport.tcp.port' => $dhrep::params::tgelasticsearch_master_tcp_port,
+      'node.master'                      => true,
+      'node.data'                        => true,
+      'http.port'                        => $dhrep::params::tgelasticsearch_master_http_port,
+      'transport.tcp.port'               => $dhrep::params::tgelasticsearch_master_tcp_port,
+      'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${dhrep::params::tgelasticsearch_workhorse_tcp_port}",
     }
   }
 
   elasticsearch::instance { 'workhorse':
     config => {
-      'node.master'        => false,
-      'node.data'          => true,
-      'http.port'          => $dhrep::params::tgelasticsearch_workhorse_http_port,
-      'transport.tcp.port' => $dhrep::params::tgelasticsearch_workhorse_tcp_port,
+      'node.master'                      => false,
+      'node.data'                        => true,
+      'http.port'                        => $dhrep::params::tgelasticsearch_workhorse_http_port,
+      'transport.tcp.port'               => $dhrep::params::tgelasticsearch_workhorse_tcp_port,
+      'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${dhrep::params::tgelasticsearch_master_tcp_port}",
     }
   }
 
@@ -100,6 +103,42 @@ class dhrep::services::intern::tgelasticsearch (
     file { '/etc/facter/facts.d/tgelastic_repos_initialized.txt':
       content => 'tgelastic_repos_initialized=true',
     }
+  }
+
+  ###
+  # collectd for elasticsearch
+  ###
+
+  # install the collectd plugin for elasticsearch
+  vcsrepo { '/opt/collectd-elasticsearch':
+    ensure   => present,
+    owner    => 'root',
+    group    => 'root',
+    provider => git,
+    source   => 'https://github.com/phobos182/collectd-elasticsearch.git',
+  }
+
+  @file { '/etc/collectd/conf.d/88-elastic.conf':
+    tag     => 'femonitoring_collectd',
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    content => "<LoadPlugin \"python\">
+    Globals true
+</LoadPlugin>
+
+<Plugin \"python\">
+    ModulePath \"/opt/collectd-elasticsearch/\"
+
+    Import \"elasticsearch\"
+
+    <Module \"elasticsearch\">
+        Verbose false
+        Version \"1.0\"
+        Cluster \"elasticsearch\"
+    </Module>
+</Plugin>
+",
   }
 
 }

@@ -9,16 +9,17 @@ class dhrep (
   $scope = 'textgrid',
   $tgauth_binddn_pass = undef,
   $tgauth_crud_secret = undef,
-  $tgelasticsearch_cluster_name = 'testing',
-  $tgelasticsearch_es_heap_size = $dhrep::params::tgelasticsearch_es_heap_size,
   $tgauth_slapd_rootpw = undef,
   $tgauth_authz_shib_pw = undef,
   $tgauth_authz_instance = undef,
   $tgauth_webauth_secret = undef,
+  $tgelasticsearch_cluster_name = 'testing',
+  $tgelasticsearch_es_heap_size = $dhrep::params::tgelasticsearch_es_heap_size,
   $tgnoid_tgcrud_secret = undef,
   $crud_publish_secret = undef,
   $datadirs_create_local_datadirs = undef,
   $confserv_service_base_url = undef,
+  $oracle_jdk8 = false,
 ) inherits dhrep::params {
 
   # internal services containing variables used by other modules need to be evaluated in order
@@ -81,6 +82,10 @@ class dhrep (
     scope => $scope,
   }
 
+  class { 'dhrep::services::iiifmd':
+    scope => $scope,
+  }
+
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
     require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
@@ -91,7 +96,7 @@ class dhrep (
   }
 
   class { 'dhrep::services::publish':
-    scope => $scope,
+    scope     => $scope,
   }
 
   if $scope == 'textgrid' {
@@ -115,12 +120,57 @@ class dhrep (
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
     }
 
-    class { 'dhrep::services::intern::tgmarketplace': }
+    class { 'dhrep::services::tgmarketplace': }
 
     class { 'dhrep::tools::check_services': }
+
   }
 
   #  include textgrid::tgnginx
+
+  ###
+  # java8 we want,
+  # openjdk-r does not seem to be up to date, so oracle for now
+  ###
+
+  #  apt::ppa { 'ppa:openjdk-r/ppa': }
+  #  package {
+  #    'openjdk-8-jdk':            ensure => present;
+  #  }
+  #  ->
+
+  if $oracle_jdk8 {
+    # copied from https://github.com/Spantree/puppet-java8/blob/master/manifests/init.pp
+    # ubuntu specific, for debian look at above link
+    # accept license
+    file { '/tmp/java.preseed':
+      source => 'puppet:///modules/liferay/oracle-java.preseed',
+      mode   => '0600',
+      backup => false,
+    }
+
+    apt::ppa { 'ppa:webupd8team/java': }
+    ->
+    package {
+      'oracle-java8-installer':
+        ensure       => present,
+        responsefile => '/tmp/java.preseed',
+        require      => [Apt::Ppa['ppa:webupd8team/java'],File['/tmp/java.preseed']],
+    }
+    ->
+    package { 'oracle-java8-set-default': ensure => present }
+
+  } else {
+    apt::ppa { 'ppa:webupd8team/java': ensure => absent }
+    package { 
+      'oracle-java8-set-default': ensure => absent;
+      'oracle-java8-installer':   ensure => absent;
+    }
+  }
+
+  ###
+  # /java8
+  ###
 
   package {
     'openjdk-6-jdk':            ensure => absent;
@@ -128,6 +178,7 @@ class dhrep (
     'openjdk-6-jre-headless':   ensure => absent;
     'openjdk-6-jre-lib':        ensure => absent;
     'openjdk-7-jdk':            ensure => present;
+    'default-jre-headless':     ensure => present; # creates symlink /usr/lib/jvm/default-java
     'tomcat7':                  ensure => present;
     'tomcat7-user':             ensure => present;
     'libtcnative-1':            ensure => present;

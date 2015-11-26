@@ -95,4 +95,14 @@ class dhrep::services::crud_public (
     require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
+  ###
+  # cron for crud comment (see crud.pp!) and analyse
+  ###
+  cron { 'crud-public-analyse' :
+    command => '/opt/dhrep/crud-analyse.pl -l /var/log/textgrid/tgcrud-public/rollback.log -c /var/log/textgrid/tgcrud-public/logcomments.log > /dev/null',
+    user    => $user,
+    minute  => '2-59/5',
+    require => File['/opt/dhrep/crud-analyse.pl'],
+  }
+
 }
