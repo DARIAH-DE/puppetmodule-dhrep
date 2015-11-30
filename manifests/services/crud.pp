@@ -98,12 +98,12 @@ class dhrep::services::crud (
 
   ###
   # crud comment and analyse scrpits
-  #
+  ###
   file { '/opt/dhrep/crud-analyse.pl':
     source  => 'puppet:///modules/dhrep/opt/dhrep/crud-analyse.pl',
     owner   => $user,
     group   => $group,
-    mode    => '0700',
+    mode    => '0755',
     require => File['/opt/dhrep'],
   }
   file { '/opt/dhrep/crud-comment.pl':
@@ -131,4 +131,10 @@ class dhrep::services::crud (
     require => File['/opt/dhrep/crud-analyse.pl'],
   }
 
+  ###
+  # nrpe for tgcrud
+  ###
+  dariahcommon::nagios_service { 'check_rollback_tgcrud':
+    command => "/opt/dhrep/crud-analyse.pl -n -l /var/log/textgrid/tgcrud/rollback.log"
+  }
 }
