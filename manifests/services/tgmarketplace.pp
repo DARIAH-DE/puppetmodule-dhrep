@@ -118,7 +118,7 @@ class dhrep::services::tgmarketplace (
   # Cron for automatical cache reloading
   cron { 'marketplace-cach-reload':
     ensure  => present,
-    command => "curl http://${fqdn}/marketplace/cgi/msInterface.cgi?action=cache_reload",
+    command => "curl http://${fqdn}/marketplace/cgi/msInterface.cgi?action=cache_reload > /dev/null",
     user    => 'root',
     hour    => $time[0],
     minute  => $time[1],
