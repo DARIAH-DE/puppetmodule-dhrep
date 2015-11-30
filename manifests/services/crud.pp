@@ -135,6 +135,7 @@ class dhrep::services::crud (
   # nrpe for tgcrud
   ###
   dariahcommon::nagios_service { 'check_rollback_tgcrud':
-    command => "/opt/dhrep/crud-analyse.pl -n -l /var/log/textgrid/tgcrud/rollback.log"
+    command => "/opt/dhrep/crud-analyse.pl -n -l /var/log/textgrid/tgcrud/rollback.log",
   }
+
 }

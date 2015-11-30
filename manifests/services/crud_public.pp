@@ -105,4 +105,11 @@ class dhrep::services::crud_public (
     require => File['/opt/dhrep/crud-analyse.pl'],
   }
 
+  ###
+  # nrpe for tgcrud_public
+  ###
+  dariahcommon::nagios_service { 'check_rollback_tgcrud_public':
+    command => "/opt/dhrep/crud-analyse.pl -n -l /var/log/textgrid/tgcrud-public/rollback.log",
+  }
+
 }
