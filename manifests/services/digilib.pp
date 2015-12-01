@@ -104,9 +104,10 @@ class dhrep::services::digilib (
   dariahcommon::nagios_service { 'check_jmx_digilib_heap_used':
     command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9992/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w 1800000000 -c 2000000000",
   }
-  dariahcommon::nagios_service { 'check_jmx_digilib_permgen':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9992/jmxrmi -O \"java.lang:type=MemoryPool,name=CMS Perm Gen\" -A Usage -K used",
-  }
+# no perm gen in java8!
+#  dariahcommon::nagios_service { 'check_jmx_digilib_permgen':
+#    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9992/jmxrmi -O \"java.lang:type=MemoryPool,name=CMS Perm Gen\" -A Usage -K used",
+#  }
   dariahcommon::nagios_service { 'check_jmx_digilib_thread_count':
     command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9992/jmxrmi -O java.lang:type=Threading -A ThreadCount",
   }
