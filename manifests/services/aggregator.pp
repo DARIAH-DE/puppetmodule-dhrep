@@ -74,7 +74,7 @@ class dhrep::services::aggregator (
     group   => root,
     mode    => '0755',
     require => File['/usr/lib/nagios/plugins/check_jmx.jar'],
-    notify  => Service[nagios],
+#    notify  => Service[nagios-nrpe-server],
   }
   dariahcommon::nagios_service { 'check_http_aggregator':
     command => '/usr/lib/nagios/plugins/check_http -H localhost -t 30 -p 9095 -u /aggregator/version -s "Aggregator"',
