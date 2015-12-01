@@ -95,4 +95,26 @@ class dhrep::services::digilib (
 #    target  => '/etc/textgrid/digilib/digilib-service.properties',
 #  }
 
+  ###
+  # nrpe
+  ###
+  dariahcommon::nagios_service { 'check_http_digilib':
+    command => "/usr/lib/nagios/plugins/check_http -H localhost -t 30 -p 9092 -u /digilibservice/rest/info -s \"Digilib\"",
+  }
+  dariahcommon::nagios_service { 'check_mx_digilib_heap_used':
+    command => "/usr/local/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9992/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w 1800000000 -c 2000000000",
+  }
+  dariahcommon::nagios_service { 'check_mx_digilib_permgen':
+    command => "/usr/local/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9992/jmxrmi -O \"java.lang:type=MemoryPool,name=CMS Perm Gen\" -A Usage -K used",
+  }
+  dariahcommon::nagios_service { 'check_mx_digilib_thread_count':
+    command => "/usr/local/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9992/jmxrmi -O java.lang:type=Threading -A ThreadCount",
+  }
+  dariahcommon::nagios_service { 'check_mx_digilib_process_cpu_load':
+    command => "/usr/local/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9992/jmxrmi -O java.lang:type=OperatingSystem -A ProcessCpuLoad",
+  }
+  dariahcommon::nagios_service { 'check_mx_digilib_open_fd':
+    command => "/usr/local/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:9992/jmxrmi -O java.lang:type=OperatingSystem -A OpenFileDescriptorCount",
+  }
+
 }
