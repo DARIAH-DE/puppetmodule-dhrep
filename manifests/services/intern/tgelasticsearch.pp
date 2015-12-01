@@ -141,4 +141,11 @@ class dhrep::services::intern::tgelasticsearch (
 ",
   }
 
+  ###
+  # nrpe
+  ###
+  dariahcommon::nagios_service { 'check_elasticsearch':
+    command => "/usr/local/lib/nagios/plugins/check_elasticsearch -p 9202 -vv",
+  }
+
 }

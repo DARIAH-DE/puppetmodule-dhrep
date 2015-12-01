@@ -455,4 +455,11 @@ class dhrep::services::tgauth (
     monthday => 01,
   }
 
+  ###
+  # nrpe for LDAP
+  ###
+  dariahcommon::nagios_service { 'check_ldap':
+    command => "/usr/lib/nagios/plugins/check_ldap -H localhost -b dc=textgrid.dc=de -3",
+  }
+
 }
