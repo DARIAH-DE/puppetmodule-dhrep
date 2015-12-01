@@ -51,6 +51,31 @@ class dhrep::services::aggregator (
   ###
   # nrpe for aggregator
   ###
+  file { '/etc/nagios-plugins/config/jmx.cfg':
+    source  => 'puppet:///modules/dhrep/etc/nagios-plugins/config/jmx.cfg', 
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    require => Class[dariahcommon::nagios],
+  }
+  file { '/usr/lib/nagios/plugins/check_jmx.jar':
+    source  => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_jmx.jar',
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    require => Class[dariahcommon::nagios],
+  }
+  file { '/usr/lib/nagios/plugins/check_jmx':
+    source  => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_jmx',
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0755',
+    require => File['/usr/lib/nagios/plugins/check_jmx.jar'],
+    notify  => Service[nagios],
+  }
   dariahcommon::nagios_service { 'check_http_aggregator':
     command => '/usr/lib/nagios/plugins/check_http -H localhost -t 30 -p 9095 -u /aggregator/version -s "Aggregator"',
   }
