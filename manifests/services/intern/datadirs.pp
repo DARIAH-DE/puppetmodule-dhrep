@@ -87,6 +87,14 @@ class dhrep::services::intern::datadirs (
       ensure => 'link',
       target => $data_nonpublic_location
     }
+
+    ###
+    # nrpe
+    ###
+    dariahcommon::nagios_service { 'check_disk_stornext':
+      command => "/usr/lib/nagios/plugins/check_disk --units GB -w 1024 -c 256 -p /media/stornext",
+    }
+
   }
 
 }

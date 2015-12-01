@@ -86,12 +86,56 @@ class dhrep::services::crud (
     dateformat   => '.%Y-%m-%d'
   }
 
+  ###
   # symlink war from deb package to tomcat webapps dir
+  ###
   file { "/home/${user}/${catname}/webapps/${short}.war": 
     ensure => 'link',
     target => "/var/${scope}/webapps/${short}.war",
 #    notify  => Service[$catname],
     require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
+  }
+
+  ###
+  # crud comment and analyse scrpits
+  ###
+  file { '/opt/dhrep/crud-analyse.pl':
+    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-analyse.pl',
+    owner   => $user,
+    group   => $group,
+    mode    => '0755',
+    require => File['/opt/dhrep'],
+  }
+  file { '/opt/dhrep/crud-comment.pl':
+    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-comment.pl',
+    owner   => $user,
+    group   => $group,
+    mode    => '0700',
+    require => [File['/opt/dhrep'],File['/opt/dhrep/crud-analyse.pl']],
+  }
+
+  ###
+  # cron for crud comment and analyse
+  ###
+  cron { 'crud-comment' :
+    command => '/opt/dhrep/crud-comment.pl > /dev/null',
+    user    => $user,
+    hour    => 4,
+    minute  => 3,
+    require => File['/opt/dhrep/crud-comment.pl'],
+  }
+  cron { 'crud-analyse' :
+    command => '/opt/dhrep/crud-analyse.pl -l /var/log/textgrid/tgcrud/rollback.log -c /var/log/textgrid/tgcrud/logcomments.log > /dev/null',
+    user    => $user,
+    minute  => '*/5',
+    require => File['/opt/dhrep/crud-analyse.pl'],
+  }
+
+  ###
+  # nrpe for tgcrud
+  ###
+  dariahcommon::nagios_service { 'check_rollback_tgcrud':
+    command => "/opt/dhrep/crud-analyse.pl -n -l /var/log/textgrid/tgcrud/rollback.log",
   }
 
 }

@@ -58,4 +58,11 @@ class dhrep::services::tgsearch (
     require => Dhrep::Resources::Servicetomcat[$catname],
   }
 
+  ###
+  # nrpe
+  ###
+  dariahcommon::nagios_service { 'check_http_tgsearch':
+    command => "/usr/lib/nagios/plugins/check_http -H localhost -p 9090 -u /tgsearch",
+  }
+
 }

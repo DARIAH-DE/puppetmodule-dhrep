@@ -62,6 +62,7 @@ class dhrep::tgnginx (
     group   => root,
     mode    => '0644',
     content => template($proxy_conf_template),
+    notify  => Service['nginx'],
   }
   ->
   file { '/etc/nginx/nginx.conf':
@@ -70,6 +71,7 @@ class dhrep::tgnginx (
     group   => root,
     mode    => '0644',
     content => template($nginx_conf_template),
+    notify  => Service['nginx'],
   }
   ->
   file { '/etc/nginx/sites-available/default':

@@ -65,6 +65,16 @@ class dhrep::static::textgridlab_org(
     mode    => '0644',
     require => File['/var/www/nginx-root/textgridlab.org/schema'],
   }
+  file { '/var/www/nginx-root/textgridlab.org/schema/textgrid-metadata-genre_2015.xml':
+    source  => 'file:///usr/local/src/textgrid-metadata-git/textgrid-metadata-genre_2015.xml',
+    mode    => '0644',
+    require => File['/var/www/nginx-root/textgridlab.org/schema'],
+  }
+  file { '/var/www/nginx-root/textgridlab.org/schema/textgrid-metadata-genre_2015.xsl':
+    source  => 'file:///usr/local/src/textgrid-metadata-git/textgrid-metadata-genre_2015.xsl',
+    mode    => '0644',
+    require => File['/var/www/nginx-root/textgridlab.org/schema'],
+  }
 
   #
   # TextGridRep Documentation (common index file and folder)
