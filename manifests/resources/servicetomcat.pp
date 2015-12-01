@@ -134,4 +134,9 @@ define dhrep::resources::servicetomcat (
     dateformat   => '.%Y-%m-%d'
   }
 
+  ###
+  # nrpe
+  ###
+# TODO
+
 }

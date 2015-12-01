@@ -112,4 +112,11 @@ class dhrep::services::intern::tgnoid (
     notify => Service['apache2']
   }
 
+  ###
+  # nrpe
+  ###
+#  dariahcommon::nagios_service { 'check_tgnoid':
+#    command => "/usr/lib/nagios/plugins/check_http -a tgcrud:***pass*** -H localhost -p 8080 -u /nd/noidu_textgrid?get+textgrid:h4kg.0 -s \"note: no elements bound under textgrid:h4kg.0\"",
+#  }
+
 }
