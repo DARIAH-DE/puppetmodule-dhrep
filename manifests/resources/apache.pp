@@ -78,7 +78,7 @@ class dhrep::resources::apache (
     </Directory>
 
     ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-    <Directory \"/usr/lib/cgi-bin\">
+    <Directory /usr/lib/cgi-bin>
         AllowOverride None
         Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
         Require all granted
@@ -93,7 +93,6 @@ class dhrep::resources::apache (
     LogLevel warn
 
     CustomLog \${APACHE_LOG_DIR}/access.log combined
-
     ",
     order   => 010,
   }

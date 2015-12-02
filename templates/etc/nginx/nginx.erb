@@ -8,38 +8,31 @@ events {
 }
 
 http {
-
 	##
 	# Basic Settings
 	##
-
 	sendfile on;
 	tcp_nopush on;
 	tcp_nodelay on;
 	keepalive_timeout 120;
 	types_hash_max_size 2048;
 	# server_tokens off;
-
 	# server_names_hash_bucket_size 64;
 	# server_name_in_redirect off;
-
 	include /etc/nginx/mime.types;
 	default_type application/octet-stream;
 
 	##
 	# Logging Settings
 	##
-
 	access_log /var/log/nginx/access.log;
 	error_log /var/log/nginx/error.log;
 
 	##
 	# Gzip Settings
 	##
-
 	gzip on;
 	gzip_disable "msie6";
-
 	# gzip_vary on;
 	# gzip_proxied any;
 	# gzip_comp_level 6;
@@ -48,60 +41,47 @@ http {
 	# gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
 	##
-	# nginx-naxsi config
+	# nginx-naxsi config (Uncomment it if you installed nginx-naxsi)
 	##
-	# Uncomment it if you installed nginx-naxsi
-	##
-
 	#include /etc/nginx/naxsi_core.rules;
 
 	##
-	# nginx-passenger config
+	# nginx-passenger config (Uncomment it if you installed nginx-passenger)
 	##
-	# Uncomment it if you installed nginx-passenger
-	##
-	
 	#passenger_root /usr;
 	#passenger_ruby /usr/bin/ruby;
-
 
 	##
 	# Special TextGrid Settings
 	##
-
 	client_body_buffer_size 512k;
 
 	# proxy tgsearch toplevel aggregations and aggregator items
 	proxy_buffer_size 64k;
 	proxy_buffers 8 128k;
 	proxy_cache_path /var/www/nginx-cache/aggregator levels=1:2 keys_zone=tgsearch:500m;
-  proxy_cache_path /var/www/nginx-cache/aggregator levels=1:2 keys_zone=aggregator:10m 
-                         max_size=100g;
+	proxy_cache_path /var/www/nginx-cache/aggregator levels=1:2 keys_zone=aggregator:10m max_size=100g;
 
 	##
 	# Virtual Host Configs
 	##
-
 	include /etc/nginx/conf.d/*.conf;
 	include /etc/nginx/sites-enabled/*;
-
 }
-
 
 #mail {
 #	# See sample authentication script at:
 #	# http://wiki.nginx.org/ImapAuthenticateWithApachePhpScript
-# 
+#
 #	# auth_http localhost/auth.php;
 #	# pop3_capabilities "TOP" "USER";
 #	# imap_capabilities "IMAP4rev1" "UIDPLUS";
-# 
+#
 #	server {
 #		listen     localhost:110;
 #		protocol   pop3;
 #		proxy      on;
 #	}
-# 
 #	server {
 #		listen     localhost:143;
 #		protocol   imap;

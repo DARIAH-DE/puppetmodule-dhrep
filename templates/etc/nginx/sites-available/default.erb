@@ -45,9 +45,9 @@ server {
 		# copied from http://blog.kovyrin.net/2006/04/29/monitoring-nginx-with-rrdtool/
 		stub_status on;
 		access_log off;
-		allow 10.160.254.110;
-		allow 134.76.20.90;
-		allow 127.0.0.1;
+		allow 134.94.199.61; # Icinga DARIAH Jülich
+		allow 134.76.20.211; # Icinga DARIAH GWDG
+		allow 127.0.0.1;     # Localhost as well :)
 		deny all;
 	}
 
@@ -71,9 +71,7 @@ server {
 	ssl on;
 	ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
 	ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
-
 	ssl_session_timeout 5m;
-
 	ssl_protocols SSLv3 TLSv1;
 	ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
 	ssl_prefer_server_ciphers on;

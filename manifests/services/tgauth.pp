@@ -362,7 +362,8 @@ class dhrep::services::tgauth (
     require => Package['slapd'],
   }
 
-  # apache config, apache should be there (e.g. by dhrep::init.pp or dariah profile::apache)
+  # apache config, apache should be there
+  # (e.g. by dhrep::init.pp or dariah profile::apache)
   file { "/etc/apache2/${scope}/default_vhost_includes/tgauth.conf":
     content => "
     # --------------------------------------------------------------------------
@@ -382,12 +383,12 @@ class dhrep::services::tgauth (
     </Location>
 
     Alias /tgauth /var/www/tgauth/rbacSoap
-    <Directory \"/var/www/tgauth/rbacSoap\">
+    <Directory /var/www/tgauth/rbacSoap>
       Options +FollowSymLinks -Indexes
       Require all granted
     </Directory>
     ",
-    notify => Service['apache2']
+    notify => Service['apache2'],
   }
 
   # Configure LDAP backup and unused logfile removing.

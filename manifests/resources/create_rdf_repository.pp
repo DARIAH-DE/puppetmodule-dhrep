@@ -34,4 +34,3 @@ define dhrep::resources::create_rdf_repository (
   }
 
 }
-
