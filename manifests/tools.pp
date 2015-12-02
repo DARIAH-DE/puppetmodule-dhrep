@@ -25,7 +25,7 @@ class dhrep::tools {
     owner   => root,
     group   => root,
     mode    => '0755',
-    require => Class[dariahcommon::nagios],
+#    require => Class[dariahcommon::nagios],
   }
   dariahcommon::nagios_service { 'check_tivoli_root':
     command => "/usr/lib/nagios/plugins/check_tivoli -c /",
