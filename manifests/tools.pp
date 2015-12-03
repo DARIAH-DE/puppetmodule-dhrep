@@ -13,19 +13,25 @@ class dhrep::tools {
   }
 
   ###
-  # misc nrpe checks
+  # cron nrpe check
   ###
   dariahcommon::nagios_service { 'check_cron':
     command => "/usr/lib/nagios/plugins/check_procs -c 1:20 -w 1:2 -C cron",
   }
 
+  ###
+  # tsm nrpe check
+  ###
+  file { '/var/log/tsm/dsmerror.log':
+    group => 'nagios',
+    mode  => '0660',
+  }
   file { '/usr/lib/nagios/plugins/check_tivoli':
     source  => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_tivoli',
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0755',
-#    require => Class[dariahcommon::nagios],
   }
   dariahcommon::nagios_service { 'check_tivoli_root':
     command => "/usr/lib/nagios/plugins/check_tivoli -c /",
