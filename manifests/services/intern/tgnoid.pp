@@ -115,8 +115,8 @@ class dhrep::services::intern::tgnoid (
   ###
   # nrpe
   ###
-#  dariahcommon::nagios_service { 'check_tgnoid':
-#    command => "/usr/lib/nagios/plugins/check_http -a tgcrud:***pass*** -H localhost -p 8080 -u /nd/noidu_textgrid?get+textgrid:h4kg.0 -s \"note: no elements bound under textgrid:h4kg.0\"",
-#  }
+  dariahcommon::nagios_service { 'check_tgnoid':
+    command => "/usr/lib/nagios/plugins/check_http -a tgcrud:${dhrep::services::intern::tgnoid::tgcrud_secret} -H localhost -p 8080 -u /nd/noidu_textgrid?get+textgrid:h4kg.0 -s \"note: no elements bound under textgrid:h4kg.0\"",
+  }
 
 }
