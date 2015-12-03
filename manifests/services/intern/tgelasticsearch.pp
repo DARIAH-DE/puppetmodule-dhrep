@@ -148,10 +148,6 @@ class dhrep::services::intern::tgelasticsearch (
   ###
   # nrpe
   ###
-
-  # do python setup:
-  #   package python-pip
-  #   pip install nagios-plugin-elasticsearch
   exec { 'nagios-plugin-elasticsearch':
     command => '/usr/bin/pip install nagios-plugin-elasticsearch',
     require => Package['python-pip'],
