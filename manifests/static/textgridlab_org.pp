@@ -179,23 +179,19 @@ class dhrep::static::textgridlab_org(
   }
 
   #
-  # TODO Update site
+  # Update site: needs StorNext mount to be working!
   #
   file { '/var/www/nginx-root/textgridlab.org/updates':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure  => link,
+    target  => '/media/stornext/tglab/updates',
   }
 
   #
-  # TODO TG-lab download files
+  # TG-lab download files: needs StorNext mount to be working!
   #
   file { '/var/www/nginx-root/textgridlab.org/download':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure  => link,
+    target  => '/media/stornext/tglab/download',
   }
 
 }
