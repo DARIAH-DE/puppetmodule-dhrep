@@ -159,7 +159,6 @@ class dhrep::services::intern::tgelasticsearch (
   ->
   dariahcommon::nagios_service { 'check_elasticsearch':
     command => "/usr/lib/nagios/plugins/check_elasticsearch -p 9202 -vv",
-#    require => File['/usr/lib/nagios/plugins/check_elasticsearch'],
   }
 
 }
