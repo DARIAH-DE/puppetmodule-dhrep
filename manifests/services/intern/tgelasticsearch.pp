@@ -21,7 +21,11 @@ class dhrep::services::intern::tgelasticsearch (
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
   $es_heap_size               = $dhrep::params::tgelasticsearch_es_heap_size,
-) inherits dhrep::params {  
+) inherits dhrep::params {
+
+  package {
+    'python-pip': ensure => present,
+  }
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
 
@@ -144,8 +148,18 @@ class dhrep::services::intern::tgelasticsearch (
   ###
   # nrpe
   ###
+
+  # do python setup:
+  #   package python-pip
+  #   pip install nagios-plugin-elasticsearch
+  exec { 'nagios-plugin-elasticsearch':
+    command => '/usr/bin/pip install nagios-plugin-elasticsearch',
+    require => Package['python-pip'],
+  }
+  ->
   dariahcommon::nagios_service { 'check_elasticsearch':
-    command => "/usr/local/lib/nagios/plugins/check_elasticsearch -p 9202 -vv",
+    command => "/usr/lib/nagios/plugins/check_elasticsearch -p 9202 -vv",
+#    require => File['/usr/lib/nagios/plugins/check_elasticsearch'],
   }
 
 }
