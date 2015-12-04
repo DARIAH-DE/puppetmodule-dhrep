@@ -1,6 +1,6 @@
-##########################
-## ElasticSearch config ##
-##########################
+############################
+##  ElasticSearch Config  ##
+############################
 
 elasticSearch.url = 127.0.0.1
 elasticSearch.port = <%= scope.lookupvar('dhrep::params::tgelasticsearch_master_tcp_port') %>
@@ -8,16 +8,16 @@ elasticSearch.clusterName = <%= scope.lookupvar('dhrep::services::intern::tgelas
 elasticSearch.index = textgrid-public
 elasticSearch.type = metadata
 
-#######################
-##  Project Choosing ##
-#######################
+########################
+##  Project Choosing  ##
+########################
 
 textgrid = true
 dariah = false
 
-##########################
-## Repositoy Properties ##
-##########################
+############################
+##  Repositoy Properties  ##
+############################
 
 RepositoryName = TextGrid Repository
 BaseUrl = http://www.textgridrep.de
@@ -27,16 +27,16 @@ Granularity = YYYY_MM_DD_THH_MM_SS_Z
 ProtocolVersion = 2.0
 AdminMail = textgrid-support@gwdg.de
 
-####################
-## Field Settings ##
-####################
+######################
+##  Field Settings  ##
+######################
 
 fields = created, format, identifier, dataContributor, textgridUri, project.id, relations.isDerivedFrom, title, pid.value, edition.isEditionOf, edition.agent.value, edition.license.licenseUri, edition.language, edition.source.bibliographicCitation.author.value, edition.source.bibliographicCitation.editor.value, edition.source.bibliographicCitation.editionTitle, edition.source.bibliographicCitation.placeOfPublication.value, edition.source.bibliographicCitation.publisher.value, edition.source.bibliographicCitation.editionNo, edition.source.bibliographicCitation.series, edition.source.bibliographicCitation.volume, edition.source.bibliographicCitation.issue, edition.source.bibliographicCitation.epage, edition.source.bibliographicCitation.spage, edition.source.bibliographicCitation.bibidentifier, work.abstract, work.genre, work.type, work.spatial.value, work.temporal.value, work.agent.value, work.subject.id.value
 workFields = created, work.abstract, relations.isDerivedFrom, textgridUri, work.genre, title, work.type, work.spatial.value, work.temporal.spatial, work.agent.value, work.subject.id.value
 
-########################
-## Dublin Core Fields ##
-########################
+##########################
+##  Dublin Core Fields  ##
+##########################
 
 contributorList = dataContributor
 coverageList = work.spatial.value, work.temporal.value
@@ -55,9 +55,9 @@ subjectList = work.subject.id.value
 titleList = title
 typeList = work.genre, work.type
 
-###########################
-## ListIdentifierSetting ##
-###########################
+#############################
+##  ListIdentifierSetting  ##
+#############################
 
 rangeField = created
 identifierListFields = textgridUri, created, format
@@ -67,3 +67,5 @@ dateOfObjectCreation = created
 relationToFurtherMetadataObject = edition.isEditionOf
 repositoryObjectURIPrefix = textgrid:
 identifierPrefix = textgridUri
+identifierField = textgridUri
+specFieldPrefix = textgrid
