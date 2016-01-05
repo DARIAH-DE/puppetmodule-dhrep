@@ -134,13 +134,11 @@ define dhrep::resources::servicetomcat (
     dateformat   => '.%Y-%m-%d'
   }
 
-  if $collectd_enabled {
-    collectd::plugin::genericjmx::connection { $name:
-        host            => 'localhost',
-        service_url     => "service:jmx:rmi:///jndi/rmi://localhost:${jmx_port}/jmxrmi",
-        collect         => [ 'memory-heap', 'memory-nonheap' ],
-        instance_prefix => "${name}-"
-    }
+  collectd::plugin::genericjmx::connection { $name:
+      host            => 'localhost',
+      service_url     => "service:jmx:rmi:///jndi/rmi://localhost:${jmx_port}/jmxrmi",
+      collect         => [ 'memory-heap', 'memory-nonheap' ],
+      instance_prefix => "${name}-"
   }
 
 }
