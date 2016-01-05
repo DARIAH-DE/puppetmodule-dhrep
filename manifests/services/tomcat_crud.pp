@@ -4,14 +4,14 @@
 #
 class dhrep::services::tomcat_crud (
   $scope        = undef,
-){
+  $xmx          = $dhrep::params::tomcat_tgcrud_xmx,
+  $xms          = $dhrep::params::tomcat_tgcrud_xms,
+) inherits dhrep::params {
 
   $short        = 'tgcrud'
   $catname      = 'tomcat-tgcrud'
   $http_port    = '9093'
   $control_port = '9008'
-  $xmx          = '1024'
-  $xms          = '128'
   $jmx_port     = '9993'
   $gid          = '29900'
   $uid          = '49628'
@@ -35,6 +35,8 @@ class dhrep::services::tomcat_crud (
     jmx_port          => $jmx_port,
     defaults_template => $template,
     init_dependencies => $depcat,
+    xmx               => $xmx,
+    xms               => $xms,
     require           => Service[$depcat],
   }
 

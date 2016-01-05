@@ -31,7 +31,6 @@ class dhrep::params {
   $tgelasticsearch_master_tcp_port     = '9302'
   $tgelasticsearch_workhorse_http_port = '9203'
   $tgelasticsearch_workhorse_tcp_port  = '9303'
-  $tgelasticsearch_es_heap_size        = '512m'
 
   $config = {
     'oaipmh'    => {
@@ -40,6 +39,47 @@ class dhrep::params {
     },
     'pid'             => {
       'pid_endpoint' => 'http://pid.gwdg.de',
+    }
+  }
+
+  # memory profiles
+  # if no hiera entry is found, default to undef, so default profile is used
+  case hiera('dhrep::mem_profile', undef) {
+    'low': {
+      $tgelasticsearch_es_heap_size        = '64m'
+      $servicetomcat_xmx                   = '64m'
+      $servicetomcat_xms                   = '32m'
+      $tomcat_tgcrud_xmx                   = '96m'
+      $tomcat_tgcrud_xms                   = '32m'
+      $tomcat_tgpublish_xmx                = '96m'
+      $tomcat_tgpublish_xms                = '32m'
+      $wildfly_xmx                         = '96m'
+      $wildfly_xms                         = '64m'
+      $wildfly_maxpermsize                 = '64m'
+    }
+    'server': {
+      $tgelasticsearch_es_heap_size        = '4096m'
+      $servicetomcat_xmx                   = '1024m'
+      $servicetomcat_xms                   = '1024m'
+      $tomcat_tgcrud_xmx                   = '1024m'
+      $tomcat_tgcrud_xms                   = '1024m'
+      $tomcat_tgpublish_xmx                = '1024m'
+      $tomcat_tgpublish_xms                = '1024m'
+      $wildfly_xmx                         = '512m'
+      $wildfly_xms                         = '512m'
+      $wildfly_maxpermsize                 = '256m'
+    }
+    default: {
+      $tgelasticsearch_es_heap_size        = '512m'
+      $servicetomcat_xmx                   = '1024m'
+      $servicetomcat_xms                   = '128m'
+      $tomcat_tgcrud_xmx                   = '1024m'
+      $tomcat_tgcrud_xms                   = '128m'
+      $tomcat_tgpublish_xmx                = '1024m'
+      $tomcat_tgpublish_xms                = '128m'
+      $wildfly_xmx                         = '512m'
+      $wildfly_xms                         = '256m'
+      $wildfly_maxpermsize                 = '256m'
     }
   }
 

@@ -14,7 +14,6 @@ class dhrep (
   $tgauth_authz_instance = undef,
   $tgauth_webauth_secret = undef,
   $tgelasticsearch_cluster_name = 'testing',
-  $tgelasticsearch_es_heap_size = $dhrep::params::tgelasticsearch_es_heap_size,
   $tgnoid_tgcrud_secret = undef,
   $crud_publish_secret = undef,
   $datadirs_create_local_datadirs = undef,
@@ -36,7 +35,6 @@ class dhrep (
   class { 'dhrep::services::intern::tgelasticsearch':
     scope        => $scope,
     cluster_name => $tgelasticsearch_cluster_name,
-    es_heap_size => $tgelasticsearch_es_heap_size,
   }
 
   class { 'dhrep::resources::apache': 

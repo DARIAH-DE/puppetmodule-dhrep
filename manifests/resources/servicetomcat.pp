@@ -21,10 +21,10 @@
 #   port for java jmx management
 #
 # [*xmx*]
-#   java max memory allocation (Xmx), in megabyte, default: 1024
+#   java max memory allocation (Xmx), default: 1024m
 #
 # [*xms*]
-#   java inital memory allocation (Xms), in megabyte, default: 128
+#   java inital memory allocation (Xms), default: 128m
 #
 # [*user*]
 #   user which the service belongs to (will be created), defaults to $name if not set 
@@ -50,13 +50,13 @@ define dhrep::resources::servicetomcat (
   $http_port,
   $control_port,
   $jmx_port,
-  $xmx               = 1024,
-  $xms               = 128,
+  $xmx               = $dhrep::params::servicetomcat_xmx,
+  $xms               = $dhrep::params::servicetomcat_xms,
   $group             = $name,
   $user              = $name,
   $defaults_template = 'dhrep/etc/default/tomcat.erb',
   $init_dependencies = '',
-){
+) {
 
   require dhrep::tools
 

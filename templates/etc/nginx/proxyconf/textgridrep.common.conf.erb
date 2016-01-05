@@ -15,7 +15,7 @@ rewrite ^/(textgrid:[a-z0-9\.]+)/data$ /services/tgcrud-public/rest/$1/data last
 rewrite ^/(textgrid:[a-z0-9\.]+)/metadata$ /services/tgcrud-public/rest/$1/metadata last;
 rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)$ /services/tgcrud/rest/$1/data last;
 rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)/data$ /services/tgcrud/rest/$1/data last;
-rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)/metadata$ /services/tgcrud/rest/$1/metadata $
+rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)/metadata$ /services/tgcrud/rest/$1/metadata last;
 rewrite_log on;
 
 location /services/tgcrud-public {
