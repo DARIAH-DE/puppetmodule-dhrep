@@ -139,7 +139,8 @@ class dhrep::services::intern::tgelasticsearch (
     <Module \"elasticsearch\">
         Verbose false
         Version \"1.0\"
-        Cluster \"elasticsearch\"
+        Cluster \"$cluster_name\"
+        Port $dhrep::params::tgelasticsearch_master_http_port
     </Module>
 </Plugin>
 ",
