@@ -220,34 +220,6 @@ class dhrep (
     require => Package['tomcat7'],
   }
 
-
-  collectd::plugin::genericjmx::mbean {
-    'memory-heap':
-      object_name     => 'java.lang:type=Memory',
-      instance_prefix => 'memory-heap',
-      #instance_from   => 'name',
-      values          => [
-        {
-          type      => 'jmx_memory',
-          table     => true,
-          attribute => 'HeapMemoryUsage',
-        },
-      ];
-  }
-  collectd::plugin::genericjmx::mbean {
-    'memory-nonheap':
-      object_name     => 'java.lang:type=Memory',
-      instance_prefix => 'memory-nonheap',
-      #instance_from   => 'name',
-      values          => [
-        {
-          type      => 'jmx_memory',
-          table     => true,
-          attribute => 'NonHeapMemoryUsage',
-        },
-      ];
-  }
-
   # we want to use custom facts (TODO: is there an existing puppet plugin?)
   file { '/etc/facter/':
     ensure => directory,
