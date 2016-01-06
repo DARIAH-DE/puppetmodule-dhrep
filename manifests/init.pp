@@ -222,7 +222,7 @@ class dhrep (
 
 
   collectd::plugin::genericjmx::mbean {
-    'memory_heap':
+    'memory-heap':
       object_name     => 'java.lang:type=Memory',
       instance_prefix => 'memory-heap',
       #instance_from   => 'name',
@@ -235,7 +235,7 @@ class dhrep (
       ];
   }
   collectd::plugin::genericjmx::mbean {
-    'memory_nonheap':
+    'memory-nonheap':
       object_name     => 'java.lang:type=Memory',
       instance_prefix => 'memory-nonheap',
       #instance_from   => 'name',
