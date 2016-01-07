@@ -463,4 +463,9 @@ class dhrep::services::tgauth (
     command => "/usr/lib/nagios/plugins/check_ldap -H localhost -b dc=textgrid,dc=de -3",
   }
 
+  ###
+  # monitor slapd with collectd
+  ###
+  collectd::plugin::processes::process { 'slapd' : }
+
 }
