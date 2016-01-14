@@ -1666,7 +1666,7 @@ olcDbIndex: o eq,sub
 olcDbMode: 0600
 # https://sites.google.com/site/bmaupinwiki/home/applications/ldap/optimizing-openldap
 # 100 GB max database size
-olcDbMaxSize: 107374182400
+olcDbMaxSize: <%= @ldap_dbmaxsize %>
 olcDbSearchStack: 16
 
 <% if replication -%>

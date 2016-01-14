@@ -30,6 +30,7 @@ class dhrep::services::tgauth (
   $ldap_clusternodes     = [],
   $no_shib_login         = false,
   $malloc                = '', # tcmalloc or jemalloc, default to glibc
+  $ldap_dbmaxsize        = 10485760 # default value 10485760 bytes = 10mb
 ){
 
 
