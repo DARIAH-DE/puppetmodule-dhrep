@@ -51,11 +51,11 @@ class dhrep::params {
       $servicetomcat_xms                   = '32m'
       $tomcat_tgcrud_xmx                   = '96m'
       $tomcat_tgcrud_xms                   = '32m'
-      $tomcat_tgpublish_xmx                = '96m'
+      $tomcat_tgpublish_xmx                = '128m'
       $tomcat_tgpublish_xms                = '32m'
-      $wildfly_xmx                         = '96m'
+      $wildfly_xmx                         = '128m'
       $wildfly_xms                         = '64m'
-      $wildfly_maxpermsize                 = '64m'
+      $wildfly_maxpermsize                 = '96m'
     }
     'server': {
       $tgelasticsearch_es_heap_size        = '4096m'
