@@ -17,7 +17,7 @@ class dhrep::services::intern::tgelasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
   $repo_version               = '1.7',
-  $elasticsearch_version      = '1.7.0',
+  $elasticsearch_version      = '1.7.4',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
   $es_heap_size               = $dhrep::params::tgelasticsearch_es_heap_size,
