@@ -146,13 +146,16 @@ class dhrep::services::intern::tgelasticsearch (
 ",
   }
 
+  # TODO, move to fe-monitoring
+  package { 'libyajl2': }
+
   collectd::plugin::curl_json {
   'elasticsearch_workhorse':
     url => "http://localhost:${dhrep::params::tgelasticsearch_workhorse_http_port}/_nodes/${::hostname}-workhorse/stats/jvm/",
     instance => 'elasticsearch_workhorse',
     keys => {
-      '*/jvm/mem/heap_max_in_bytes' => {'type' => 'bytes'},
-      '*/jvm/mem/heap_used_in_bytes' => {'type' => 'bytes'},
+      'nodes/*/jvm/mem/heap_max_in_bytes' => {'type' => 'bytes'},
+      'nodes/*/jvm/mem/heap_used_in_bytes' => {'type' => 'bytes'},
     }
   }
 
