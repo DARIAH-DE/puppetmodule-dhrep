@@ -66,4 +66,20 @@ class dhrep::services::intern::tgwildfly (
     source => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
   }
 
+  # service:jmx:http-remoting-jmx://vm1:19990
+  # service:jmx:http-remoting-jmx://localhost:19990
+  #collectd::plugin::genericjmx { "add_wildfy_jar_to_jmx":
+  #  jvmarg => "-Djava.class.path=/home/wildfly/wildfly/bin/client/jboss-cli-client.jar"
+  #}
+#  class { 'collectd::plugin::genericjmx':
+#    jvmarg => "-Djava.class.path=/home/wildfly/wildfly/bin/client/jboss-cli-client.jar",
+#  }
+
+#  collectd::plugin::genericjmx::connection { $name:
+#      host            => $fqdn,
+#      service_url     => "service:jmx:http-remoting-jmx://localhost:19990",
+#      collect         => [ 'memory-heap', 'memory-nonheap' ],
+#      instance_prefix => "wildfly-",
+#  }
+
 }

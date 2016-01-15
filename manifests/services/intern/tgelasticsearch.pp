@@ -17,7 +17,7 @@ class dhrep::services::intern::tgelasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
   $repo_version               = '1.7',
-  $elasticsearch_version      = '1.7.0',
+  $elasticsearch_version      = '1.7.4',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
   $es_heap_size               = $dhrep::params::tgelasticsearch_es_heap_size,
@@ -144,6 +144,19 @@ class dhrep::services::intern::tgelasticsearch (
     </Module>
 </Plugin>
 ",
+  }
+
+  # TODO, move to fe-monitoring
+  package { 'libyajl2': }
+
+  collectd::plugin::curl_json {
+  'elasticsearch_workhorse':
+    url => "http://localhost:${dhrep::params::tgelasticsearch_workhorse_http_port}/_nodes/${::hostname}-workhorse/stats/jvm/",
+    instance => 'elasticsearch_workhorse',
+    keys => {
+      'nodes/*/jvm/mem/heap_max_in_bytes' => {'type' => 'bytes'},
+      'nodes/*/jvm/mem/heap_used_in_bytes' => {'type' => 'bytes'},
+    }
   }
 
   ###

@@ -30,14 +30,16 @@ class dhrep::services::tgauth (
   $ldap_clusternodes     = [],
   $no_shib_login         = false,
   $malloc                = '', # tcmalloc or jemalloc, default to glibc
+  $ldap_dbmaxsize        = 10485760 # default value 10485760 bytes = 10mb
 ){
 
+
   package {
-    'slapd':                ensure => present;
-    'ldap-utils':           ensure => present;
-    'php5-ldap':            ensure => present;
-    'db5.3-util':           ensure => present;
-    'mailutils':            ensure => present;
+    'slapd':      ensure => present;
+    'ldap-utils': ensure => present;
+    'db5.3-util': ensure => present;
+    'mailutils':  ensure => present;
+    'php5-ldap':  ensure => present;
   }
 
   Exec {
@@ -275,15 +277,17 @@ class dhrep::services::tgauth (
         package { 'libtcmalloc-minimal4': ensure => present; }
         ->
         file_line { 'slapd_absent_jemalloc':
-          ensure => absent,
-          path   => '/etc/default/slapd',
-          line   => $preload_jemalloc_line,
+          ensure  => absent,
+          path    => '/etc/default/slapd',
+          line    => $preload_jemalloc_line,
+          require => Package['slapd'],
         }
         ->
         file_line { 'slapd_tcmalloc':
           path   => '/etc/default/slapd',
           line   => $preload_tcmalloc_line,
           notify => Service['slapd'],
+          require => Package['slapd'],
         }
      }
      'jemalloc': {
@@ -293,12 +297,14 @@ class dhrep::services::tgauth (
           ensure => absent,
           path   => '/etc/default/slapd',
           line   => $preload_tcmalloc_line,
+          require => Package['slapd'],
         }
         ->
         file_line { 'slapd_jemalloc':
           path   => '/etc/default/slapd',
           line   => $preload_jemalloc_line,
           notify => Service['slapd'],
+          require => Package['slapd'],
         }
      }
      default: {
@@ -307,12 +313,14 @@ class dhrep::services::tgauth (
           path   => '/etc/default/slapd',
           line   => $preload_tcmalloc_line,
           notify => Service['slapd'],
+          require => Package['slapd'],
         }
         file_line { 'slapd_absent_tcmalloc':
           ensure => absent,
           path   => '/etc/default/slapd',
           line   => $preload_jemalloc_line,
           notify => Service['slapd'],
+          require => Package['slapd'],
         }
      }
   }
@@ -478,6 +486,10 @@ class dhrep::services::tgauth (
   ###
   # monitor slapd with collectd
   ###
-  collectd::plugin::processes::process { 'slapd' : }
+#  @collectd::plugin::processes::process { 'slapd' : 
+#    tag => 'femonitoring_collectd',
+#  }
+
+   collectd::plugin::processes::process { 'slapd' : }
 
 }
