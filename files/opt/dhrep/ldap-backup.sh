@@ -8,5 +8,3 @@ fi
 # Create current backup
 sudo slapcat -l /var/textgrid/backups/ldap/ldap-backup.ldif &&
 
-# Remove old logs
-sudo db5.3_archive -h /var/lib/ldap -d
