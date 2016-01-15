@@ -1,0 +1,29 @@
+$(document).ready(function() {
+    loadBundles($.i18n.browserLang());
+});
+
+function loadBundles(lang) {
+    $.i18n.properties({
+        name: 'DARIAH',
+        path: 'js/i18n/',
+        mode: 'both',
+        language: lang,
+        callback: function() {
+            $("#dariah_weiterzumdariahidp").text($.i18n.prop('dariah_weiterzumdariahidp'));
+            $("#dariah_andereeinrichtung").text($.i18n.prop('dariah_andereeinrichtung'));
+        }
+    });
+}
+
+function getURLParameter(name, string) {
+  return decodeURI((RegExp(name + '=' + '(.+?)(&|$)').exec(string)||[,null])[1]);
+}
+var returnUrl = decodeURIComponent(getURLParameter('return', location.search));
+
+$('#dform').attr('action', returnUrl.substring(0,returnUrl.lastIndexOf("?")));
+var query = returnUrl.substring(returnUrl.lastIndexOf("?")+1).split("&");
+jQuery.each( query, function ( i, params ) {
+   var param_array=(params.split("="));
+  $('#dform').append('<input type="hidden" name="' + param_array[0] + '" value="' + param_array[1] + '">');
+});
+$('#dform').append('<input type="hidden" name="entityID" value="<%= scope.lookupvar('dariahshibboleth::idp_entityid') %>">');

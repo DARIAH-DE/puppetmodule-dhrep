@@ -217,6 +217,18 @@ class dhrep::services::tgauth (
   }
 
   ###
+  # Shibboleth config (set IdP's entityID)
+  ###
+  file { '/var/www/WebAuthN/js/dariah.js':
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('dhrep/var/www/WebAuthN/js/dariah.js.erb'),
+    require => File['/var/www/WebAuthN/js'],
+  }
+
+  ###
   # Nutzungsordnung
   ###
   file { '/var/Nutzungsordnung_en_200611.txt.html':
