@@ -227,7 +227,7 @@ class dhrep::services::tgauth (
     group   => root,
     mode    => '0644',
     content => template('dhrep/var/www/WebAuthN/js/dariah.js.erb'),
-    require => File['/var/www/WebAuthN/js'],
+    require => File['/var/www/WebAuthN'],
   }
 
   ###
