@@ -26,4 +26,4 @@ jQuery.each( query, function ( i, params ) {
    var param_array=(params.split("="));
   $('#dform').append('<input type="hidden" name="' + param_array[0] + '" value="' + param_array[1] + '">');
 });
-$('#dform').append('<input type="hidden" name="entityID" value="<%= scope.lookupvar('dariahshibboleth::idp_entityid') %>">');
+$('#dform').append('<input type="hidden" name="entityID" value="<%= scope.lookupvar('::dariahshibboleth::idp_entityid') %>">');

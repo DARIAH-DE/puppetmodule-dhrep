@@ -33,7 +33,6 @@ class dhrep::services::tgauth (
   $ldap_dbmaxsize        = 10485760 # default value 10485760 bytes = 10mb
 ){
 
-
   package {
     'slapd':      ensure => present;
     'ldap-utils': ensure => present;
@@ -128,8 +127,7 @@ class dhrep::services::tgauth (
     owner  => root,
     group  => root,
     mode   => '0644',
-    #this dir needs to be there from above copy operation
-    #require => File['/var/www/tgauth/rbacSoap'],
+    require => File['/var/www/tgauth'],
   }
 
   file { '/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl':

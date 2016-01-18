@@ -34,18 +34,18 @@ class dhrep::tgnginx (
 
   file { '/var/www/nginx-cache':
     ensure => directory,
-    owner => 'www-data',
-    group => 'www-data',
+    owner  => 'www-data',
+    group  => 'www-data',
   }
   file { '/var/www/nginx-cache/tgsearch':
     ensure => directory,
-    owner => 'www-data',
-    group => 'www-data',
+    owner  => 'www-data',
+    group  => 'www-data',
   }
   file { '/var/www/nginx-cache/aggregator':
     ensure => directory,
-    owner => 'www-data',
-    group => 'www-data',
+    owner  => 'www-data',
+    group  => 'www-data',
   }
 
   file { '/etc/nginx/proxyconf':
