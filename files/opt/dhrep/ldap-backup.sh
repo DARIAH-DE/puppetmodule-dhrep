@@ -6,4 +6,5 @@ if [ -a /var/textgrid/backups/ldap/ldap-backup.ldif ]; then
 fi
 
 # Create current backup
-sudo slapcat -l /var/textgrid/backups/ldap/ldap-backup.ldif &&
+sudo slapcat -l /var/textgrid/backups/ldap/ldap-backup.ldif
+
