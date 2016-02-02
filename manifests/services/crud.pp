@@ -89,9 +89,10 @@ class dhrep::services::crud (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${user}/${catname}/webapps/${short}.war": 
+
+  file { "/home/${user}/${catname}/webapps/${short}": 
     ensure => 'link',
-    target => "/var/${scope}/webapps/${short}.war",
+    target => "/var/${scope}/webapps/${short}",
 #    notify  => Service[$catname],
     require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
@@ -99,6 +100,7 @@ class dhrep::services::crud (
   ###
   # crud comment and analyse scrpits
   ###
+
   file { '/opt/dhrep/crud-analyse.pl':
     source  => 'puppet:///modules/dhrep/opt/dhrep/crud-analyse.pl',
     owner   => $user,
@@ -117,6 +119,7 @@ class dhrep::services::crud (
   ###
   # cron for crud comment and analyse
   ###
+
   cron { 'crud-comment' :
     command => '/opt/dhrep/crud-comment.pl > /dev/null',
     user    => $user,
@@ -134,6 +137,7 @@ class dhrep::services::crud (
   ###
   # nrpe for tgcrud
   ###
+
   dariahcommon::nagios_service { 'check_rollback_tgcrud':
     command => "/opt/dhrep/crud-analyse.pl -n -l /var/log/textgrid/tgcrud/rollback.log",
   }
