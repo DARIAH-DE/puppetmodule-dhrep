@@ -57,10 +57,13 @@ class dhrep::services::iiifmd (
     mode   => '0755',
   }
 
+  ###
   # symlink war from deb package to tomcat webapps dir
-  file { "/home/${user}/${catname}/webapps/iiifmd.war": 
+  ###
+
+  file { "/home/${user}/${catname}/webapps/iiifmd": 
     ensure  => 'link',
-    target  => "/var/${scope}/webapps/iiifmd.war",
+    target  => "/var/${scope}/webapps/iiifmd",
     require => [File['/etc/textgrid/iiifmd/iiifmd.properties'],Dhrep::Resources::Servicetomcat[$catname]],
   }
 

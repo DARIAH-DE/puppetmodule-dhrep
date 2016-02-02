@@ -40,17 +40,20 @@ class dhrep::services::aggregator (
     require =>  File["/etc/${scope}/${short}"],
   }
 
+  ###
   # symlink war from deb package to tomcat webapps dir
-  file { "/home/${user}/${catname}/webapps/${short}.war": 
+  ###
+
+  file { "/home/${user}/${catname}/webapps/${short}": 
     ensure  => 'link',
-    target  => "/var/${scope}/webapps/${short}.war",
-#    notify  => Service[$catname],
+    target  => "/var/${scope}/webapps/${short}",
     require => [File["/etc/${scope}/${short}/aggregator.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
   ###
   # nrpe for aggregator
   ###
+
   file { '/etc/nagios-plugins/config/jmx.cfg':
     source  => 'puppet:///modules/dhrep/etc/nagios-plugins/config/jmx.cfg', 
     ensure  => present,

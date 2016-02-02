@@ -158,11 +158,13 @@ class dhrep::services::publish (
     dateformat   => '.%Y-%m-%d'
   }
 
+  ###
   # symlink war from deb package to tomcat webapps dir
-  file { "/home/${user}/${catname}/webapps/${publish_short}.war": 
+  ###
+  
+  file { "/home/${user}/${catname}/webapps/${publish_short}": 
     ensure  => 'link',
-    target  => "/var/${scope}/webapps/${publish_short}.war",
-#    notify  => Service[$catname],
+    target  => "/var/${scope}/webapps/${publish_short}",
     require => [File["/etc/${scope}/${publish_short}/conf/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 

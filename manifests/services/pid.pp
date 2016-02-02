@@ -69,11 +69,13 @@ class dhrep::services::pid (
     dateformat   => '.%Y-%m-%d'
   }
 
+  ###
   # symlink war from deb package to tomcat webapps dir
-  file { "/home/${user}/${catname}/webapps/${short}.war": 
+  ###
+  
+  file { "/home/${user}/${catname}/webapps/${short}": 
     ensure => 'link',
-    target => "/var/${scope}/webapps/${short}.war",
-#    notify  => Service[$catname],
+    target => "/var/${scope}/webapps/${short}",
     require => [File["/etc/${scope}/${short}/${short}.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 

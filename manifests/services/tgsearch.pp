@@ -49,18 +49,21 @@ class dhrep::services::tgsearch (
     content => template("dhrep/etc/textgrid/${short}/log4j.properties.erb"),
     require => File["/etc/textgrid/tgsearch"],
   }
-
+  
+  ###
   # symlink war from deb package to tomcat webapps dir
-  file { "/home/${user}/${catname}/webapps/${short}.war": 
+  ###
+  
+  file { "/home/${user}/${catname}/webapps/${short}": 
     ensure  => 'link',
-    target  => "/var/${scope}/webapps/tgsearch-nonpublic.war",
-#    notify  => Service[$catname],
+    target  => "/var/${scope}/webapps/tgsearch-nonpublic",
     require => Dhrep::Resources::Servicetomcat[$catname],
   }
 
   ###
   # nrpe
   ###
+
   dariahcommon::nagios_service { 'check_http_tgsearch':
     command => "/usr/lib/nagios/plugins/check_http -H localhost -p 9090 -u /tgsearch",
   }
