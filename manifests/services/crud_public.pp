@@ -88,16 +88,16 @@ class dhrep::services::crud_public (
   }
 
   # symlink war from deb package to tomcat webapps dir
-  file { "/home/${user}/${catname}/webapps/${short}.war": 
+  file { "/home/${user}/${catname}/webapps/${short}": 
     ensure  => 'link',
-    target  => "/var/${scope}/webapps/${short}.war",
-#    notify  => Service[$catname],
+    target  => "/var/${scope}/webapps/${short}",
     require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
   ###
   # cron for crud comment (see crud.pp!) and analyse
   ###
+
   cron { 'crud-public-analyse' :
     command => '/opt/dhrep/crud-analyse.pl -l /var/log/textgrid/tgcrud-public/rollback.log -c /var/log/textgrid/tgcrud-public/logcomments.log > /dev/null',
     user    => $user,
@@ -108,6 +108,7 @@ class dhrep::services::crud_public (
   ###
   # nrpe for tgcrud_public
   ###
+
   dariahcommon::nagios_service { 'check_rollback_tgcrud_public':
     command => "/opt/dhrep/crud-analyse.pl -n -l /var/log/textgrid/tgcrud-public/rollback.log",
   }
