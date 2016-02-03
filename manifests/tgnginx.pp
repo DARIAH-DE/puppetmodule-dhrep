@@ -5,16 +5,63 @@
 # set proxyconfig for forwarding local services via port 80 
 #
 class dhrep::tgnginx (
-  $proxy_conf_file = '/etc/nginx/proxyconf/1.0.conf',
-  $proxy_conf_template = 'dhrep/etc/nginx/proxyconf/1.0.conf.erb',
-  $nginx_conf_template = 'dhrep/etc/nginx/nginx.erb',
-  $default_site_template = 'dhrep/etc/nginx/sites-available/default.erb',
+  $proxy_conf_file                    = '/etc/nginx/proxyconf/1.0.conf',
+  $proxy_conf_template                = 'dhrep/etc/nginx/proxyconf/1.0.conf.erb',
+  $nginx_conf_template                = 'dhrep/etc/nginx/nginx.erb',
+  $default_site_template              = 'dhrep/etc/nginx/sites-available/default.erb',
   $tgsearch_toplevel_cache_expiration = '24h',
+  $sslcert                            = undef,
+  $sslkey                             = undef,
 ) {
 
   package {
     'nginx'    : ensure => present;
     'ssl-cert' : ensure => present; # snakeoil cert for nginx
+  }
+
+  # ssl certs and keys
+  case $sslcert {
+    undef:      {
+      $vhost_ssl_cert = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
+      $vhost_ssl_key  = '/etc/ssl/private/ssl-cert-snakeoil.key'
+    }
+    default: {
+      $vhost_ssl_cert = "/etc/ssl/${::fqdn}.chain.cert.pem"
+      $vhost_ssl_key  = "/etc/ssl/${::fqdn}.key.pem"
+    }
+  }
+
+  # TODO: for nginx we use chained cert, possibly merge to chain by puppet magic?
+  # for now the "kette" is not used, but a chained cert below
+  file { '/etc/ssl/Uni_Goettingen_Kette.pem':
+    ensure => present,
+    owner  => root,
+    group  => root,
+    mode   => '0644',
+    source => 'puppet:///modules/dariahcommon/etc/ssl/Uni_Goettingen_Kette.pem',
+#    notify => Service['nginx'],
+  }
+
+  if $sslkey != undef {
+    file { "/etc/ssl/${::fqdn}.key.pem":
+      ensure => present,
+      owner  => root,
+      group  => root,
+      mode   => '0600',
+      source => $sslkey,
+      notify => Service['nginx'],
+    }
+  }
+
+  if $sslcert != undef {
+    file { "/etc/ssl/${::fqdn}.chain.cert.pem":
+      ensure => present,
+      owner  => root,
+      group  => root,
+      mode   => '0644',
+      source => $sslcert,
+      notify => Service['nginx'],
+    }
   }
 
   # Use with module jfryman/nginx (maybe later)
