@@ -57,6 +57,37 @@ class dhrep::services::iiifmd (
     mode   => '0755',
   }
 
+  # install the collectd plugin for elasticsearch
+  file { '/var/www/nginx-root/textgridrep.de/iiif':
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
+    mode   => '0755',
+  }
+
+  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
+    ensure   => present,
+    owner  => $user,
+    group  => $group,
+    provider => git,
+    source   => 'https://github.com/IIIF/m1.git',
+  }
+  ->
+  file { '/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html':
+    source => 'puppet:///modules/dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html',
+    mode   => '0644',
+  }
+
+  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/m2':
+    ensure   => present,
+    owner  => $user,
+    group  => $group,
+    provider => git,
+    source   => 'https://github.com/IIIF/mirador.git',
+    revision => 'v2.0.0',
+  }
+
+
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
