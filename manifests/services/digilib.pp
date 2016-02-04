@@ -84,13 +84,17 @@ class dhrep::services::digilib (
   } 
   ->
   file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
-    ensure  => link,
-    target  => '/etc/textgrid/digilib/digilib.properties',
+#    ensure  => link,
+#    target  => '/etc/textgrid/digilib/digilib.properties',
+    # dilib doesn't like to load from symlinked files, TODO: still put to etc?
+    source => '/etc/textgrid/digilib/digilib.properties',
   } 
   ->
   file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
-    ensure  => link,
-    target  => '/etc/textgrid/digilib/digilib-service.properties',
+#    ensure  => link,
+#    target  => '/etc/textgrid/digilib/digilib-service.properties',
+    # dilib doesn't like to load from symlinked files, TODO: still put to etc?
+    source => '/etc/textgrid/digilib/digilib-service.properties',
   }
 
 
