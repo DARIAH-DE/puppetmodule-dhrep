@@ -8,16 +8,21 @@ class dhrep::services::intern::tgwildfly (
   $xmx         = $dhrep::params::wildfly_xmx,
   $xms         = $dhrep::params::wildfly_xms,
   $maxpermsize = $dhrep::params::wildfly_maxpermsize,
+  $tgcrud_pw   = 'secret',
 ) inherits dhrep::params {
 
   $message_beans_version = '1.0.1-SNAPSHOT'
-  $java_home = '/usr/lib/jvm/default-java'
+
+  if($::dhrep::oracle_jdk8) {
+    $java_home = '/usr/lib/jvm/java-8-oracle'
+  } else {
+    $java_home = '/usr/lib/jvm/default-java'
+  }
 
   # install wildfly
-  class { 'wildfly::install':
-    version           => '8.2.0',
-    install_source    => 'http://download.jboss.org/wildfly/8.2.0.Final/wildfly-8.2.0.Final.tar.gz',
-    install_file      => 'wildfly-8.2.0.Final.tar.gz',
+  class { 'wildfly':
+    version           => '9.0.2',
+    install_source    => 'http://download.jboss.org/wildfly/9.0.2.Final/wildfly-9.0.2.Final.tar.gz',
     java_home         => $java_home,
     dirname           => '/home/wildfly/wildfly',
     mode              => 'standalone',
@@ -25,32 +30,27 @@ class dhrep::services::intern::tgwildfly (
     java_xmx          => $xmx,
     java_xms          => $xms,
     java_maxpermsize  => $maxpermsize,
+    java_opts         => "-Djava.net.preferIPv4Stack=true",
     mgmt_http_port    => '19990',
     mgmt_https_port   => '19993',
     public_http_port  => '18080',
     public_https_port => '18443',
     ajp_port          => '18009',
-#    notify            => [Exec['wildfly_add_tgrud_user'],Exec['wildfly_add_tgcrud_topic']],
+    # only required if not oracle jdk8...?
     require           => Package['default-jre-headless'],
   }
-  ~>
-  # add user for tgcrud to connect
-  # TODO: use wildfly:config module, as commented out below, requires server restart
-  exec { 'wildfly_add_tgrud_user':
-    path        => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
-    environment => ['JBOSS_HOME=/home/wildfly/wildfly', "JAVA_HOME=${java_home}"],
-#    require     => Class['wildfly'],
-    refreshonly => true,
-    command     => '/home/wildfly/wildfly/bin/add-user.sh -a -s --user tgcrud --password secret --group guest',
+  ->
+  wildfly::config::app_user { 'tgcrud':
+    password => $tgcrud_pw,
   }
-  ~>
-  # add tgcrud topic to jms
-  exec { 'wildfly_add_tgcrud_topic':
-    path        => ['/usr/bin','/bin','/usr/sbin', '/sbin', '/home/wildfly/wildfly/bin'],
-    environment => ['JBOSS_HOME=/home/wildfly/wildfly', "JAVA_HOME=${java_home}"],
-#    require     => Class['wildfly'],
-    refreshonly => true,
-    command     => '/home/wildfly/wildfly/bin/jboss-cli.sh --controller=localhost:19990 --connect --command="jms-topic add --topic-address=tgcrudTopic --entries=topic/tgcrud,java:jboss/exported/jms/topic/tgcrud"',
+  ->
+  wildfly::config::user_roles { 'tgcrud':
+    roles    => 'guest',
+  }
+  ->
+  wildfly::messaging::topic { 'tgcrudTopic':
+    entries => ['topic/tgcrud','java:jboss/exported/jms/topic/tgcrud'],
+    notify => [Service['tomcat-tgcrud'], Service['tomcat-tgpublish']],
   }
 
   ###
@@ -59,27 +59,45 @@ class dhrep::services::intern::tgwildfly (
   staging::file { 'message-beans.war':
     source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
     target  => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
-    require => Class['wildfly::install'],
+    require => Class['wildfly'],
   }
   ~>
   file { '/home/wildfly/wildfly/standalone/deployments/message-beans.war':
     source => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
   }
 
-  # service:jmx:http-remoting-jmx://vm1:19990
-  # service:jmx:http-remoting-jmx://localhost:19990
-  #collectd::plugin::genericjmx { "add_wildfy_jar_to_jmx":
-  #  jvmarg => "-Djava.class.path=/home/wildfly/wildfly/bin/client/jboss-cli-client.jar"
-  #}
-#  class { 'collectd::plugin::genericjmx':
-#    jvmarg => "-Djava.class.path=/home/wildfly/wildfly/bin/client/jboss-cli-client.jar",
-#  }
+  #  wildfly::deployment { 'message-beans.war':
+  #    source   => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
+  #  }
 
-#  collectd::plugin::genericjmx::connection { $name:
-#      host            => $fqdn,
-#      service_url     => "service:jmx:http-remoting-jmx://localhost:19990",
-#      collect         => [ 'memory-heap', 'memory-nonheap' ],
-#      instance_prefix => "wildfly-",
-#  }
+
+
+  ###
+  # collectd for wildfly
+  ###
+
+  #  wildfly::deployment { 'jolokia.war':
+  #    source   => 'http://central.maven.org/maven2/org/jolokia/jolokia-war/1.3.2/jolokia-war-1.3.2.war
+  #  ',
+  #  }
+
+  staging::file { 'jolokia.war':
+    source  => "http://central.maven.org/maven2/org/jolokia/jolokia-war/1.3.2/jolokia-war-1.3.2.war",
+    target  => "/var/cache/textgrid/jolokia.war",
+    require => Class['wildfly'],
+  }
+  ~>
+  file { '/home/wildfly/wildfly/standalone/deployments/jolokia.war':
+    source => "/var/cache/textgrid/jolokia.war",
+  }
+
+  collectd::plugin::curl_json { 'wildfly':
+    url      => "http://localhost:18080/jolokia/read/java.lang:type=Memory", 
+    instance => 'wildfly',
+    keys => {
+      'value/NonHeapMemoryUsage/*' => {'type' => 'bytes'},
+      'value/HeapMemoryUsage/*'    => {'type' => 'bytes'},
+    },
+  }
 
 }
