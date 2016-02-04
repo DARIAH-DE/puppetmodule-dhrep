@@ -12,6 +12,7 @@ class dhrep::tgnginx (
   $tgsearch_toplevel_cache_expiration = '24h',
   $sslcert                            = undef,
   $sslkey                             = undef,
+  $dhparam                            = undef,
 ) {
 
   package {
@@ -63,6 +64,22 @@ class dhrep::tgnginx (
       notify => Service['nginx'],
     }
   }
+
+  # todo: else create dhparam: 
+  # openssl dhparam -out /etc/nginx/dhparam2048.pem 2048
+  if $dhparam != undef {
+    file { "/etc/nginx/dhparam2048.pem":
+      ensure => present,
+      owner  => root,
+      group  => root,
+      mode   => '0644',
+      source => $dhparam,
+      notify => Service['nginx'],
+    }
+    $dhparam_file = true
+  }
+
+
 
   # Use with module jfryman/nginx (maybe later)
   #    class { 'nginx':

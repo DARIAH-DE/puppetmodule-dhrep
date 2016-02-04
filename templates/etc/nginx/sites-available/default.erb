@@ -76,10 +76,10 @@ server {
 	ssl_ciphers EECDH+AESGCM:EDH+AESGCM:EECDH:EDH:!MD5:!RC4:!LOW:!MEDIUM:!CAMELLIA:!ECDSA:!DES:!DSS:!3DES:!NULL;
 	ssl_prefer_server_ciphers on;
 
-#  TODO?
-#  ssl_dhparam /etc/nginx/dhparam2048.pem;
-#  ssl_ecdh_curve secp384r1;
-
+<% if @dhparam_file -%>
+  ssl_dhparam /etc/nginx/dhparam2048.pem;
+  ssl_ecdh_curve secp384r1;
+<% end -%>
 
 	include /etc/nginx/proxyconf/1.0.conf;
 }
