@@ -53,3 +53,7 @@ JAVA_OPTS="-Djava.awt.headless=true -Xmx<%= @xmx %> -Xms<%= @xms %> -XX:+UseConc
 # NOTE: authbind works only with IPv4.  Do not enable it when using IPv6.
 # (yes/no, default: no)
 #AUTHBIND=no
+
+# libtcnative on ubuntu 14.04 for oracle-java-8
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/
+
