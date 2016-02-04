@@ -41,6 +41,7 @@ class dhrep::services::digilib (
     mode    => '0644',
     content => template('dhrep/etc/textgrid/digilib/digilib.properties.erb'),
     require => File['/etc/textgrid/digilib'],
+    notify  => Service['tomcat-digilib'],
   }
 
   file { '/etc/textgrid/digilib/digilib-service.properties':
@@ -50,6 +51,7 @@ class dhrep::services::digilib (
     mode    => '0644',
     content => template('dhrep/etc/textgrid/digilib/digilib-service.properties.erb'),
     require => File['/etc/textgrid/digilib'],
+    notify  => Service['tomcat-digilib'],
   }
 
   ###
@@ -78,24 +80,19 @@ class dhrep::services::digilib (
   file { "/home/${user}/${catname}/webapps/${short}": 
     ensure  => 'link',
     target  => "/var/${scope}/webapps/${short}",
-    require => [File['/etc/textgrid/digilib/digilib.properties'],Dhrep::Resources::Servicetomcat[$catname]],
+    require => [Dhrep::Resources::Servicetomcat[$catname], Package[$digilib_name]],
+  } 
+  ->
+  file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
+    ensure  => link,
+    target  => '/etc/textgrid/digilib/digilib.properties',
+  } 
+  ->
+  file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
+    ensure  => link,
+    target  => '/etc/textgrid/digilib/digilib-service.properties',
   }
 
-#  dhrep::tools::wait_for_url_ready { 'wait_4_digilib_war_deployed':
-#    url         => "http://localhost:${http_port}/digilibservice/",
-#    require     => dhrep::Resources::Servicetomcat[$catname],
-#    refreshonly => true,
- # }
-  #->
-#  file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
-#    ensure  => link,
-#    target  => '/etc/textgrid/digilib/digilib.properties',
-#  }
-#  ->
-#  file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
-#    ensure  => link,
-#    target  => '/etc/textgrid/digilib/digilib-service.properties',
-#  }
 
   ###
   # nrpe
