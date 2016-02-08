@@ -15,7 +15,6 @@ clusternodes = scope.lookupvar('dhrep::services::tgauth::ldap_clusternodes')
 dn: cn=config
 objectClass: olcGlobal
 cn: config
-#olcConfigFile: /etc/ldap/slapd.conf
 olcConfigDir: /etc/ldap/slapd.d
 olcArgsFile: /var/run/slapd/slapd.args
 olcAttributeOptions: lang-
@@ -58,7 +57,7 @@ dn: cn=module{0},cn=config
 objectClass: olcModuleList
 cn: module{0}
 olcModulePath: /usr/lib/ldap
-olcModuleLoad: {0}back_hdb
+olcModuleLoad: {0}back_mdb
 <% if replication -%>
 # accesslog & syncprov for multi-master replication
 olcModuleLoad: {1}accesslog
@@ -1630,11 +1629,11 @@ olcRootPW: <%= @slapd_rootpw_sha %>
 olcSyncUseSubentry: FALSE
 olcMonitoring: FALSE
 
-# {1}hdb, config
-dn: olcDatabase={1}hdb,cn=config
+# {1}mdb, config
+dn: olcDatabase={1}mdb,cn=config
 objectClass: olcDatabaseConfig
-objectClass: olcHdbConfig
-olcDatabase: {1}hdb
+objectClass: olcMdbConfig
+olcDatabase: {1}mdb
 olcDbDirectory: /var/lib/ldap
 olcSuffix: dc=textgrid,dc=de
 olcAddContentAcl: FALSE
@@ -1646,15 +1645,8 @@ olcRootPW: <%= @slapd_rootpw_sha %>
 olcSizeLimit: unlimited
 olcSyncUseSubentry: FALSE
 olcMonitoring: FALSE
-olcDbCacheSize: 500000
 olcDbCheckpoint: 1024 5
-olcDbConfig: {0}set_cachesize 0 1073741824 0
-olcDbConfig: {1}set_lk_max_objects 1500
-olcDbConfig: {2}set_lk_max_locks 1500
-olcDbConfig: {3}set_lk_max_lockers 1500
 olcDbNoSync: FALSE
-olcDbDirtyRead: FALSE
-olcDbIDLcacheSize: 1500000
 olcDbIndex: objectClass eq
 olcDbIndex: uid eq,sub
 olcDbIndex: rbacSessionUser eq
@@ -1671,19 +1663,18 @@ olcDbIndex: displayname eq,sub
 olcDbIndex: mail eq,sub
 olcDbIndex: sn eq,sub
 olcDbIndex: o eq,sub
-olcDbLinearIndex: FALSE
 olcDbMode: 0600
+# https://sites.google.com/site/bmaupinwiki/home/applications/ldap/optimizing-openldap
+# 100 GB max database size
+olcDbMaxSize: <%= @ldap_dbmaxsize %>
 olcDbSearchStack: 16
-olcDbShmKey: 0
-olcDbCacheFree: 1
-olcDbDNcacheSize: 0
 
 <% if replication -%>
 # for mulitmaster replication, backend with overlay syncprov
-dn: olcDatabase={2}hdb,cn=config
+dn: olcDatabase={2}mdb,cn=config
 objectClass: olcDatabaseConfig
-objectClass: olcHdbConfig
-olcDatabase: {2}hdb
+objectClass: olcMdbConfig
+olcDatabase: {2}mdb
 olcDbDirectory: /var/lib/ldap/accesslog
 olcAccess: {0}to * by dn.exact="cn=repl­1,ou=bindaccounts,dc=textgrid,dc=de"
   read by dn.exact="cn=repl­2,ou=bindaccounts,dc=textgrid,dc=de" read
@@ -1691,11 +1682,6 @@ olcAddContentAcl: FALSE
 olcDbCacheFree: 1
 olcDbCacheSize: 500000
 olcDbCheckpoint: 1024 5
-olcDbConfig: {0}set_cachesize 0 1073741824 0
-olcDbConfig: {1}set_lk_max_objects 1500
-olcDbConfig: {2}set_lk_max_locks 1500
-olcDbConfig: {3}set_lk_max_lockers 1500
-olcDbConfig: {4}set_flags DB_LOG_AUTOREMOVE
 olcDbDirtyRead: FALSE
 olcDbDNcacheSize: 0
 olcDbIDLcacheSize: 1500000
@@ -1705,11 +1691,9 @@ olcDbIndex: reqStart eq
 olcDbIndex: reqType eq
 olcDbIndex: entryUUID eq
 olcDbIndex: reqResult eq
-olcDbLinearIndex: FALSE
 olcDbMode: 0600
 olcDbNoSync: FALSE
 olcDbSearchStack: 16
-olcDbShmKey: 0
 olcLastMod: TRUE
 olcLimits: {0}dn.exact="cn=repl­2,ou=bindaccounts,dc=textgrid,dc=de" size=un
  limited
@@ -1724,7 +1708,7 @@ olcSizeLimit: unlimited
 olcSuffix: cn=accesslog
 olcSyncUseSubentry: FALSE
 
-dn: olcOverlay={0}syncprov,olcDatabase={2}hdb,cn=config
+dn: olcOverlay={0}syncprov,olcDatabase={2}mdb,cn=config
 objectClass: olcSyncProvConfig
 objectClass: olcOverlayConfig
 objectClass: olcConfig
