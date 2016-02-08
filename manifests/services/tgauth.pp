@@ -33,6 +33,8 @@ class dhrep::services::tgauth (
   $ldap_dbmaxsize        = 10485760 # default value 10485760 bytes = 10mb
 ){
 
+  apt::ppa { 'ppa:rtandy/openldap-backports': }
+  ->
   package {
     'slapd':      ensure => present;
     'ldap-utils': ensure => present;
@@ -40,6 +42,8 @@ class dhrep::services::tgauth (
     'mailutils':  ensure => present;
     'php5-ldap':  ensure => present;
   }
+
+
 
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin'],
