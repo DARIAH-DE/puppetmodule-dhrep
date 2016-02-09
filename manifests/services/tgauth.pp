@@ -43,8 +43,6 @@ class dhrep::services::tgauth (
     'php5-ldap':  ensure => present;
   }
 
-
-
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin'],
   }

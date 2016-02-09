@@ -12,7 +12,7 @@
 <% if scope.lookupvar('dhrep::services::tgauth::no_shib_login') -%>
 	{"key":"authz","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/WebAuthN\/WebAuthN.php?authZinstance=<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>"},
 <% else -%>
-	{"key":"authz","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/Shibboleth.sso\/Login?target=\/1.0\/secure/\TextGrid-WebAuth.php?authZinstance=<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>"},
+	{"key":"authz","value":"<%= scope.lookupvar('dhrep::services::confserv::service_base_url') %>\/Shibboleth.sso\/Login?target=\/1.0\/secure\/TextGrid-WebAuth.php?authZinstance=<%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>"},
 <% end -%>
 	{"key":"info.textgrid.lemmatizer.service.endpoint","value":"http:\/\/clarin.ids-mannheim.de\/services\/textgrid\/lemmatizer" },
 	{"key":"info.textgrid.cosmas.service.endpoint","value":"http:\/\/clarin.ids-mannheim.de\/services\/textgrid\/cosmas" },
