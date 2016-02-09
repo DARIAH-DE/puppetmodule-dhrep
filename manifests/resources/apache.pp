@@ -61,7 +61,7 @@ class dhrep::resources::apache (
 #####################
 
 <VirtualHost *:${port}>
-    ServerName https://${::fqdn}
+    ServerName https://${::dhrep::public_hostname}
     ServerAdmin webmaster@localhost
     UseCanonicalName On
 

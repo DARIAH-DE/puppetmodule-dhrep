@@ -7,6 +7,7 @@
 #
 class dhrep (
   $scope = 'textgrid',
+  $public_hostname = $::fqdn,
   $tgauth_binddn_pass = undef,
   $tgauth_crud_secret = undef,
   $tgauth_slapd_rootpw = undef,
