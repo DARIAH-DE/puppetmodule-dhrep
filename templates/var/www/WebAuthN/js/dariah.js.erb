@@ -21,9 +21,10 @@ function getURLParameter(name, string) {
 var returnUrl = decodeURIComponent(getURLParameter('return', location.search));
 
 $('#dform').attr('action', returnUrl.substring(0,returnUrl.lastIndexOf("?")));
-var query = returnUrl.substring(returnUrl.lastIndexOf("?")+1).split("&");
+var query = returnUrl.substring(returnUrl.lastIndexOf("?")+1).split("&"); 
 jQuery.each( query, function ( i, params ) {
    var param_array=(params.split("="));
   $('#dform').append('<input type="hidden" name="' + param_array[0] + '" value="' + param_array[1] + '">');
 });
 $('#dform').append('<input type="hidden" name="entityID" value="<%= scope.lookupvar('::dariahshibboleth::idp_entityid') %>">');
+
