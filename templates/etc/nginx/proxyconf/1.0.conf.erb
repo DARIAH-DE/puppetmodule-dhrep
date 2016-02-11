@@ -185,6 +185,11 @@ location /pndsearch {
     proxy_pass http://ref.dariah.eu/pndsearch;
 }
 
+location /voyant {
+    proxy_pass https://dariah.fz-juelich.de/voyant;
+}
+
+
 # rewrite /textgrid: and /hdl: uris, so they are served by tgcrud
 rewrite ^/(textgrid:[a-z0-9\.]+)$ /1.0/tgcrud-public/rest/$1/data last;
 rewrite ^/(textgrid:[a-z0-9\.]+)/data$ /1.0/tgcrud-public/rest/$1/data last;
