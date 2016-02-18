@@ -1,5 +1,5 @@
 # location of this service
-serviceBaseUrl=http://<%= scope.lookupvar('::fqdn') %>/1.0/iiif/manifests
+serviceBaseUrl=https://textgridlab.org/1.0/iiif/manifests
 
 # sparql endpoint of triplestore
 sparqlEndpoint=http://localhost:9091/openrdf-sesame/repositories/textgrid-public
@@ -15,7 +15,7 @@ esIndex=textgrid-public
 esType=metadata
 
 # location and conformance level of iiif service
-iiifService.url=http://<%= scope.lookupvar('::fqdn') %>/1.0/digilib/rest/IIIF
+iiifService.url=https://textgridlab.org/1.0/digilib/rest/IIIF
 iiifService.conformance=http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level1
 
 # cache directory, needs to be existing and writeable
@@ -28,10 +28,12 @@ metsXsltFile=metsExtract.xsl
 jsonld.contextUrl=http://iiif.io/api/presentation/2/context.json
 
 # textgrid projects which should be listed for IIIF (comma separated)
-listedProjects=TGPR-2e532567-c3e3-36f5-3ecc-520cea7904cc,TGPR-2c283391-6ed5-70b4-2e5e-5501c856bca9,TGPR-d303e6d9-435d-4c98-aadc-5540cd346cfa,TGPR-16e20ddd-e4a5-d225-7db7-55eea81d6306
+listedProjects=TGPR-2e532567-c3e3-36f5-3ecc-520cea7904cc,TGPR-2c283391-6ed5-70b4-2e5e-5501c856bca9,TGPR-d303e6d9-435d-4c98-aadc-5540cd346cfa,TGPR-16e20ddd-e4a5-d225-7db7-55eea81d6306,TGPR-e29f9ad6-f267-ce94-2d69-5697ae0b09b8
 
 # url for textgridrep website
-textgridrepUrl=http://textgridrep.de/sandbox/browse?id=
+textgridrepUrl=https://textgridrep.org/browse/-/browse/
 
-miradorUrl=http://<%= scope.lookupvar('::fqdn') %>/1.0/iiif/mirador/view.html?uri=
+miradorUrl=https://textgridlab.org/1.0/iiif/mirador/view.html?uri=
 
+# uris of not incomplete textgrid publications, which cause errors
+brokenUris=textgrid:2524s.0,textgrid:258fc.0,textgrid:24hs0.0,textgrid:2522d.0,textgrid:2522c.0,textgrid:24js4.0
