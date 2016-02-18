@@ -5,8 +5,8 @@ serviceBaseUrl=https://textgridlab.org/1.0/iiif/manifests
 sparqlEndpoint=http://localhost:9091/openrdf-sesame/repositories/textgrid-public
 
 # tgcrud url
-tgcrudUrl=http://<%= scope.lookupvar('::fqdn') %>/1.0/tgcrud-public/rest
-tgsearchUrl=http://<%= scope.lookupvar('::fqdn') %>/1.0/tgsearch-public
+tgcrudUrl=https://textgridlab.org/1.0/tgcrud-public/rest
+tgsearchUrl=https://textgridlab.org/1.0/tgsearch-public
 
 # Elasticsearch config
 esCluster= <%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %>
