@@ -14,7 +14,7 @@ class dhrep::services::tomcat_aggregator (
   $jmx_port     = '9995'
   $gid          = '1014'
   $uid          = '1014'
-  $template     = 'dhrep/etc/default/tomcat-java7.erb'
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   $user         = $catname
   $group        = $catname
