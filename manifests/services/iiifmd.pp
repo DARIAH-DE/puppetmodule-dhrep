@@ -78,6 +78,7 @@ class dhrep::services::iiifmd (
     mode   => '0644',
   }
 
+  # TODO: npm nodejs build and dhsummit.html
   vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/m2':
     ensure   => present,
     owner  => $user,
