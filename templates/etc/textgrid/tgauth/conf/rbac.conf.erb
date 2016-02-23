@@ -2,21 +2,25 @@
 <configuration>
 
   <section name="user">
-    <var name="host"><%= scope.lookupvar('dhrep::services::tgauth::ldap_host') %></var>
+    <var name="host"><%= scope.lookupvar('dhrep::services::tgauth::user_ldap_host') %></var>
     <var name="port">389</var>
     <var name="version">3</var>
     <var name="tls">no</var>
-    <var name="base">ou=people,ou=rbac,dc=textgrid,dc=de</var>
-    <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
-    <var name="filter">(objectClass=inetorgperson)</var>
+    <!--var name="base">ou=people,ou=rbac,dc=textgrid,dc=de</var-->
+    <var name="base">dc=dariah,dc=eu</var>
+    <!--var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var-->
+    <var name="binddn">cn=Manager,dc=dariah,dc=eu</var>
+    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::user_binddn_pass') %></var>
+    <!--var name="filter">(objectClass=inetorgperson)</var-->
+    <var name="filter">(objectClass=dariahPerson)</var>
 
-    <!-- Possile values are "uid", "cn", "sn" or any other used in the
+    <!-- Possible values are "uid", "cn", "sn" or any other used in the
          objectClass "inetOrgPerson". If you want to use another attribute, you
          will have to write an Extension for the addUser-function. This is
          only possible if you use the RBAC-Framework instead of the plain
          libraries RBACcore or RBAClimitedHirarchical. -->
-    <var name="namingattribute">uid</var>
+    <!--var name="namingattribute">uid</var-->
+    <var name="namingattribute">dariahTextGridRbacId</var>
   </section>
 
   <section name="role">
@@ -59,7 +63,6 @@
     <var name="filter">(objectClass=rbacresource)</var>
   </section>
 
-
   <!-- This is the configuration section for the project-extension
        defined in the extensions/Project.class.php file.
        Notice: This part is independant from the configuration in
@@ -72,7 +75,6 @@
     <var name="editorRoleName">Bearbeiter</var>
     <var name="observerRoleName">Beobachter</var>
   </section>
-
 
   <section name="errorCode">
     <var name="OK">1</var>
