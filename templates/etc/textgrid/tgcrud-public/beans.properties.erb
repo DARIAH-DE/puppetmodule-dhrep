@@ -1,3 +1,3 @@
 CRUD_CONFIG = /etc/textgrid/tgcrud-public/tgcrud.properties
-WS_ENDPOINT = http://<%= scope.lookupvar('::fqdn') %>/1.0/tgcrud-public/TGCrudService
-RS_ENDPOINT = http://<%= scope.lookupvar('::fqdn') %>/1.0/tgcrud-public/rest
+WS_ENDPOINT = http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/TGCrudService
+RS_ENDPOINT = http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/rest

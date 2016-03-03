@@ -18,10 +18,10 @@
 class dhrep::services::tgauth (
   $scope,
   $ldap_host             = 'localhost',
-  $ldap_port             = '398',
+  $ldap_port             = '389',
   $binddn_pass           = '',
   $user_ldap_host        = 'auth.dariah.eu',
-  $user_ldap_port        = '398',
+  $user_ldap_port        = '389',
   $user_binddn_pass      = '',
   $crud_secret           = '',
   $webauth_secret        = '',
