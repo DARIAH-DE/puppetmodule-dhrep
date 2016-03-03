@@ -9,6 +9,7 @@ class dhrep (
   $scope = 'textgrid',
   $public_hostname = $::fqdn,
   $tgauth_binddn_pass = undef,
+  $tgauth_user_binddn_pass = undef,
   $tgauth_crud_secret = undef,
   $tgauth_slapd_rootpw = undef,
   $tgauth_authz_shib_pw = undef,

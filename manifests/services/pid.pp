@@ -4,8 +4,8 @@
 #
 class dhrep::services::pid (
   $scope            = undef,
-  $short            = 'tgpid',
-  $pid_name         = 'tgpid-service',
+  $short            = 'pid',
+  $pid_name         = 'pid-webapp',
   $pid_version      = 'latest',
   $pid_user         = '',
   $pid_passwd       = '',
@@ -72,10 +72,10 @@ class dhrep::services::pid (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  
+
   file { "/home/${user}/${catname}/webapps/${short}": 
     ensure => 'link',
-    target => "/var/${scope}/webapps/${short}",
+    target => "/var/dhrep/webapps/${short}",
     require => [File["/etc/${scope}/${short}/${short}.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 

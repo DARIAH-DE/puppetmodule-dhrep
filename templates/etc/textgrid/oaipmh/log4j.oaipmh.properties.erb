@@ -1,8 +1,8 @@
 ###
 # #%L
-# TG-pid Service Implementation
+# OAI-PMH Webapp
 # %%
-# Copyright (C) 2015 TextGrid Consortion (http://www.textgrid.de), SUB Göttingen (http://www.sub.uni-goettingen.de)
+# Copyright (C) 2011 - 2016 TextGrid Consortium (http://www.textgrid.de), SUB Göttingen (http://www.sub.uni-goettingen.de)
 # %%
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as 
@@ -19,10 +19,8 @@
 # <http://www.gnu.org/licenses/lgpl-3.0.html>.
 # #L%
 ###
-gwdg.user = <%= scope.lookupvar('dhrep::services::pid::pid_user') %>
-gwdg.pw = <%= scope.lookupvar('dhrep::services::pid::pid_passwd') %>
-handleservice.endpoint = <%= scope.lookupvar('dhrep::services::pid::pid_endpoint') %>
-handleservice.path = <%= scope.lookupvar('dhrep::services::pid::pid_path') %>
-handleservice.prefix = <%= scope.lookupvar('dhrep::services::pid::pid_prefix') %>
-tg.responsible = <%= scope.lookupvar('dhrep::services::pid::pid_responsible') %>
-tgauth.endpoint = http://localhost:8080/tgauth/tgextra.php
+log4j.rootLogger=ERROR, console
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.conversionPattern=%5p [%t] (%F:%L) - %m%n
+log4j.logger.info.textgrid.middleware=DEBUG

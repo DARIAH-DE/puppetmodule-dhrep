@@ -161,7 +161,7 @@ class dhrep::services::publish (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  
+
   file { "/home/${user}/${catname}/webapps/${publish_short}": 
     ensure  => 'link',
     target  => "/var/${scope}/webapps/${publish_short}",

@@ -56,16 +56,13 @@
 
   <section name="authentication">
     <var name="host"><%= scope.lookupvar('dhrep::services::tgauth::user_ldap_host') %></var>
-    <var name="port">389</var>
+    <var name="port"><%= scope.lookupvar('dhrep::services::tgauth::user_ldap_port') %></var>
     <var name="version">3</var>
     <var name="tls">no</var>
-    <!--var name="base">ou=people,ou=rbac,dc=textgrid,dc=de</var-->
-    <var name="base">dc=dariah,de=eu</var>
-    <!--var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var-->
-    <var name="binddn">cn=Manager,dc=dariah,dc=eu</var>
+    <var name="base">dc=dariah,dc=eu</var>
+    <var name="binddn">cn=manager,dc=dariah,dc=eu</var>
     <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::user_binddn_pass') %></var>
-    <!--var name="namingattribute">uid</var-->
-    <var name="namingattribute">dariahTextGridRbacId<var>
+    <var name="namingattribute">dariahTextGridRbacId</var>
     <var name="filter">(objectClass=dariahPerson)</var>
   </section>
 
