@@ -8,7 +8,7 @@
     <var name="tls">no</var>
     <var name="base">dc=dariah,dc=eu</var>
     <var name="binddn">cn=manager,dc=dariah,dc=eu</var>
-    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::user_binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('profiles::textgrid::tgauth_user_binddn_pass') %></var>
     <var name="filter">(objectClass=dariahPerson)</var>
 
     <!-- Possible values are "uid", "cn", "sn" or any other used in the
@@ -27,7 +27,7 @@
     <var name="tls">no</var>
     <var name="base">ou=roles,ou=rbac,dc=textgrid,dc=de</var>
     <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('profiles::textgrid::tgauth_binddn_pass') %></var>
     <var name="namingattribute">rbacname</var>
     <var name="filter">(objectClass=rbacrole)</var>
 
@@ -42,7 +42,7 @@
     <var name="tls">no</var>
     <var name="base">ou=sessions,ou=rbac,dc=textgrid,dc=de</var>
     <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('profiles::textgrid::tgauth_binddn_pass') %></var>
     <var name="namingattribute">rbacname</var>
     <var name="filter">(objectClass=rbacsession)</var>
   </section>
@@ -54,7 +54,7 @@
     <var name="tls">no</var>
     <var name="base">ou=rbac,dc=textgrid,dc=de</var>
     <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('profiles::textgrid::tgauth_binddn_pass') %></var>
     <var name="namingattribute">rbacname</var>
     <var name="aliasattribute">tgresourceuri</var>
     <var name="filter">(objectClass=rbacresource)</var>

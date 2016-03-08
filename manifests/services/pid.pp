@@ -42,6 +42,7 @@ class dhrep::services::pid (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${short}/${short}.properties.erb"),
     require => File["/etc/${scope}/${short}"],
+    notify  => Service[$catname],
   }
 
   ###

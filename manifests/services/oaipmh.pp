@@ -38,6 +38,7 @@ class dhrep::services::oaipmh (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${short}/oaipmh.properties.erb"),
     require => File["/etc/${scope}/${short}"],
+    notify  => Service[$catname],
   }
 
   ###

@@ -22,9 +22,9 @@
     <rbacbase><%= scope.lookupvar('dhrep::services::tgauth::rbac_base') %></rbacbase>
     <sessioncreator>
       <user>shibconnector@application.int</user>
-      <password><%= scope.lookupvar('dhrep::services::tgauth::authz_shib_pw') %></password>
+      <password><%= scope.lookupvar('profiles::textgrid::tgauth_authz_shib_pw') %></password>
     </sessioncreator>
-    <setnamessecret><%= scope.lookupvar('dhrep::services::tgauth::webauth_secret') %></setnamessecret>
+    <setnamessecret><%= scope.lookupvar('profiles::textgrid::tgauth_webauth_secret') %></setnamessecret>
   </authz>
 
 </conf>

@@ -45,7 +45,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/config.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service['tomcat-tgpublish'],
+    notify  => Service[$catname],
   }
 
   file { "/etc/${scope}/${publish_short}/conf/beans.properties":
