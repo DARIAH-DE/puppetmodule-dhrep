@@ -74,7 +74,9 @@ class dhrep::services::pid (
   # symlink war from deb package to tomcat webapps dir
   ###
 
-  file { "/home/${user}/${catname}/webapps/${short}": 
+  # NOTE: Using dhpid instead of ${short} (pid) because of tomcat's service start
+  # seems to be in alphabetocal order, and pid service must be started first
+  file { "/home/${user}/${catname}/webapps/tgpid": 
     ensure => 'link',
     target => "/var/dhrep/webapps/${short}",
     require => [File["/etc/${scope}/${short}/${short}.properties"],Dhrep::Resources::Servicetomcat[$catname]],
