@@ -148,8 +148,8 @@ fi
 # pid
 #
 FILE="version"
-PID=$SERVER"/1.0/pid/"$FILE
-echo "checking "$CSTR"pid"$CNRM" --> "$PID
+PID=$SERVER"/1.0/tgpid/"$FILE
+echo "checking "$CSTR"tgpid"$CNRM" --> "$PID
 wget -q $PID
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
