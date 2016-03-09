@@ -1,3 +1,5 @@
+RS_ENDPOINT = http://<%= scope.lookupvar('::fqdn') %>/tgoaipmh
+
 ############################
 ##  ElasticSearch Config  ##
 ############################
@@ -15,12 +17,12 @@ elasticSearch.type = metadata
 textgrid = true
 dariah = false
 
-############################
-##  Repositoy Properties  ##
-############################
+#############################
+##  Repository Properties  ##
+#############################
 
 RepositoryName = TextGrid Repository
-BaseUrl = http://www.textgridrep.de
+BaseUrl = http://<%= scope.lookupvar('::fqdn') %>
 DeletedRecordInfo = NO
 EarliestDateStamp = 2011-06-11T02:32:40Z
 Granularity = YYYY_MM_DD_THH_MM_SS_Z
@@ -69,4 +71,4 @@ repositoryObjectURIPrefix = textgrid:
 identifierPrefix = textgridUri
 identifierField = textgridUri
 specFieldPrefix = textgrid
-modiefiedField = lastModified
+modifiedField = lastModified

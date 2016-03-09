@@ -79,7 +79,7 @@ class dhrep::services::oaipmh (
   # symlink war from deb package to tomcat webapps dir
   ###
 
-  file { "/home/${user}/${catname}/webapps/${short}": 
+  file { "/home/${user}/${catname}/webapps/${short}":
     ensure  => 'link',
     target  => "/var/dhrep/webapps/${short}",
     require => [File["/etc/${scope}/${short}/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$catname]],

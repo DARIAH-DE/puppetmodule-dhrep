@@ -132,8 +132,8 @@ fi
 # oaipmh
 #
 FILE="version"
-OAIPMH=$SERVER"/1.0/oaipmh/oai/"$FILE
-echo "checking "$CSTR"oaipmh"$CNRM" --> "$OAIPMH
+OAIPMH=$SERVER"/1.0/tgoaipmh/oai/"$FILE
+echo "checking "$CSTR"tgoaipmh"$CNRM" --> "$OAIPMH
 wget -q $OAIPMH
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
