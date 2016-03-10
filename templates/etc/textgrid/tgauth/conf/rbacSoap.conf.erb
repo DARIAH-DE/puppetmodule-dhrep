@@ -1,11 +1,11 @@
 <configuration>
 
   <section name="crud">
-    <var name="secret"><%= scope.lookupvar('dhrep::services::tgauth::crud_secret') %></var>
+    <var name="secret"><%= scope.lookupvar('profiles::textgrid::tgauth_crud_secret') %></var>
   </section>
 
   <section name="webAuth">
-    <var name="secret"><%= scope.lookupvar('dhrep::services::tgauth::webauth_secret') %></var>
+    <var name="secret"><%= scope.lookupvar('profiles::textgrid::tgauth_webauth_secret') %></var>
   </section>
 
   <section name="SIDcheck">
@@ -22,7 +22,7 @@
     <!-- value: optionalness|attrNameInLDAP|schemaNameInLDAP|attrDisplayname|attrDescription -->
     <var name="givenname">mandatory|givenname|inetOrgPerson|Given Name|Your First Name</var>
     <var name="surname">mandatory|sn|inetOrgPerson|Surname|Your Last Name</var>
-    <var name="displayname">optional|displayname|inetOrgPerson|Full Name|Your Name for Display Purposes</var>
+    <var name="displayname">optional|cn|inetOrgPerson|Full Name|Your Name for Display Purposes</var>
     <var name="mail">mandatory|mail|inetOrgPerson|E-Mail|Your Electronic Mail Address</var>
     <var name="organisation">mandatory|o|inetOrgPerson|Institution|Institute or Organisation</var>
     <var name="orgunit">optional|ou|inetOrgPerson|Department|Organisational Unit</var>
@@ -32,10 +32,10 @@
     <var name="country">mandatory|c|TextGridUser|Country|Country of Residence</var>
     <var name="tel">mandatory|telephoneNumber|inetOrgPerson|Phone|Phone Number, International Format</var>
     <var name="citizenship">mandatory|schacCountryOfCitizenship|schacPersonalCharacteristics|Citizenship|Your Country of Citizenship</var>
-    <var name="interest">optional|TGfieldOfInterest|TextGridUser|Field of Interest|Optional specification of fields of research interests in conjuction with TextGrid</var>
-    <var name="personid">optional|TGidentifierForPerson|TextGridUser|Person ID|PND / URI for Person, e.g. http://xyz.org/~johndoe</var>
-    <var name="agreesearch">optional|TGagreeSearch|TextGridUser|Searchable|If this option is set, other TextGrid users can find you by Name, Institution or E-Mail-Address</var>
-    <var name="ToUversion">mandatory|TGacceptedTermsOfUse|TextGridUser|Terms Of Use|Latest Version of Terms Of Use that has been accepted by user</var>
+    <var name="interest">optional|dariahResearchInterests|TextGridUser|Field of Interest|Optional specification of fields of research interests in conjuction with TextGrid</var>
+    <var name="personid">optional|dariahResearcherIds|TextGridUser|Person ID|PND / URI for Person, e.g. http://xyz.org/~johndoe</var>
+    <var name="agreesearch">optional|dariahIsSearchable|TextGridUser|Searchable|If this option is set, other TextGrid users can find you by Name, Institution or E-Mail-Address</var>
+    <var name="ToUversion">mandatory|dariahTermsOfUse|TextGridUser|Terms Of Use|Latest Version of Terms Of Use that has been accepted by user</var>
   </section>
 
   <section name="errorCode">
@@ -55,14 +55,15 @@
   </section>
 
   <section name="authentication">
-    <var name="host"><%= scope.lookupvar('dhrep::services::tgauth::ldap_host') %></var>
-    <var name="port">389</var>
+    <var name="host"><%= scope.lookupvar('dhrep::services::tgauth::user_ldap_host') %></var>
+    <var name="port"><%= scope.lookupvar('dhrep::services::tgauth::user_ldap_port') %></var>
     <var name="version">3</var>
     <var name="tls">no</var>
-    <var name="base">ou=people,ou=rbac,dc=textgrid,dc=de</var>
-    <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
-    <var name="namingattribute">uid</var>
+    <var name="base">dc=dariah,dc=eu</var>
+    <var name="binddn">cn=manager,dc=dariah,dc=eu</var>
+    <var name="password"><%= scope.lookupvar('profiles::textgrid::tgauth_user_binddn_pass') %></var>
+    <var name="namingattribute">dariahTextGridRbacId</var>
+    <var name="filter">(objectClass=dariahPerson)</var>
   </section>
 
   <section name="counter">
@@ -72,7 +73,7 @@
     <var name="tls">no</var>
     <var name="base">ou=counter,ou=rbac,dc=textgrid,dc=de</var>
     <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('profiles::textgrid::tgauth_binddn_pass') %></var>
     <var name="namingattribute">cn</var>
   </section>
 

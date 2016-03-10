@@ -9,6 +9,7 @@ class dhrep (
   $scope = 'textgrid',
   $public_hostname = $::fqdn,
   $tgauth_binddn_pass = undef,
+  $tgauth_user_binddn_pass = undef,
   $tgauth_crud_secret = undef,
   $tgauth_slapd_rootpw = undef,
   $tgauth_authz_shib_pw = undef,
@@ -24,13 +25,14 @@ class dhrep (
 
   # internal services containing variables used by other modules need to be evaluated in order
   class { 'dhrep::services::tgauth':
-    scope          => $scope,
-    binddn_pass    => $tgauth_binddn_pass,
-    crud_secret    => $tgauth_crud_secret,
-    slapd_rootpw   => $tgauth_slapd_rootpw,
-    authz_instance => $tgauth_authz_instance,
-    authz_shib_pw  => $tgauth_authz_shib_pw,
-    webauth_secret => $tgauth_webauth_secret,
+    scope            => $scope,
+    binddn_pass      => $tgauth_binddn_pass,
+    user_binddn_pass => $tgauth_user_binddn_pass,
+    crud_secret      => $tgauth_crud_secret,
+    slapd_rootpw     => $tgauth_slapd_rootpw,
+    authz_instance   => $tgauth_authz_instance,
+    authz_shib_pw    => $tgauth_authz_shib_pw,
+    webauth_secret   => $tgauth_webauth_secret,
   }
 
   class { 'dhrep::services::intern::tgelasticsearch':

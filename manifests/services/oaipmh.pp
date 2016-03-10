@@ -4,7 +4,7 @@
 #
 class dhrep::services::oaipmh (
   $scope            = undef,
-  $short            = 'tgoaipmh',
+  $short            = 'oaipmh',
   $oaipmh_name      = 'oaipmh-webapp',
   $oaipmh_version   = 'latest',
 ) inherits dhrep::params {
@@ -38,6 +38,7 @@ class dhrep::services::oaipmh (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${short}/oaipmh.properties.erb"),
     require => File["/etc/${scope}/${short}"],
+    notify  => Service[$catname],
   }
 
   ###
@@ -55,7 +56,7 @@ class dhrep::services::oaipmh (
 
   file { "/var/log/${scope}/${short}":
     ensure  => directory,
-    owner   => root,
+    owner   => $user,
     group   => $group,
     mode    => '0775',
     require => File["/var/log/${scope}"],
@@ -77,10 +78,10 @@ class dhrep::services::oaipmh (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  
-  file { "/home/${user}/${catname}/webapps/${short}": 
+
+  file { "/home/${user}/${catname}/webapps/${short}":
     ensure  => 'link',
-    target  => "/var/${scope}/webapps/${short}",
+    target  => "/var/dhrep/webapps/${short}",
     require => [File["/etc/${scope}/${short}/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 

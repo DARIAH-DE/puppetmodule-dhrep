@@ -4,8 +4,8 @@
 #
 class dhrep::services::pid (
   $scope            = undef,
-  $short            = 'tgpid',
-  $pid_name         = 'tgpid-service',
+  $short            = 'pid',
+  $pid_name         = 'pid-webapp',
   $pid_version      = 'latest',
   $pid_user         = '',
   $pid_passwd       = '',
@@ -42,6 +42,7 @@ class dhrep::services::pid (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${short}/${short}.properties.erb"),
     require => File["/etc/${scope}/${short}"],
+    notify  => Service[$catname],
   }
 
   ###
@@ -72,10 +73,12 @@ class dhrep::services::pid (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  
-  file { "/home/${user}/${catname}/webapps/${short}": 
+
+  # NOTE: Using dhpid instead of ${short} (pid) because of tomcat's service start
+  # seems to be in alphabetocal order, and pid service must be started first
+  file { "/home/${user}/${catname}/webapps/tgpid": 
     ensure => 'link',
-    target => "/var/${scope}/webapps/${short}",
+    target => "/var/dhrep/webapps/${short}",
     require => [File["/etc/${scope}/${short}/${short}.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 

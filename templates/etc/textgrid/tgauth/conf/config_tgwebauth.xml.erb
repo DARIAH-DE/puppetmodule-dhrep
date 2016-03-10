@@ -9,7 +9,7 @@
     <key name="filter">(uid=${login})</key>
     <key name="IDattribute">dariahMappedIds;eduPersonPrincipalName</key>
     <key name="name">DARIAH Community Authentication Server</key>
-    <key name="setAttributesDN">cn=Manager,dc=dariah,dc=eu</key>
+    <key name="setAttributesDN">cn=manager,dc=dariah,dc=eu</key>
     <!-- Secret is used for updating attributes only! -->
     <key name="setAttributesPW"><%= scope.lookupvar('dhrep::services::tgauth::webauth_dariah_secret') %></key>
   </authn>
@@ -22,9 +22,9 @@
     <rbacbase><%= scope.lookupvar('dhrep::services::tgauth::rbac_base') %></rbacbase>
     <sessioncreator>
       <user>shibconnector@application.int</user>
-      <password><%= scope.lookupvar('dhrep::services::tgauth::authz_shib_pw') %></password>
+      <password><%= scope.lookupvar('profiles::textgrid::tgauth_authz_shib_pw') %></password>
     </sessioncreator>
-    <setnamessecret><%= scope.lookupvar('dhrep::services::tgauth::webauth_secret') %></setnamessecret>
+    <setnamessecret><%= scope.lookupvar('profiles::textgrid::tgauth_webauth_secret') %></setnamessecret>
   </authz>
 
 </conf>

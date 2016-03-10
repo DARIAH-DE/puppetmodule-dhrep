@@ -37,10 +37,10 @@ location /1.0/triplestore {
 }
 
 location /1.0/tgoaipmh {
-    proxy_pass		http://localhost:9097/tgoaipmh;
-    proxy_set_header        X-Real-IP $remote_addr;
-    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header        Host $http_host;
+    proxy_pass		http://localhost:9097/oaipmh;
+    proxy_set_header	X-Real-IP $remote_addr;
+    proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header	Host $http_host;
 }
 
 location /1.0/tgsearch {
@@ -207,4 +207,3 @@ rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)$ /1.0/tgcrud/rest/$1/data las
 rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)/data$ /1.0/tgcrud/rest/$1/data last;
 rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)/metadata$ /1.0/tgcrud/rest/$1/metadata last;
 rewrite_log on;
-

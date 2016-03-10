@@ -41,6 +41,7 @@ class dhrep::services::crud (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${short}/${short}.properties.erb"),
     require => File["/etc/${scope}/${short}"],
+    notify  => Service[$catname],
   }
 
   file { "/etc/${scope}/${short}/beans.properties":

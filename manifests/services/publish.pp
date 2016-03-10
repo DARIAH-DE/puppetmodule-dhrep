@@ -45,7 +45,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/config.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service['tomcat-tgpublish'],
+    notify  => Service[$catname],
   }
 
   file { "/etc/${scope}/${publish_short}/conf/beans.properties":
@@ -161,7 +161,7 @@ class dhrep::services::publish (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  
+
   file { "/home/${user}/${catname}/webapps/${publish_short}": 
     ensure  => 'link',
     target  => "/var/${scope}/webapps/${publish_short}",
