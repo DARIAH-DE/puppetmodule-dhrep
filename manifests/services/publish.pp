@@ -148,8 +148,8 @@ class dhrep::services::publish (
   logrotate::rule { $publish_short:
     path         => "/var/log/${scope}/${publish_short}/${publish_short}.log",
     require      => File["/var/log/${scope}/${publish_short}"],
-    rotate       => 365,
-    rotate_every => 'week',
+    rotate       => 30,
+    rotate_every => 'day',
     compress     => true,
     copytruncate => true,
     missingok    => true,
