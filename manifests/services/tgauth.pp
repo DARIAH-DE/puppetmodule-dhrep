@@ -415,7 +415,7 @@ class dhrep::services::tgauth (
     notify => Service['apache2'],
   }
 
-  # Configure LDAP backup and unused logfile removing.
+  # Configure LDAP backup.
   file { '/var/textgrid/backups/' :
     ensure  => directory,
     owner   => 'root',
@@ -481,12 +481,34 @@ class dhrep::services::tgauth (
   }
 
   ###
-  # nrpe for LDAP
+  # nrpe for ldap, ldap-backup and ldap-statistic 
   ###
   dariahcommon::nagios_service { 'check_ldap':
     command => "/usr/lib/nagios/plugins/check_ldap -H localhost -b dc=textgrid,dc=de -3",
   }
-
+  file { '/opt/dhrep/check_ldap_statistics.sh' :
+    source  => 'puppet:///modules/dhrep/opt/dhrep/check_ldap_statistics.sh',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    require => File['/opt/dhrep/ldap-statistic.pl'],
+  }
+  dariahcommon::nagios_service { 'check_ldap_backups':
+    command => "/opt/dhrep/check_ldap_backups.sh",
+    require => File['/opt/dhrep/check_ldap_backups.sh'],
+  }
+  file { '/opt/dhrep/check_ldap_backups.sh' :
+    source  => 'puppet:///modules/dhrep/opt/dhrep/check_ldap_backups.sh',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    require => File['/opt/dhrep/ldap-backup.sh'],
+  }
+  dariahcommon::nagios_service { 'check_ldap_statistics':
+    command => "/opt/dhrep/check_ldap_statistics.sh",
+    require => File['/opt/dhrep/check_ldap_statistics.sh'],
+  }
+  
   ###
   # monitor slapd with collectd
   ###
