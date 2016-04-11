@@ -490,7 +490,7 @@ class dhrep::services::tgauth (
     source  => 'puppet:///modules/dhrep/opt/dhrep/check_ldap_statistics.sh',
     owner   => 'root',
     group   => 'root',
-    mode    => '0700',
+    mode    => '0755',
     require => File['/opt/dhrep/ldap-statistic.pl'],
   }
   dariahcommon::nagios_service { 'check_ldap_backups':
@@ -501,7 +501,7 @@ class dhrep::services::tgauth (
     source  => 'puppet:///modules/dhrep/opt/dhrep/check_ldap_backups.sh',
     owner   => 'root',
     group   => 'root',
-    mode    => '0700',
+    mode    => '0755',
     require => File['/opt/dhrep/ldap-backup.sh'],
   }
   dariahcommon::nagios_service { 'check_ldap_statistics':
