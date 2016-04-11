@@ -1,7 +1,7 @@
 #!/bin/bash
 
-P1=`ls -r1t rbacusers-*.csv | tail -1` 
-P2=`ls -r1t rbacusers-*.txt | tail -1`
+P1=`ls -r1t /var/textgrid/statistics/ldap/rbacusers-*.csv | tail -1` 
+P2=`ls -r1t /var/textgrid/statistics/ldap/rbacusers-*.txt | tail -1`
 onemonth=$((31*24*60*60))
 
 # Taken from: http://stackoverflow.com/questions/1819187/test-a-file-date-with-bash (THANKS!)
