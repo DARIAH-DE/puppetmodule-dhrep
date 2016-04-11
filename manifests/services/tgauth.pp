@@ -420,14 +420,14 @@ class dhrep::services::tgauth (
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
-    mode    => '0771',
+    mode    => '0701',
     require => File['/var/textgrid'],
   }
   file { '/var/textgrid/backups/ldap' :
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
-    mode    => '0771',
+    mode    => '0701',
     require => File['/var/textgrid/backups'],
   }
   file { '/opt/dhrep' :

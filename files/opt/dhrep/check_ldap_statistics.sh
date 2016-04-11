@@ -40,5 +40,5 @@ if [ $delta -gt $onemonth ]; then
   exit 2
 fi
 
-echo "LDAP statistics OK: statistic files [$P1] and [$P2] existing"
+echo "LDAP statistics OK: statistic files existing and less than one month old"
 exit 0

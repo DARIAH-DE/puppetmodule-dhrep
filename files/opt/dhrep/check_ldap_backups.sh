@@ -41,5 +41,5 @@ if [ $delta -gt $twodays ]; then
   exit 1
 fi
 
-echo "LDAP backup OK: backup files [$P1] and [$P2] existing"
+echo "LDAP backup OK: backup files existing and less than 24 hours old"
 exit 0
