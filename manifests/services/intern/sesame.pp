@@ -98,7 +98,7 @@ class dhrep::services::intern::sesame (
     ensure  => directory,
     owner   => $tgname,
     group   => $tgname,
-    mode    => '0701',
+    mode    => '0755',
     require => File['/var/textgrid/backups'],
   }
   file{ '/opt/dhrep/sesame-backup.sh' :
