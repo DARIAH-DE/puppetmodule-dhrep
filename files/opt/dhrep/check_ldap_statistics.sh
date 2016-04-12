@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# First get newest CSV and TXT filenames
 P1=`ls -r1t /var/textgrid/statistics/ldap/rbacusers-*.csv | tail -1` 
 P2=`ls -r1t /var/textgrid/statistics/ldap/rbacusers-*.txt | tail -1`
 onemonth=$((31*24*60*60))

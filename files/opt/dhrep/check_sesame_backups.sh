@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# First get newest nonpublic and public filenames
 P1=`ls -r1t /var/textgrid/backups/sesame/openrdf_textgrid-nonpublic*.rdf.gz | tail -1` 
 P2=`ls -r1t /var/textgrid/backups/sesame/openrdf_textgrid-public*.rdf.gz | tail -1`
 oneday=$((24*60*60))
