@@ -32,12 +32,12 @@ fi
 
 modsecs=$(date --utc --reference=$P2 +%s)
 nowsecs=$(date +%s)
-delta=$(($nowsecs-$modsecs))
+delta2=$(($nowsecs-$modsecs))
 
 #echo "ldap backup file $P2 was modified $delta secs ago"
 
-if [ $delta -gt $twodays ]; then
-  echo "LDAP backup WARNING: LDAP backup file $P2 is older than 48h (>$((delta/3600))h)!"
+if [ $delta2 -gt $twodays ]; then
+  echo "LDAP backup WARNING: LDAP backup file $P2 is older than 48h (>$((delta2/3600))h)!"
   exit 1
 fi
 
