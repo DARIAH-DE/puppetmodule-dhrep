@@ -20,7 +20,7 @@ delta=$(($nowsecs-$modsecs))
 #echo "ldap backup file $P1 was modified $delta secs ago"
 
 if [ $delta -gt $oneday ]; then
-  echo "LDAP backup CRITICAL: LDAP backup file [$P1] is older than 24h!"
+  echo "LDAP backup CRITICAL: LDAP backup file $P1 is older than 24h (>$((delta/3600))h)!"
   exit 2
 fi
 
@@ -37,9 +37,9 @@ delta=$(($nowsecs-$modsecs))
 #echo "ldap backup file $P2 was modified $delta secs ago"
 
 if [ $delta -gt $twodays ]; then
-  echo "LDAP backup WARNING: LDAP backup file [$P2] is older than 48h!"
+  echo "LDAP backup WARNING: LDAP backup file $P2 is older than 48h (>$((delta/3600))h)!"
   exit 1
 fi
 
-echo "LDAP backup OK: backup files existing and less than 24 hours old"
+echo "LDAP backup OK: backup files existing and less than 24 hours old (>$((delta/3600))h)"
 exit 0

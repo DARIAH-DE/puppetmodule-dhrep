@@ -9,7 +9,7 @@ onemonth=$((31*24*60*60))
 
 # Test statistic CSV file
 if ! [ -f $P1 ]; then
-  echo "LDAP statistic CRITICAL: LDAP statistic file [$P1] does not exist!"
+  echo "LDAP statistic CRITICAL: LDAP statistic file $P1 does not exist!"
   exit 2
 fi
 
@@ -20,13 +20,13 @@ delta=$(($nowsecs-$modsecs))
 #echo "ldap statistic file $P1 was modified $delta secs ago"
 
 if [ $delta -gt $onemonth ]; then
-  echo "LDAP statistics CRITICAL: LDAP statistic file [$P1] is older than one month!"
+  echo "LDAP statistics CRITICAL: LDAP statistic file $P1 is older than one month (>$(($delta/(24*3600)))d)!"
   exit 2
 fi
 
 # Test statistic TXT file
 if ! [ -f $P2 ]; then
-  echo "LDAP statistics CRITICAL: LDAP statistic file [$P2] does not exist!"
+  echo "LDAP statistics CRITICAL: LDAP statistic file $P2 does not exist!"
   exit 2
 fi
 
@@ -37,9 +37,9 @@ delta=$(($nowsecs-$modsecs))
 #echo "ldap statistic file $P2 was modified $delta secs ago"
 
 if [ $delta -gt $onemonth ]; then
-  echo "LDAP statistics CRITICAL: LDAP statistic file [$P2] is older than one month!"
+  echo "LDAP statistics CRITICAL: LDAP statistic file $P2 is older than one month (>$(($delta/24*3600))d)!"
   exit 2
 fi
 
-echo "LDAP statistics OK: statistic files existing and less than one month old"
+echo "LDAP statistics OK: statistic files existing and less than one month old (>$(($delta/(24*3600)))d)"
 exit 0

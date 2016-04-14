@@ -13,7 +13,7 @@ if [ -z $P1 ]; then
   exit 2
 fi
 if ! [ -f $P1 ]; then
-  echo "SESAME backup CRITICAL (nonpublic): SESAME backup file [$P1] does not exist!"
+  echo "SESAME backup CRITICAL (nonpublic): SESAME backup file $P1 does not exist!"
   exit 2
 fi
 
@@ -28,13 +28,13 @@ if [ -z $P2 ]; then
   exit 2
 fi
 if [ $delta -gt $oneday ]; then
-  echo "SESAME backup CRITICAL (nonpublic): SESAME backup file [$P1] is older than 24h!"
+  echo "SESAME backup CRITICAL (nonpublic): SESAME backup file $P1 is older than 24h (>$(($delta/3600)h)!"
   exit 2
 fi
 
 # Test public sesame backup file
 if ! [ -f $P2 ]; then
-  echo "SESAME backup CRITICAL (public): SESAME backup file [$P2] does not exist!"
+  echo "SESAME backup CRITICAL (public): SESAME backup file $P2 does not exist!"
   exit 2
 fi
 
@@ -45,9 +45,9 @@ delta=$(($nowsecs-$modsecs))
 #echo "sesame backup file $P2 was modified $delta secs ago"
 
 if [ $delta -gt $oneday ]; then
-  echo "SESAME backup CRITICAL (public): SESAME backup file [$P2] is older than 24h!"
+  echo "SESAME backup CRITICAL (public): SESAME backup file $P2 is older than 24h (>$($delta/3600))h)!"
   exit 2
 fi
 
-echo "SESAME backups OK: nonpublic and public backup files existing and less than 24h old"
+echo "SESAME backups OK: nonpublic and public backup files existing and less than 24h old (>$((delta/3600))h)"
 exit 0
