@@ -28,7 +28,7 @@ if [ -z $P2 ]; then
   exit 2
 fi
 if [ $delta -gt $oneday ]; then
-  echo "SESAME backup CRITICAL (nonpublic): SESAME backup file $P1 is older than 24h (>$(($delta/3600)h)!"
+  echo "SESAME backup CRITICAL (nonpublic): SESAME backup file $P1 is older than 24h (>$(($delta/3600))h)!"
   exit 2
 fi
 
@@ -45,7 +45,7 @@ delta=$(($nowsecs-$modsecs))
 #echo "sesame backup file $P2 was modified $delta secs ago"
 
 if [ $delta -gt $oneday ]; then
-  echo "SESAME backup CRITICAL (public): SESAME backup file $P2 is older than 24h (>$($delta/3600))h)!"
+  echo "SESAME backup CRITICAL (public): SESAME backup file $P2 is older than 24h (>$(($delta/3600))h)!"
   exit 2
 fi
 
