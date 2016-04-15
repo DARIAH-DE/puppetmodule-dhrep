@@ -109,7 +109,7 @@ class dhrep::services::intern::sesame (
     require => [File['/opt/dhrep'],File['/var/textgrid/backups/sesame']],
   }
   cron { 'sesame-backup' :
-    command  => '/opt/dhrep/sesame_backups.sh',
+    command  => '/opt/dhrep/sesame-backup.sh',
     user     => $tgname,
     hour     => 22,
     minute   => 33,
