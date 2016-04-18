@@ -442,7 +442,7 @@ class dhrep::services::tgauth (
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
-    mode    => '0701',
+    mode    => '0755',
     require => File['/var/textgrid'],
   }
   file { '/opt/dhrep/ldap-statistic.pl' :
