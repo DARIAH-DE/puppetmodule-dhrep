@@ -37,7 +37,7 @@ delta=$(($nowsecs-$modsecs))
 #echo "ldap statistic file $P2 was modified $delta secs ago"
 
 if [ $delta -gt $onemonth ]; then
-  echo "LDAP statistics CRITICAL: LDAP statistic file $P2 is older than one month (>$(($delta/24*3600))d)!"
+  echo "LDAP statistics CRITICAL: LDAP statistic file $P2 is older than one month (>$(($delta/(24*3600)))d)!"
   exit 2
 fi
 
