@@ -76,7 +76,7 @@ class dhrep::services::crud_public (
   }
 
   logrotate::rule { $short:
-    path         => "/var/log/${scope}/${short}/${short}.log",
+    path         => "/var/log/${scope}/${short}/tgcrud.log",
     require      => File["/var/log/${scope}/${short}"],
     rotate       => 30,
     rotate_every => 'day',
