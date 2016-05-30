@@ -491,7 +491,7 @@ class dhrep::services::tgauth (
   # monitor slapd with collectd
   ###
 #  @collectd::plugin::processes::process { 'slapd' : 
-#    tag => 'femonitoring_collectd',
+#    tag => 'gwdgmetrics_collectd',
 #  }
 
    collectd::plugin::processes::process { 'slapd' : }

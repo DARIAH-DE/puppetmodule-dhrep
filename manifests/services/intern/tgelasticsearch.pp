@@ -123,7 +123,7 @@ class dhrep::services::intern::tgelasticsearch (
   }
 
   @file { '/etc/collectd/conf.d/88-elastic.conf':
-    tag     => 'femonitoring_collectd',
+    tag     => 'gwdgmetrics_collectd',
     ensure  => present,
     owner   => 'root',
     group   => 'root',
