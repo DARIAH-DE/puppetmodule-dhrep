@@ -262,4 +262,17 @@ class dhrep (
     }
   }
 
+  # todo: move to gwdgmetrics module
+  collectd::plugin::genericjmx::mbean {
+    'process_cpu_load':
+      object_name     => 'java.lang:type=OperatingSystem',
+      instance_prefix => 'process_cpu_load',
+      values          => [
+        {
+          'type'      => 'gauge',
+          'attribute' => 'ProcessCpuLoad',
+        },
+      ];
+  }
+
 }
