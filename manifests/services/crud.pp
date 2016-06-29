@@ -7,6 +7,7 @@ class dhrep::services::crud (
   $short            = 'tgcrud',
   $crud_name        = 'tgcrud-webapp',
   $crud_version     = 'latest',
+  $crud_loglevel    = 'INFO',
   $use_messaging    = true,
   $publish_secret   = undef,
 ) inherits dhrep::params {
