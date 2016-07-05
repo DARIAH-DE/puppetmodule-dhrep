@@ -11,7 +11,8 @@ no warnings 'uninitialized';
 my $csvfile = "rbacusers.csv";
 my $usertxt = "rbacusers.txt";
 my $binddn = "cn=rbac,ou=bindaccounts,dc=textgrid,dc=de";
-my $pindpw = "<%= scope.lookupvar('dhrep::services::tgauth::binddn_pass') %>";
+# 's used to prevent compile errors due to $ in passwords
+my $pindpw = '<%= scope.lookupvar("dhrep::services::tgauth::binddn_pass") %>';
 
 my @testaccounts = qw (shibconnector@application.int crud.junit1@textgrid.de crud.junit2@textgrid.de testuser@textgrid.de BerndTmp@dariah.eu);
 push @testaccounts, map { $_ = sprintf 'functional.tester%d@textgrid.de', $_ } 1..30;
