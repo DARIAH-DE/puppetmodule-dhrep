@@ -1,8 +1,9 @@
 ###
 # #%L
-# PID Service Implementation
+# PID Service Wrapper Implementation
 # %%
-# Copyright (C) 2016 TextGrid Consortion (http://www.textgrid.de), SUB Göttingen (http://www.sub.uni-goettingen.de)
+# Copyright (C) 2016 TextGrid Consortium (http://www.textgrid.de),
+# SUB Göttingen (http://www.sub.uni-goettingen.de)
 # %%
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as 
@@ -19,11 +20,24 @@
 # <http://www.gnu.org/licenses/lgpl-3.0.html>.
 # #L%
 ###
+
+# EPIC PID service settings (GWDG)
 handleservice.endpoint = <%= scope.lookupvar('dhrep::services::pid::pid_endpoint') %>
 handleservice.path = <%= scope.lookupvar('dhrep::services::pid::pid_path') %>
 handleservice.prefix = <%= scope.lookupvar('dhrep::services::pid::pid_prefix') %>
+handleservice.user = <%= scope.lookupvar('dhrep::services::pid::pid_user') %>
+handleservice.pw = <%= scope.lookupvar('dhrep::services::pid::pid_passwd') %>
+
+# Deprecated for new PID service version, use prefix "handleservice" instead.
+# Can be removed if PID service version > 4.7.0 is used!
 gwdg.user = <%= scope.lookupvar('dhrep::services::pid::pid_user') %>
 gwdg.pw = <%= scope.lookupvar('dhrep::services::pid::pid_passwd') %>
+
+# Handle resolver (read-only)
+resolver.endpoint = https://hdl.handle.net
+resolver.path = /api/handles/
+
+# More settings
 pid.responsible = <%= scope.lookupvar('dhrep::services::pid::pid_responsible') %>
 pid.creator = 
 pid.publisher = 
