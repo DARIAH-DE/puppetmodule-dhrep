@@ -102,7 +102,7 @@ class dhrep::services::intern::tgwildfly (
 
   logrotate::rule { 'wildfly_logrotate':
     path         => "/var/log/wildfly/console.log",
-    require      => Wildfly,
+    require      => Class['wildfly'],
     rotate       => 365,
     rotate_every => 'week',
     compress     => true,
