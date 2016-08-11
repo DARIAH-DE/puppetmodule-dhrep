@@ -168,4 +168,18 @@ class dhrep::services::publish (
     require => [File["/etc/${scope}/${publish_short}/conf/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
+  ###
+  # add elasticsearch script for removing nearly publish flag from elasticsearch
+  ###
+  
+  file { '/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy':
+    ensure  => present,
+    owner   => 'elasticsearch',
+    group   => 'elasticsearch',
+    mode    => '0640',
+    source  => 'puppet:///modules/dhrep/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy',
+    require => File['/etc/elasticsearch/masternode/scripts/'],
+    notify  => Service[$catname],
+  }
+
 }
