@@ -94,7 +94,7 @@ class dhrep::services::crud (
 
   file { "/home/${user}/${catname}/webapps/${short}": 
     ensure => 'link',
-    target => "/var/dhrep/webapps/${short}",
+    target => "/var/${scope}/webapps/${short}",
     require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
