@@ -92,7 +92,7 @@ class dhrep::services::crud_public (
   # symlink war from deb package to tomcat webapps dir
   file { "/home/${user}/${catname}/webapps/${short}": 
     ensure  => 'link',
-    target  => "/var/${scope}/webapps/${short}",
+    target  => "/var/dhrep/webapps/${short}",
     require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
