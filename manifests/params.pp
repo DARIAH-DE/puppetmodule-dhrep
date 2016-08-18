@@ -50,6 +50,14 @@ class dhrep::params {
     'textgrid' => 'kolibri-tgpublish-service',
     'dariah'   => 'kolibri-dhpublish-service'
   }
+  $publish_short = {
+    'textgrid' => 'tgpublish',
+    'dariah'   => 'dhpublish'
+  }
+  $publish_version = {
+    'textgrid' => 'latest',
+    'dariah'   => 'latest'
+  }
 
   ###
   # elasticsearch

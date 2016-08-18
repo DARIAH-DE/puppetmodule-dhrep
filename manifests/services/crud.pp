@@ -15,11 +15,9 @@ class dhrep::services::crud (
   $_name    = $::dhrep::params::crud_name[$scope]
   $_short   = $::dhrep::params::crud_short[$scope]
   $_version = $::dhrep::params::crud_version[$scope]
-
   $_confdir = $::dhrep::params::confdir
   $_logdir  = $::dhrep::params::logdir
   $_optdir  = $::dhrep::params::optdir
-
   $_catname = $::dhrep::services::tomcat_crud::catname
   $_user    = $::dhrep::services::tomcat_crud::user
   $_group   = $::dhrep::services::tomcat_crud::group
@@ -46,7 +44,7 @@ class dhrep::services::crud (
   file { "/home/${_user}/${_catname}/webapps/${_short}":
     ensure  => 'link',
     target  => "${_aptdir}/${_short}",
-    require => [File[ "${_confdir}/${_short}/beans.properties"], Dhrep::Resources::Servicetomcat[$_catname]],
+    require => [File["${_confdir}/${_short}/beans.properties"], Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
@@ -54,8 +52,8 @@ class dhrep::services::crud (
   ###
   file { "${_confdir}/${_short}":
     ensure => directory,
-    owner  => root,
-    group  => root,
+    owner  => 'root',
+    group  => 'root',
     mode   => '0755',
   }
   file { "${_confdir}/${_short}/${_short}.properties":

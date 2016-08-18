@@ -3,151 +3,147 @@
 # Class to install and configure dhpublish and/or tgpublish.
 #
 class dhrep::services::publish (
-  $scope            = undef,
-  $publish_short    = 'tgpublish',
-  $publish_name     = 'kolibri-tgpublish-service',
-  $publish_version  = 'latest',
-  $fake_pids        = false,
+  $scope     = undef,
+  $fake_pids = false,
 ) inherits dhrep::params {
 
-  $catname = $dhrep::services::tomcat_publish::catname
-  $user    = $dhrep::services::tomcat_publish::user
-  $group   = $dhrep::services::tomcat_publish::group
+  include dhrep::services::tomcat_publish
 
-  package { $publish_name:
-    ensure  => $publish_version,
-    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
+  $_name    = $::dhrep::params::publish_name[$scope]
+  $_short   = $::dhrep::params::publish_short[$scope]
+  $_version = $::dhrep::params::publish_version[$scope]
+  $_confdir = $::dhrep::params::confdir
+  $_logdir  = $::dhrep::params::logdir
+  $_catname = $::dhrep::services::tomcat_publish::catname
+  $_user    = $::dhrep::services::tomcat_publish::user
+  $_group   = $::dhrep::services::tomcat_publish::group
+
+  # FIXME Only affected are tgcrud and tgpublish right now! Do change if going productive in tgcrud- and tgpublish webapp's POM file! All other dhrep webapps already are deployed to /var/dhrep/webapps!
+  if $scope == 'textgrid' {
+    $_aptdir = '/var/textgrid/webapps'
+  }
+  else {
+    $_aptdir = $::dhrep::params::aptdir
+  }
+
+  ###
+  # update apt repo and install package
+  ###
+  package { $_name:
+    ensure  => $_version,
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
+  }
+
+  ###
+  # symlink war from deb package to tomcat webapps dir
+  ###
+  file { "/home/${_user}/${_catname}/webapps/${_short}":
+    ensure  => 'link',
+    target  => "${_aptdir}/${_short}",
+    require => [File["${_confdir}/${_short}/beans.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
   # config
   ###
-
-  file { "/etc/${scope}/${publish_short}":
+  file { "${_confdir}/${_short}":
     ensure => directory,
-    owner  => root,
-    group  => root,
+    owner  => 'root',
+    group  => 'root',
     mode   => '0755',
   }
+  file { "${_confdir}/${_short}/config.xml":
+    ensure  => present,
+    owner   => 'root',
+    group   => $_group,
+    mode    => '0640',
+    content => template("dhrep/etc/dhrep/${_short}/config.xml.erb"),
+    require => File["${_confdir}/${_short}"],
+    notify  => Service[$_catname],
+  }
+  file { "${_confdir}/${_short}/beans.properties":
+    ensure  => present,
+    owner   => 'root',
+    group   => $group,
+    mode    => '0640',
+    content => template("dhrep/etc/dhrep/${_short}/beans.properties.erb"),
+    require => File["${_confdir}/${_short}"],
+  }
+  file { "${_confdir}/${_short}/policies.xml":
+    ensure  => present,
+    owner   => 'root',
+    group   => $group,
+    mode    => '0640',
+    content => template("dhrep/etc/dhrep/${_short}/policies.xml.erb"),
+    require => File["${_confdir}/${_short}"],
+    notify  => Service[$_catname],
+  }
+  file { "${_confdir}/${_short}/mets_template.xml":
+    ensure  => present,
+    owner   => 'root',
+    group   => $group,
+    mode    => '0640',
+    content => template("dhrep/etc/dhrep/${_short}/mets_template.xml.erb"),
+    require => File["${_confdir}/${_short}"],
+    notify  => Service[$_catname],
+  }
+  file { "${_confdir}/${_short}/map_dias2jhove.xml":
+    ensure  => present,
+    owner   => 'root',
+    group   => $group,
+    mode    => '0640',
+    content => template("dhrep/etc/dhrep/${_short}/map_dias2jhove.xml.erb"),
+    require => File["${_confdir}/${_short}"],
+    notify  => Service[$_catname],
+  }
+  file { "${_confdir}/${_short}/dias_formatregistry.xml":
+    ensure  => present,
+    owner   => 'root',
+    group   => $group,
+    mode    => '0640',
+    content => template("dhrep/etc/dhrep/${_short}/dias_formatregistry.xml.erb"),
+    require => File["${_confdir}/${_short}"],
+    notify  => Service[$_catname],
+  }
 
-  file { "/etc/${scope}/${publish_short}/conf":
+  ###
+  # temp, dest, and work dir
+  ###
+  file { "${_confdir}/${_short}/temp":
     ensure  => directory,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0755',
-    require => File["/etc/${scope}/${publish_short}"],
+    require => File["${_confdir}/${_short}"],
   }
-
-  file { "/etc/${scope}/${publish_short}/conf/config.xml":
-    ensure  => present,
-    owner   => root,
-    group   => $group,
-    mode    => '0640',
-    content => template("dhrep/etc/${scope}/${publish_short}/conf/config.xml.erb"),
-    require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service[$catname],
-  }
-
-  file { "/etc/${scope}/${publish_short}/conf/beans.properties":
-    ensure  => present,
-    owner   => root,
-    group   => $group,
-    mode    => '0640',
-    content => template("dhrep/etc/${scope}/${publish_short}/conf/beans.properties.erb"),
-    require => File["/etc/${scope}/${publish_short}/conf"],
-  }
-
-  file { "/etc/${scope}/${publish_short}/conf/policies.xml":
-    ensure  => present,
-    owner   => root,
-    group   => $group,
-    mode    => '0640',
-    content => template("dhrep/etc/${scope}/${publish_short}/conf/policies.xml.erb"),
-    require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service[$catname],
-  }
-
-  file { "/etc/${scope}/${publish_short}/conf/mets_template.xml":
-    ensure  => present,
-    owner   => root,
-    group   => $group,
-    mode    => '0640',
-    content => template("dhrep/etc/${scope}/${publish_short}/conf/mets_template.xml.erb"),
-    require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service[$catname],
-  }
-
-  file { "/etc/${scope}/${publish_short}/conf/map_dias2jhove.xml":
-    ensure  => present,
-    owner   => root,
-    group   => $group,
-    mode    => '0640',
-    content => template("dhrep/etc/${scope}/${publish_short}/conf/map_dias2jhove.xml.erb"),
-    require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service[$catname],
-  }
-
-  file { "/etc/${scope}/${publish_short}/conf/dias_formatregistry.xml":
-    ensure  => present,
-    owner   => root,
-    group   => $group,
-    mode    => '0640',
-    content => template("dhrep/etc/${scope}/${publish_short}/conf/dias_formatregistry.xml.erb"),
-    require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service[$catname],
-  }
-
-  ###
-  # temp dir
-  ###
-
-  file { "/etc/${scope}/${publish_short}/temp":
+  file { "${_confdir}/${_short}/dest":
     ensure  => directory,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0755',
-    require => File["/etc/${scope}/${publish_short}"],
+    require => File["${_confdir}/${_short}"],
   }
-
-  ###
-  # dest dir
-  ###
-
-  file { "/etc/${scope}/${publish_short}/dest":
+  file { "${_confdir}/${_short}/work":
     ensure  => directory,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0755',
-    require => File["/etc/${scope}/${publish_short}"],
-  }
-
-  ###
-  # work dir
-  ###
-
-  file { "/etc/${scope}/${publish_short}/work":
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    require => File["/etc/${scope}/${publish_short}"],
+    require => File["${_confdir}/${_short}"],
   }
 
   ###
   # logging
   ###
-
-  file { "/var/log/${scope}/${publish_short}":
+  file { "${_logdir}/${_short}":
     ensure  => directory,
-    owner   => $user,
-    group   => $group,
+    owner   => $_user,
+    group   => $_group,
     mode    => '0755',
-    require => File["/var/log/${scope}"],
+    require => File[$_logdir],
   }
-
-  logrotate::rule { $publish_short:
-    path         => "/var/log/${scope}/${publish_short}/${publish_short}.log",
-    require      => File["/var/log/${scope}/${publish_short}"],
+  logrotate::rule { $_short:
+    path         => "${_logdir}/${_short}/${_short}.log",
+    require      => File["${_logdir}/${_short}"],
     rotate       => 30,
     rotate_every => 'day',
     compress     => true,
@@ -159,27 +155,21 @@ class dhrep::services::publish (
   }
 
   ###
-  # symlink war from deb package to tomcat webapps dir
+  # scope: textgrid
   ###
+  if $scope == 'textgrid' {
 
-  file { "/home/${user}/${catname}/webapps/${publish_short}":
-    ensure  => 'link',
-    target  => "/var/${scope}/webapps/${publish_short}",
-    require => [File["/etc/${scope}/${publish_short}/conf/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
+    ###
+    # add elasticsearch script for removing nearly publish flag from elasticsearch
+    ###
+    file { '/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy':
+      ensure  => present,
+      owner   => 'elasticsearch',
+      group   => 'elasticsearch',
+      mode    => '0640',
+      source  => 'puppet:///modules/dhrep/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy',
+      require => File['/etc/elasticsearch/masternode/scripts/'],
+      notify  => Service[$_catname],
+    }
   }
-
-  ###
-  # add elasticsearch script for removing nearly publish flag from elasticsearch
-  ###
-
-  file { '/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy':
-    ensure  => present,
-    owner   => 'elasticsearch',
-    group   => 'elasticsearch',
-    mode    => '0640',
-    source  => 'puppet:///modules/dhrep/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy',
-    require => File['/etc/elasticsearch/masternode/scripts/'],
-    notify  => Service[$catname],
-  }
-
 }
