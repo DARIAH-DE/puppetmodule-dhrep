@@ -203,7 +203,7 @@ class dhrep (
   # folder creation
   ###
   # weg damit später :-)
-  file { "/etc/textgrid":
+  file { '/etc/textgrid':
     ensure => directory,
     owner  => root,
     group  => root,
