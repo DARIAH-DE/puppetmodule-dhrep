@@ -15,14 +15,16 @@ class dhrep::services::crud (
   $_name    = $::dhrep::params::crud_name[$scope]
   $_short   = $::dhrep::params::crud_short[$scope]
   $_version = $::dhrep::params::crud_version[$scope]
+
   $_confdir = $::dhrep::params::confdir
   $_logdir  = $::dhrep::params::logdir
   $_optdir  = $::dhrep::params::optdir
+
   $_catname = $::dhrep::services::tomcat_crud::catname
   $_user    = $::dhrep::services::tomcat_crud::user
   $_group   = $::dhrep::services::tomcat_crud::group
 
-  # FIXME Only affected are tgcrud and tgpublish right now! Do change if going productive in tgcrud-webapp's POM file! All other dhrep webapps already are deployed to /var/dhrep/webapps!
+  # FIXME Only affected are tgcrud and tgpublish right now! Do change if going productive in tgcrud- and tgpublish webapp's POM file! All other dhrep webapps already are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {
     $_aptdir = '/var/textgrid/webapps'
   }
@@ -36,6 +38,15 @@ class dhrep::services::crud (
   package { $_name:
     ensure  => $_version,
     require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
+  }
+
+  ###
+  # symlink war from deb package to tomcat webapps dir
+  ###
+  file { "/home/${_user}/${_catname}/webapps/${_short}":
+    ensure  => 'link',
+    target  => "${_aptdir}/${_short}",
+    require => [File[ "${_confdir}/${_short}/beans.properties"], Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
@@ -97,15 +108,6 @@ class dhrep::services::crud (
   }
 
   ###
-  # symlink war from deb package to tomcat webapps dir
-  ###
-  file { "/home/${user}/${_catname}/webapps/${_short}":
-    ensure  => 'link',
-    target  => "${_aptdir}/${_short}",
-    require => [File[ "${_confdir}/${_short}/beans.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
-  }
-
-  ###
   # scope: textgrid
   ###
   if $scope == 'textgrid' {
@@ -131,18 +133,18 @@ class dhrep::services::crud (
     ###
     # cron for tgcrud comment and analyse
     ###
-    cron { 'crud-comment' :
+    cron { 'crud-comment':
       command => "${_optdir}/crud-comment.pl > /dev/null",
       user    => $_user,
       hour    => 4,
       minute  => 3,
       require => File["${_optdir}/crud-comment.pl"],
     }
-    cron { 'crud-analyse' :
+    cron { 'crud-analyse':
       command => "${_optdir}/crud-analyse.pl -l ${_logdir}/${_short}/rollback.log -c ${_logdir}/${_short}/logcomments.log > /dev/null",
       user    => $_user,
       minute  => '*/5',
-      require => File["${_logdir}/crud-analyse.pl"],
+      require => File["${_optdir}/crud-analyse.pl"],
     }
 
     ###

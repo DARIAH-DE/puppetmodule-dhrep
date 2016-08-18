@@ -59,14 +59,14 @@ class dhrep::params {
   $tgelasticsearch_workhorse_http_port = '9203'
   $tgelasticsearch_workhorse_tcp_port  = '9303'
 
-  # alles so umbauen? carsten sagt: "ja!" :-)
-  # später!
-
   ###
   # more specific config settings
   ###
+  # FIXME Machen wir später für alle relevanten config parameter!
+  # Zugriff dann per $::dhrep::params::config['tomcat_tgcrud']['catname']
+  ###
   $config = {
-    'tomcat-crud' => {
+    'tomcat_crud' => {
       'catname'      => 'tomcat-crud',
       'http_port'    => '9093',
       'control_port' => '9008',
@@ -74,9 +74,14 @@ class dhrep::params {
       'gid'          => '29900',
       'uid'          => '49628',
     },
-    'pid' => {
-      'pid_endpoint' => 'http://pid.gwdg.de',
-    }
+    'tomcat_publish' => {
+      'catname'      => 'tomcat-publish',
+      'http_port'    => '9094',
+      'control_port' => '9009',
+      'jmx_port'     => '9994',
+      'gid'          => '29900',
+      'uid'          => '49628',
+    },
   }
 
   ###
