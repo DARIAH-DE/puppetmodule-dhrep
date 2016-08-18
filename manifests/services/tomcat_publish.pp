@@ -4,19 +4,18 @@
 #
 class dhrep::services::tomcat_publish (
   $scope        = undef,
-  $xmx          = $dhrep::params::tomcat_tgpublish_xmx,
-  $xms          = $dhrep::params::tomcat_tgpublish_xms,
+  $xmx          = $::dhrep::params::tomcat_publish_xmx,
+  $xms          = $::dhrep::params::tomcat_publish_xms,
 ) inherits dhrep::params {
 
-  $short        = 'tgpublish'
-  $catname      = 'tomcat-tgpublish'
-  $depcat       = 'tomcat-tgcrud'
+  $catname      = 'tomcat-publish'
+  $depcat       = 'tomcat-crud'
   $http_port    = '9094'
   $control_port = '9009'
   $jmx_port     = '9994'
   $gid          = '29900'
   $uid          = '49628'
-  $template     = "dhrep/etc/default/tomcat.${short}.erb"
+  $template     = 'dhrep/etc/default/tomcat.publish.erb'
 
   $user         = 'storage'
   $group        = 'storage'

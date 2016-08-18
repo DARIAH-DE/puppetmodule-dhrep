@@ -3,81 +3,89 @@
 # Class to install and configure tgcrud/dhcrud
 #
 class dhrep::services::crud (
-  $scope            = undef,
-  $short            = 'tgcrud',
-  $crud_name        = 'tgcrud-webapp',
-  $crud_version     = 'latest',
-  $crud_loglevel    = 'INFO',
-  $use_messaging    = true,
-  $publish_secret   = undef,
+  $scope          = undef,
+  $crud_loglevel  = 'INFO',
+  $use_messaging  = true,
+  $publish_secret = undef,
 ) inherits dhrep::params {
 
   include dhrep::services::intern::javagat
   include dhrep::services::tomcat_crud
 
-  $catname = $dhrep::services::tomcat_crud::catname
-  $user    = 'storage'
-  $group   = 'storage'
+  $_name    = $::dhrep::params::crud_name[$scope]
+  $_short   = $::dhrep::params::crud_short[$scope]
+  $_version = $::dhrep::params::crud_version[$scope]
+  $_confdir = $::dhrep::params::confdir
+  $_logdir  = $::dhrep::params::logdir
+  $_optdir  = $::dhrep::params::optdir
+  $_catname = $::dhrep::services::tomcat_crud::catname
+  $_user    = $::dhrep::services::tomcat_crud::user
+  $_group   = $::dhrep::services::tomcat_crud::group
 
-  package { $crud_name:
-    ensure  => $crud_version,
-    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
+  # FIXME Only affected are tgcrud and tgpublish right now! Do change if going productive in tgcrud-webapp's POM file! All other dhrep webapps already are deployed to /var/dhrep/webapps!
+  if $scope == 'textgrid' {
+    $_aptdir = '/var/textgrid/webapps'
+  }
+  else {
+    $_aptdir = $::dhrep::params::aptdir
+  }
+
+  ###
+  # update apt repo and install package
+  ###
+  package { $_name:
+    ensure  => $_version,
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
   # config
   ###
-
-  file { "/etc/${scope}/${short}":
+  file { "${_confdir}/${_short}":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-
-  file { "/etc/${scope}/${short}/${short}.properties":
+  file { "${_confdir}/${_short}/${_short}.properties":
     ensure  => present,
-    owner   => root,
-    group   => $group,
+    owner   => 'root',
+    group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/${scope}/${short}/${short}.properties.erb"),
-    require => File["/etc/${scope}/${short}"],
-    notify  => Service[$catname],
+    content => template("dhrep/etc/dhrep/${_short}/${_short}.properties.erb"),
+    require => File["${_confdir}/${_short}"],
+    notify  => Service[$_catname],
   }
-
-  file { "/etc/${scope}/${short}/beans.properties":
+  file { "${_confdir}/${_short}/beans.properties":
     ensure  => present,
-    owner   => root,
-    group   => $group,
+    owner   => 'root',
+    group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/${scope}/${short}/beans.properties.erb"),
-    require => File["/etc/${scope}/${short}"],
+    content => template("dhrep/etc/dhrep/${_short}/beans.properties.erb"),
+    require => File["${_confdir}/${_short}"],
   }
 
   ###
   # logging
   ###
-
-  file { "/etc/${scope}/${short}/${short}.log4j":
+  file { "${_confdir}/${_short}/${_short}.log4j":
     ensure  => present,
-    owner   => root,
-    group   => $group,
+    owner   => 'root',
+    group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/${scope}/${short}/${short}.log4j.erb"),
-    require => File["/etc/${scope}/${short}"],
+    content => template("dhrep/etc/dhrep/${_short}/${_short}.log4j.erb"),
+    require => File["${_confdir}/${_short}"],
   }
-
-  file { "/var/log/${scope}/${short}":
+  file { "${_logdir}/${_short}":
     ensure  => directory,
-    owner   => $user,
-    group   => $group,
+    owner   => $_user,
+    group   => $_group,
     mode    => '0755',
-    require => File["/var/log/${scope}"],
+    require => File[$_logdir],
   }
-
-  logrotate::rule { $short:
-    path         => "/var/log/${scope}/${short}/${short}.log",
-    require      => File["/var/log/${scope}/${short}"],
+  logrotate::rule { $_short:
+    path         => "${_logdir}/${_short}/${_short}.log",
+    require      => File["${_logdir}/${_short}"],
     rotate       => 30,
     rotate_every => 'day',
     compress     => true,
@@ -85,62 +93,63 @@ class dhrep::services::crud (
     missingok    => true,
     ifempty      => true,
     dateext      => true,
-    dateformat   => '.%Y-%m-%d'
+    dateformat   => '.%Y-%m-%d',
   }
 
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-
-  file { "/home/${user}/${catname}/webapps/${short}": 
-    ensure => 'link',
-    target => "/var/${scope}/webapps/${short}",
-    require => [File[ "/etc/${scope}/${short}/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
+  file { "/home/${user}/${_catname}/webapps/${_short}":
+    ensure  => 'link',
+    target  => "${_aptdir}/${_short}",
+    require => [File[ "${_confdir}/${_short}/beans.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
-  # crud comment and analyse scrpits
+  # scope: textgrid
   ###
+  if $scope == 'textgrid' {
 
-  file { '/opt/dhrep/crud-analyse.pl':
-    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-analyse.pl',
-    owner   => $user,
-    group   => $group,
-    mode    => '0755',
-    require => File['/opt/dhrep'],
+    ###
+    # tgcrud comment and analyse scrpits
+    ###
+    file { "${_optdir}/crud-analyse.pl":
+      source  => 'puppet:///modules/dhrep/opt/dhrep/crud-analyse.pl',
+      owner   => $_user,
+      group   => $_group,
+      mode    => '0755',
+      require => File[$_optdir],
+    }
+    file { "${_optdir}/crud-comment.pl":
+      source  => 'puppet:///modules/dhrep/opt/dhrep/crud-comment.pl',
+      owner   => $_user,
+      group   => $_group,
+      mode    => '0700',
+      require => [File[$_optdir],File["${_optdir}/crud-analyse.pl"]],
+    }
+
+    ###
+    # cron for tgcrud comment and analyse
+    ###
+    cron { 'crud-comment' :
+      command => "${_optdir}/crud-comment.pl > /dev/null",
+      user    => $_user,
+      hour    => 4,
+      minute  => 3,
+      require => File["${_optdir}/crud-comment.pl"],
+    }
+    cron { 'crud-analyse' :
+      command => "${_optdir}/crud-analyse.pl -l ${_logdir}/${_short}/rollback.log -c ${_logdir}/${_short}/logcomments.log > /dev/null",
+      user    => $_user,
+      minute  => '*/5',
+      require => File["${_logdir}/crud-analyse.pl"],
+    }
+
+    ###
+    # nrpe for tgcrud
+    ###
+    dariahcommon::nagios_service { 'check_rollback_tgcrud':
+      command => "${_optdir}/crud-analyse.pl -n -l ${_logdir}/${_short}/rollback.log",
+    }
   }
-  file { '/opt/dhrep/crud-comment.pl':
-    source  => 'puppet:///modules/dhrep/opt/dhrep/crud-comment.pl',
-    owner   => $user,
-    group   => $group,
-    mode    => '0700',
-    require => [File['/opt/dhrep'],File['/opt/dhrep/crud-analyse.pl']],
-  }
-
-  ###
-  # cron for crud comment and analyse
-  ###
-
-  cron { 'crud-comment' :
-    command => '/opt/dhrep/crud-comment.pl > /dev/null',
-    user    => $user,
-    hour    => 4,
-    minute  => 3,
-    require => File['/opt/dhrep/crud-comment.pl'],
-  }
-  cron { 'crud-analyse' :
-    command => '/opt/dhrep/crud-analyse.pl -l /var/log/textgrid/tgcrud/rollback.log -c /var/log/textgrid/tgcrud/logcomments.log > /dev/null',
-    user    => $user,
-    minute  => '*/5',
-    require => File['/opt/dhrep/crud-analyse.pl'],
-  }
-
-  ###
-  # nrpe for tgcrud
-  ###
-
-  dariahcommon::nagios_service { 'check_rollback_tgcrud':
-    command => "/opt/dhrep/crud-analyse.pl -n -l /var/log/textgrid/tgcrud/rollback.log",
-  }
-
 }

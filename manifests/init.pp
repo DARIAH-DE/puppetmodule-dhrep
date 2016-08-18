@@ -1,13 +1,14 @@
-# == Class: textgrid
+# == Class: dhrep
 #
-# setup and manage a textgrid server
-#
-# TODO  read https://dev2.dariah.eu/wiki/display/TGINT/textgrid-esx1.gwdg.de
-#       and write the manifests ;-)
+# Setup and manage a dhrep server with scope "textgrid" or "dariah"
 #
 class dhrep (
   $scope = 'textgrid',
   $public_hostname = $::fqdn,
+  $tgelasticsearch_cluster_name = 'testing',
+  $crud_publish_secret = undef,
+  $oracle_jdk8 = false,
+# FIXME textgrid specific refs defined here???
   $tgauth_binddn_pass = undef,
   $tgauth_user_binddn_pass = undef,
   $tgauth_crud_secret = undef,
@@ -15,24 +16,23 @@ class dhrep (
   $tgauth_authz_shib_pw = undef,
   $tgauth_authz_instance = undef,
   $tgauth_webauth_secret = undef,
-  $tgelasticsearch_cluster_name = 'testing',
   $tgnoid_tgcrud_secret = undef,
-  $crud_publish_secret = undef,
   $datadirs_create_local_datadirs = undef,
   $confserv_service_base_url = undef,
-  $oracle_jdk8 = false,
 ) inherits dhrep::params {
 
   # internal services containing variables used by other modules need to be evaluated in order
-  class { 'dhrep::services::tgauth':
-    scope            => $scope,
-    binddn_pass      => $tgauth_binddn_pass,
-    user_binddn_pass => $tgauth_user_binddn_pass,
-    crud_secret      => $tgauth_crud_secret,
-    slapd_rootpw     => $tgauth_slapd_rootpw,
-    authz_instance   => $tgauth_authz_instance,
-    authz_shib_pw    => $tgauth_authz_shib_pw,
-    webauth_secret   => $tgauth_webauth_secret,
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::tgauth':
+      scope            => $scope,
+      binddn_pass      => $tgauth_binddn_pass,
+      user_binddn_pass => $tgauth_user_binddn_pass,
+      crud_secret      => $tgauth_crud_secret,
+      slapd_rootpw     => $tgauth_slapd_rootpw,
+      authz_instance   => $tgauth_authz_instance,
+      authz_shib_pw    => $tgauth_authz_shib_pw,
+      webauth_secret   => $tgauth_webauth_secret,
+    }
   }
 
   class { 'dhrep::services::intern::tgelasticsearch':
@@ -40,12 +40,14 @@ class dhrep (
     cluster_name => $tgelasticsearch_cluster_name,
   }
 
-  class { 'dhrep::resources::apache': 
+  class { 'dhrep::resources::apache':
     scope => $scope,
   }
 
-  class { 'dhrep::services::intern::sesame':
-    scope => $scope,
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::intern::sesame':
+      scope => $scope,
+    }
   }
 
   class { 'dhrep::services::intern::tgwildfly':
@@ -56,8 +58,10 @@ class dhrep (
     scope => $scope,
   }
 
-  class { 'dhrep::services::aggregator':
-    scope => $scope,
+  if $scope == 'textgrid' {
+    class { 'dhrep::services::aggregator':
+      scope => $scope,
+    }
   }
 
   if $scope == 'textgrid' {
@@ -97,11 +101,10 @@ class dhrep (
   }
 
   class { 'dhrep::services::publish':
-    scope     => $scope,
+    scope => $scope,
   }
 
   if $scope == 'textgrid' {
-
     class { 'dhrep::services::confserv':
       service_base_url => $confserv_service_base_url,
     }
@@ -117,6 +120,7 @@ class dhrep (
     class { 'dhrep::services::tgsearch':
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
     }
+
     class { 'dhrep::services::tgsearch_public':
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
     }
@@ -124,7 +128,6 @@ class dhrep (
     class { 'dhrep::services::tgmarketplace': }
 
     class { 'dhrep::tools::check_services': }
-
   }
 
   #  include textgrid::tgnginx
@@ -163,7 +166,7 @@ class dhrep (
 
   } else {
     apt::ppa { 'ppa:webupd8team/java': ensure => absent }
-    package { 
+    package {
       'oracle-java8-set-default': ensure => absent;
       'oracle-java8-installer':   ensure => absent;
     }
@@ -174,19 +177,19 @@ class dhrep (
   ###
 
   package {
-    'openjdk-6-jdk':            ensure => absent;
-    'openjdk-6-jre':            ensure => absent;
-    'openjdk-6-jre-headless':   ensure => absent;
-    'openjdk-6-jre-lib':        ensure => absent;
-    'openjdk-7-jdk':            ensure => present;
-    'default-jre-headless':     ensure => present; # creates symlink /usr/lib/jvm/default-java
-    'tomcat7':                  ensure => present;
-    'tomcat7-user':             ensure => present;
-    'libtcnative-1':            ensure => present;
-    'mc':                       ensure => present;
-    'maven':                    ensure => present;
-    'make':                     ensure => present;
-    'apache2-utils':            ensure => present;
+    'openjdk-6-jdk':          ensure => absent;
+    'openjdk-6-jre':          ensure => absent;
+    'openjdk-6-jre-headless': ensure => absent;
+    'openjdk-6-jre-lib':      ensure => absent;
+    'openjdk-7-jdk':          ensure => present;
+    'default-jre-headless':   ensure => present; # creates symlink /usr/lib/jvm/default-java
+    'tomcat7':                ensure => present;
+    'tomcat7-user':           ensure => present;
+    'libtcnative-1':          ensure => present;
+    'mc':                     ensure => present;
+    'maven':                  ensure => present;
+    'make':                   ensure => present;
+    'apache2-utils':          ensure => present;
   }
 
   # open http and https ports (other ports are closed via dariah-common firewall rules)
@@ -196,27 +199,28 @@ class dhrep (
     action => accept,
   }
 
-  file { "/etc/${scope}":
+  ###
+  # folder creation
+  ###
+  # weg damit später :-)
+  file { "/etc/textgrid":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-
   file { '/var/log/textgrid':
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-
   file { '/var/textgrid':
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-
   file { '/var/textgrid/backups/' :
     ensure  => directory,
     owner   => 'root',
@@ -224,7 +228,6 @@ class dhrep (
     mode    => '0755',
     require => File['/var/textgrid'],
   }
-
   file { '/var/textgrid/statistics' :
     ensure  => directory,
     owner   => 'root',
@@ -233,7 +236,39 @@ class dhrep (
     require => File['/var/textgrid'],
   }
 
-  file { '/opt/dhrep' :
+  file { $::dhrep::params::confdir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  }
+  file { $::dhrep::params::logdir:
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
+  }
+  file { $::dhrep::params::vardir:
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
+  }
+  file { $::dhrep::params::backupdir:
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File[$::dhrep::params::vardir],
+  }
+  file { $::dhrep::params::statdir:
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0701',
+    require => File[$::dhrep::params::vardir],
+  }
+  file { $::dhrep::params::optdir:
     ensure => directory,
     owner  => 'root',
     group  => 'root',
@@ -254,10 +289,9 @@ class dhrep (
     ensure  => directory,
   }
 
-  $tgcache = '/var/cache/textgrid/'
   # vagrant cachier changes this to symlink
   unless $::vagrant {
-    file { $tgcache :
+    file { $::dhrep::params::cachedir:
       ensure => directory,
     }
   }
@@ -274,5 +308,4 @@ class dhrep (
         },
       ];
   }
-
 }

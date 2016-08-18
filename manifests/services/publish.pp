@@ -64,7 +64,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/policies.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service['tomcat-tgpublish'],
+    notify  => Service[$catname],
   }
 
   file { "/etc/${scope}/${publish_short}/conf/mets_template.xml":
@@ -74,7 +74,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/mets_template.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service['tomcat-tgpublish'],
+    notify  => Service[$catname],
   }
 
   file { "/etc/${scope}/${publish_short}/conf/map_dias2jhove.xml":
@@ -84,7 +84,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/map_dias2jhove.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service['tomcat-tgpublish'],
+    notify  => Service[$catname],
   }
 
   file { "/etc/${scope}/${publish_short}/conf/dias_formatregistry.xml":
@@ -94,7 +94,7 @@ class dhrep::services::publish (
     mode    => '0640',
     content => template("dhrep/etc/${scope}/${publish_short}/conf/dias_formatregistry.xml.erb"),
     require => File["/etc/${scope}/${publish_short}/conf"],
-    notify  => Service['tomcat-tgpublish'],
+    notify  => Service[$catname],
   }
 
   ###
@@ -162,7 +162,7 @@ class dhrep::services::publish (
   # symlink war from deb package to tomcat webapps dir
   ###
 
-  file { "/home/${user}/${catname}/webapps/${publish_short}": 
+  file { "/home/${user}/${catname}/webapps/${publish_short}":
     ensure  => 'link',
     target  => "/var/${scope}/webapps/${publish_short}",
     require => [File["/etc/${scope}/${publish_short}/conf/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
@@ -171,7 +171,7 @@ class dhrep::services::publish (
   ###
   # add elasticsearch script for removing nearly publish flag from elasticsearch
   ###
-  
+
   file { '/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy':
     ensure  => present,
     owner   => 'elasticsearch',

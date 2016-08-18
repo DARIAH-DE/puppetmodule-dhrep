@@ -1,8 +1,7 @@
 # == Class: dhrep::services::intern::tgwildfly
 #
-# Class to install and configure wildfly, 
-# adds also tgcrud user for jms
-# 
+# Class to install and configure wildfly, adds also tgcrud user for jms
+#
 class dhrep::services::intern::tgwildfly (
   $scope       = undef,
   $xmx         = $dhrep::params::wildfly_xmx,
@@ -50,7 +49,7 @@ class dhrep::services::intern::tgwildfly (
   ->
   wildfly::messaging::topic { 'tgcrudTopic':
     entries => ['topic/tgcrud','java:jboss/exported/jms/topic/tgcrud'],
-    notify => [Service['tomcat-tgcrud'], Service['tomcat-tgpublish']],
+    notify => [Service['tomcat-crud'], Service['tomcat-publish']],
   }
 
   ###
@@ -92,7 +91,7 @@ class dhrep::services::intern::tgwildfly (
   }
 
   collectd::plugin::curl_json { 'wildfly':
-    url      => "http://localhost:18080/jolokia/read/java.lang:type=Memory", 
+    url      => "http://localhost:18080/jolokia/read/java.lang:type=Memory",
     instance => 'wildfly',
     keys => {
       'value/NonHeapMemoryUsage/*' => {'type' => 'bytes'},
