@@ -3,26 +3,22 @@
 # Class to install and configure tgsearch tomcat.
 #
 class dhrep::services::tomcat_tgsearch (
-  $scope        = undef,
-){
+  $scope = undef,
+) inherits dhrep::params {
 
-  $catname      = 'tomcat-tgsearch'
-  $http_port    = '9090'
-  $control_port = '9005'
-  $xmx          = '1024'
-  $xms          = '128'
-  $jmx_port     = '9990'
-  $gid          = '1007'
-  $uid          = '1007'
-  $template     = 'dhrep/etc/default/tomcat.erb'
-  
+  $catname      = $::dhrep::params::config['tomcat_tgsearch']['catname']
+  $http_port    = $::dhrep::params::config['tomcat_tgsearch']['http_port']
+  $control_port = $::dhrep::params::config['tomcat_tgsearch']['control_port']
+  $jmx_port     = $::dhrep::params::config['tomcat_tgsearch']['jmx_port']
+  $gid          = $::dhrep::params::config['tomcat_tgsearch']['gid']
+  $uid          = $::dhrep::params::config['tomcat_tgsearch']['uid']
   $user         = $catname
   $group        = $catname
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   ###
   # user, home-dir and user-tomcat
   ###
-
   dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
@@ -33,5 +29,4 @@ class dhrep::services::tomcat_tgsearch (
     jmx_port          => $jmx_port,
     defaults_template => $template,
   }
-
 }

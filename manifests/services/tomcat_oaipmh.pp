@@ -3,20 +3,17 @@
 # Class to install and configure oaipmh tomcat.
 #
 class dhrep::services::tomcat_oaipmh (
-){
+) inherits dhrep::params {
 
-  $catname      = 'tomcat-oaipmh'
-  $http_port    = '9097'
-  $control_port = '9012'
-  $xmx          = '1024'
-  $xms          = '1024'
-  $jmx_port     = '9996'
-  $gid          = '1011'
-  $uid          = '1011'
-  $template     = 'dhrep/etc/default/tomcat.erb'
-
+  $catname      = $::dhrep::params::config['tomcat_oaipmh']['catname']
+  $http_port    = $::dhrep::params::config['tomcat_oaipmh']['http_port']
+  $control_port = $::dhrep::params::config['tomcat_oaipmh']['control_port']
+  $jmx_port     =  $::dhrep::params::config['tomcat_oaipmh']['jmx_port']
+  $gid          = $::dhrep::params::config['tomcat_oaipmh']['gid']
+  $uid          = $::dhrep::params::config['tomcat_oaipmh']['uid']
   $user         = $catname
   $group        = $catname
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   ###
   # user, home-dir and user-tomcat

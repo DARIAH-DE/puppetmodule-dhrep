@@ -1,6 +1,6 @@
 # == Class: dhrep::services::publish
 #
-# Class to install and configure dhpublish and/or tgpublish.
+# Class to install and configure tgpublish/dhpublish.
 #
 class dhrep::services::publish (
   $scope     = undef,
@@ -57,7 +57,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/${_short}/config.xml.erb"),
+    content => template("dhrep/etc/dhrep/publish/config.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -66,7 +66,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/${_short}/beans.properties.erb"),
+    content => template("dhrep/etc/dhrep/publish/beans.properties.erb"),
     require => File["${_confdir}/${_short}"],
   }
   file { "${_confdir}/${_short}/policies.xml":
@@ -74,7 +74,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/${_short}/policies.xml.erb"),
+    content => template("dhrep/etc/dhrep/publish/policies.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -83,7 +83,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/${_short}/mets_template.xml.erb"),
+    content => template("dhrep/etc/dhrep/publish/mets_template.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -92,7 +92,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/${_short}/map_dias2jhove.xml.erb"),
+    content => template("dhrep/etc/dhrep/publish/map_dias2jhove.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -101,7 +101,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/${_short}/dias_formatregistry.xml.erb"),
+    content => template("dhrep/etc/dhrep/publish/dias_formatregistry.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -142,7 +142,7 @@ class dhrep::services::publish (
     require => File[$_logdir],
   }
   logrotate::rule { $_short:
-    path         => "${_logdir}/${_short}/${_short}.log",
+    path         => "${_logdir}/${_short}/publish.log",
     require      => File["${_logdir}/${_short}"],
     rotate       => 30,
     rotate_every => 'day',

@@ -3,26 +3,22 @@
 # Class to install and configure digilib tomcat.
 #
 class dhrep::services::tomcat_digilib (
-  $scope        = undef,
-){
+  $scope = undef,
+) inherits dhrep::params {
 
-  $catname      = 'tomcat-digilib'
-  $http_port    = '9092'
-  $control_port = '9007'
-  $xmx          = '1024'
-  $xms          = '128'
-  $jmx_port     = '9992'
-  $gid          = '1009'
-  $uid          = '1009'
-  $template     = 'dhrep/etc/default/tomcat.erb'
-
+  $catname      = $::dhrep::params::config['tomcat_digilib']['catname']
+  $http_port    = $::dhrep::params::config['tomcat_digilib']['http_port']
+  $control_port = $::dhrep::params::config['tomcat_digilib']['control_port']
+  $jmx_port     = $::dhrep::params::config['tomcat_digilib']['jmx_port']
+  $gid          = $::dhrep::params::config['tomcat_digilib']['gid']
+  $uid          = $::dhrep::params::config['tomcat_digilib']['uid']
   $user         = $catname
   $group        = $catname
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   ###
   # user, home-dir and user-tomcat
   ###
-
   dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
@@ -33,5 +29,4 @@ class dhrep::services::tomcat_digilib (
     jmx_port          => $jmx_port,
     defaults_template => $template,
   }
-
 }

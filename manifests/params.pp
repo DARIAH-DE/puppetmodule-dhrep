@@ -42,6 +42,14 @@ class dhrep::params {
     'textgrid' => 'tgcrud-webapp-public',
     'dariah'   => 'dhcrud-webapp-public'
   }
+  $crud_public_short = {
+    'textgrid' => 'tgcrud-public',
+    'dariah'   => 'dhcrud-public'
+  }
+  $crud_public_version = {
+    'textgrid' => 'latest',
+    'dariah'   => 'latest'
+  }
 
   ###
   # publish
@@ -70,10 +78,15 @@ class dhrep::params {
   ###
   # more specific config settings
   ###
-  # FIXME Machen wir später für alle relevanten config parameter!
-  # Zugriff dann per $::dhrep::params::config['tomcat_tgcrud']['catname']
-  ###
   $config = {
+    'tomcat_aggregator' => {
+      'catname'      => 'tomcat-aggregator',
+      'http_port'    => '9095',
+      'control_port' => '9010',
+      'jmx_port'     => '9995',
+      'gid'          => '1014',
+      'uid'          => '1014',
+    },
     'tomcat_crud' => {
       'catname'      => 'tomcat-crud',
       'http_port'    => '9093',
@@ -81,6 +94,24 @@ class dhrep::params {
       'jmx_port'     => '9993',
       'gid'          => '29900',
       'uid'          => '49628',
+      'user'         => 'storage',
+      'group'        => 'storage',
+    },
+    'tomcat_digilib' => {
+      'catname'      => 'tomcat-digilib',
+      'http_port'    => '9092',
+      'control_port' => '9007',
+      'jmx_port'     => '9992',
+      'gid'          => '1009',
+      'uid'          => '1009',
+    },
+    'tomcat_oaipmh' => {
+      'catname'      => 'tomcat-oaipmh',
+      'http_port'    => '9097',
+      'control_port' => '9012',
+      'jmx_port'     => '9996',
+      'gid'          => '1011',
+      'uid'          => '1011',
     },
     'tomcat_publish' => {
       'catname'      => 'tomcat-publish',
@@ -89,11 +120,22 @@ class dhrep::params {
       'jmx_port'     => '9994',
       'gid'          => '29900',
       'uid'          => '49628',
+      'user'         => 'storage',
+      'group'        => 'storage',
+    },
+    'tomcat_tgsearch' => {
+      'catname'      => 'tomcat-tgsearch',
+      'http_port'    => '9090',
+      'control_port' => '9005',
+      'jmx_port'     => '9990',
+      'gid'          => '1007',
+      'uid'          => '1007',
     },
   }
 
   ###
-  # memory profiles: if no hiera entry is found, default to undef, so default profile is used)
+  # memory profiles: if no hiera entry is found, default to undef, so default profile is used
+  # NOTE all tomcat's except the crud, publish, and wildfly ones are using the servicetomcat's settings!
   ###
   case hiera('dhrep::mem_profile', undef) {
     'low': {

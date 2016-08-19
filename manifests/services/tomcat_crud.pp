@@ -14,11 +14,10 @@ class dhrep::services::tomcat_crud (
   $jmx_port     = $::dhrep::params::config['tomcat_crud']['jmx_port']
   $gid          = $::dhrep::params::config['tomcat_crud']['gid']
   $uid          = $::dhrep::params::config['tomcat_crud']['uid']
-
+  $user         = $::dhrep::params::config['tomcat_crud']['user']
+  $group        = $::dhrep::params::config['tomcat_crud']['group']
   $template     = 'dhrep/etc/default/tomcat.crud.erb'
   $depcat       = 'wildfly'
-  $user         = 'storage'
-  $group        = 'storage'
 
   ###
   # user, home-dir and user-tomcat

@@ -14,11 +14,10 @@ class dhrep::services::tomcat_publish (
   $jmx_port     = $::dhrep::params::config['tomcat_publish']['jmx_port']
   $gid          = $::dhrep::params::config['tomcat_publish']['gid']
   $uid          = $::dhrep::params::config['tomcat_publish']['uid']
-
+  $user         = $::dhrep::params::config['tomcat_publish']['user']
+  $group        = $::dhrep::params::config['tomcat_publish']['group']
   $template     = 'dhrep/etc/default/tomcat.publish.erb'
   $depcat       = $::dhrep::params::config['tomcat_crud']['catname']
-  $user         = 'storage'
-  $group        = 'storage'
 
   ###
   # user, home-dir and user-tomcat

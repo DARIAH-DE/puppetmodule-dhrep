@@ -56,12 +56,12 @@ class dhrep::services::crud (
     group  => 'root',
     mode   => '0755',
   }
-  file { "${_confdir}/${_short}/${_short}.properties":
+  file { "${_confdir}/${_short}/crud.properties":
     ensure  => present,
     owner   => 'root',
     group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/${_short}/${_short}.properties.erb"),
+    content => template("dhrep/etc/dhrep/crud/crud.properties.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -70,19 +70,19 @@ class dhrep::services::crud (
     owner   => 'root',
     group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/${_short}/beans.properties.erb"),
+    content => template("dhrep/etc/dhrep/crud/beans.properties.erb"),
     require => File["${_confdir}/${_short}"],
   }
 
   ###
   # logging
   ###
-  file { "${_confdir}/${_short}/${_short}.log4j":
+  file { "${_confdir}/${_short}/crud.log4j":
     ensure  => present,
     owner   => 'root',
     group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/${_short}/${_short}.log4j.erb"),
+    content => template("dhrep/etc/dhrep/crud/crud.log4j.erb"),
     require => File["${_confdir}/${_short}"],
   }
   file { "${_logdir}/${_short}":
@@ -93,7 +93,7 @@ class dhrep::services::crud (
     require => File[$_logdir],
   }
   logrotate::rule { $_short:
-    path         => "${_logdir}/${_short}/${_short}.log",
+    path         => "${_logdir}/${_short}/crud.log",
     require      => File["${_logdir}/${_short}"],
     rotate       => 30,
     rotate_every => 'day',

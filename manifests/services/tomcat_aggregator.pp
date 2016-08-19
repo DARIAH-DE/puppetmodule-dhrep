@@ -3,26 +3,22 @@
 # Class to install and configure aggregator tomcat.
 #
 class dhrep::services::tomcat_aggregator (
-  $scope        = undef,
-){
+  $scope = undef,
+) inherits dhrep::params {
 
-  $catname      = 'tomcat-aggregator'
-  $http_port    = '9095'
-  $control_port = '9010'
-  $xmx          = '1024'
-  $xms          = '128'
-  $jmx_port     = '9995'
-  $gid          = '1014'
-  $uid          = '1014'
-  $template     = 'dhrep/etc/default/tomcat.erb'
-
+  $catname      = $::dhrep::params::config['tomcat_aggregator']['catname']
+  $http_port    = $::dhrep::params::config['tomcat_aggregator']['http_port']
+  $control_port = $::dhrep::params::config['tomcat_aggregator']['control_port']
+  $jmx_port     = $::dhrep::params::config['tomcat_aggregator']['jmx_port']
+  $gid          = $::dhrep::params::config['tomcat_aggregator']['gid']
+  $uid          = $::dhrep::params::config['tomcat_aggregator']['uid']
   $user         = $catname
   $group        = $catname
+  $template     = 'dhrep/etc/default/tomcat.erb'
 
   ###
   # user, home-dir and user-tomcat
   ###
-
   dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
@@ -33,5 +29,4 @@ class dhrep::services::tomcat_aggregator (
     jmx_port          => $jmx_port,
     defaults_template => $template,
   }
-
 }
