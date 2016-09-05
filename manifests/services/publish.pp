@@ -146,7 +146,7 @@ class dhrep::services::publish (
   }
 
   logrotate::rule { $publish_short:
-    path         => "/var/log/${scope}/${publish_short}/${publish_short}.log",
+    path         => "/var/log/${scope}/${publish_short}/kolibri.log",
     require      => File["/var/log/${scope}/${publish_short}"],
     rotate       => 30,
     rotate_every => 'day',
