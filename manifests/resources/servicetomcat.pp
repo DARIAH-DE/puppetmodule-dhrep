@@ -137,7 +137,7 @@ define dhrep::resources::servicetomcat (
   collectd::plugin::genericjmx::connection { $name:
       host            => $fqdn,
       service_url     => "service:jmx:rmi:///jndi/rmi://localhost:${jmx_port}/jmxrmi",
-      collect         => [ 'memory-heap', 'memory-nonheap' ],
+      collect         => [ 'memory-heap', 'memory-nonheap', 'process_cpu_load' ],
       instance_prefix => "${name}-",
   }
 

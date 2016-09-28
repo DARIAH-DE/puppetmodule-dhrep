@@ -60,8 +60,8 @@ class dhrep::services::pid (
   logrotate::rule { $short:
     path         => "/var/log/${scope}/${short}/${short}.log",
     require      => File["/var/log/${scope}/${short}"],
-    rotate       => 365,
-    rotate_every => 'week',
+    rotate       => 30,
+    rotate_every => 'day',
     compress     => true,
     copytruncate => true,
     missingok    => true,

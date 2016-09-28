@@ -146,10 +146,10 @@ class dhrep::services::publish (
   }
 
   logrotate::rule { $publish_short:
-    path         => "/var/log/${scope}/${publish_short}/${publish_short}.log",
+    path         => "/var/log/${scope}/${publish_short}/kolibri.log",
     require      => File["/var/log/${scope}/${publish_short}"],
-    rotate       => 365,
-    rotate_every => 'week',
+    rotate       => 30,
+    rotate_every => 'day',
     compress     => true,
     copytruncate => true,
     missingok    => true,
@@ -166,6 +166,20 @@ class dhrep::services::publish (
     ensure  => 'link',
     target  => "/var/${scope}/webapps/${publish_short}",
     require => [File["/etc/${scope}/${publish_short}/conf/beans.properties"],Dhrep::Resources::Servicetomcat[$catname]],
+  }
+
+  ###
+  # add elasticsearch script for removing nearly publish flag from elasticsearch
+  ###
+  
+  file { '/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy':
+    ensure  => present,
+    owner   => 'elasticsearch',
+    group   => 'elasticsearch',
+    mode    => '0640',
+    source  => 'puppet:///modules/dhrep/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy',
+    require => File['/etc/elasticsearch/masternode/scripts/'],
+    notify  => Service[$catname],
   }
 
 }

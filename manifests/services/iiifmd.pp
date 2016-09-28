@@ -88,7 +88,6 @@ class dhrep::services::iiifmd (
     revision => 'v2.0.0',
   }
 
-
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
