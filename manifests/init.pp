@@ -40,7 +40,7 @@ class dhrep (
     cluster_name => $tgelasticsearch_cluster_name,
   }
 
-  class { 'dhrep::resources::apache': 
+  class { 'dhrep::resources::apache':
     scope => $scope,
   }
 
@@ -163,7 +163,7 @@ class dhrep (
 
   } else {
     apt::ppa { 'ppa:webupd8team/java': ensure => absent }
-    package { 
+    package {
       'oracle-java8-set-default': ensure => absent;
       'oracle-java8-installer':   ensure => absent;
     }
@@ -260,19 +260,6 @@ class dhrep (
     file { $tgcache :
       ensure => directory,
     }
-  }
-
-  # todo: move to gwdgmetrics module
-  collectd::plugin::genericjmx::mbean {
-    'process_cpu_load':
-      object_name     => 'java.lang:type=OperatingSystem',
-      instance_prefix => 'process_cpu_load',
-      values          => [
-        {
-          'type'      => 'gauge',
-          'attribute' => 'ProcessCpuLoad',
-        },
-      ];
   }
 
 }
