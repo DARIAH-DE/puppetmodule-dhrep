@@ -19,7 +19,7 @@ class dhrep::services::tomcat_publish (
   $template     = "dhrep/etc/default/tomcat.${short}.erb"
 
   $user         = 'storage'
-  $group        = 'storage'
+  $group        = 'ULSB'
 
   ###
   # user, home-dir and user-tomcat

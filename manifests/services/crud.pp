@@ -16,8 +16,8 @@ class dhrep::services::crud (
   include dhrep::services::tomcat_crud
 
   $catname = $dhrep::services::tomcat_crud::catname
-  $user    = 'storage'
-  $group   = 'storage'
+  $user    = $dhrep::services::tomcat_crud::user
+  $group   = $dhrep::services::tomcat_crud::group
 
   package { $crud_name:
     ensure  => $crud_version,
