@@ -1,7 +1,7 @@
 # == Class: dhrep::services::intern::tgelasticsearch
 #
 # Class to install and configure elasticsearch
-# 
+#
 # === Parameters
 #
 # [*cluster_name*]
