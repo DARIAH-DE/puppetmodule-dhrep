@@ -3,7 +3,9 @@
 # Setup and manage a dhrep server with scope "textgrid" or "dariah"
 #
 class dhrep (
-  $scope = 'textgrid',
+  # testing with dariah rep at first! textgrif will follow then!
+#  $scope = 'textgrid',
+  $scope = 'dariah',
   $public_hostname = $::fqdn,
   $tgelasticsearch_cluster_name = 'testing',
   $crud_publish_secret = undef,
@@ -33,6 +35,43 @@ class dhrep (
       authz_shib_pw    => $tgauth_authz_shib_pw,
       webauth_secret   => $tgauth_webauth_secret,
     }
+
+    class { 'dhrep::services::intern::sesame':
+      scope => $scope,
+    }
+
+    class { 'dhrep::services::aggregator':
+      scope => $scope,
+    }
+
+    class { 'dhrep::services::intern::tgnoid':
+      before        => Class['dhrep::services::crud'],
+      tgcrud_secret => $tgnoid_tgcrud_secret,
+    }
+
+    class { 'dhrep::services::confserv':
+      service_base_url => $confserv_service_base_url,
+    }
+
+    class { 'dhrep::services::intern::datadirs':
+      create_local_datadirs => $datadirs_create_local_datadirs,
+    }
+
+    class { 'dhrep::static::textgridrep_website': }
+
+    class { 'dhrep::static::textgridlab_org': }
+
+    class { 'dhrep::services::tgsearch':
+      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
+    }
+
+    class { 'dhrep::services::tgsearch_public':
+      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
+    }
+
+    class { 'dhrep::services::tgmarketplace': }
+
+    class { 'dhrep::tools::check_services': }
   }
 
   class { 'dhrep::services::intern::tgelasticsearch':
@@ -44,31 +83,12 @@ class dhrep (
     scope => $scope,
   }
 
-  if $scope == 'textgrid' {
-    class { 'dhrep::services::intern::sesame':
-      scope => $scope,
-    }
-  }
-
   class { 'dhrep::services::intern::tgwildfly':
     scope => $scope,
   }
 
   class { 'dhrep::services::intern::messaging':
     scope => $scope,
-  }
-
-  if $scope == 'textgrid' {
-    class { 'dhrep::services::aggregator':
-      scope => $scope,
-    }
-  }
-
-  if $scope == 'textgrid' {
-    class { 'dhrep::services::intern::tgnoid':
-      before        => Class['dhrep::services::crud'],
-      tgcrud_secret => $tgnoid_tgcrud_secret,
-    }
   }
 
   class { 'dhrep::services::crud':
@@ -102,32 +122,6 @@ class dhrep (
 
   class { 'dhrep::services::publish':
     scope => $scope,
-  }
-
-  if $scope == 'textgrid' {
-    class { 'dhrep::services::confserv':
-      service_base_url => $confserv_service_base_url,
-    }
-
-    class { 'dhrep::services::intern::datadirs':
-      create_local_datadirs => $datadirs_create_local_datadirs,
-    }
-
-    class { 'dhrep::static::textgridrep_website': }
-
-    class { 'dhrep::static::textgridlab_org': }
-
-    class { 'dhrep::services::tgsearch':
-      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
-    }
-
-    class { 'dhrep::services::tgsearch_public':
-      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
-    }
-
-    class { 'dhrep::services::tgmarketplace': }
-
-    class { 'dhrep::tools::check_services': }
   }
 
   #  include textgrid::tgnginx
@@ -294,18 +288,5 @@ class dhrep (
     file { $::dhrep::params::cachedir:
       ensure => directory,
     }
-  }
-
-  # todo: move to gwdgmetrics module
-  collectd::plugin::genericjmx::mbean {
-    'process_cpu_load':
-      object_name     => 'java.lang:type=OperatingSystem',
-      instance_prefix => 'process_cpu_load',
-      values          => [
-        {
-          'type'      => 'gauge',
-          'attribute' => 'ProcessCpuLoad',
-        },
-      ];
   }
 }

@@ -62,7 +62,7 @@ define dhrep::resources::servicetomcat (
 
   # Check if group and user are already existing.
   # Just in case we have two tomcats using the same user and group
-  # (e.g. tgcrud and tgcrud-public)
+  # (e.g. tgcrud and tgcrud-public or group ULSB is already existing :-)
   if ! defined(Group[$group]) {
     group { $group:
       ensure =>  present,

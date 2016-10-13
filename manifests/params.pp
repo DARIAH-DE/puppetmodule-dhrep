@@ -4,9 +4,6 @@
 #
 class dhrep::params {
 
-# do we still need this somewhere?!
-#  $maven_repository = 'http://dev.dariah.eu/nexus/content/repositories/releases/'
-
   ###
   # some global folder settings
   ###
@@ -95,7 +92,7 @@ class dhrep::params {
       'gid'          => '29900',
       'uid'          => '49628',
       'user'         => 'storage',
-      'group'        => 'storage',
+      'group'        => 'ULSB',
     },
     'tomcat_digilib' => {
       'catname'      => 'tomcat-digilib',
@@ -121,7 +118,7 @@ class dhrep::params {
       'gid'          => '29900',
       'uid'          => '49628',
       'user'         => 'storage',
-      'group'        => 'storage',
+      'group'        => 'ULSB',
     },
     'tomcat_tgsearch' => {
       'catname'      => 'tomcat-tgsearch',

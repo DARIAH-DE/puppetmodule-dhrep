@@ -141,6 +141,7 @@ class dhrep::services::publish (
     mode    => '0755',
     require => File[$_logdir],
   }
+
   logrotate::rule { $_short:
     path         => "${_logdir}/${_short}/publish.log",
     require      => File["${_logdir}/${_short}"],
