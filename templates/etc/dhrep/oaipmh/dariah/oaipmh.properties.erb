@@ -1,0 +1,80 @@
+##############################
+## elastic search endpoint ###
+##############################
+
+RS_ENDPOINT = http://<%= scope.lookupvar('::fqdn') %>/oaipmh
+
+##################################################################### OAI-PMH Configuration File #########################################################################
+
+############################
+## elastic search config ###
+############################
+
+elasticSearch.url = 127.0.0.1
+elasticSearch.port = <%= scope.lookupvar('dariahrepository::services::intern::tgelasticsearch::master_tcp_port') %>
+elasticSearch.clusterName = <%= scope.lookupvar('dariahrepository::services::intern::tgelasticsearch::cluster_name') %>
+elasticSearch.index = textgrid-public
+elasticSearch.type = metadata
+
+############################
+####  Project Choosing #####
+############################
+
+textgrid = false
+dariah = true
+
+#############################
+### Repository Properties ###
+#############################
+
+RepositoryName = DARIAH-DE Repository
+BaseUrl = http://<%= scope.lookupvar('::fqdn') %>
+DeletedRecordInfo = NO
+EarliestDateStamp = 2011-06-11T02:32:40Z
+Granularity = YYYY_MM_DD_THH_MM_SS_Z
+ProtocolVersion = 2.0
+AdminMail = funk@sub.uni-goettingen.de
+
+############################
+##### Field Settings #######
+############################
+
+fields = descriptiveMetadata.dc:contributor, descriptiveMetadata.dc:coverage, descriptiveMetadata.dc:creator, descriptiveMetadata.dc:date, administrativeMetadata.dcterms:modified, descriptiveMetadata.dc:description, descriptiveMetadata.dc:format, descriptiveMetadata.dc:identifier, administrativeMetadata.dcterms:identifier, descriptiveMetadata.dc:language, descriptiveMetadata.dc:publisher, descriptiveMetadata.dc:relation, descriptiveMetadata.dc:rights, descriptiveMetadata.dc:source, descriptiveMetadata.dc:subject, descriptiveMetadata.dc:title, descriptiveMetadata.dc:type
+workFields = descriptiveMetadata.dc:title
+
+############################
+#### Dublin Core Fields ####
+############################
+
+contributorList = descriptiveMetadata.dc:contributor
+coverageList = descriptiveMetadata.dc:coverage
+creatorList = descriptiveMetadata.dc:creator
+dateList = administrativeMetadata.dcterms:modified
+descriptionList = descriptiveMetadata.dc:description
+formatList = descriptiveMetadata.dc:format
+identifierList = descriptiveMetadata.dc:identifier
+languageList = descriptiveMetadata.dc:language
+publisherList = descriptiveMetadata.dc:publisher
+relationList = descriptiveMetadata.dc:relation
+rightsList = descriptiveMetadata.dc:rights
+sourceList = descriptiveMetadata.dc:source
+subjectList = descriptiveMetadata.dc:subject
+titleList = descriptiveMetadata.dc:title
+typeList = descriptiveMetadata.dc:type
+
+############################
+## ListIdentifierSetting ###
+############################
+
+rangeField = administrativeMetadata.dcterms:modified
+identifierListFields = descriptiveMetadata.dc:identifier, descriptiveMetadata.dc:date, descriptiveMetadata.dc:format, administrativeMetadata.dcterms:identifier, administrativeMetadata.dcterms:modified
+formatField = descriptiveMetadata.dc:format
+formatToFilter = text/tg.collection+tg.aggregation+xml
+dateOfObjectCreation = administrativeMetadata.dcterms:modified
+relationToFurtherMetadataObject = descriptiveMetadata.dc:relation
+repositoryObjectURIPrefix = hdl:
+identifierField = administrativeMetadata.dcterms:identifier
+specFieldPrefix = dariah:collection:
+specField = descriptiveMetadata.dc:title
+modifiedField = administrativeMetadata.dcterms:modified
+searchResponseSize = 100

@@ -1,19 +1,22 @@
 # == Class: dhrep::services::iiifmd
 #
-# Class to install and configure iiifmd
+# Class to install and configure iiifmd service.
 #
 class dhrep::services::iiifmd (
-  $scope            = undef,
-  $version          = 'latest',
-){
+  $scope   = undef,
+  $name    = 'tg-iiif-metadata',
+  $version = 'latest',
+) inherits dhrep::params {
 
   include dhrep::services::tomcat_digilib
 
-  $catname   = $dhrep::services::tomcat_digilib::catname
-  $user      = $dhrep::services::tomcat_digilib::user
-  $group     = $dhrep::services::tomcat_digilib::group
+  $_confdir = $::dhrep::params::confdir
+  $_vardir  = $::dhrep::params::vardir
+  $_catname = $dhrep::services::tomcat_digilib::catname
+  $_user    = $dhrep::services::tomcat_digilib::user
+  $_group   = $dhrep::services::tomcat_digilib::group
 
-  package { 'tg-iiif-metadata':
+  package { $name:
     ensure  => $version,
     require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
   }
@@ -21,54 +24,51 @@ class dhrep::services::iiifmd (
   ###
   # config
   ###
-
-  file { '/etc/textgrid/iiifmd':
+  file { "${_confdir}/iiifmd":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-
-  file { '/etc/textgrid/iiifmd/iiifmd.properties':
+  file { "${_confdir}/iiifmd/iiifmd.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('dhrep/etc/textgrid/iiifmd/iiifmd.properties.erb'),
-    require => File['/etc/textgrid/iiifmd'],
-    notify  => Service[$catname]
+    content => template('dhrep/etc/dhrep/iiifmd/iiifmd.properties.erb'),
+    require => File['/etc/dhrep/iiifmd'],
+    notify  => Service[$_catname]
   }
 
   ###
   # data
   ###
-
-  file { '/var/textgrid/iiifmd':
+  file { "${_vardir}/textgrid/iiifmd":
     ensure => directory,
-    owner  => $user,
-    group  => $group,
+    owner  => $_user,
+    group  => $_group,
+    mode   => '0755',
+  }
+  file { "${_vardir}/iiifmd/cache":
+    ensure => directory,
+    owner  => $_user,
+    group  => $_group,
     mode   => '0755',
   }
 
-  file { '/var/textgrid/iiifmd/cache':
-    ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => '0755',
-  }
-
+  ###
   # install the collectd plugin for elasticsearch
-  file { '/var/www/nginx-root/textgridrep.de/iiif':
+  ###
+  file { "${_vardir}/nginx-root/textgridrep.de/iiif":
     ensure => directory,
-    owner  => $user,
-    group  => $group,
+    owner  => $_user,
+    group  => $_group,
     mode   => '0755',
   }
-
-  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
+  vcsrepo { "${_vardir}nginx-root/textgridrep.de/iiif/mirador":
     ensure   => present,
-    owner  => $user,
-    group  => $group,
+    owner    => $_user,
+    group    => $_group,
     provider => git,
     source   => 'https://github.com/IIIF/m1.git',
   }
@@ -77,12 +77,11 @@ class dhrep::services::iiifmd (
     source => 'puppet:///modules/dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html',
     mode   => '0644',
   }
-
   # TODO: npm nodejs build and dhsummit.html
   vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/m2':
     ensure   => present,
-    owner  => $user,
-    group  => $group,
+    owner    => $_user,
+    group    => $_group,
     provider => git,
     source   => 'https://github.com/IIIF/mirador.git',
     revision => 'v2.0.0',
@@ -91,11 +90,9 @@ class dhrep::services::iiifmd (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-
-  file { "/home/${user}/${catname}/webapps/iiifmd": 
+  file { "/home/${_user}/${_catname}/webapps/iiifmd":
     ensure  => 'link',
-    target  => "/var/${scope}/webapps/iiifmd",
-    require => [File['/etc/textgrid/iiifmd/iiifmd.properties'],Dhrep::Resources::Servicetomcat[$catname]],
+    target  => "${_vardir}/webapps/iiifmd",
+    require => [File["${_confdir}/iiifmd/iiifmd.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
-
 }

@@ -1,8 +1,8 @@
-# == Class: dhrep::services::intern::datadirs
+# == Class: dhrep::services::intern::tgdatadirs
 #
-# Class to install and configure DH- or TG-crud data folders.
+# Class to install and configure TG-crud data folders.
 #
-class dhrep::services::intern::datadirs (
+class dhrep::services::intern::tgdatadirs (
   $scope                   = undef,
   $create_local_datadirs   = true,
   $data_public_location    = '',

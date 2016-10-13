@@ -1,14 +1,13 @@
 # == Class: dhrep::services::intern::tgnoid
 #
-# Class to install and configure the NOID.
-# Creates initial minter textgrid.
-# 
+# Class to install and configure the NOID. Creates initial textgrid minter.
+#
 # TODO:
 #   add checks to bash script
 #
 class dhrep::services::intern::tgnoid (
   $scope         = 'textgrid',
-  $tgcrud_secret
+  $tgcrud_secret = undef,
 ){
 
   $tgname    = 'tgnoid'
@@ -80,7 +79,7 @@ class dhrep::services::intern::tgnoid (
 
   ###
   # apache config, apache should be setup by dhrep::init
-  ###  
+  ###
   file { "/etc/apache2/${scope}/default_vhost_includes/tgnoid.conf":
     content => "
     # --------------------------------------------------------------------------
@@ -118,5 +117,4 @@ class dhrep::services::intern::tgnoid (
   dariahcommon::nagios_service { 'check_tgnoid':
     command => "/usr/lib/nagios/plugins/check_http -H localhost -a 'tgcrud:${dhrep::services::intern::tgnoid::tgcrud_secret}' -p 8080 -u /nd/noidu_textgrid?get+textgrid:h4kg.0 -s \"note: no elements bound under textgrid:h4kg.0\"",
   }
-
 }

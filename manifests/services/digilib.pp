@@ -19,7 +19,7 @@ class dhrep::services::digilib (
   package {
     'libvips37':     ensure  => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
     'libvips-tools': ensure  => present;
-    $digilib_name:   ensure  => $digilib_version, 
+    $digilib_name:   ensure  => $digilib_version,
                      require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
   }
 
@@ -27,30 +27,30 @@ class dhrep::services::digilib (
   # config
   ###
 
-  file { '/etc/textgrid/digilib':
+  file { "${confdir}/digilib":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
 
-  file { '/etc/textgrid/digilib/digilib.properties':
+  file { "${confdir}/digilib/digilib.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('dhrep/etc/textgrid/digilib/digilib.properties.erb'),
-    require => File['/etc/textgrid/digilib'],
+    content => template('dhrep/etc/dhrep/digilib/digilib.properties.erb'),
+    require => File['/etc/dhrep/digilib'],
     notify  => Service['tomcat-digilib'],
   }
 
-  file { '/etc/textgrid/digilib/digilib-service.properties':
+  file { "${confdir}/digilib/digilib-service.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('dhrep/etc/textgrid/digilib/digilib-service.properties.erb'),
-    require => File['/etc/textgrid/digilib'],
+    content => template('dhrep/etc/dhrep/digilib/digilib-service.properties.erb'),
+    require => File['/etc/dhrep/digilib'],
     notify  => Service['tomcat-digilib'],
   }
 
@@ -58,7 +58,7 @@ class dhrep::services::digilib (
   # data
   ###
 
-  file { '/var/textgrid/digilib':
+  file { "${vardir}/digilib":
     ensure => directory,
     owner  => root,
     group  => root,
@@ -66,7 +66,7 @@ class dhrep::services::digilib (
   }
 
   # the prescale images will be written by wildfly
-  file { '/var/textgrid/digilib/prescale':
+  file { "${vardir}/digilib/prescale":
     ensure => directory,
     owner  => 'wildfly',
     group  => 'wildfly',
@@ -76,19 +76,18 @@ class dhrep::services::digilib (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-
-  file { "/home/${user}/${catname}/webapps/${short}": 
+  file { "/home/${user}/${catname}/webapps/${short}":
     ensure  => 'link',
     target  => "/var/${scope}/webapps/${short}",
     require => [Dhrep::Resources::Servicetomcat[$catname], Package[$digilib_name]],
-  } 
+  }
   ->
   file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
 #    ensure  => link,
 #    target  => '/etc/textgrid/digilib/digilib.properties',
     # dilib doesn't like to load from symlinked files, TODO: still put to etc?
     source => '/etc/textgrid/digilib/digilib.properties',
-  } 
+  }
   ->
   file { "/home/${catname}/${catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
 #    ensure  => link,

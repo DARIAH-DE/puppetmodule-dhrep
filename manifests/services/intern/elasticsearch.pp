@@ -1,4 +1,4 @@
-# == Class: dhrep::services::intern::tgelasticsearch
+# == Class: dhrep::services::intern::elasticsearch
 #
 # Class to install and configure elasticsearch
 #
@@ -13,14 +13,14 @@
 # [*master_tcp_port*]
 #   elastic search tcp transport port (masternode)
 #
-class dhrep::services::intern::tgelasticsearch (
+class dhrep::services::intern::elasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
   $repo_version               = '1.7',
-  $elasticsearch_version      = '1.7.4',
+  $elasticsearch_version      = '1.7.5',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
-  $es_heap_size               = $dhrep::params::tgelasticsearch_es_heap_size,
+  $es_heap_size               = $dhrep::params::elasticsearch_es_heap_size,
 ) inherits dhrep::params {
 
   package {
@@ -51,9 +51,9 @@ class dhrep::services::intern::tgelasticsearch (
     config => {
       'node.master'                      => true,
       'node.data'                        => true,
-      'http.port'                        => $dhrep::params::tgelasticsearch_master_http_port,
-      'transport.tcp.port'               => $dhrep::params::tgelasticsearch_master_tcp_port,
-      'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${dhrep::params::tgelasticsearch_workhorse_tcp_port}",
+      'http.port'                        => $dhrep::params::elasticsearch_master_http_port,
+      'transport.tcp.port'               => $dhrep::params::elasticsearch_master_tcp_port,
+      'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${dhrep::params::elasticsearch_workhorse_tcp_port}",
     }
   }
 
@@ -61,9 +61,9 @@ class dhrep::services::intern::tgelasticsearch (
     config => {
       'node.master'                      => false,
       'node.data'                        => true,
-      'http.port'                        => $dhrep::params::tgelasticsearch_workhorse_http_port,
-      'transport.tcp.port'               => $dhrep::params::tgelasticsearch_workhorse_tcp_port,
-      'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${dhrep::params::tgelasticsearch_master_tcp_port}",
+      'http.port'                        => $dhrep::params::elasticsearch_workhorse_http_port,
+      'transport.tcp.port'               => $dhrep::params::elasticsearch_workhorse_tcp_port,
+      'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${dhrep::params::elasticsearch_master_tcp_port}",
     }
   }
 
@@ -76,7 +76,7 @@ class dhrep::services::intern::tgelasticsearch (
   }
 
   # run only once
-  unless $::tgelastic_repos_initialized {
+  unless $::elastic_repos_initialized {
     # clone commons repo, which contains shell scripts to create textgrid elastic search indizes
     exec { 'git_clone_tgcommon':
       path    => ['/usr/bin','/bin','/usr/sbin'],
@@ -86,26 +86,26 @@ class dhrep::services::intern::tgelasticsearch (
     }
     ->
     dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
-      url     => "http://localhost:${dhrep::params::tgelasticsearch_master_http_port}/",
+      url     => "http://localhost:${dhrep::params::elasticsearch_master_http_port}/",
       require => Elasticsearch::Instance['masternode'],
     }
     ~>
     exec { 'create_public_es_index':
       path    => ['/usr/bin','/bin','/usr/sbin'],
       cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${dhrep::params::tgelasticsearch_master_http_port}",
+      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${dhrep::params::elasticsearch_master_http_port}",
       require => [Package['curl']],
     }
     ~>
     exec { 'create_nonpublic_es_index':
       path    => ['/usr/bin','/bin','/usr/sbin'],
       cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${dhrep::params::tgelasticsearch_master_http_port}",
+      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${dhrep::params::elasticsearch_master_http_port}",
       require => [Package['curl']],
     }
     ~>
-    file { '/etc/facter/facts.d/tgelastic_repos_initialized.txt':
-      content => 'tgelastic_repos_initialized=true',
+    file { '/etc/facter/facts.d/elastic_repos_initialized.txt':
+      content => 'elastic_repos_initialized=true',
     }
   }
 
@@ -140,7 +140,7 @@ class dhrep::services::intern::tgelasticsearch (
         Verbose false
         Version \"1.0\"
         Cluster \"$cluster_name\"
-        Port $dhrep::params::tgelasticsearch_master_http_port
+        Port $dhrep::params::elasticsearch_master_http_port
     </Module>
 </Plugin>
 ",
@@ -151,7 +151,7 @@ class dhrep::services::intern::tgelasticsearch (
 
   collectd::plugin::curl_json {
   'elasticsearch_workhorse':
-    url => "http://localhost:${dhrep::params::tgelasticsearch_workhorse_http_port}/_nodes/${::hostname}-workhorse/stats/jvm/",
+    url => "http://localhost:${dhrep::params::elasticsearch_workhorse_http_port}/_nodes/${::hostname}-workhorse/stats/jvm/",
     instance => 'elasticsearch_workhorse',
     keys => {
       'nodes/*/jvm/mem/heap_max_in_bytes' => {'type' => 'bytes'},

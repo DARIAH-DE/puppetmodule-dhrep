@@ -1,8 +1,8 @@
 # == Class: dhrep::services::intern::sesame
 #
 # Class to install and configure sesame.
-# Creates initial repos textgrid-nonpublic 
-# and textgrid-public and adds initial triples.
+# Creates initial repos textgrid-nonpublic and textgrid-public and adds initial
+# triples.
 #
 class dhrep::services::intern::sesame (
   $scope          = undef
@@ -30,22 +30,6 @@ class dhrep::services::intern::sesame (
     target  => "/home/${tgname}",
     creates => "/home/${tgname}/openrdf-sesame-${sesame_version}",
   }
-
-#  $tgcache = '/var/cache/textgrid/'
-#  file { $tgcache:
-#    ensure => directory,
-#  }
-
-#  staging::file { $sesame_file:
-#    source  => "http://sourceforge.net/projects/sesame/files/Sesame%202/${sesame_version}/${sesame_file}/download",
-#    target  => "${tgcache}/${sesame_file}",
-#  }
-#  ->
-#  staging::extract { $sesame_file:
-#    source  => "${tgcache}/${sesame_file}",
-#    target  => "/home/${tgname}",
-#    creates => "/home/${tgname}/openrdf-sesame-${sesame_version}",
-#  }
   ~>
   tomcat::war { 'openrdf-workbench.war':
     war_ensure    => present,
@@ -94,22 +78,22 @@ class dhrep::services::intern::sesame (
   ###
   # sesame backup script
   ###
-  file { '/var/textgrid/backups/sesame' :
+  file { "${backupdir}/sesame" :
     ensure  => directory,
     owner   => $tgname,
     group   => $tgname,
     mode    => '0755',
-    require => File['/var/textgrid/backups'],
+    require => File[${backupdir}],
   }
   file{ '/opt/dhrep/sesame-backup.sh' :
     source  => 'puppet:///modules/dhrep/opt/dhrep/sesame-backup.sh',
     owner   => $tgname,
     group   => $tgname,
     mode    => '0700',
-    require => [File['/opt/dhrep'],File['/var/textgrid/backups/sesame']],
+    require => [File[${optdir}],File["${backupdir}/sesame"]],
   }
   cron { 'sesame-backup' :
-    command  => '/opt/dhrep/sesame-backup.sh',
+    command  => "${optdir}/sesame-backup.sh",
     user     => $tgname,
     hour     => 22,
     minute   => 33,
@@ -126,11 +110,11 @@ class dhrep::services::intern::sesame (
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File['/opt/dhrep/sesame-backup.sh'],
+    require => File["${optdir}/sesame-backup.sh"],
   }
   dariahcommon::nagios_service { 'check_sesame_backups':
-    command => "/opt/dhrep/check_sesame_backups.sh",
-    require => File['/opt/dhrep/check_sesame_backups.sh'],
+    command => "${optdir}/check_sesame_backups.sh",
+    require => File["${optdir}"/check_sesame_backups.sh"],
   }
 
 }

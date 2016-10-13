@@ -1,71 +1,68 @@
 # == Class: dhrep::services::tgsearch
 #
-# Class to install and configure tgsearch.
+# Class to install and configure tgsearch nonpublic service.
 #
 class dhrep::services::tgsearch (
-  $scope            = 'textgrid',
-  $short            = 'tgsearch',
-  $tgsearch_name    = 'tgsearch-nonpublic-webapp',
-  $tgsearch_version = 'latest',
-) {
+  $scope   = undef,
+  $name    = 'tgsearch-nonpublic-webapp',
+  $version = 'latest',
+)  inherits dhrep::params {
 
   include dhrep::services::tomcat_tgsearch
 
-  $catname = $dhrep::services::tomcat_tgsearch::catname
-  $user    = $dhrep::services::tomcat_tgsearch::user
-  $group   = $dhrep::services::tomcat_tgsearch::group
+  $_confdir = $::dhrep::params::confdir
+  $_catname = $::dhrep::services::tomcat_tgsearch::catname
+  $_user    = $::dhrep::services::tomcat_tgsearch::user
+  $_group   = $::dhrep::services::tomcat_tgsearch::group
 
-  package { $tgsearch_name:
-    ensure  => $tgsearch_version,
-    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
+  ###
+  # update apt repo and install package
+  ###
+  package { $name:
+    ensure  => $version,
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
   # config
   ###
-
-  file { "/etc/textgrid/tgsearch":
+  file { "${_confdir}/tgsearch":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-
-  file { "/etc/textgrid/tgsearch/tgsearch-nonpublic.properties":
+  file { "${_confdir}/tgsearch/tgsearch-nonpublic.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("dhrep/etc/textgrid/${short}/tgsearch.properties.erb"),
-    require => File["/etc/textgrid/tgsearch"],
-    notify  => Service['tomcat-tgsearch'],
+    content => template("dhrep/etc/dhrep/tgsearch-nonpublic/tgsearch.properties.erb"),
+    require => File["${_confdir}/tgsearch"],
+    notify  => Service[$_catname],
   }
-
-  file { "/etc/textgrid/tgsearch/log4j.nonpublic.properties":
+  file { "${_confdir}/tgsearch/log4j.nonpublic.properties":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("dhrep/etc/textgrid/${short}/log4j.properties.erb"),
-    require => File["/etc/textgrid/tgsearch"],
+    content => template("dhrep/etc/dhrep/tgsearch-nonpublic/log4j.properties.erb"),
+    require => File["${_confdir}/tgsearch"],
   }
-  
+
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  
-  file { "/home/${user}/${catname}/webapps/${short}": 
+  file { "/home/${_user}/${_catname}/webapps/tgsearch-nonpublic-webapp":
     ensure  => 'link',
-    target  => "/var/${scope}/webapps/tgsearch-nonpublic",
-    require => Dhrep::Resources::Servicetomcat[$catname],
+    target  => "/var/dhrep/webapps/tgsearch-nonpublic",
+    require => Dhrep::Resources::Servicetomcat[$_catname],
   }
 
   ###
   # nrpe
   ###
-
   dariahcommon::nagios_service { 'check_http_tgsearch':
     command => "/usr/lib/nagios/plugins/check_http -H localhost -p 9090 -u /tgsearch",
   }
-
 }

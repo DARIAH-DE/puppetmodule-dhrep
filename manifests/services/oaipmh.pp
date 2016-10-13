@@ -1,70 +1,72 @@
 # == Class: dhrep::services::oaipmh
 #
-# Class to install and configure oaipmh
+# Class to install and configure oaipmh service
 #
 class dhrep::services::oaipmh (
-  $scope            = undef,
-  $short            = 'oaipmh',
-  $oaipmh_name      = 'oaipmh-webapp',
-  $oaipmh_version   = 'latest',
+  $scope   = undef,
+  $name    = 'oaipmh-webapp',
+  $version = 'latest',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_oaipmh
 
-  $catname = $dhrep::services::tomcat_oaipmh::catname
-  $user    = $dhrep::services::tomcat_oaipmh::user
-  $group   = $dhrep::services::tomcat_oaipmh::group
+  $_confdir  = $::dhrep::params::confdir
+  $_vardir   = $::dhrep::params::vardir
+  $_logdir   = $::dhrep::params::logdir
+  $_catname  = $::dhrep::services::tomcat_oaipmh::catname
+  $_user     = $::dhrep::services::tomcat_oaipmh::user
+  $_group    = $::dhrep::services::tomcat_oaipmh::group
 
-  package { $oaipmh_name:
-    ensure  => $oaipmh_version,
-    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
+  $templates = "dhrep/etc/dhrep/oaipmh/${scope}"
+
+  ###
+  # update apt repo and install package
+  ###
+  package { $name:
+    ensure  => $version,
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
   # config
   ###
-
-  file { "/etc/${scope}/${short}":
+  file { "${_confdir}/oaipmh":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-
-  file { "/etc/${scope}/${short}/oaipmh.properties":
+  file { "${_confdir}/oaipmh/oaipmh.properties":
     ensure  => present,
     owner   => root,
-    group   => $group,
+    group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/${scope}/${short}/oaipmh.properties.erb"),
-    require => File["/etc/${scope}/${short}"],
-    notify  => Service[$catname],
+    content => template("${templates}/oaipmh.properties.erb"),
+    require => File["${_confdir}/oaipmh"],
+    notify  => Service[$_catname],
   }
 
   ###
   # logging
   ###
-
-  file { "/etc/${scope}/${short}/log4j.oaipmh.properties":
+  file { "${_confdir}/oaipmh/log4j.oaipmh.properties":
     ensure  => present,
     owner   => root,
-    group   => $group,
+    group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/${scope}/${short}/log4j.oaipmh.properties.erb"),
-    require => File["/etc/${scope}/${short}"],
+    content => template("${templates}/log4j.oaipmh.properties.erb"),
+    require => File["${_confdir}/oaipmh"],
   }
-
-  file { "/var/log/${scope}/${short}":
+  file { "${_logdir}/oaipmh":
     ensure  => directory,
-    owner   => $user,
-    group   => $group,
+    owner   => $_user,
+    group   => $_group,
     mode    => '0775',
-    require => File["/var/log/${scope}"],
+    require => File[$_logdir],
   }
-
   logrotate::rule { $short:
-    path         => "/var/log/${scope}/${short}/${short}.log",
-    require      => File["/var/log/${scope}/${short}"],
+    path         => "${_vardir}/oaipmh/oaipmh.log",
+    require      => File["${_vardir}/oaipmh"],
     rotate       => 30,
     rotate_every => 'day',
     compress     => true,
@@ -78,11 +80,9 @@ class dhrep::services::oaipmh (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-
-  file { "/home/${user}/${catname}/webapps/${short}":
+  file { "/home/${_user}/${_catname}/webapps/oaipmh":
     ensure  => 'link',
-    target  => "/var/dhrep/webapps/${short}",
-    require => [File["/etc/${scope}/${short}/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$catname]],
+    target  => '/var/dhrep/webapps/oaipmh',
+    require => [File["/etc/dhrep/oaipmh/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
-
 }

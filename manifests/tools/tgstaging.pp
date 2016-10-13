@@ -4,7 +4,7 @@ define dhrep::tools::tgstaging(
   $creates = undef,
 ){
 
-  $tgcache = '/var/cache/textgrid/'
+  $tgcache = '/var/cache/dhrep/'
 
   staging::file { $name:
     source  => $source,

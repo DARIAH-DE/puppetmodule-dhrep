@@ -1,8 +1,8 @@
-# == Class: dhrep::services::intern::javagat
+# == Class: dhrep::services::intern::tgjavagat
 #
 # Class to install and configure JavaGAT.
 #
-class dhrep::services::intern::javagat (
+class dhrep::services::intern::tgjavagat (
   $scope           = undef,
   $javagat_version = '2.1.1',
 ){

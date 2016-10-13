@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="koLibRI-config" xmlns:koLibRI="koLibRI-config"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="koLibRI-config
+	http://kopal.langzeitarchivierung.de/schema/koLibRI/config.xsd">
+	<!-- Common Configuration Section: This common configuration part contains 
+		all common config values usable from all process starter, action modules and other classes. -->
+	<common>
+		<property>
+			<field>logLevel</field>
+			<value>FINER</value>
+			<description>The log level for the WorkflowTool application. Possible are ALL, FINEST, FINER, FINE, INFO, WARNING, SEVERE and OFF.</description>
+		</property>
+		<property>
+			<field>defaultProcessStarter</field>
+			<value>dariahde.publish.DHPublish</value>
+			<description>The processStarter class which defines where the data is taken from to fill the process queue. You can start multiple process starters concurrently by using the defaultProcessStarter value repeatedly.</description>
+		</property>
+		<property>
+			<field>policyFile</field>
+			<value>/etc/dariah/dhpublish/conf/policies.xml</value>
+			<description>The XML file containing the policies to define the order of processing ActionModules on all objects hold in the process queue. It also is possible to configure the action modules from here.</description>
+		</property>
+		<property>
+			<field>defaultPolicyName</field>
+			<value>DHPublish</value>
+			<description>The default policy name if no other policy name is given, possibly via command line interface or in the ProcessStarter configuration itself.</description>
+		</property>
+		<property>
+			<field>logfileDir</field>
+			<value>/var/log/dariah/dhpublish/</value>
+			<description>The directory where TG-publish`s log files shall be stored. Don`t forget the `/` at the end!</description>
+		</property>
+		<property>
+			<field>tempDir</field>
+			<value>/etc/dariah/dhpublish/temp/</value>
+			<description>The temporary directory is used to copy folders and files to import. Don`t forget the `/` at the end!</description>
+		</property>
+		<property>
+			<field>destinationDir</field>
+			<value>/etc/dariah/dhpublish/dest/</value>
+		</property>
+		<property>
+			<field>workDir</field>
+			<value>/etc/dariah/dhpublish/work/</value>
+		</property>
+		<property>
+			<field>useDatabase</field>
+			<value>false</value>
+		</property>
+		<property>
+			<field>logMessagesWithStatus</field>
+			<value>ERROR</value>
+			<value>CANCELLED</value>
+			<value>WARNING</value>
+			<value>DONE</value>
+		</property>
+		<property>
+			<field>defaultOwner</field>
+			<value>TEST</value>
+		</property>
+		<property>
+			<field>defaultServer</field>
+			<value>localhost</value>
+		</property>
+		<property>
+			<field>knownHostsFile</field>
+			<value>***</value>
+		</property>
+		<property>
+			<field>maxFiles</field>
+			<value>5000</value>
+		</property>
+		<property>
+			<field>dmdPrefix</field>
+			<value>DMD</value>
+		</property>
+		<property>
+			<field>amdPrefix</field>
+			<value>AMDTECH</value>
+		</property>
+		<property>
+			<field>techMdPrefix</field>
+			<value>TECHMD</value>
+		</property>
+		<property>
+			<field>mdWrapPrefix</field>
+			<value>MDWRAP</value>
+		</property>
+		<property>
+			<field>mdClassName</field>
+			<value>de.langzeitarchivierung.kolibri.formats.Uof</value>
+		</property>
+		<property>
+			<field>mdTemplateFile</field>
+			<value>/etc/dariah/dhpublish/conf/mets_template.xml</value>
+		</property>
+		<property>
+			<field>maxTechMDLength</field>
+			<value>262144</value>
+		</property>
+		<property>
+			<field>maxNumberOfThreads</field>
+			<value>4</value>
+			<description>Number of threads each process starter is able to work with.</description>
+		</property>
+		<property>
+			<field>waitUntilNextTry</field>
+			<value>15000</value>
+		</property>
+
+		<!-- DARIAH Repository globally configured values START -->
+		<property>
+			<field>ownStorageEndpoint</field>
+			<value>https://de.dariah.eu/storage/</value>
+			<description>The URI of the Storage Service implementation (DARIAH OwnStorage)</description>
+		</property>
+		<property>
+			<field>dhcrudEndpoint</field>
+			<value>http://localhost:9093/dhcrud/</value>
+			<description>The endpoint of the DH-crud service</description>
+		</property>
+		<property>
+			<field>dhpidEndpoint</field>
+			<value>http://localhost:9094/dhpid/</value>
+		</property>
+		<property>
+			<field>pidSecret</field>
+			<value><%= scope.lookupvar('dariahrepository::services::dhpublish::pid_secret') %></value>
+		</property>
+		<property>
+			<field>crEndpoint</field>
+			<value>http://demo2.dariah.eu/colreg/</value>
+		</property>
+		<property>
+			<field>crOaiPath</field>
+			<value>oaipmh/?verb=GetRecord&amp;metadataPrefix=dcddm&amp;identifier=</value>
+			<description>The URI of the Collection Registry OAI service.</description>
+		</property>
+		<property>
+			<field>repositoryOaiEndpoint</field>
+			<value>http://<%= scope.lookupvar('::fqdn') %>/oaipmh/oai</value>
+		</property>
+		<!-- DARIAH Repository globally configured values END -->
+	</common>
+
+	<!-- Module Configuration Section : This module configuration section contains all config data to use with single classes like action modules, process starter and other classes. The following information only is available in the given classes. -->
+	<modules>
+
+		<!-- Miscellaneous Classes -->
+		<class name="util.FormatRegistry">
+			<property>
+				<field>formatMapFileLocation</field>
+				<value>/etc/dariah/dhpublish/conf/map_dias2jhove.xml</value>
+			</property>
+			<property>
+				<field>formatRegistryBackupFile</field>
+				<value>/etc/dariah/dhpublish/conf/dias_formatregistry.xml</value>
+			</property>
+			<property>
+				<field>useBackupFileOnly</field>
+				<value>true</value>
+			</property>
+		</class>
+
+		<!-- ProcessStarters -->
+		<class name="processstarter.PublishAbs">
+			<property>
+				<field>responseMapCapacity</field>
+				<value>1000</value>
+				<description>The capacity of the response map. Minimum should be the amount of all dataQueueCapaticities of implementing classes.</description>
+			</property>
+		</class>
+		<class name="processstarter.dariahde.publish.DHPublish">
+			<!-- globally configured: dhpidEndpoint, pidSecret -->
+			<property>
+				<field>defaultPolicy</field>
+				<value>DHPublish</value>
+				<description>The policy of the TGPublish process starter.</description>
+			</property>
+			<property>
+				<field>dataQueueCapacity</field>
+				<value>1000</value>
+				<description>The capacity of the DHPublish data queue. If more requests are coming in, DHPublish will not add them to its data queue.</description>
+			</property>
+			<property>
+				<field>recheckDataQueue</field>
+				<value>5000</value>
+				<description>The repeat interval the DHPublish data queue is checked.</description>
+			</property>
+			<property>
+				<field>infoResponseCachingTime</field>
+				<value>600000</value>
+				<description>The time info responses are cached.</description>
+			</property>
+		</class>
+
+		<!-- ActionModules -->
+		<class name="actionmodule.dariahde.publish.CheckCollection">
+			<!-- globally configured: ownStorageEndpoint -->
+			<property>
+				<field>collectionRequiredFields</field>
+				<value>dc:title</value>
+				<value>dc:creator</value>
+				<value>dc:rights</value>
+			</property>
+			<property>
+				<field>itemRequiredFields</field>
+				<value>dc:title</value>
+				<value>dc:creator</value>
+				<value>dc:rights</value>
+			</property>
+		</class>
+		<!-- class name="actionmodule.dariahde.publish.CreateCollection"> -->
+			<!-- globally configured: dhcrudEndpoint -->
+		<!-- </class> -->
+		<class name="actionmodule.dariahde.publish.SubmitFiles">
+			<!-- globally configured: dhcrudEndpoint -->
+			<property>
+				<field>dryRunOffset</field>
+				<value>973</value>
+				<description>The time in millis each file is being created in dryrun mode.</description>
+			</property>
+		</class>
+		<!-- <class name="actionmodule.dariahde.publish.NotifyCollectionRegistry"> -->
+			<!-- globally configured: crEndpoint, oaiEndpoint, pidSecret -->
+		<!-- </class> -->
+	</modules>
+</config>

@@ -1,0 +1,44 @@
+# locations for /
+
+location /oaipmh {
+    proxy_pass http://localhost:9097/oaipmh;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
+
+location /dhcrud {
+    gzip on;
+    gzip_types multipart/related application/xop+xml text/xml;
+    client_max_body_size 1000m;
+    proxy_read_timeout 900s;
+    proxy_send_timeout 900s;
+    proxy_connect_timeout 120s;
+    proxy_pass http://localhost:9093/dhcrud-public;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
+
+# FIXME Only Publish GUI must have access!! Setup AAI!!
+location /dhpublish {
+    proxy_pass http://localhost:9094/dhpublish;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
+
+# Only accessed from internal!
+#location /pid {
+#    proxy_pass http://localhost:9094/dhpid;
+#    proxy_set_header        X-Real-IP $remote_addr;
+#    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+#    proxy_set_header        Host $http_host;
+#}
+
+#location /fits {
+#    proxy_pass http://localhost:9098/fits/FitsService;
+#    proxy_set_header        X-Real-IP $remote_addr;
+#    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+#    proxy_set_header        Host $http_host;
+#}

@@ -1,10 +1,10 @@
 # == Class: dhrep::services::crud
 #
-# Class to install and configure tgcrud/dhcrud
+# Class to install and configure non-public crud service.
 #
 class dhrep::services::crud (
   $scope          = undef,
-  $crud_loglevel  = 'INFO',
+  $loglevel       = 'INFO',
   $use_messaging  = true,
   $publish_secret = undef,
 ) inherits dhrep::params {
@@ -12,23 +12,18 @@ class dhrep::services::crud (
   include dhrep::services::intern::javagat
   include dhrep::services::tomcat_crud
 
-  $_name    = $::dhrep::params::crud_name[$scope]
-  $_short   = $::dhrep::params::crud_short[$scope]
-  $_version = $::dhrep::params::crud_version[$scope]
-  $_confdir = $::dhrep::params::confdir
-  $_logdir  = $::dhrep::params::logdir
-  $_optdir  = $::dhrep::params::optdir
-  $_catname = $::dhrep::services::tomcat_crud::catname
-  $_user    = $::dhrep::services::tomcat_crud::user
-  $_group   = $::dhrep::services::tomcat_crud::group
+  $_name     = $::dhrep::params::crud_name[$scope]
+  $_short    = $::dhrep::params::crud_short[$scope]
+  $_version  = $::dhrep::params::crud_version[$scope]
+  $_confdir  = $::dhrep::params::confdir
+  $_logdir   = $::dhrep::params::logdir
+  $_optdir   = $::dhrep::params::optdir
+  $_catname  = $::dhrep::services::tomcat_crud::catname
+  $_user     = $::dhrep::services::tomcat_crud::user
+  $_group    = $::dhrep::services::tomcat_crud::group
+  $_aptdir   = $::dhrep::params::aptdir
 
-  # FIXME Only affected are tgcrud and tgpublish right now! Do change if going productive in tgcrud- and tgpublish webapp's POM file! All other dhrep webapps already are deployed to /var/dhrep/webapps!
-  if $scope == 'textgrid' {
-    $_aptdir = '/var/textgrid/webapps'
-  }
-  else {
-    $_aptdir = $::dhrep::params::aptdir
-  }
+  $templates = "dhrep/etc/dhrep/${_short}/${scope}"
 
   ###
   # update apt repo and install package
@@ -61,7 +56,7 @@ class dhrep::services::crud (
     owner   => 'root',
     group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/crud/crud.properties.erb"),
+    content => template("${templates}/crud.properties.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -70,7 +65,7 @@ class dhrep::services::crud (
     owner   => 'root',
     group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/crud/beans.properties.erb"),
+    content => template("${templates}/beans.properties.erb"),
     require => File["${_confdir}/${_short}"],
   }
 
@@ -82,7 +77,7 @@ class dhrep::services::crud (
     owner   => 'root',
     group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/crud/crud.log4j.erb"),
+    content => template("${templates}/crud.log4j.erb"),
     require => File["${_confdir}/${_short}"],
   }
   file { "${_logdir}/${_short}":

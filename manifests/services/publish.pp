@@ -1,6 +1,6 @@
 # == Class: dhrep::services::publish
 #
-# Class to install and configure tgpublish/dhpublish.
+# Class to install and configure publish service.
 #
 class dhrep::services::publish (
   $scope     = undef,
@@ -9,22 +9,17 @@ class dhrep::services::publish (
 
   include dhrep::services::tomcat_publish
 
-  $_name    = $::dhrep::params::publish_name[$scope]
-  $_short   = $::dhrep::params::publish_short[$scope]
-  $_version = $::dhrep::params::publish_version[$scope]
-  $_confdir = $::dhrep::params::confdir
-  $_logdir  = $::dhrep::params::logdir
-  $_catname = $::dhrep::services::tomcat_publish::catname
-  $_user    = $::dhrep::services::tomcat_publish::user
-  $_group   = $::dhrep::services::tomcat_publish::group
+  $_name     = $::dhrep::params::publish_name[$scope]
+  $_short    = $::dhrep::params::publish_short[$scope]
+  $_version  = $::dhrep::params::publish_version[$scope]
+  $_confdir  = $::dhrep::params::confdir
+  $_logdir   = $::dhrep::params::logdir
+  $_catname  = $::dhrep::services::tomcat_publish::catname
+  $_user     = $::dhrep::services::tomcat_publish::user
+  $_group    = $::dhrep::services::tomcat_publish::group
+  $_aptdir   = $::dhrep::params::aptdir
 
-  # FIXME Only affected are tgcrud and tgpublish right now! Do change if going productive in tgcrud- and tgpublish webapp's POM file! All other dhrep webapps already are deployed to /var/dhrep/webapps!
-  if $scope == 'textgrid' {
-    $_aptdir = '/var/textgrid/webapps'
-  }
-  else {
-    $_aptdir = $::dhrep::params::aptdir
-  }
+  $templates = "dhrep/etc/dhrep/${_short}"
 
   ###
   # update apt repo and install package
@@ -57,7 +52,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/publish/config.xml.erb"),
+    content => template("${templates}/${scope}/config.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -66,7 +61,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/publish/beans.properties.erb"),
+    content => template("${templates}/${scope}/beans.properties.erb"),
     require => File["${_confdir}/${_short}"],
   }
   file { "${_confdir}/${_short}/policies.xml":
@@ -74,7 +69,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/publish/policies.xml.erb"),
+    content => template("${templates}/${scope}/policies.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -83,7 +78,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/publish/mets_template.xml.erb"),
+    content => template("${templates}/mets_template.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -92,7 +87,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/publish/map_dias2jhove.xml.erb"),
+    content => template("${templates}"/map_dias2jhove.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -101,7 +96,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("dhrep/etc/dhrep/publish/dias_formatregistry.xml.erb"),
+    content => template("${templates}/dias_formatregistry.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
@@ -159,7 +154,6 @@ class dhrep::services::publish (
   # scope: textgrid
   ###
   if $scope == 'textgrid' {
-
     ###
     # add elasticsearch script for removing nearly publish flag from elasticsearch
     ###

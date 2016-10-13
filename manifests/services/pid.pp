@@ -1,65 +1,68 @@
 # == Class: dhrep::services::pid
 #
-# Class to install and configure dhpid or tgpid.
+# Class to install and configure pid service.
 #
 class dhrep::services::pid (
-  $scope            = undef,
-  $short            = 'pid',
-  $pid_name         = 'pid-webapp',
-  $pid_version      = 'latest',
-  $pid_user         = '',
-  $pid_passwd       = '',
-  $pid_endpoint     = 'http://pid.gwdg.de',
-  $pid_path         = '/handles/',
-  $pid_prefix       = '',
-  $pid_responsible  = 'TextGrid',
-){
+  $scope       = undef,
+  $name        = 'pid-webapp',
+  $version     = 'latest',
+  $endpoint    = 'http://pid.gwdg.de',
+  $path        = '/handles/',
+  $user        = undef,
+  $passwd      = undef,
+  $prefix      = undef,
+  $responsible = 'TextGrid',
+) inherits dhrep::params {
 
-  $catname = $dhrep::services::tomcat_publish::catname
-  $user    = $dhrep::services::tomcat_publish::user
-  $group   = $dhrep::services::tomcat_publish::group
+  $_confdir  = $::dhrep::params::confdir
+  $_vardir   = $::dhrep::params::vardir
+  $_logdir   = $::dhrep::params::logdir
+  $_catname  = $::dhrep::services::tomcat_publish::catname
+  $_user     = $::dhrep::services::tomcat_publish::user
+  $_group    = $::dhrep::services::tomcat_publish::group
 
-  package { $pid_name:
-    ensure  => $pid_version,
-    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
+  $templates = "dhrep/etc/dhrep/pid/${scope}"
+
+  ###
+  # update apt repo and install package
+  ###
+  package { $name:
+    ensure  => $version,
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
   # config
   ###
-
-  file { "/etc/${scope}/${short}":
+  file { "${_confdir}/pid":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-
-  file { "/etc/${scope}/${short}/${short}.properties":
+  file { "${_confdir}/pid/pid.properties":
     ensure  => present,
     owner   => root,
-    group   => $group,
+    group   => $_group,
     mode    => '0640',
-    content => template("dhrep/etc/${scope}/${short}/${short}.properties.erb"),
-    require => File["/etc/${scope}/${short}"],
-    notify  => Service[$catname],
+    content => template("${templates}/pid/pid.properties.erb"),
+    require => File["${_confdir}/pid"],
+    notify  => Service[$_catname],
   }
 
   ###
   # logging
   ###
-
-  file { "/var/log/${scope}/${short}":
+  file { "${_logdir}/pid":
     ensure  => directory,
-    owner   => $user,
-    group   => $group,
+    owner   => $_user,
+    group   => $_group,
     mode    => '0755',
-    require => File["/var/log/${scope}"],
+    require => File[$_logdir],
   }
-
-  logrotate::rule { $short:
-    path         => "/var/log/${scope}/${short}/${short}.log",
-    require      => File["/var/log/${scope}/${short}"],
+  logrotate::rule { 'pid':
+    path         => "${_logdir}/pid/pid.log",
+    require      => File["${_logdir}/pid"],
     rotate       => 30,
     rotate_every => 'day',
     compress     => true,
@@ -73,13 +76,9 @@ class dhrep::services::pid (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-
-  # NOTE: Using dhpid instead of ${short} (pid) because of tomcat's service start
-  # seems to be in alphabetocal order, and pid service must be started first
-  file { "/home/${user}/${catname}/webapps/tgpid": 
+  file { "/home/${_user}/${_catname}/webapps/pid":
     ensure => 'link',
-    target => "/var/dhrep/webapps/${short}",
-    require => [File["/etc/${scope}/${short}/${short}.properties"],Dhrep::Resources::Servicetomcat[$catname]],
+    target => "/var/dhrep/webapps/pid",
+    require => [File["${_confdir}/pid/pid.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
-
 }

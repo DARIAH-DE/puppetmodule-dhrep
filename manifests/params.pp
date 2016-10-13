@@ -7,14 +7,14 @@ class dhrep::params {
   ###
   # some global folder settings
   ###
-  $confdir   = '/etc/dhrep'
-  $optdir    = '/opt/dhrep'
-  $logdir    = '/var/log/dhrep'
-  $cachedir  = '/var/cache/dhrep'
-  $vardir    = '/var/dhrep'
-  $backupdir = '/var/dhrep/backups'
-  $statdir   = '/var/dhrep/statistics'
   $aptdir    = '/var/dhrep/webapps'
+  $backupdir = '/var/dhrep/backups'
+  $cachedir  = '/var/cache/dhrep'
+  $confdir   = '/etc/dhrep'
+  $logdir    = '/var/log/dhrep'
+  $optdir    = '/opt/dhrep'
+  $statdir   = '/var/dhrep/statistics'
+  $vardir    = '/var/dhrep'
 
   ###
   # crud
@@ -65,12 +65,12 @@ class dhrep::params {
   }
 
   ###
-  # elasticsearch
+  # elastisearch
   ###
-  $tgelasticsearch_master_http_port    = '9202'
-  $tgelasticsearch_master_tcp_port     = '9302'
-  $tgelasticsearch_workhorse_http_port = '9203'
-  $tgelasticsearch_workhorse_tcp_port  = '9303'
+  $elasticsearch_master_http_port    = '9202'
+  $elasticsearch_master_tcp_port     = '9302'
+  $elasticsearch_workhorse_http_port = '9203'
+  $elasticsearch_workhorse_tcp_port  = '9303'
 
   ###
   # more specific config settings
@@ -131,12 +131,14 @@ class dhrep::params {
   }
 
   ###
-  # memory profiles: if no hiera entry is found, default to undef, so default profile is used
-  # NOTE all tomcat's except the crud, publish, and wildfly ones are using the servicetomcat's settings!
+  # memory profiles: if no hiera entry is found, default to undef, so default
+  # profile is used
+  # NOTE all tomcats except the crud, publish, and wildfly ones are using the
+  # servicetomcat's settings!
   ###
   case hiera('dhrep::mem_profile', undef) {
     'low': {
-      $tgelasticsearch_es_heap_size = '64m'
+      $elasticsearch_es_heap_size = '64m'
       $servicetomcat_xmx            = '64m'
       $servicetomcat_xms            = '32m'
       $tomcat_crud_xmx              = '96m'
@@ -148,7 +150,7 @@ class dhrep::params {
       $wildfly_maxpermsize          = '96m'
     }
     'server': {
-      $tgelasticsearch_es_heap_size = '3072m'
+      $elasticsearch_es_heap_size = '3072m'
       $servicetomcat_xmx            = '1024m'
       $servicetomcat_xms            = '1024m'
       $tomcat_crud_xmx              = '1536m'
@@ -160,7 +162,7 @@ class dhrep::params {
       $wildfly_maxpermsize          = '256m'
     }
     default: {
-      $tgelasticsearch_es_heap_size = '512m'
+      $elasticsearch_es_heap_size = '512m'
       $servicetomcat_xmx            = '1024m'
       $servicetomcat_xms            = '128m'
       $tomcat_crud_xmx              = '1024m'

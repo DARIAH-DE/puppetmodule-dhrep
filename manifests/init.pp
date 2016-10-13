@@ -1,16 +1,21 @@
 # == Class: dhrep
 #
-# Setup and manage a dhrep server with scope "textgrid" or "dariah"
+# Setup and manage a dhrep server with scope "textgrid" or "dariah".
 #
 class dhrep (
-  # testing with dariah rep at first! textgrif will follow then!
+  ###
+  # testing with dariah repository at first! textgrid will follow later!
+  ###
 #  $scope = 'textgrid',
   $scope = 'dariah',
   $public_hostname = $::fqdn,
-  $tgelasticsearch_cluster_name = 'testing',
+  $elasticsearch_cluster_name = 'testing',
   $crud_publish_secret = undef,
   $oracle_jdk8 = false,
-# FIXME textgrid specific refs defined here???
+
+  ###
+  # textgrid specific refs defined here
+  ###
   $tgauth_binddn_pass = undef,
   $tgauth_user_binddn_pass = undef,
   $tgauth_crud_secret = undef,
@@ -19,12 +24,36 @@ class dhrep (
   $tgauth_authz_instance = undef,
   $tgauth_webauth_secret = undef,
   $tgnoid_tgcrud_secret = undef,
-  $datadirs_create_local_datadirs = undef,
-  $confserv_service_base_url = undef,
+  $tgdatadirs_create_local_datadirs = undef,
+  $tgconfserv_service_base_url = undef,
 ) inherits dhrep::params {
 
-  # internal services containing variables used by other modules need to be evaluated in order
+  ###
+  # internal services containing variables used by other modules need to be
+  # evaluated in order, configure TextGrid services first.
+  #
+  # TODO check order of classes to be initialised!!
+  ###
   if $scope == 'textgrid' {
+    # TODO adapt generic services to generic usage: wildfly, iiifmc, aggregator,
+    # digilib
+    class { 'dhrep::services::intern::sesame':
+      scope => $scope,
+    }
+
+    class { 'dhrep::services::intern::tgnoid':
+      before        => Class['dhrep::services::crud'],
+      tgcrud_secret => $tgcrud_secret,
+    }
+
+    class { 'dhrep::services::intern::tgwildfly':
+      scope => $scope,
+    }
+
+    class { 'dhrep::services::intern::tgdatadirs':
+      create_local_datadirs => $tgdatadirs_create_local_datadirs,
+    }
+
     class { 'dhrep::services::tgauth':
       scope            => $scope,
       binddn_pass      => $tgauth_binddn_pass,
@@ -36,25 +65,20 @@ class dhrep (
       webauth_secret   => $tgauth_webauth_secret,
     }
 
-    class { 'dhrep::services::intern::sesame':
+    class { 'dhrep::services::tgconfserv':
+      service_base_url => $tgconfserv_service_base_url,
+    }
+
+    class { 'dhrep::services::digilib':
+      scope => $scope,
+    }
+
+    class { 'dhrep::services::iiifmd':
       scope => $scope,
     }
 
     class { 'dhrep::services::aggregator':
       scope => $scope,
-    }
-
-    class { 'dhrep::services::intern::tgnoid':
-      before        => Class['dhrep::services::crud'],
-      tgcrud_secret => $tgnoid_tgcrud_secret,
-    }
-
-    class { 'dhrep::services::confserv':
-      service_base_url => $confserv_service_base_url,
-    }
-
-    class { 'dhrep::services::intern::datadirs':
-      create_local_datadirs => $datadirs_create_local_datadirs,
     }
 
     class { 'dhrep::static::textgridrep_website': }
@@ -70,20 +94,19 @@ class dhrep (
     }
 
     class { 'dhrep::services::tgmarketplace': }
-
-    class { 'dhrep::tools::check_services': }
   }
 
-  class { 'dhrep::services::intern::tgelasticsearch':
+  ###
+  # generic services used for both scopes following now
+  ###
+  class { 'dhrep::tools::check_services': }
+
+  class { 'dhrep::services::intern::elasticsearch':
     scope        => $scope,
-    cluster_name => $tgelasticsearch_cluster_name,
+    cluster_name => $elasticsearch_cluster_name,
   }
 
   class { 'dhrep::resources::apache':
-    scope => $scope,
-  }
-
-  class { 'dhrep::services::intern::tgwildfly':
     scope => $scope,
   }
 
@@ -94,26 +117,18 @@ class dhrep (
   class { 'dhrep::services::crud':
     scope          => $scope,
     publish_secret => $crud_publish_secret,
-    require        => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
+    require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame']]
   }
 
   class { 'dhrep::services::crud_public':
     scope   => $scope,
-    require => [Class['dhrep::services::intern::tgelasticsearch'],
+    require => [Class['dhrep::services::intern::elasticsearch'],
                 Class['dhrep::services::intern::sesame']]
-  }
-
-  class { 'dhrep::services::digilib':
-    scope => $scope,
-  }
-
-  class { 'dhrep::services::iiifmd':
-    scope => $scope,
   }
 
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
-    require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
+    require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame']]
   }
 
   class { 'dhrep::services::pid':
@@ -124,22 +139,13 @@ class dhrep (
     scope => $scope,
   }
 
-  #  include textgrid::tgnginx
-
   ###
-  # java8 we want,
-  # openjdk-r does not seem to be up to date, so oracle for now
+  # java8 we want! openjdk-r does not seem to be up to date, so oracle for now
   ###
-
-  #  apt::ppa { 'ppa:openjdk-r/ppa': }
-  #  package {
-  #    'openjdk-8-jdk':            ensure => present;
-  #  }
-  #  ->
-
   if $oracle_jdk8 {
-    # copied from https://github.com/Spantree/puppet-java8/blob/master/manifests/init.pp
-    # ubuntu specific, for debian look at above link
+    # copied from
+    # https://github.com/Spantree/puppet-java8/blob/master/manifests/init.pp
+    # Ubuntu specific, for debian look at above link
     # accept license
     file { '/tmp/java.preseed':
       source => 'puppet:///modules/liferay/oracle-java.preseed',
@@ -169,14 +175,14 @@ class dhrep (
   ###
   # /java8
   ###
-
   package {
     'openjdk-6-jdk':          ensure => absent;
     'openjdk-6-jre':          ensure => absent;
     'openjdk-6-jre-headless': ensure => absent;
     'openjdk-6-jre-lib':      ensure => absent;
     'openjdk-7-jdk':          ensure => present;
-    'default-jre-headless':   ensure => present; # creates symlink /usr/lib/jvm/default-java
+    # Creates symlink /usr/lib/jvm/default-java.
+    'default-jre-headless':   ensure => present;
     'tomcat7':                ensure => present;
     'tomcat7-user':           ensure => present;
     'libtcnative-1':          ensure => present;
@@ -186,7 +192,10 @@ class dhrep (
     'apache2-utils':          ensure => present;
   }
 
-  # open http and https ports (other ports are closed via dariah-common firewall rules)
+  ###
+  # open http and https ports (other ports are closed via dariah-common
+  # firewall rules)
+  ###
   firewall { '100 allow http and https access':
     port   => [80, 443],
     proto  => tcp,
@@ -196,40 +205,6 @@ class dhrep (
   ###
   # folder creation
   ###
-  # weg damit später :-)
-  file { '/etc/textgrid':
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
-  }
-  file { '/var/log/textgrid':
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
-  }
-  file { '/var/textgrid':
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
-  }
-  file { '/var/textgrid/backups/' :
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    require => File['/var/textgrid'],
-  }
-  file { '/var/textgrid/statistics' :
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0701',
-    require => File['/var/textgrid'],
-  }
-
   file { $::dhrep::params::confdir:
     ensure => directory,
     owner  => 'root',
@@ -283,7 +258,7 @@ class dhrep (
     ensure  => directory,
   }
 
-  # vagrant cachier changes this to symlink
+  # vagrant cachier changes this to symlink.
   unless $::vagrant {
     file { $::dhrep::params::cachedir:
       ensure => directory,

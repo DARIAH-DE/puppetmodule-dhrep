@@ -1,14 +1,14 @@
 # == Class: dhrep::services::tgmarketplace
 #
 # Class to install and configure the TextGrid Marketplace.
-# 
+#
 class dhrep::services::tgmarketplace (
-  $scope = 'textgrid',
+  $scope = undef,
   $time  = ['23', '02'],
 ){
 
-  $owner = www-data
-  $group = www-data
+  $owner = 'www-data'
+  $group = 'www-data'
 
   package {
     'libapache2-mod-python': ensure => present;
@@ -20,12 +20,12 @@ class dhrep::services::tgmarketplace (
     path => ['/usr/bin','/bin','/usr/sbin','/usr/local/bin'],
   }
 
+  ###
+  # clone marketplace from git and copy to var/www/
   #
-  # Clone marketplace from GIT and copy to var/www/
-  #
-  # TODO Use release-tag in any way?
-  # TODO Cloning does not yield automatic updates via pull!!
-  #
+  # TODO use release-tag in any way?
+  # TODO cloning does not yield automatic updates via pull!!
+  ###
   exec { 'git_clone_textgrid_marketplace':
     command => 'git clone git://git.projects.gwdg.de/textgridlab-marketplace.git /usr/local/src/textgrid-marketplace-git',
     creates => '/usr/local/src/textgrid-marketplace-git',
@@ -45,7 +45,10 @@ class dhrep::services::tgmarketplace (
     mode    => '0755',
     require => File['/var/www/marketplace'],
   }
+
+  ###
   # .htaccess and config file from template.
+  ###
   file { '/var/www/marketplace/.htaccess':
     ensure  => present,
     owner   => $owner,
@@ -55,7 +58,10 @@ class dhrep::services::tgmarketplace (
     require => File['/var/www/marketplace'],
     notify  => Service['apache2'],
   }
-  # Logging and logrotate
+
+  ###
+  # logging and logrotate
+  ###
   file { '/var/log/textgrid/marketplace':
     ensure  => directory,
     owner   => $owner,
@@ -75,7 +81,10 @@ class dhrep::services::tgmarketplace (
     dateext      => true,
     dateformat   => '.%Y-%m-%d'
   }
+
+  ###
   # Configuration
+  ###
   file { '/var/www/marketplace/cgi/ms.conf':
     ensure  => present,
     owner   => $owner,
@@ -84,7 +93,10 @@ class dhrep::services::tgmarketplace (
     content => template('dhrep/var/www/marketplace/cgi/ms.conf.erb'),
     require => File['/var/www/marketplace/cgi'],
   }
-  # Symlink to /etc/textgrid/marketplace, create folder before.
+
+  ###
+  # symlink to /etc/textgrid/marketplace, create folder before.
+  ###
   file { '/etc/textgrid/marketplace':
     ensure => directory,
     owner  => $owner,
@@ -100,7 +112,9 @@ class dhrep::services::tgmarketplace (
     target  => '/var/www/marketplace/cgi/ms.conf',
     require => [File['/etc/textgrid/marketplace'],File['/var/www/marketplace/cgi/ms.conf']],
   }
-  # Other files from cloned GIT repo.
+  ###
+  # other files from cloned GIT repo.
+  ###
   file { '/var/www/marketplace/tg32.png':
     source  => 'file:///usr/local/src/textgrid-marketplace-git/tg32.png',
     owner   => $owner,
@@ -115,7 +129,10 @@ class dhrep::services::tgmarketplace (
     mode    => '0755',
     require => File['/var/www/marketplace/cgi'],
   }
-  # Cron for automatical cache reloading
+
+  ###
+  # cron for automatical cache reloading
+  ###
   cron { 'marketplace-cach-reload':
     ensure  => present,
     command => "curl -s http://${fqdn}/marketplace/cgi/msInterface.cgi?action=cache_reload > /dev/null",
@@ -127,7 +144,7 @@ class dhrep::services::tgmarketplace (
 
   ###
   # apache config, apache should be setup by dhrep::init
-  ###  
+  ###
   file { "/etc/apache2/${scope}/default_vhost_includes/tgmarketplace.conf":
     content => "
     # --------------------------------------------------------------------------
@@ -148,5 +165,4 @@ class dhrep::services::tgmarketplace (
     ",
     notify => Service['apache2'],
   }
-
 }

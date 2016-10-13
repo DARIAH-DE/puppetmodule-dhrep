@@ -1,11 +1,11 @@
 # == Class: dhrep::static::textgridlab_org
 #
-# Class to install and configure the textgridlab.org static sites
+# Class to install and configure the textgridlab.org static sites.
 #
 class dhrep::static::textgridlab_org(
 ) {
 
-  include dhrep::tgnginx
+  include dhrep::nginx
 
   Exec {
     path => ['/usr/bin','/bin','/usr/sbin'],
@@ -193,5 +193,4 @@ class dhrep::static::textgridlab_org(
     ensure  => link,
     target  => '/media/stornext/tglab/download',
   }
-
 }
