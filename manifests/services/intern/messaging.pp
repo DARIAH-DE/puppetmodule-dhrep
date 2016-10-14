@@ -17,7 +17,7 @@ class dhrep::services::intern::messaging (
     creates => '/usr/local/src/messagebeans-git',
     require => Package['git'],
   }
-  
+
   file { '/root/.m2':
     ensure => directory,
   }
@@ -36,7 +36,7 @@ class dhrep::services::intern::messaging (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('dhrep/etc/textgrid/messagebeans/enzmeta.properties.erb'),
+    content => template('dhrep/etc/dhrep/messagebeans/enzmeta.properties.erb'),
   }
 
   file { '/etc/textgrid/messagebeans/bolrfd.properties':
@@ -44,7 +44,7 @@ class dhrep::services::intern::messaging (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('dhrep/etc/textgrid/messagebeans/bolrdf.properties.erb'),
+    content => template('dhrep/etc/dhrep/messagebeans/bolrdf.properties.erb'),
   }
 
 }

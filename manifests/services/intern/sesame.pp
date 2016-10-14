@@ -5,58 +5,65 @@
 # triples.
 #
 class dhrep::services::intern::sesame (
-  $scope          = undef
-){
+  $scope = undef,
+) inherits dhrep::params {
 
-  $tgname         = 'tomcat-sesame'
-  $http_port      = '9091'
-  $control_port   = '9006'
-  $jmx_port       = '9991'
-  $sesame_version = '2.7.13'
-  $sesame_file    = "openrdf-sesame-${sesame_version}-sdk.tar.gz"
+  $catname       = 'tomcat-sesame'
+  $version       = '2.7.13'
+  $file          = "openrdf-sesame-${sesame_version}-sdk.tar.gz"
 
-  #require textgrid::resources::create_rdf_repository
+  $_catname      = $::dhrep::params::config['tomcat_sesame']['catname']
+  $_http_port    = $::dhrep::params::config['tomcat_sesame']['http_port']
+  $_control_port = $::dhrep::params::config['tomcat_sesame']['control_port']
+  $_jmx_port     = $::dhrep::params::config['tomcat_sesame']['jmx_port']
+  $_gid          = $::dhrep::params::config['tomcat_sesame']['gid']
+  $_uid          = $::dhrep::params::config['tomcat_sesame']['uid']
+  $_backupdir    = $::dhrep::params::backupdir
+  $_optdir       = $::dhrep::params::optdir
 
-  dhrep::resources::servicetomcat { $tgname:
-    gid          => '1008',
-    uid          => '1008',
-    http_port    => $http_port,
-    control_port => $control_port,
-    jmx_port     => $jmx_port,
+  ###
+  # create tomcat
+  ###
+  dhrep::resources::servicetomcat { $_catname:
+    gid          => $_gid,
+    uid          => $_uid,
+    http_port    => $_http_port,
+    control_port => $_control_port,
+    jmx_port     => $_jmx_port,
   }
 
-  dhrep::tools::tgstaging { $sesame_file:
-    source  => "http://sourceforge.net/projects/sesame/files/Sesame%202/${sesame_version}/${sesame_file}/download",
-    target  => "/home/${tgname}",
-    creates => "/home/${tgname}/openrdf-sesame-${sesame_version}",
+  dhrep::tools::tgstaging { $file:
+    source  => "http://sourceforge.net/projects/sesame/files/Sesame%202/${version}/${file}/download",
+    target  => "/home/${_catname}",
+    creates => "/home/${_catname}/openrdf-sesame-${version}",
   }
   ~>
   tomcat::war { 'openrdf-workbench.war':
     war_ensure    => present,
-    catalina_base => "/home/${tgname}/${tgname}",
-    war_source    => "/home/${tgname}/openrdf-sesame-${sesame_version}/war/openrdf-workbench.war",
-    require       => [Dhrep::Resources::Servicetomcat[$tgname]],
+    catalina_base => "/home/${_catname}/${_catname}",
+    war_source    => "/home/${_catname}/openrdf-sesame-${version}/war/openrdf-workbench.war",
+    require       => [Dhrep::Resources::Servicetomcat[$_catname]],
   }
   ~>
   tomcat::war { 'openrdf-sesame.war':
     war_ensure    => present,
-    catalina_base => "/home/${tgname}/${tgname}",
-    war_source    => "/home/${tgname}/openrdf-sesame-${sesame_version}/war/openrdf-sesame.war",
-    require       => [Dhrep::Resources::Servicetomcat[$tgname],Tomcat::War['openrdf-workbench.war']],
+    catalina_base => "/home/${_catname}/${_catname}",
+    war_source    => "/home/${_catname}/openrdf-sesame-${version}/war/openrdf-sesame.war",
+    require       => [Dhrep::Resources::Servicetomcat[$_catname],Tomcat::War['openrdf-workbench.war']],
   }
 
-  file { "/home/${tgname}/mime.ttl":
+  file { "/home/${_catname}/mime.ttl":
     ensure  => present,
-    owner   => $user,
+    owner   => $_catname,
     mode    => '0644',
     source  => 'puppet:///modules/dhrep/rdf/mime.ttl',
-    require => User[$tgname]
+    require => User[$_catname]
   }
 
   unless $sesame_nonpublic_repo_created {
-    dhrep::resources::create_rdf_repository{'textgrid-nonpublic':
-      port => '9091',
-      user => $tgname,
+    dhrep::resources::create_rdf_repository{"${scope}-nonpublic":
+      port => $_http_port,
+      user => $_catname,
     }
     ->
     file {'/etc/facter/facts.d/sesame_nonpublic.txt':
@@ -65,9 +72,9 @@ class dhrep::services::intern::sesame (
   }
 
   unless $sesame_public_repo_created {
-    dhrep::resources::create_rdf_repository{'textgrid-public':
-      port => '9091',
-      user => $tgname,
+    dhrep::resources::create_rdf_repository{"${scope}-public":
+      port => $_http_port,
+      user => $_catname,
     }
     ->
     file {'/etc/facter/facts.d/sesame_public.txt':
@@ -78,23 +85,23 @@ class dhrep::services::intern::sesame (
   ###
   # sesame backup script
   ###
-  file { "${backupdir}/sesame" :
+  file { "${_backupdir}/sesame" :
     ensure  => directory,
-    owner   => $tgname,
-    group   => $tgname,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0755',
-    require => File[${backupdir}],
+    require => File[$_backupdir],
   }
-  file{ '/opt/dhrep/sesame-backup.sh' :
+  file{ "${_optdir}/sesame-backup.sh" :
     source  => 'puppet:///modules/dhrep/opt/dhrep/sesame-backup.sh',
-    owner   => $tgname,
-    group   => $tgname,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0700',
-    require => [File[${optdir}],File["${backupdir}/sesame"]],
+    require => [File[$_optdir],File["${_backupdir}/sesame"]],
   }
   cron { 'sesame-backup' :
-    command  => "${optdir}/sesame-backup.sh",
-    user     => $tgname,
+    command  => "${_optdir}/sesame-backup.sh",
+    user     => $catname,
     hour     => 22,
     minute   => 33,
   }
@@ -105,16 +112,16 @@ class dhrep::services::intern::sesame (
   dariahcommon::nagios_service { 'check_http_sesame':
     command => "/usr/lib/nagios/plugins/check_http -H localhost -p 9091 -u /openrdf-sesame/repositories -k \"Accept: application/xml\" -s /openrdf-sesame/repositories/textgrid-nonpublic -s /openrdf-sesame/repositories/textgrid-public",
   }
-  file { '/opt/dhrep/check_sesame_backups.sh' :
+  file { "${_optdir}/check_sesame_backups.sh" :
     source  => 'puppet:///modules/dhrep/opt/dhrep/check_sesame_backups.sh',
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File["${optdir}/sesame-backup.sh"],
+    require => File["${_optdir}/sesame-backup.sh"],
   }
   dariahcommon::nagios_service { 'check_sesame_backups':
-    command => "${optdir}/check_sesame_backups.sh",
-    require => File["${optdir}"/check_sesame_backups.sh"],
+    command => "${_optdir}/check_sesame_backups.sh",
+    require => File["${_optdir}/check_sesame_backups.sh"],
   }
 
 }

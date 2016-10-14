@@ -19,7 +19,7 @@ class dhrep::services::publish (
   $_group    = $::dhrep::services::tomcat_publish::group
   $_aptdir   = $::dhrep::params::aptdir
 
-  $templates = "dhrep/etc/dhrep/${_short}"
+  $templates = "dhrep/etc/dhrep/publish"
 
   ###
   # update apt repo and install package

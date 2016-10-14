@@ -4,12 +4,11 @@
 #
 class dhrep (
   ###
-  # testing with dariah repository at first! textgrid will follow later!
+  # testing with scope "dariah" at first! scope "textgrid" will follow later!
   ###
-#  $scope = 'textgrid',
-  $scope = 'dariah',
+  $scope = undef,
   $public_hostname = $::fqdn,
-  $elasticsearch_cluster_name = 'testing',
+  $tgelasticsearch_cluster_name = 'testing',
   $crud_publish_secret = undef,
   $oracle_jdk8 = false,
 
@@ -46,10 +45,6 @@ class dhrep (
       tgcrud_secret => $tgcrud_secret,
     }
 
-    class { 'dhrep::services::intern::tgwildfly':
-      scope => $scope,
-    }
-
     class { 'dhrep::services::intern::tgdatadirs':
       create_local_datadirs => $tgdatadirs_create_local_datadirs,
     }
@@ -63,6 +58,14 @@ class dhrep (
       authz_instance   => $tgauth_authz_instance,
       authz_shib_pw    => $tgauth_authz_shib_pw,
       webauth_secret   => $tgauth_webauth_secret,
+    }
+
+    class { 'dhrep::services::intern::tgwildfly':
+      scope => $scope,
+    }
+
+    class { 'dhrep::services::intern::messaging':
+      scope => $scope,
     }
 
     class { 'dhrep::services::tgconfserv':
@@ -101,34 +104,30 @@ class dhrep (
   ###
   class { 'dhrep::tools::check_services': }
 
-  class { 'dhrep::services::intern::elasticsearch':
+  class { 'dhrep::services::intern::tgelasticsearch':
     scope        => $scope,
-    cluster_name => $elasticsearch_cluster_name,
+    cluster_name => $tgelasticsearch_cluster_name,
   }
 
   class { 'dhrep::resources::apache':
     scope => $scope,
   }
 
-  class { 'dhrep::services::intern::messaging':
-    scope => $scope,
-  }
-
   class { 'dhrep::services::crud':
     scope          => $scope,
     publish_secret => $crud_publish_secret,
-    require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame']]
+    require        => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
   }
 
   class { 'dhrep::services::crud_public':
     scope   => $scope,
-    require => [Class['dhrep::services::intern::elasticsearch'],
+    require => [Class['dhrep::services::intern::tgelasticsearch'],
                 Class['dhrep::services::intern::sesame']]
   }
 
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
-    require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame']]
+    require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
   }
 
   class { 'dhrep::services::pid':

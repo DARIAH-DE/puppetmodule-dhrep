@@ -65,12 +65,12 @@ class dhrep::params {
   }
 
   ###
-  # elastisearch
+  # tgelastisearch
   ###
-  $elasticsearch_master_http_port    = '9202'
-  $elasticsearch_master_tcp_port     = '9302'
-  $elasticsearch_workhorse_http_port = '9203'
-  $elasticsearch_workhorse_tcp_port  = '9303'
+  $tgelasticsearch_master_http_port    = '9202'
+  $tgelasticsearch_master_tcp_port     = '9302'
+  $tgelasticsearch_workhorse_http_port = '9203'
+  $tgelasticsearch_workhorse_tcp_port  = '9303'
 
   ###
   # more specific config settings
@@ -120,6 +120,14 @@ class dhrep::params {
       'user'         => 'storage',
       'group'        => 'ULSB',
     },
+    'tomcat_sesame' => {
+      'catname'      => 'tomcat-sesame',
+      'http_port'    => '9091',
+      'control_port' => '9006',
+      'jmx_port'     => '9991',
+      'gid'          => '1008',
+      'uid'          => '1008',
+    },
     'tomcat_tgsearch' => {
       'catname'      => 'tomcat-tgsearch',
       'http_port'    => '9090',
@@ -138,7 +146,7 @@ class dhrep::params {
   ###
   case hiera('dhrep::mem_profile', undef) {
     'low': {
-      $elasticsearch_es_heap_size = '64m'
+      $tgelasticsearch_es_heap_size = '64m'
       $servicetomcat_xmx            = '64m'
       $servicetomcat_xms            = '32m'
       $tomcat_crud_xmx              = '96m'
@@ -150,7 +158,7 @@ class dhrep::params {
       $wildfly_maxpermsize          = '96m'
     }
     'server': {
-      $elasticsearch_es_heap_size = '3072m'
+      $tgelasticsearch_es_heap_size = '3072m'
       $servicetomcat_xmx            = '1024m'
       $servicetomcat_xms            = '1024m'
       $tomcat_crud_xmx              = '1536m'
@@ -162,7 +170,7 @@ class dhrep::params {
       $wildfly_maxpermsize          = '256m'
     }
     default: {
-      $elasticsearch_es_heap_size = '512m'
+      $tgelasticsearch_es_heap_size = '512m'
       $servicetomcat_xmx            = '1024m'
       $servicetomcat_xms            = '128m'
       $tomcat_crud_xmx              = '1024m'

@@ -1,6 +1,6 @@
-# == Class: dhrep::services::intern::elasticsearch
+# == Class: dhrep::services::intern::tgelasticsearch
 #
-# Class to install and configure elasticsearch
+# Class to install and configure tgelasticsearch
 #
 # === Parameters
 #
@@ -13,7 +13,7 @@
 # [*master_tcp_port*]
 #   elastic search tcp transport port (masternode)
 #
-class dhrep::services::intern::elasticsearch (
+class dhrep::services::intern::tgelasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
   $repo_version               = '1.7',

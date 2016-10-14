@@ -9,7 +9,9 @@ class dhrep::services::crud (
   $publish_secret = undef,
 ) inherits dhrep::params {
 
-  include dhrep::services::intern::javagat
+  if $scope == 'textgrid' {
+    include dhrep::services::intern::javagat
+  }
   include dhrep::services::tomcat_crud
 
   $_name     = $::dhrep::params::crud_name[$scope]
@@ -23,7 +25,7 @@ class dhrep::services::crud (
   $_group    = $::dhrep::services::tomcat_crud::group
   $_aptdir   = $::dhrep::params::aptdir
 
-  $templates = "dhrep/etc/dhrep/${_short}/${scope}"
+  $templates = "dhrep/etc/dhrep/crud/${scope}"
 
   ###
   # update apt repo and install package

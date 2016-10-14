@@ -439,7 +439,7 @@ class dhrep::services::tgauth (
     group   => 'root',
     mode    => '0700',
     content => template('dhrep/opt/dhrep/ldap-statistic.pl.erb'),
-    require => [File[$_optdir}],File["${_statdir}/ldap"]],
+    require => [File[$_optdir],File["${_statdir}/ldap"]],
   }
   cron { 'ldap-statistic' :
     command  => "${_optdir}/ldap-statistic.pl -a -c ${_statdir}/ldap/rbacusers-`date --iso`.csv -u ${_statdir}/ldap/rbacusers-`date --iso`.txt > /dev/null",
