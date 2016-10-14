@@ -10,12 +10,13 @@ class dhrep::services::oaipmh (
 
   include dhrep::services::tomcat_oaipmh
 
-  $_confdir  = $::dhrep::params::confdir
-  $_vardir   = $::dhrep::params::vardir
-  $_logdir   = $::dhrep::params::logdir
-  $_catname  = $::dhrep::services::tomcat_oaipmh::catname
-  $_user     = $::dhrep::services::tomcat_oaipmh::user
-  $_group    = $::dhrep::services::tomcat_oaipmh::group
+  $_confdir = $::dhrep::params::confdir
+  $_vardir  = $::dhrep::params::vardir
+  $_logdir  = $::dhrep::params::logdir
+  $_aptdir  = $::dhrep::params::aptdir
+  $_catname = $::dhrep::services::tomcat_oaipmh::catname
+  $_user    = $::dhrep::services::tomcat_oaipmh::user
+  $_group   = $::dhrep::services::tomcat_oaipmh::group
 
   $templates = "dhrep/etc/dhrep/oaipmh/${scope}"
 
@@ -25,6 +26,15 @@ class dhrep::services::oaipmh (
   package { $name:
     ensure  => $version,
     require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
+  }
+
+  ###
+  # symlink war from deb package to tomcat webapps dir
+  ###
+  file { "/home/${_user}/${_catname}/webapps/oaipmh":
+    ensure  => 'link',
+    target  => "${_aptdir}/oaipmh",
+    require => [File["/etc/dhrep/oaipmh/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
@@ -75,14 +85,5 @@ class dhrep::services::oaipmh (
     ifempty      => true,
     dateext      => true,
     dateformat   => '.%Y-%m-%d'
-  }
-
-  ###
-  # symlink war from deb package to tomcat webapps dir
-  ###
-  file { "/home/${_user}/${_catname}/webapps/oaipmh":
-    ensure  => 'link',
-    target  => '/var/dhrep/webapps/oaipmh',
-    require => [File["/etc/dhrep/oaipmh/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 }

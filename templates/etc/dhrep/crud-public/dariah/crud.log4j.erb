@@ -2,21 +2,21 @@
 
 # Daily rolling file appender - TG-crud rollback logging - every day.
 log4j.appender.rolling_daily = org.apache.log4j.DailyRollingFileAppender
-log4j.appender.rolling_daily.File = /var/log/dariah/dhcrud-public/rollback.log
+log4j.appender.rolling_daily.File = /var/log/dhrep/dhcrud-public/rollback.log
 log4j.appender.rolling_daily.DatePattern = '.'yyyy-MM-dd
 log4j.appender.rolling_daily.layout = org.apache.log4j.PatternLayout
 log4j.appender.rolling_daily.layout.ConversionPattern = %d{yyyy-MM-dd'T'HH:mm:ss.SSS}\t%p\t%t\t%m%n
 
 # Daily rolling file appender - TG-crud logging - every day.
 log4j.appender.rolling = org.apache.log4j.DailyRollingFileAppender
-log4j.appender.rolling.File = /var/log/dariah/dhcrud-public/dhcrud.log
+log4j.appender.rolling.File = /var/log/dhrep/dhcrud-public/crud.log
 log4j.appender.rolling.DatePattern = '.'yyyy-MM-dd
 log4j.appender.rolling.layout = org.apache.log4j.PatternLayout
 log4j.appender.rolling.layout.ConversionPattern = %d{yyyy-MM-dd'T'HH:mm:ss.SSS}\t%p\t%t\t%m%n
 
-# Simple File Appender, to be gzipped using logrotate (see /etc/logrotate.d/tgcrud).
+# Simple File Appender, to be gzipped using logrotate (see /etc/logrotate.d/dhcrud).
 log4j.appender.rotate = org.apache.log4j.FileAppender
-log4j.appender.rotate.File = /var/log/dariah/dhcrud-public/dhcrud.log
+log4j.appender.rotate.File = /var/log/dhrep/dhcrud-public/crud.log
 log4j.appender.rotate.layout = org.apache.log4j.PatternLayout
 log4j.appender.rotate.layout.ConversionPattern = %d{yyyy-MM-dd'T'HH:mm:ss.SSS}\t%p\t%t\t%m%n
 

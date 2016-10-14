@@ -8,7 +8,7 @@ class dhrep::services::tomcat_oaipmh (
   $catname      = $::dhrep::params::config['tomcat_oaipmh']['catname']
   $http_port    = $::dhrep::params::config['tomcat_oaipmh']['http_port']
   $control_port = $::dhrep::params::config['tomcat_oaipmh']['control_port']
-  $jmx_port     =  $::dhrep::params::config['tomcat_oaipmh']['jmx_port']
+  $jmx_port     = $::dhrep::params::config['tomcat_oaipmh']['jmx_port']
   $gid          = $::dhrep::params::config['tomcat_oaipmh']['gid']
   $uid          = $::dhrep::params::config['tomcat_oaipmh']['uid']
   $user         = $catname

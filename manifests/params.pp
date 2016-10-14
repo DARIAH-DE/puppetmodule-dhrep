@@ -65,6 +65,22 @@ class dhrep::params {
   }
 
   ###
+  # pid
+  ###
+  $pid_name = {
+    'textgrid' => 'tgpid-webapp',
+    'dariah'   => 'dhpid-webapp'
+  }
+  $pid_short = {
+    'textgrid' => 'tgpid',
+    'dariah'   => 'dhpid'
+  }
+  $pid_version = {
+    'textgrid' => 'latest',
+    'dariah'   => 'latest'
+  }
+
+  ###
   # tgelastisearch
   ###
   $tgelasticsearch_master_http_port    = '9202'

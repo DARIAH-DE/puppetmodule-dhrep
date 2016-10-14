@@ -11,7 +11,7 @@ LOG4J_CONFIGFILE = /etc/dariah/dhcrud-public/dhcrud.log4j
 # The Handle resolver URL (resolving only!).
 PID_RESOLVER = http://hdl.handle.net/
 # The DC-crud location for PID metadata.
-CRUD_LOCATION = <%= scope.lookupvar('dariahrepository::services::dhcrud_public::crud_location') %>
+CRUD_LOCATION = <%= scope.lookupvar('dhrep::services::crud_public::crud_location') %>
 
 # The ID implementation to use for identifier creation.
 ID_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.DHCrudServiceIdentifierPidImpl
@@ -35,10 +35,10 @@ DEFAULT_DATA_STORAGE_URI_PUBLIC = file://localhost//data/public/productive/
 # The DARIAH PublicStorage configuration
 DARIAH_BASE_URL = https://ipedariah1.lsdf.kit.edu/dhpublic/
 DARIAH_IDP_URL = https://ldap-dariah.esc.rzg.mpg.de/idp/profile/SAML2/SOAP/ECP
-DARIAH_USER = <%= scope.lookupvar('dariahrepository::services::dhcrud_public::dhstorage_user') %>
-DARIAH_PW = <%= scope.lookupvar('dariahrepository::services::dhcrud_public::dhstorage_pw') %>
+DARIAH_USER = <%= scope.lookupvar('dhrep::services::crud_public::dhstorage_user') %>
+DARIAH_PW = <%= scope.lookupvar('dhrep::services::crud_public::storage_pw') %>
 # The DARIAH OwnStorage host.
-OWNSTORAGE_HOST = <%= scope.lookupvar('dariahrepository::services::dhcrud_public::ownstorage_host') %>
+OWNSTORAGE_HOST = <%= scope.lookupvar('dhrep::services::crud_public::ownstorage_host') %>
 
 # Which DATA STORAGE authentication shall be used (e.g. JavaGAT)? Allowed is one
 # of MYPROXY, PROXY, CERT, SLC or NONE. The needed values have to be set
@@ -76,8 +76,8 @@ SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results
 
 # The Index DB namespapce, if XML.
 IDXDB_NAMESPACE = urn:elasticsearch
-IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dariahrepository::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-public/metadata
-IDXDB_CLUSTER_NAME = <%= scope.lookupvar('dariahrepository::services::intern::tgelasticsearch::cluster_name') %>
+IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-public/metadata
+IDXDB_CLUSTER_NAME = <%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %>
 IDXDB_USER = *
 IDXDB_PASS = *
 IDXDB_SERVICE_URL_PUBLIC = *
@@ -88,19 +88,19 @@ IDXDB_PAIRTREE_USAGE = FALSE
 # The URI settings.
 ID_SERVICE_URL = http://localhost:9094/pid
 ID_SERVICE_USER = *
-ID_SERVICE_PASS = <%= scope.lookupvar('dariahrepository::services::dhcrud_public::id_service_pass') %>
+ID_SERVICE_PASS = <%= scope.lookupvar('dhrep::services::crud_public::id_service_pass') %>
 ID_AUTOMAGIC_UNLOCKING_TIME = 1800000
 
 # Password for the #MOVEPUBLIC method.
 PUBLISH_SECRET = *
 
 # Settings for the message producer.
-USE_MESSAGING = <%= scope.lookupvar('dariahrepository::services::dhcrud_public::use_messaging') %>
+USE_MESSAGING = <%= scope.lookupvar('dhrep::services::crud_public::use_messaging') %>
 INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContextFactory 
 MESSAGING_PROVIDER_URL = *
 MESSAGING_SECURITY_PRINCIPAL = *
 MESSAGING_SECURITY_CREDENTIALS = *
 
 # Settings for technical metadata extraction via FITS.
-EXTRACT_TECHMD = <%= scope.lookupvar('dariahrepository::services::dhcrud_public::extract_techmd') %>
-FITS_LOCATION = <%= scope.lookupvar('dariahrepository::services::dhcrud_public::fits_location') %>
+EXTRACT_TECHMD = <%= scope.lookupvar('dhrep::services::crud_public::extract_techmd') %>
+FITS_LOCATION = <%= scope.lookupvar('dhrep::services::crud_public::fits_location') %>

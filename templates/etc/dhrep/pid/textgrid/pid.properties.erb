@@ -22,25 +22,21 @@
 ###
 
 # EPIC PID service settings (GWDG)
-handleservice.endpoint = <%= scope.lookupvar('dhrep::services::pid::pid_endpoint') %>
-handleservice.path = <%= scope.lookupvar('dhrep::services::pid::pid_path') %>
-handleservice.prefix = <%= scope.lookupvar('dhrep::services::pid::pid_prefix') %>
-handleservice.user = <%= scope.lookupvar('dhrep::services::pid::pid_user') %>
-handleservice.pw = <%= scope.lookupvar('dhrep::services::pid::pid_passwd') %>
-
-# Deprecated for new PID service version, use prefix "handleservice" instead.
-# Can be removed if PID service version > 4.7.0 is used!
-gwdg.user = <%= scope.lookupvar('dhrep::services::pid::pid_user') %>
-gwdg.pw = <%= scope.lookupvar('dhrep::services::pid::pid_passwd') %>
+handleservice.endpoint = <%= scope.lookupvar('dhrep::services::pid::endpoint') %>
+handleservice.path = <%= scope.lookupvar('dhrep::services::pid::path') %>
+handleservice.prefix = <%= scope.lookupvar('dhrep::services::pid::prefix') %>
+handleservice.user = <%= scope.lookupvar('dhrep::services::pid::user') %>
+handleservice.pw = <%= scope.lookupvar('dhrep::services::pid::passwd') %>
 
 # Handle resolver (read-only)
 resolver.endpoint = https://hdl.handle.net
 resolver.path = /api/handles/
 
 # More settings
-pid.responsible = <%= scope.lookupvar('dhrep::services::pid::pid_responsible') %>
+pid.responsible = <%= scope.lookupvar('dhrep::services::pid::responsible') %>
 pid.creator = 
 pid.publisher = 
+pid.secret =
 tgauth.endpoint = http://localhost:8080/tgauth/tgextra.php
 log.location = /var/log/textgrid/pid/pid.log
 service.endpoint = http://localhost/1.0/tgpid/

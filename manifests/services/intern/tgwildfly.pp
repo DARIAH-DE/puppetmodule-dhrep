@@ -111,5 +111,4 @@ class dhrep::services::intern::tgwildfly (
     dateext      => true,
     dateformat   => '.%Y-%m-%d'
   }
-
 }

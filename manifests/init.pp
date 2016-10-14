@@ -3,9 +3,6 @@
 # Setup and manage a dhrep server with scope "textgrid" or "dariah".
 #
 class dhrep (
-  ###
-  # testing with scope "dariah" at first! scope "textgrid" will follow later!
-  ###
   $scope = undef,
   $public_hostname = $::fqdn,
   $tgelasticsearch_cluster_name = 'testing',
@@ -34,21 +31,16 @@ class dhrep (
   # TODO check order of classes to be initialised!!
   ###
   if $scope == 'textgrid' {
-    # TODO adapt generic services to generic usage: wildfly, iiifmc, aggregator,
-    # digilib
     class { 'dhrep::services::intern::sesame':
       scope => $scope,
     }
-
     class { 'dhrep::services::intern::tgnoid':
       before        => Class['dhrep::services::crud'],
       tgcrud_secret => $tgcrud_secret,
     }
-
     class { 'dhrep::services::intern::tgdatadirs':
       create_local_datadirs => $tgdatadirs_create_local_datadirs,
     }
-
     class { 'dhrep::services::tgauth':
       scope            => $scope,
       binddn_pass      => $tgauth_binddn_pass,
@@ -59,84 +51,65 @@ class dhrep (
       authz_shib_pw    => $tgauth_authz_shib_pw,
       webauth_secret   => $tgauth_webauth_secret,
     }
-
-    class { 'dhrep::services::intern::tgwildfly':
-      scope => $scope,
-    }
-
     class { 'dhrep::services::intern::messaging':
       scope => $scope,
     }
-
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
     }
-
     class { 'dhrep::services::digilib':
       scope => $scope,
     }
-
     class { 'dhrep::services::iiifmd':
       scope => $scope,
     }
-
     class { 'dhrep::services::aggregator':
       scope => $scope,
     }
-
     class { 'dhrep::static::textgridrep_website': }
-
     class { 'dhrep::static::textgridlab_org': }
-
     class { 'dhrep::services::tgsearch':
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
     }
-
     class { 'dhrep::services::tgsearch_public':
       require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
     }
-
     class { 'dhrep::services::tgmarketplace': }
   }
 
   ###
   # generic services used for both scopes following now
   ###
-  class { 'dhrep::tools::check_services': }
-
   class { 'dhrep::services::intern::tgelasticsearch':
     scope        => $scope,
     cluster_name => $tgelasticsearch_cluster_name,
   }
-
   class { 'dhrep::resources::apache':
     scope => $scope,
   }
-
+  class { 'dhrep::services::intern::tgwildfly':
+    scope => $scope,
+  }
   class { 'dhrep::services::crud':
     scope          => $scope,
     publish_secret => $crud_publish_secret,
-    require        => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
+    require        => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
   }
-
   class { 'dhrep::services::crud_public':
     scope   => $scope,
-    require => [Class['dhrep::services::intern::tgelasticsearch'],
-                Class['dhrep::services::intern::sesame']]
+    require => [Class['dhrep::services::intern::tgelasticsearch'], Class['dhrep::services::intern::sesame']],
   }
-
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
-    require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']]
+    require => Class['dhrep::services::intern::tgelasticsearch'],
   }
-
   class { 'dhrep::services::pid':
     scope => $scope,
   }
-
   class { 'dhrep::services::publish':
     scope => $scope,
   }
+  class { 'dhrep::tools::check_services': }
 
   ###
   # java8 we want! openjdk-r does not seem to be up to date, so oracle for now
@@ -243,12 +216,18 @@ class dhrep (
     mode   => '0775',
   }
 
+  ###
+  # tomcat
+  ###
   service { 'tomcat7':
     ensure  => stopped,
     enable  => false,
     require => Package['tomcat7'],
   }
 
+  ###
+  # facter
+  ###
   # we want to use custom facts (TODO: is there an existing puppet plugin?)
   file { '/etc/facter/':
     ensure => directory,
@@ -257,7 +236,9 @@ class dhrep (
     ensure  => directory,
   }
 
-  # vagrant cachier changes this to symlink.
+  ###
+  # vagrant cachier changes this to symlink
+  ###
   unless $::vagrant {
     file { $::dhrep::params::cachedir:
       ensure => directory,

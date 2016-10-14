@@ -4,7 +4,7 @@
 #
 class dhrep::services::crud (
   $scope          = undef,
-  $loglevel       = 'INFO',
+  $log_level      = 'INFO',
   $use_messaging  = true,
   $publish_secret = undef,
 ) inherits dhrep::params {
@@ -14,16 +14,16 @@ class dhrep::services::crud (
   }
   include dhrep::services::tomcat_crud
 
-  $_name     = $::dhrep::params::crud_name[$scope]
-  $_short    = $::dhrep::params::crud_short[$scope]
-  $_version  = $::dhrep::params::crud_version[$scope]
-  $_confdir  = $::dhrep::params::confdir
-  $_logdir   = $::dhrep::params::logdir
-  $_optdir   = $::dhrep::params::optdir
-  $_catname  = $::dhrep::services::tomcat_crud::catname
-  $_user     = $::dhrep::services::tomcat_crud::user
-  $_group    = $::dhrep::services::tomcat_crud::group
-  $_aptdir   = $::dhrep::params::aptdir
+  $_name    = $::dhrep::params::crud_name[$scope]
+  $_short   = $::dhrep::params::crud_short[$scope]
+  $_version = $::dhrep::params::crud_version[$scope]
+  $_confdir = $::dhrep::params::confdir
+  $_logdir  = $::dhrep::params::logdir
+  $_optdir  = $::dhrep::params::optdir
+  $_catname = $::dhrep::services::tomcat_crud::catname
+  $_user    = $::dhrep::services::tomcat_crud::user
+  $_group   = $::dhrep::services::tomcat_crud::group
+  $_aptdir  = $::dhrep::params::aptdir
 
   $templates = "dhrep/etc/dhrep/crud/${scope}"
 

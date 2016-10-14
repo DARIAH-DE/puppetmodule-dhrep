@@ -4,20 +4,21 @@
 #
 class dhrep::services::publish (
   $scope     = undef,
+  $log_level = 'INFO',
   $fake_pids = false,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish
 
-  $_name     = $::dhrep::params::publish_name[$scope]
-  $_short    = $::dhrep::params::publish_short[$scope]
-  $_version  = $::dhrep::params::publish_version[$scope]
-  $_confdir  = $::dhrep::params::confdir
-  $_logdir   = $::dhrep::params::logdir
-  $_catname  = $::dhrep::services::tomcat_publish::catname
-  $_user     = $::dhrep::services::tomcat_publish::user
-  $_group    = $::dhrep::services::tomcat_publish::group
-  $_aptdir   = $::dhrep::params::aptdir
+  $_name    = $::dhrep::params::publish_name[$scope]
+  $_short   = $::dhrep::params::publish_short[$scope]
+  $_version = $::dhrep::params::publish_version[$scope]
+  $_confdir = $::dhrep::params::confdir
+  $_logdir  = $::dhrep::params::logdir
+  $_catname = $::dhrep::services::tomcat_publish::catname
+  $_user    = $::dhrep::services::tomcat_publish::user
+  $_group   = $::dhrep::services::tomcat_publish::group
+  $_aptdir  = $::dhrep::params::aptdir
 
   $templates = "dhrep/etc/dhrep/publish"
 
@@ -87,7 +88,7 @@ class dhrep::services::publish (
     owner   => 'root',
     group   => $group,
     mode    => '0640',
-    content => template("${templates}"/map_dias2jhove.xml.erb"),
+    content => template("${templates}/map_dias2jhove.xml.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
