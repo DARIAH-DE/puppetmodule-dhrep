@@ -1,3 +1,7 @@
+# == Class: dhrep::tools
+#
+# Class for tools, yeah!
+#
 class dhrep::tools {
 
   ###
@@ -37,5 +41,4 @@ class dhrep::tools {
     command => "/usr/lib/nagios/plugins/check_tivoli -c /",
     require => File['/usr/lib/nagios/plugins/check_tivoli'],
   }
-
 }

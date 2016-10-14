@@ -84,6 +84,10 @@ class dhrep (
     scope        => $scope,
     cluster_name => $tgelasticsearch_cluster_name,
   }
+  class { 'dhrep::services::oaipmh':
+    scope   => $scope,
+    require => Class['dhrep::services::intern::tgelasticsearch'],
+  }
   class { 'dhrep::resources::apache':
     scope => $scope,
   }
@@ -98,10 +102,6 @@ class dhrep (
   class { 'dhrep::services::crud_public':
     scope   => $scope,
     require => [Class['dhrep::services::intern::tgelasticsearch'], Class['dhrep::services::intern::sesame']],
-  }
-  class { 'dhrep::services::oaipmh':
-    scope   => $scope,
-    require => Class['dhrep::services::intern::tgelasticsearch'],
   }
   class { 'dhrep::services::pid':
     scope => $scope,
