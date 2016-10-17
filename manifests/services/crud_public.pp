@@ -13,7 +13,6 @@ class dhrep::services::crud_public (
     include dhrep::services::intern::javagat
   }
   include dhrep::services::tomcat_crud
-  include dhrep::services::tomcat_publish
 
   $_name    = $::dhrep::params::crud_public_name[$scope]
   $_short   = $::dhrep::params::crud_public_short[$scope]
@@ -22,9 +21,9 @@ class dhrep::services::crud_public (
   $_logdir  = $::dhrep::params::logdir
   $_optdir  = $::dhrep::params::optdir
   $_aptdir  = $::dhrep::params::aptdir
-  $_catname = $::dhrep::services::tomcat_publish::catname
-  $_user    = $::dhrep::services::tomcat_publish::user
-  $_group   = $::dhrep::services::tomcat_publish::group
+  $_catname = $::dhrep::services::tomcat_crud::catname
+  $_user    = $::dhrep::services::tomcat_crud::user
+  $_group   = $::dhrep::services::tomcat_crud::group
 
   $templates = "dhrep/etc/dhrep/crud-public/${scope}"
 
@@ -54,7 +53,7 @@ class dhrep::services::crud_public (
   }
   file { "${_confdir}/${_short}/crud.properties":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/crud.properties.erb"),
@@ -63,7 +62,7 @@ class dhrep::services::crud_public (
   }
   file { "${_confdir}/${_short}/beans.properties":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/beans.properties.erb"),
@@ -75,7 +74,7 @@ class dhrep::services::crud_public (
   ###
   file { "${_confdir}/${_short}/crud.log4j":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/crud.log4j.erb"),

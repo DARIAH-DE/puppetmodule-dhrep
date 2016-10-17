@@ -13,7 +13,10 @@ class dhrep::services::pid (
   $responsible = '',
 ) inherits dhrep::params {
 
+  include dhrep::services::tomcat_publish
+
   $_name    = $::dhrep::params::pid_name[$scope]
+  $_short   = $::dhrep::params::pid_short[$scope]
   $_version = $::dhrep::params::pid_version[$scope]
   $_confdir = $::dhrep::params::confdir
   $_vardir  = $::dhrep::params::vardir
@@ -36,35 +39,35 @@ class dhrep::services::pid (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/pid":
+  file { "/home/${_user}/${_catname}/webapps/${_short}":
     ensure => 'link',
     target  => "${_aptdir}/pid",
-    require => [File["${_confdir}/pid/pid.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
+    require => [File["${_confdir}/${_short}/beans.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
   # config
   ###
-  file { "${_confdir}/pid":
+  file { "${_confdir}/${_short}":
     ensure => directory,
-    owner  => root,
-    group  => root,
+    owner  => 'root',
+    group  => 'root',
     mode   => '0755',
   }
-  file { "${_confdir}/pid/pid.properties":
+  file { "${_confdir}/${_short}/beans.properties":
     ensure  => present,
-    owner   => root,
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
-    content => template("${templates}/pid.properties.erb"),
-    require => File["${_confdir}/pid"],
+    content => template("${templates}/beans.properties.erb"),
+    require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
 
   ###
   # logging
   ###
-  file { "${_logdir}/pid":
+  file { "${_logdir}/${_short}":
     ensure  => directory,
     owner   => $_user,
     group   => $_group,
@@ -72,8 +75,8 @@ class dhrep::services::pid (
     require => File[$_logdir],
   }
   logrotate::rule { 'pid':
-    path         => "${_logdir}/pid/pid.log",
-    require      => File["${_logdir}/pid"],
+    path         => "${_logdir}/${_short}/pid.log",
+    require      => File["${_logdir}/${_short}"],
     rotate       => 30,
     rotate_every => 'day',
     compress     => true,

@@ -42,13 +42,13 @@ class dhrep::services::oaipmh (
   ###
   file { "${_confdir}/oaipmh":
     ensure => directory,
-    owner  => root,
-    group  => root,
+    owner  => 'root',
+    group  => 'root',
     mode   => '0755',
   }
   file { "${_confdir}/oaipmh/oaipmh.properties":
     ensure  => present,
-    owner   => root,
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/oaipmh.properties.erb"),
@@ -61,7 +61,7 @@ class dhrep::services::oaipmh (
   ###
   file { "${_confdir}/oaipmh/log4j.oaipmh.properties":
     ensure  => present,
-    owner   => root,
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/log4j.properties.erb"),

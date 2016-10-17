@@ -71,6 +71,10 @@ class dhrep::params {
     'textgrid' => 'pid-webapp',
     'dariah'   => 'pid-webapp'
   }
+  $pid_short = {
+    'textgrid' => 'tgpid',
+    'dariah'   => 'dhpid'
+  }
   $pid_version = {
     'textgrid' => 'latest',
     'dariah'   => 'latest'

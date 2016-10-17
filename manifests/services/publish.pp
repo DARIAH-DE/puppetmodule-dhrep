@@ -50,7 +50,7 @@ class dhrep::services::publish (
   }
   file { "${_confdir}/${_short}/config.xml":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/${scope}/config.xml.erb"),
@@ -59,7 +59,7 @@ class dhrep::services::publish (
   }
   file { "${_confdir}/${_short}/beans.properties":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $group,
     mode    => '0640',
     content => template("${templates}/${scope}/beans.properties.erb"),
@@ -67,7 +67,7 @@ class dhrep::services::publish (
   }
   file { "${_confdir}/${_short}/policies.xml":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $group,
     mode    => '0640',
     content => template("${templates}/${scope}/policies.xml.erb"),
@@ -76,7 +76,7 @@ class dhrep::services::publish (
   }
   file { "${_confdir}/${_short}/mets_template.xml":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $group,
     mode    => '0640',
     content => template("${templates}/mets_template.xml.erb"),
@@ -85,7 +85,7 @@ class dhrep::services::publish (
   }
   file { "${_confdir}/${_short}/map_dias2jhove.xml":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $group,
     mode    => '0640',
     content => template("${templates}/map_dias2jhove.xml.erb"),
@@ -94,7 +94,7 @@ class dhrep::services::publish (
   }
   file { "${_confdir}/${_short}/dias_formatregistry.xml":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $group,
     mode    => '0640',
     content => template("${templates}/dias_formatregistry.xml.erb"),

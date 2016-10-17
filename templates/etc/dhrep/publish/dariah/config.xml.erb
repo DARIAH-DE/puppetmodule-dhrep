@@ -18,7 +18,7 @@
 		</property>
 		<property>
 			<field>policyFile</field>
-			<value>/etc/dariah/dhpublish/conf/policies.xml</value>
+			<value>/etc/dhrep/dhpublish/policies.xml</value>
 			<description>The XML file containing the policies to define the order of processing ActionModules on all objects hold in the process queue. It also is possible to configure the action modules from here.</description>
 		</property>
 		<property>
@@ -28,21 +28,21 @@
 		</property>
 		<property>
 			<field>logfileDir</field>
-			<value>/var/log/dariah/dhpublish/</value>
+			<value>/var/log/dhrep/dhpublish/</value>
 			<description>The directory where TG-publish`s log files shall be stored. Don`t forget the `/` at the end!</description>
 		</property>
 		<property>
 			<field>tempDir</field>
-			<value>/etc/dariah/dhpublish/temp/</value>
+			<value>/etc/dhrep/dhpublish/temp/</value>
 			<description>The temporary directory is used to copy folders and files to import. Don`t forget the `/` at the end!</description>
 		</property>
 		<property>
 			<field>destinationDir</field>
-			<value>/etc/dariah/dhpublish/dest/</value>
+			<value>/etc/dhrep/dhpublish/dest/</value>
 		</property>
 		<property>
 			<field>workDir</field>
-			<value>/etc/dariah/dhpublish/work/</value>
+			<value>/etc/dhrep/dhpublish/work/</value>
 		</property>
 		<property>
 			<field>useDatabase</field>
@@ -93,7 +93,7 @@
 		</property>
 		<property>
 			<field>mdTemplateFile</field>
-			<value>/etc/dariah/dhpublish/conf/mets_template.xml</value>
+			<value>/etc/dhrep/dhpublish/mets_template.xml</value>
 		</property>
 		<property>
 			<field>maxTechMDLength</field>
@@ -112,7 +112,7 @@
 		<!-- DARIAH Repository globally configured values START -->
 		<property>
 			<field>ownStorageEndpoint</field>
-			<value>https://de.dariah.eu/storage/</value>
+			<value>https://storage.dariah.eu/</value>
 			<description>The URI of the Storage Service implementation (DARIAH OwnStorage)</description>
 		</property>
 		<property>
@@ -151,11 +151,11 @@
 		<class name="util.FormatRegistry">
 			<property>
 				<field>formatMapFileLocation</field>
-				<value>/etc/dariah/dhpublish/conf/map_dias2jhove.xml</value>
+				<value>/etc/dhrep/dhpublish/map_dias2jhove.xml</value>
 			</property>
 			<property>
 				<field>formatRegistryBackupFile</field>
-				<value>/etc/dariah/dhpublish/conf/dias_formatregistry.xml</value>
+				<value>/etc/dhrep/dhpublish/dias_formatregistry.xml</value>
 			</property>
 			<property>
 				<field>useBackupFileOnly</field>

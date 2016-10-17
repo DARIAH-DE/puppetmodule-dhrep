@@ -55,7 +55,7 @@ class dhrep::services::crud (
   }
   file { "${_confdir}/${_short}/crud.properties":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/crud.properties.erb"),
@@ -64,7 +64,7 @@ class dhrep::services::crud (
   }
   file { "${_confdir}/${_short}/beans.properties":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/beans.properties.erb"),
@@ -76,7 +76,7 @@ class dhrep::services::crud (
   ###
   file { "${_confdir}/${_short}/crud.log4j":
     ensure  => present,
-    owner   => 'root',
+    owner   => $_user,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/crud.log4j.erb"),
