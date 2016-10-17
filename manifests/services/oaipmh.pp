@@ -4,12 +4,12 @@
 #
 class dhrep::services::oaipmh (
   $scope   = undef,
-  $name    = 'oaipmh-webapp',
-  $version = 'latest',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_oaipmh
 
+  $_name    = $::dhrep::params::oaipmh_name[$scope]
+  $_version = $::dhrep::params::oaipmh_version[$scope]
   $_confdir = $::dhrep::params::confdir
   $_vardir  = $::dhrep::params::vardir
   $_logdir  = $::dhrep::params::logdir
@@ -23,8 +23,8 @@ class dhrep::services::oaipmh (
   ###
   # update apt repo and install package
   ###
-  package { $name:
-    ensure  => $version,
+  package { $_name:
+    ensure  => $_version,
     require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
@@ -34,7 +34,7 @@ class dhrep::services::oaipmh (
   file { "/home/${_user}/${_catname}/webapps/oaipmh":
     ensure  => 'link',
     target  => "${_aptdir}/oaipmh",
-    require => [File["/etc/dhrep/oaipmh/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
+    require => [File["${_confdir}/oaipmh/oaipmh.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
@@ -64,19 +64,19 @@ class dhrep::services::oaipmh (
     owner   => root,
     group   => $_group,
     mode    => '0640',
-    content => template("${templates}/log4j.oaipmh.properties.erb"),
+    content => template("${templates}/log4j.properties.erb"),
     require => File["${_confdir}/oaipmh"],
   }
   file { "${_logdir}/oaipmh":
     ensure  => directory,
     owner   => $_user,
     group   => $_group,
-    mode    => '0775',
+    mode    => '0755',
     require => File[$_logdir],
   }
-  logrotate::rule { $short:
+  logrotate::rule { 'oaipmh':
     path         => "${_vardir}/oaipmh/oaipmh.log",
-    require      => File["${_vardir}/oaipmh"],
+    require      => File["${_logdir}/oaipmh"],
     rotate       => 30,
     rotate_every => 'day',
     compress     => true,

@@ -25,12 +25,26 @@ class dhrep (
 ) inherits dhrep::params {
 
   ###
-  # internal services containing variables used by other modules need to be
-  # evaluated in order, configure TextGrid services first.
-  #
-  # TODO check order of classes to be initialised!!
+  # generic internal services used for both scopes
+  ###
+  class { 'dhrep::services::intern::tgelasticsearch':
+    scope        => $scope,
+    cluster_name => $tgelasticsearch_cluster_name,
+  }
+  class { 'dhrep::services::intern::tgwildfly':
+    scope => $scope,
+  }
+  class { 'dhrep::tools::check_services':
+    scope => $scope,
+  }
+
+  ###
+  # services for scope textgrid configured here
   ###
   if $scope == 'textgrid' {
+    class { 'dhrep::resources::apache':
+      scope => $scope,
+    }
     class { 'dhrep::services::intern::sesame':
       scope => $scope,
     }
@@ -53,6 +67,15 @@ class dhrep (
     }
     class { 'dhrep::services::intern::messaging':
       scope => $scope,
+    }
+    class { 'dhrep::services::crud':
+      scope          => $scope,
+      publish_secret => $crud_publish_secret,
+      require        => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
+    }
+    class { 'dhrep::services::crud_public':
+      scope   => $scope,
+      require => [Class['dhrep::services::intern::tgelasticsearch'], Class['dhrep::services::intern::sesame']],
     }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
@@ -78,38 +101,33 @@ class dhrep (
   }
 
   ###
-  # generic services used for both scopes following now
+  # services for scope dariah following now (mainly due to different dependencies)
   ###
-  class { 'dhrep::services::intern::tgelasticsearch':
-    scope        => $scope,
-    cluster_name => $tgelasticsearch_cluster_name,
+  if $scope == 'dariah' {
+    class { 'dhrep::services::crud':
+      scope          => $scope,
+      publish_secret => $crud_publish_secret,
+      require        => Class['dhrep::services::intern::tgelasticsearch'],
+    }
+    class { 'dhrep::services::crud_public':
+      scope   => $scope,
+      require => Class['dhrep::services::intern::tgelasticsearch'],
+    }
+  }
+
+  ###
+  # general external services declared now
+  ###
+  class { 'dhrep::services::pid':
+    scope => $scope,
   }
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
     require => Class['dhrep::services::intern::tgelasticsearch'],
   }
-  class { 'dhrep::resources::apache':
-    scope => $scope,
-  }
-  class { 'dhrep::services::intern::tgwildfly':
-    scope => $scope,
-  }
-  class { 'dhrep::services::crud':
-    scope          => $scope,
-    publish_secret => $crud_publish_secret,
-    require        => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
-  }
-  class { 'dhrep::services::crud_public':
-    scope   => $scope,
-    require => [Class['dhrep::services::intern::tgelasticsearch'], Class['dhrep::services::intern::sesame']],
-  }
-  class { 'dhrep::services::pid':
-    scope => $scope,
-  }
   class { 'dhrep::services::publish':
     scope => $scope,
   }
-  class { 'dhrep::tools::check_services': }
 
   ###
   # java8 we want! openjdk-r does not seem to be up to date, so oracle for now

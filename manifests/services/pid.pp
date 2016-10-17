@@ -14,7 +14,6 @@ class dhrep::services::pid (
 ) inherits dhrep::params {
 
   $_name    = $::dhrep::params::pid_name[$scope]
-  $_short   = $::dhrep::params::pid_short[$scope]
   $_version = $::dhrep::params::pid_version[$scope]
   $_confdir = $::dhrep::params::confdir
   $_vardir  = $::dhrep::params::vardir
@@ -37,35 +36,35 @@ class dhrep::services::pid (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/${_short}":
+  file { "/home/${_user}/${_catname}/webapps/pid":
     ensure => 'link',
-    target  => "${_aptdir}/${_short}",
-    require => [File["${_confdir}/${_short}/pid.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
+    target  => "${_aptdir}/pid",
+    require => [File["${_confdir}/pid/pid.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
   # config
   ###
-  file { "${_confdir}/${_short}":
+  file { "${_confdir}/pid":
     ensure => directory,
     owner  => root,
     group  => root,
     mode   => '0755',
   }
-  file { "${_confdir}/${_short}/pid.properties":
+  file { "${_confdir}/pid/pid.properties":
     ensure  => present,
     owner   => root,
     group   => $_group,
     mode    => '0640',
     content => template("${templates}/pid.properties.erb"),
-    require => File["${_confdir}/${_short}"],
+    require => File["${_confdir}/pid"],
     notify  => Service[$_catname],
   }
 
   ###
   # logging
   ###
-  file { "${_logdir}/${_short}":
+  file { "${_logdir}/pid":
     ensure  => directory,
     owner   => $_user,
     group   => $_group,
@@ -73,8 +72,8 @@ class dhrep::services::pid (
     require => File[$_logdir],
   }
   logrotate::rule { 'pid':
-    path         => "${_logdir}/${_short}/pid.log",
-    require      => File["${_logdir}/${_short}"],
+    path         => "${_logdir}/pid/pid.log",
+    require      => File["${_logdir}/pid"],
     rotate       => 30,
     rotate_every => 'day',
     compress     => true,

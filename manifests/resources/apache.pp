@@ -5,7 +5,7 @@
 # mainly used by tgauth with mod php and tgnoid with mod-cgi
 #
 class dhrep::resources::apache (
-  $scope = 'textgrid',
+  $scope = undef,
   $port  = '8080',
 ){
 

@@ -9,7 +9,7 @@ class dhrep::tools::check_services (
   $_optdir = $::dhrep::params::optdir
 
   file { "${_optdir}/check-services.sh" :
-    source  => "puppet:///modules/dhrep/${_optdir}/${scope}/check-services.sh",
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/check-services.sh",
     owner   => 'root',
     group   => 'root',
     mode    => '0755',

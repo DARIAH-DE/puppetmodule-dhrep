@@ -68,14 +68,22 @@ class dhrep::params {
   # pid
   ###
   $pid_name = {
-    'textgrid' => 'tgpid-webapp',
-    'dariah'   => 'dhpid-webapp'
-  }
-  $pid_short = {
-    'textgrid' => 'tgpid',
-    'dariah'   => 'dhpid'
+    'textgrid' => 'pid-webapp',
+    'dariah'   => 'pid-webapp'
   }
   $pid_version = {
+    'textgrid' => 'latest',
+    'dariah'   => 'latest'
+  }
+
+  ###
+  # oaipmh
+  ###
+  $oaipmh_name = {
+    'textgrid' => 'oaipmh-webapp',
+    'dariah'   => 'oaipmh-webapp'
+  }
+  $oaipmh_version = {
     'textgrid' => 'latest',
     'dariah'   => 'latest'
   }
