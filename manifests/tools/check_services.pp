@@ -15,5 +15,4 @@ class dhrep::tools::check_services (
     mode    => '0755',
     require => File[$_optdir],
   }
-
 }

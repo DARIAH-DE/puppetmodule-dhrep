@@ -9,10 +9,10 @@ class dhrep::services::tomcat_oaipmh (
   $http_port    = $::dhrep::params::config['tomcat_oaipmh']['http_port']
   $control_port = $::dhrep::params::config['tomcat_oaipmh']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_oaipmh']['jmx_port']
-  $gid          = $::dhrep::params::config['tomcat_oaipmh']['gid']
-  $uid          = $::dhrep::params::config['tomcat_oaipmh']['uid']
   $user         = $catname
   $group        = $catname
+  $uid          = $::dhrep::params::config['tomcat_oaipmh']['uid']
+  $gid          = $::dhrep::params::config['tomcat_oaipmh']['gid']
   $template     = 'dhrep/etc/default/tomcat.erb'
 
   ###
@@ -21,8 +21,8 @@ class dhrep::services::tomcat_oaipmh (
   dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $fgroup,
-    gid               => $gid,
     uid               => $uid,
+    gid               => $gid,
     http_port         => $http_port,
     control_port      => $control_port,
     jmx_port          => $jmx_port,

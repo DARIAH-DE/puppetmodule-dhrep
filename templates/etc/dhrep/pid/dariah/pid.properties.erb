@@ -1,0 +1,42 @@
+###
+# #%L
+# PID Service Wrapper Implementation
+# %%
+# Copyright (C) 2016 TextGrid Consortium (http://www.textgrid.de),
+# SUB Göttingen (http://www.sub.uni-goettingen.de)
+# %%
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as 
+# published by the Free Software Foundation, either version 3 of the 
+# License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Lesser Public License for more details.
+# 
+# You should have received a copy of the GNU General Lesser Public 
+# License along with this program.  If not, see
+# <http://www.gnu.org/licenses/lgpl-3.0.html>.
+# #L%
+###
+
+# EPIC PID service (GWDG)
+handleservice.endpoint = <%= scope.lookupvar('dhrep::services::pid::endpoint') %>
+handleservice.path = <%= scope.lookupvar('dhrep::services::pid::path') %>
+handleservice.prefix = <%= scope.lookupvar('dhrep::services::pid::prefix') %>
+handleservice.user = <%= scope.lookupvar('dhrep::services::pid::user') %>
+handleservice.pw = <%= scope.lookupvar('dhrep::services::pid::passwd') %>
+
+# Handle resolver (read-only)
+resolver.endpoint = http://hdl.handle.net
+resolver.path = /api/handles/
+
+# More settings
+pid.responsible = <%= scope.lookupvar('dhrep::services::pid::responsible') %>
+pid.creator =
+pid.publisher =
+pid.secret = <%= scope.lookupvar('dhrep::services::pid::secret') %>
+tgauth.endpoint =
+log.location = /var/log/dhrep/dhpid/pid.log
+service.endpoint = http://localhost:9094/dhpid

@@ -10,10 +10,10 @@ class dhrep::services::tomcat_tgsearch (
   $http_port    = $::dhrep::params::config['tomcat_tgsearch']['http_port']
   $control_port = $::dhrep::params::config['tomcat_tgsearch']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_tgsearch']['jmx_port']
-  $gid          = $::dhrep::params::config['tomcat_tgsearch']['gid']
-  $uid          = $::dhrep::params::config['tomcat_tgsearch']['uid']
   $user         = $catname
   $group        = $catname
+  $uid          = $::dhrep::params::config['tomcat_tgsearch']['uid']
+  $gid          = $::dhrep::params::config['tomcat_tgsearch']['gid']
   $template     = 'dhrep/etc/default/tomcat.erb'
 
   ###
@@ -22,8 +22,8 @@ class dhrep::services::tomcat_tgsearch (
   dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
-    gid               => $gid,
     uid               => $uid,
+    gid               => $gid,
     http_port         => $http_port,
     control_port      => $control_port,
     jmx_port          => $jmx_port,

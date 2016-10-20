@@ -4,9 +4,16 @@
 #
 class dhrep::services::crud (
   $scope          = undef,
+  $publish_secret = undef,
   $log_level      = 'INFO',
   $use_messaging  = true,
-  $publish_secret = undef,
+  $location       = '',
+  $storage_host   = '',
+  $storage_user   = '',
+  $storage_pw     = '',
+  $extract_techmd = false,
+  $fits_location  = '',
+  $pid_secret     = '',
 ) inherits dhrep::params {
 
   if $scope == 'textgrid' {

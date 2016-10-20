@@ -5,7 +5,7 @@
 class dhrep (
   $scope = undef,
   $public_hostname = $::fqdn,
-  $tgelasticsearch_cluster_name = 'testing',
+  $elasticsearch_cluster_name = undef,
   $crud_publish_secret = undef,
   $oracle_jdk8 = false,
 
@@ -27,14 +27,14 @@ class dhrep (
   ###
   # generic internal services used for both scopes
   ###
-  class { 'dhrep::services::intern::tgelasticsearch':
+  class { 'dhrep::services::intern::elasticsearch':
     scope        => $scope,
-    cluster_name => $tgelasticsearch_cluster_name,
-  }
-  class { 'dhrep::services::intern::tgwildfly':
-    scope => $scope,
+    cluster_name => $elasticsearch_cluster_name,
   }
   class { 'dhrep::tools::check_services':
+    scope => $scope,
+  }
+  class { 'dhrep::nginx':
     scope => $scope,
   }
 
@@ -42,6 +42,9 @@ class dhrep (
   # services for scope textgrid configured here
   ###
   if $scope == 'textgrid' {
+    class { 'dhrep::services::intern::tgwildfly':
+      scope => $scope,
+    }
     class { 'dhrep::resources::apache':
       scope => $scope,
     }
@@ -71,11 +74,11 @@ class dhrep (
     class { 'dhrep::services::crud':
       scope          => $scope,
       publish_secret => $crud_publish_secret,
-      require        => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
+      require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::crud_public':
       scope   => $scope,
-      require => [Class['dhrep::services::intern::tgelasticsearch'], Class['dhrep::services::intern::sesame']],
+      require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
@@ -92,10 +95,10 @@ class dhrep (
     class { 'dhrep::static::textgridrep_website': }
     class { 'dhrep::static::textgridlab_org': }
     class { 'dhrep::services::tgsearch':
-      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
+      require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
     }
     class { 'dhrep::services::tgsearch_public':
-      require => [Class['dhrep::services::intern::tgelasticsearch'],Class['dhrep::services::intern::sesame']],
+      require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame']],
     }
     class { 'dhrep::services::tgmarketplace': }
   }
@@ -104,14 +107,17 @@ class dhrep (
   # services for scope dariah following now (mainly due to different dependencies)
   ###
   if $scope == 'dariah' {
+    class { 'dhrep::services::fits':
+      scope  => $scope,
+    }
     class { 'dhrep::services::crud':
       scope          => $scope,
       publish_secret => $crud_publish_secret,
-      require        => Class['dhrep::services::intern::tgelasticsearch'],
+      require        => Class['dhrep::services::intern::elasticsearch'],
     }
     class { 'dhrep::services::crud_public':
       scope   => $scope,
-      require => Class['dhrep::services::intern::tgelasticsearch'],
+      require => Class['dhrep::services::intern::elasticsearch'],
     }
   }
 
@@ -123,7 +129,7 @@ class dhrep (
   }
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
-    require => Class['dhrep::services::intern::tgelasticsearch'],
+    require => Class['dhrep::services::intern::elasticsearch'],
   }
   class { 'dhrep::services::publish':
     scope => $scope,

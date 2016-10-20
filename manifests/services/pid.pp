@@ -42,7 +42,7 @@ class dhrep::services::pid (
   file { "/home/${_user}/${_catname}/webapps/${_short}":
     ensure => 'link',
     target  => "${_aptdir}/pid",
-    require => [File["${_confdir}/${_short}/beans.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
+    require => [File["${_confdir}/${_short}/pid.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
@@ -54,12 +54,12 @@ class dhrep::services::pid (
     group  => 'root',
     mode   => '0755',
   }
-  file { "${_confdir}/${_short}/beans.properties":
+  file { "${_confdir}/${_short}/pid.properties":
     ensure  => present,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
-    content => template("${templates}/beans.properties.erb"),
+    content => template("${templates}/pid.properties.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }

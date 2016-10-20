@@ -10,7 +10,9 @@ class dhrep::nginx (
   $sslcert                            = undef,
   $sslkey                             = undef,
   $dhparam                            = undef,
-) {
+) inherits dhrep::params {
+
+  $_confdir = $::dhrep::params::confdir
 
   $templates = "dhrep/etc/dhrep/nginx/"
 
@@ -112,12 +114,12 @@ class dhrep::nginx (
     require => Package['nginx'],
   }
   ->
-  file { $proxy_conf_file:
+  file { '/etc/nginx/proxyconf/1.0.conf':
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${templates}/${scope}/proxyconf/1.0.conf"),
+    content => template("${templates}/proxyconf/${scope}/1.0.conf.erb"),
     notify  => Service['nginx'],
   }
   ->
@@ -135,7 +137,7 @@ class dhrep::nginx (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${template}/sites-available/default.erb"),
+    content => template("${templates}/sites-available/default.erb"),
   }
   ~>
   service { 'nginx':

@@ -14,8 +14,9 @@ class dhrep::services::tomcat_crud (
   $jmx_port     = $::dhrep::params::config['tomcat_crud']['jmx_port']
   $user         = $::dhrep::params::config['tomcat_crud']['user']
   $group        = $::dhrep::params::config['tomcat_crud']['group']
+  $uid          = $::dhrep::params::config['tomcat_crud']['uid']
+  $gid          = $::dhrep::params::config['tomcat_crud']['gid']
   $template     = 'dhrep/etc/default/tomcat.crud.erb'
-  $depcat       = 'wildfly'
 
   ###
   # user, home-dir and user-tomcat
@@ -23,8 +24,8 @@ class dhrep::services::tomcat_crud (
   dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
-    gid               => $gid,
     uid               => $uid,
+    gid               => $gid,
     http_port         => $http_port,
     control_port      => $control_port,
     jmx_port          => $jmx_port,
@@ -32,6 +33,5 @@ class dhrep::services::tomcat_crud (
     init_dependencies => $depcat,
     xmx               => $xmx,
     xms               => $xms,
-    require           => Service[$depcat],
   }
 }

@@ -76,8 +76,8 @@ SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results
 
 # The Index DB namespapce, if XML.
 IDXDB_NAMESPACE = urn:elasticsearch
-IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::master_tcp_port') %>/textgrid-public/metadata
-IDXDB_CLUSTER_NAME = <%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %>
+IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::services::intern::elasticsearch::master_tcp_port') %>/textgrid-public/metadata
+IDXDB_CLUSTER_NAME = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 IDXDB_USER = *
 IDXDB_PASS = *
 IDXDB_SERVICE_URL_PUBLIC = *
@@ -88,7 +88,7 @@ IDXDB_PAIRTREE_USAGE = FALSE
 # The URI settings.
 ID_SERVICE_URL = http://localhost:9094/pid
 ID_SERVICE_USER = *
-ID_SERVICE_PASS = <%= scope.lookupvar('dhrep::services::crud_public::id_service_pass') %>
+ID_SERVICE_PASS = <%= scope.lookupvar('dhrep::services::crud_public::pid_secret') %>
 ID_AUTOMAGIC_UNLOCKING_TIME = 1800000
 
 # Password for the #MOVEPUBLIC method.

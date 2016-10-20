@@ -8,7 +8,7 @@
 class dhrep::services::intern::tgnoid (
   $scope         = 'textgrid',
   $tgcrud_secret = undef,
-){
+) {
 
   $tgname    = 'tgnoid'
   $noiduser  = 'tgnoid'

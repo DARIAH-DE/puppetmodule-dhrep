@@ -3,9 +3,10 @@
 # Class to install and configure publish service.
 #
 class dhrep::services::publish (
-  $scope     = undef,
-  $log_level = 'INFO',
-  $fake_pids = false,
+  $scope      = undef,
+  $log_level  = 'INFO',
+  $fake_pids  = false,
+  $pid_secret = '',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish

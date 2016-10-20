@@ -12,10 +12,10 @@ class dhrep::services::tomcat_publish (
   $http_port    = $::dhrep::params::config['tomcat_publish']['http_port']
   $control_port = $::dhrep::params::config['tomcat_publish']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_publish']['jmx_port']
-  $gid          = $::dhrep::params::config['tomcat_publish']['gid']
-  $uid          = $::dhrep::params::config['tomcat_publish']['uid']
   $user         = $::dhrep::params::config['tomcat_publish']['user']
   $group        = $::dhrep::params::config['tomcat_publish']['group']
+  $uid          = $::dhrep::params::config['tomcat_publish']['uid']
+  $gid          = $::dhrep::params::config['tomcat_publish']['gid']
   $template     = 'dhrep/etc/default/tomcat.publish.erb'
   $depcat       = $::dhrep::params::config['tomcat_crud']['catname']
 
@@ -25,8 +25,8 @@ class dhrep::services::tomcat_publish (
   dhrep::resources::servicetomcat { $catname:
     user              => $user,
     group             => $group,
-    gid               => $gid,
     uid               => $uid,
+    gid               => $gid,
     http_port         => $http_port,
     control_port      => $control_port,
     jmx_port          => $jmx_port,
