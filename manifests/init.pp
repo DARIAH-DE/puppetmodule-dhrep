@@ -27,6 +27,12 @@ class dhrep (
   ###
   # generic internal services used for both scopes
   ###
+  class { 'dhrep::nginx':
+    scope => $scope,
+  }
+  class { 'dhrep::services::intern::tgwildfly':
+    scope => $scope,
+  }
   class { 'dhrep::services::intern::elasticsearch':
     scope        => $scope,
     cluster_name => $elasticsearch_cluster_name,
@@ -34,17 +40,11 @@ class dhrep (
   class { 'dhrep::tools::check_services':
     scope => $scope,
   }
-  class { 'dhrep::nginx':
-    scope => $scope,
-  }
 
   ###
   # services for scope textgrid configured here
   ###
   if $scope == 'textgrid' {
-    class { 'dhrep::services::intern::tgwildfly':
-      scope => $scope,
-    }
     class { 'dhrep::resources::apache':
       scope => $scope,
     }
@@ -113,11 +113,11 @@ class dhrep (
     class { 'dhrep::services::crud':
       scope          => $scope,
       publish_secret => $crud_publish_secret,
-      require        => Class['dhrep::services::intern::elasticsearch'],
+      require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::crud_public':
       scope   => $scope,
-      require => Class['dhrep::services::intern::elasticsearch'],
+      require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::tgwildfly']],
     }
   }
 

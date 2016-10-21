@@ -9,7 +9,7 @@
 	<common>
 		<property>
 			<field>logLevel</field>
-			<value>INFO</value>
+			<value><%= scope.lookupvar('dhrep::services::publish::log_level') %></value>
 		</property>
 		<property>
 			<field>defaultProcessStarter</field>

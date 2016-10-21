@@ -3,12 +3,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="koLibRI-config
 	http://kopal.langzeitarchivierung.de/schema/koLibRI/config.xsd">
-	<!-- Common Configuration Section: This common configuration part contains 
+	<!-- Common Configuration Section: This common configuration part contains
 		all common config values usable from all process starter, action modules and other classes. -->
 	<common>
 		<property>
 			<field>logLevel</field>
-			<value>FINER</value>
+			<value><%= scope.lookupvar('dhrep::services::publish::log_level') %></value>
 			<description>The log level for the WorkflowTool application. Possible are ALL, FINEST, FINER, FINE, INFO, WARNING, SEVERE and OFF.</description>
 		</property>
 		<property>
@@ -112,7 +112,7 @@
 		<!-- DARIAH Repository globally configured values START -->
 		<property>
 			<field>ownStorageEndpoint</field>
-			<value>https://storage.dariah.eu/</value>
+			<value><%= scope.lookupvar('dhrep::services::publish::storage_host') %></value>
 			<description>The URI of the Storage Service implementation (DARIAH OwnStorage)</description>
 		</property>
 		<property>

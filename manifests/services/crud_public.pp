@@ -8,11 +8,11 @@ class dhrep::services::crud_public (
   $log_level      = 'INFO',
   $use_messaging  = true,
   $location       = '',
-  $storage_host   = '',
+  $storage_host   = 'https://de.dariah.eu/storage/',
   $storage_user   = '',
   $storage_pw     = '',
+  $pid_resolver   = 'https://hdl.handle.net',
   $extract_techmd = false,
-  $fits_location  = '',
   $pid_secret     = '',
 ) inherits dhrep::params {
 
@@ -24,10 +24,10 @@ class dhrep::services::crud_public (
   $_name    = $::dhrep::params::crud_public_name[$scope]
   $_short   = $::dhrep::params::crud_public_short[$scope]
   $_version = $::dhrep::params::crud_public_version[$scope]
+  $_aptdir  = $::dhrep::params::aptdir
   $_confdir = $::dhrep::params::confdir
   $_logdir  = $::dhrep::params::logdir
   $_optdir  = $::dhrep::params::optdir
-  $_aptdir  = $::dhrep::params::aptdir
   $_catname = $::dhrep::services::tomcat_crud::catname
   $_user    = $::dhrep::services::tomcat_crud::user
   $_group   = $::dhrep::services::tomcat_crud::group

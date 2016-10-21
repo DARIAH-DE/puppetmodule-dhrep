@@ -69,8 +69,6 @@ class dhrep::services::intern::tgwildfly (
   #    source   => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
   #  }
 
-
-
   ###
   # collectd for wildfly
   ###

@@ -9,9 +9,9 @@ METADATA_NAMESPACE = http://textgrid.info/namespaces/metadata/core/2010
 LOG4J_CONFIGFILE = /etc/dhrep/dhcrud/crud.log4j
 
 # The Handle resolver URL (resolving only!).
-PID_RESOLVER = http://hdl.handle.net/
+PID_RESOLVER = <%= scope.lookupvar('dhrep::services::crud::pid_resolver') %>
 # The DC-crud location for PID metadata.
-CRUD_LOCATION = <%= scope.lookupvar('dhrep::services::crud::crud_location') %>
+CRUD_LOCATION = <%= scope.lookupvar('dhrep::services::crud::location') %>
 
 # The ID implementation to use for identifier creation.
 ID_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.DHCrudServiceIdentifierPidImpl
@@ -35,10 +35,10 @@ DEFAULT_DATA_STORAGE_URI_PUBLIC = file://localhost//data/public/productive/
 # The DARIAH PublicStorage configuration
 DARIAH_BASE_URL = https://ipedariah1.lsdf.kit.edu/dhpublic/
 DARIAH_IDP_URL = https://ldap-dariah.esc.rzg.mpg.de/idp/profile/SAML2/SOAP/ECP
-DARIAH_USER = <%= scope.lookupvar('dhrep::services::crud::dhstorage_user') %>
-DARIAH_PW = <%= scope.lookupvar('dhrep::services::crud::dhstorage_pw') %>
+DARIAH_USER = <%= scope.lookupvar('dhrep::services::crud::storage_user') %>
+DARIAH_PW = <%= scope.lookupvar('dhrep::services::crud::storage_pw') %>
 # The DARIAH OwnStorage host.
-OWNSTORAGE_HOST = <%= scope.lookupvar('dhrep::services::crud::ownstorage_host') %>
+OWNSTORAGE_HOST = <%= scope.lookupvar('dhrep::services::crud::storage_host') %>
 
 # Which DATA STORAGE authentication shall be used (e.g. JavaGAT)? Allowed is one
 # of MYPROXY, PROXY, CERT, SLC or NONE. The needed values have to be set
@@ -76,7 +76,7 @@ SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results
 
 # The Index DB namespapce, if XML.
 IDXDB_NAMESPACE = urn:elasticsearch
-IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::services::intern::elasticsearch::master_tcp_port') %>/textgrid-public/metadata
+IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata
 IDXDB_CLUSTER_NAME = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 IDXDB_USER = *
 IDXDB_PASS = *
@@ -96,11 +96,11 @@ PUBLISH_SECRET = *
 
 # Settings for the message producer.
 USE_MESSAGING = <%= scope.lookupvar('dhrep::services::crud::use_messaging') %>
-INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContextFactory 
+INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContextFactory
 MESSAGING_PROVIDER_URL = *
 MESSAGING_SECURITY_PRINCIPAL = *
 MESSAGING_SECURITY_CREDENTIALS = *
 
 # Settings for technical metadata extraction via FITS.
 EXTRACT_TECHMD = <%= scope.lookupvar('dhrep::services::crud::extract_techmd') %>
-FITS_LOCATION = <%= scope.lookupvar('dhrep::services::crud::fits_location') %>
+FITS_LOCATION = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_fits::http_port') %>/fits/FitsService
