@@ -6,11 +6,13 @@ class dhrep::services::pid (
   $scope       = undef,
   $endpoint    = 'http://pid.gwdg.de',
   $path        = '/handles/',
+  $prefix      = undef,
   $user        = undef,
   $passwd      = undef,
-  $prefix      = undef,
-  $secret      = undef,
   $responsible = '',
+  $creator     = '',
+  $publisher   = '',
+  $secret      = undef,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish

@@ -11,7 +11,7 @@ class dhrep::services::crud_public (
   $storage_host   = 'https://de.dariah.eu/storage/',
   $storage_user   = '',
   $storage_pw     = '',
-  $pid_resolver   = 'https://hdl.handle.net',
+  $pid_resolver   = 'https://hdl.handle.net/',
   $extract_techmd = false,
   $pid_secret     = '',
 ) inherits dhrep::params {

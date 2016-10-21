@@ -1,3 +1,26 @@
+###
+# #%L
+# TextGrid CRUD Service Configuration
+# %%
+# Copyright (C) 2016 DARIAH-DE Consortium (https://de.dariah.eu),
+# SUB Göttingen (http://www.sub.uni-goettingen.de)
+# %%
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Lesser Public License for more details.
+#
+# You should have received a copy of the GNU General Lesser Public
+# License along with this program.  If not, see
+# <http://www.gnu.org/licenses/lgpl-3.0.html>.
+# #L%
+###
+
 # Special TG-crud feature: Directly pubish objects created with #CREATE.
 # Used for the second (public) TG-crud instance used by TG-publish.
 DIRECTLY_PUBLISH_WITH_CREATE = TRUE
@@ -8,7 +31,7 @@ METADATA_NAMESPACE = http://textgrid.info/namespaces/metadata/core/2010
 # The path to the log4j config file (mandatory).
 LOG4J_CONFIGFILE = /etc/dhrep/tgcrud-public/crud.log4j
 
-# The Handle resolver URL (mandatory).                                                  
+# The Handle resolver URL (mandatory).
 HANDLE_RESOLVER_URL = http://pid.gwdg.de/handles/
 
 # The ID implementation to use for URI creation.
@@ -86,7 +109,7 @@ PUBLISH_SECRET = <%= scope.lookupvar('dhrep::services::crud_public::publish_secr
 
 # Settings for the message producer.
 USE_MESSAGING = <%= scope.lookupvar('dhrep::services::crud_public::use_messaging') %>
-INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContextFactory 
+INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContextFactory
 MESSAGING_PROVIDER_URL = http-remoting://127.0.0.1:18080
 MESSAGING_SECURITY_PRINCIPAL = tgcrud
 MESSAGING_SECURITY_CREDENTIALS = secret
