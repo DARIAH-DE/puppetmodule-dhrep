@@ -201,6 +201,19 @@ class dhrep (
   ###
   # folder creation
   ###
+  file { $::dhrep::params::backupdir:
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File[$::dhrep::params::vardir],
+  }
+  file { $::dhrep::params::cachedir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0775',
+  }
   file { $::dhrep::params::confdir:
     ensure => directory,
     owner  => 'root',
@@ -209,22 +222,15 @@ class dhrep (
   }
   file { $::dhrep::params::logdir:
     ensure => directory,
-    owner  => root,
-    group  => root,
+    owner  => 'root',
+    group  => 'root',
     mode   => '0755',
   }
-  file { $::dhrep::params::vardir:
+  file { $::dhrep::params::optdir:
     ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0755',
-  }
-  file { $::dhrep::params::backupdir:
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    require => File[$::dhrep::params::vardir],
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0775',
   }
   file { $::dhrep::params::statdir:
     ensure  => directory,
@@ -233,11 +239,11 @@ class dhrep (
     mode    => '0701',
     require => File[$::dhrep::params::vardir],
   }
-  file { $::dhrep::params::optdir:
+  file { $::dhrep::params::vardir:
     ensure => directory,
     owner  => 'root',
     group  => 'root',
-    mode   => '0775',
+    mode   => '0755',
   }
 
   ###

@@ -26,7 +26,7 @@
       <user>shibconnector@application.int</user>
       <!-- shibconnector password must be present in community authentication LDAP for -->
       <!-- dc=dariah,dc=eu,ou=dsa,uid=ShibConnector@application.int ! -->
-      <password><%= scope.lookupvar('profiles::textgrid::tgauth_authz_shib_pw') %></password>
+      <password><%= scope.lookupvar('profiles::textgridrepository::tgauth_authz_shib_pw') %></password>
     </sessioncreator>
     <!-- setnamsecret is not needed anymore! -->
     <!-- %= scope.lookupvar('profiles::textgrid::tgauth_webauth_secret') % -->

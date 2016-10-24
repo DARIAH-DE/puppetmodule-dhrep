@@ -4,7 +4,6 @@
 #
 class dhrep::services::tgsearch_public (
   $scope   = undef,
-  $name    = 'tgsearch-public-webapp',
   $version = 'latest',
 ) inherits dhrep::params {
 
@@ -18,7 +17,7 @@ class dhrep::services::tgsearch_public (
   ###
   # update apt repo and install package
   ###
-  package { $name:
+  package { 'tgsearch-public-webapp':
     ensure  => $version,
     require => Exec['update_dariah_apt_repository'],
   }
@@ -28,14 +27,14 @@ class dhrep::services::tgsearch_public (
   ###
 #  file { "${_confdir}/tgsearch":
 #    ensure => directory,
-#    owner  => root,
-#    group  => root,
+#    owner  => 'root',
+#    group  => 'root',
 #    mode   => '0755',
 #  }
   file { "${_confdir}/tgsearch/tgsearch-public.properties":
     ensure  => present,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template("dhrep/etc/dhrep/tgsearch-public/tgsearch.properties.erb"),
     require => File["${_confdir}/tgsearch"],
@@ -43,10 +42,10 @@ class dhrep::services::tgsearch_public (
   }
   file { "${_confdir}/tgsearch/log4.public.properties":
     ensure  => present,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
-    content => template("dhrep/etc/dhrep/tfsearch-public/log4j.properties.erb"),
+    content => template("dhrep/etc/dhrep/tgsearch-public/log4j.properties.erb"),
     require => File["${_confdir}/tgsearch"],
   }
 

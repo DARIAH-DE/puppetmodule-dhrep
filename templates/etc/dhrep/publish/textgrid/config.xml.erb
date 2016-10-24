@@ -3,8 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="koLibRI-config http://kopal.langzeitarchivierung.de/schema/koLibRI/config.xsd">
 
-	<!-- Common Configuration Section: This common configuration part contains 
-		all common config values usable from all process starter, action modules 
+	<!-- Common Configuration Section: This common configuration part contains
+		all common config values usable from all process starter, action modules
 		and other classes. -->
 	<common>
 		<property>
@@ -108,9 +108,9 @@
 		</property>
 	</common>
 
-	<!-- Module Configuration Section : This module configuration section contains 
-		all config data to use with single classes like action modules, process starter 
-		and other classes. The following information only is available in the given 
+	<!-- Module Configuration Section : This module configuration section contains
+		all config data to use with single classes like action modules, process starter
+		and other classes. The following information only is available in the given
 		classes. -->
 	<modules>
 
@@ -229,26 +229,26 @@
 				<value>http://localhost:9090/tgsearch</value>
 			</property>
 			<property>
-				<!-- Add required namespaces for evaluating xpath-expressions below separate 
+				<!-- Add required namespaces for evaluating xpath-expressions below separate
 					prefix from url with = -->
 				<field>xpathNamespaces</field>
 				<value>tg=http://textgrid.info/namespaces/metadata/core/2010</value>
 			</property>
 			<property>
-				<!-- Add xpath expressions for fields which are required for publishing 
+				<!-- Add xpath expressions for fields which are required for publishing
 					an Edition here -->
 				<field>editionRequiredFields</field>
 				<value>/tg:object/tg:edition/tg:isEditionOf</value>
 				<value>/tg:object/tg:edition/tg:license</value>
 			</property>
 			<property>
-				<!-- Add xpath expressions for fields which are required for publishing 
+				<!-- Add xpath expressions for fields which are required for publishing
 					an Item here -->
 				<field>itemRequiredFields</field>
 				<value>/tg:object/tg:item/tg:rightsHolder</value>
 			</property>
 			<property>
-				<!-- Add xpath expressions for fields which are required for publishing 
+				<!-- Add xpath expressions for fields which are required for publishing
 					a collection here -->
 				<field>collectionRequiredFields</field>
 				<value></value>
@@ -310,22 +310,22 @@
 		<class name="actionmodule.textgrid.publish.CopyElasticSearchIndex">
 			<property>
 				<field>elasticSearchReadHost</field>
-				<value>http://localhost:<%= scope.lookupvar('dhrep::params::tgelasticsearch_master_tcp_port') %>/textgrid-nonpublic/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-nonpublic/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to read metadtaa from (non-public instance).</description>
 			</property>
 			<property>
 				<field>elasticSearchWriteHost</field>
-				<value>http://localhost:<%= scope.lookupvar('dhrep::params::tgelasticsearch_master_tcp_port') %>/textgrid-public/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
 				<field>elasticSearchClusterNameReadHost</field>
-				<value><%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %></value>
+				<value><%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %></value>
 				<description>The ElasticSearch cluster name</description>
 			</property>
 			<property>
 				<field>elasticSearchClusterNameWriteHost</field>
-				<value><%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %></value>
+				<value><%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %></value>
 				<description>The ElasticSearch cluster name</description>
 			</property>
 		</class>
@@ -398,12 +398,12 @@
 			</property>
 			<property>
 				<field>elasticSearchHost</field>
-				<value>http://localhost:<%= scope.lookupvar('dhrep::params::tgelasticsearch_master_tcp_port') %>/textgrid-public/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
 				<field>elasticSearchClusterName</field>
-				<value><%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %></value>
+				<value><%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %></value>
 				<description>The ElasticSearch cluster name</description>
 			</property>
 			<property>

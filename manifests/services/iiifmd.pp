@@ -4,7 +4,6 @@
 #
 class dhrep::services::iiifmd (
   $scope   = undef,
-  $name    = 'tg-iiif-metadata',
   $version = 'latest',
 ) inherits dhrep::params {
 
@@ -16,9 +15,9 @@ class dhrep::services::iiifmd (
   $_user    = $dhrep::services::tomcat_digilib::user
   $_group   = $dhrep::services::tomcat_digilib::group
 
-  package { $name:
+  package { 'tg-iiif-metadata':
     ensure  => $version,
-    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$catname]],
+    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
@@ -26,14 +25,14 @@ class dhrep::services::iiifmd (
   ###
   file { "${_confdir}/iiifmd":
     ensure => directory,
-    owner  => root,
-    group  => root,
+    owner  => 'root',
+    group  => 'root',
     mode   => '0755',
   }
   file { "${_confdir}/iiifmd/iiifmd.properties":
     ensure  => present,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/etc/dhrep/iiifmd/iiifmd.properties.erb'),
     require => File['/etc/dhrep/iiifmd'],
@@ -43,7 +42,7 @@ class dhrep::services::iiifmd (
   ###
   # data
   ###
-  file { "${_vardir}/textgrid/iiifmd":
+  file { "${_vardir}/iiifmd":
     ensure => directory,
     owner  => $_user,
     group  => $_group,

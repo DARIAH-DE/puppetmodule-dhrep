@@ -1,11 +1,11 @@
 <configuration>
 
   <section name="crud">
-    <var name="secret"><%= scope.lookupvar('profiles::textgrid::tgauth_crud_secret') %></var>
+    <var name="secret"><%= scope.lookupvar('profiles::textgridrepository::tgauth_crud_secret') %></var>
   </section>
 
   <section name="webAuth">
-    <var name="secret"><%= scope.lookupvar('profiles::textgrid::tgauth_webauth_secret') %></var>
+    <var name="secret"><%= scope.lookupvar('profiles::textgridrepository::tgauth_webauth_secret') %></var>
   </section>
 
   <section name="SIDcheck">
@@ -63,7 +63,7 @@
     <var name="binddn">cn=manager,dc=dariah,dc=eu</var>
     <!-- Secret is used for updating attributes only! -->
     <!-- We are needing it here for authentication! -->
-    <var name="password"><%= scope.lookupvar('profiles::textgrid::tgauth_user_binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('profiles::textgridrepository::tgauth_user_binddn_pass') %></var>
     <var name="namingattribute">dariahTextGridRbacId</var>
     <var name="filter">(objectClass=dariahPerson)</var>
   </section>
@@ -75,7 +75,7 @@
     <var name="tls">no</var>
     <var name="base">ou=counter,ou=rbac,dc=textgrid,dc=de</var>
     <var name="binddn">cn=rbac,ou=bindaccounts,dc=textgrid,dc=de</var>
-    <var name="password"><%= scope.lookupvar('profiles::textgrid::tgauth_binddn_pass') %></var>
+    <var name="password"><%= scope.lookupvar('profiles::textgridrepository::tgauth_binddn_pass') %></var>
     <var name="namingattribute">cn</var>
   </section>
 

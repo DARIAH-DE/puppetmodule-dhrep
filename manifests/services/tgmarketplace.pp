@@ -5,7 +5,10 @@
 class dhrep::services::tgmarketplace (
   $scope = undef,
   $time  = ['23', '02'],
-){
+) inherits dhrep::params {
+
+  $_confdir = $::dhrep::params::confdir
+  $_logdir  = $::dhrep::params::logdir
 
   $owner = 'www-data'
   $group = 'www-data'
@@ -62,16 +65,16 @@ class dhrep::services::tgmarketplace (
   ###
   # logging and logrotate
   ###
-  file { '/var/log/textgrid/marketplace':
+  file { "${_logdir}/marketplace":
     ensure  => directory,
     owner   => $owner,
     group   => $group,
     mode    => '0755',
-    require => File['/var/log/textgrid'],
+    require => File[$_logdir],
   }
   logrotate::rule { marketplace:
-    path         => '/var/log/textgrid/marketplace/msInterface.log',
-    require      => File['/var/log/textgrid/marketplace'],
+    path         => "${_logdir}/marketplace/msInterface.log",
+    require      => File["${_logdir}/marketplace"],
     rotate       => 365,
     rotate_every => 'week',
     compress     => true,
@@ -97,20 +100,20 @@ class dhrep::services::tgmarketplace (
   ###
   # symlink to /etc/textgrid/marketplace, create folder before.
   ###
-  file { '/etc/textgrid/marketplace':
+  file { "${_confdir}/marketplace":
     ensure => directory,
     owner  => $owner,
     group  => $group,
     mode   => '0755',
-    require => File['/etc/textgrid'],
+    require => File[$_confdir],
   }
-  file { '/etc/textgrid/marketplace/ms.conf':
+  file { "${_confdir}/marketplace/ms.conf":
     ensure  => 'link',
     owner   => $owner,
     group   => $group,
     mode    => '0644',
     target  => '/var/www/marketplace/cgi/ms.conf',
-    require => [File['/etc/textgrid/marketplace'],File['/var/www/marketplace/cgi/ms.conf']],
+    require => [File["${_confdir}/marketplace"],File['/var/www/marketplace/cgi/ms.conf']],
   }
   ###
   # other files from cloned GIT repo.

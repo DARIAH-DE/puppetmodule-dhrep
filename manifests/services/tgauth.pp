@@ -34,7 +34,7 @@ class dhrep::services::tgauth (
   $ldap_clusternodes = [],
   $no_shib_login     = false,
   $malloc            = '', # tcmalloc or jemalloc, default to glibc
-  $ldap_dbmaxsize    = 10485760 # default value 10485760 bytes = 10mb
+  $ldap_dbmaxsize    = 10485760, # default value 10485760 bytes = 10mb
 ) inherits dhrep::params {
 
   $_backupdir = $::dhrep::params::backupdir
@@ -42,6 +42,7 @@ class dhrep::services::tgauth (
   $_logdir    = $::dhrep::params::logdir
   $_optdir    = $::dhrep::params::optdir
   $_statdir   = $::dhrep::params::statdir
+  $_vardir    = $::dhrep::params::vardir
 
   apt::ppa { 'ppa:rtandy/openldap-backports': }
   ->
@@ -79,28 +80,28 @@ class dhrep::services::tgauth (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('dhrep/${_confdir}/tgauth/conf/rbac.conf.erb'),
+    content => template("dhrep/${_confdir}/tgauth/conf/rbac.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/rbacSoap.conf":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('dhrep/${_confdir}/tgauth/conf/rbacSoap.conf.erb'),
+    content => template("dhrep/${_confdir}/tgauth/conf/rbacSoap.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/system.conf":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('dhrep/${_confdir}/tgauth/conf/system.conf.erb'),
+    content => template("dhrep/${_confdir}/tgauth/conf/system.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/config_tgwebauth.xml":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template('dhrep/${_confdir}/tgauth/conf/config_tgwebauth.xml.erb'),
+    content => template("dhrep/${_confdir}/tgauth/conf/config_tgwebauth.xml.erb"),
   }
   file { '/var/www/tgauth/conf':
     ensure => link,
