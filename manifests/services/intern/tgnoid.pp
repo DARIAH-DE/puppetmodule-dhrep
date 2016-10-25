@@ -6,7 +6,7 @@
 #   add checks to bash script
 #
 class dhrep::services::intern::tgnoid (
-  $scope         = 'textgrid',
+  $scope         = undef,
   $tgcrud_secret = undef,
 ) {
 
@@ -44,8 +44,9 @@ class dhrep::services::intern::tgnoid (
   # create apache user for tgnoid
   ###
   exec { 'create_noid_apache_credentials':
-    command => "htpasswd -bc /etc/apache2/tgnoid.htpasswd tgcrud ${tgcrud_secret}",
+    command => "htpasswd -b -c /etc/apache2/tgnoid.htpasswd tgcrud ${tgcrud_secret}",
     creates => '/etc/apache2/tgnoid.htpasswd',
+    require => Service['apache2'],
   }
   ~>
   exec { 'change_noid_apache_credential_permissions':
@@ -80,7 +81,7 @@ class dhrep::services::intern::tgnoid (
   ###
   # apache config, apache should be setup by dhrep::init
   ###
-  file { "/etc/apache2/${scope}/default_vhost_includes/tgnoid.conf":
+  file { "/etc/apache2/textgrid/default_vhost_includes/tgnoid.conf":
     content => "
     # --------------------------------------------------------------------------
     # All the NOID configuration things following here for minting TextGrid URIs

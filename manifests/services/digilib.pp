@@ -3,8 +3,8 @@
 # Class to install and configure digilib
 #
 class dhrep::services::digilib (
-  $scope            = undef,
-  $digilib_version  = 'latest',
+  $scope   = undef,
+  $version = 'latest',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_digilib
@@ -20,11 +20,37 @@ class dhrep::services::digilib (
 
   $templates  = "dhrep/etc/dhrep/digilib/"
 
+  ###
+  # update apt repo and install package
+  ###
   package {
     'libvips37': ensure        => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
     'libvips-tools': ensure    => present;
-    'digilib-service': ensure  => $digilib_version,
+    'digilib-service': ensure  => $version,
                        require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
+  }
+
+  ###
+  # symlink war from deb package to tomcat webapps dir
+  ###
+  file { "/home/${_user}/${_catname}/webapps/digilibservice":
+    ensure  => 'link',
+    target  => "/var/dhrep/webapps/digilibservice",
+    require => [Dhrep::Resources::Servicetomcat[$_catname], Package["digilib-service"]],
+  }
+  ->
+  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
+#    ensure  => link,
+#    target  => '/etc/textgrid/digilib/digilib.properties',
+    # dilib doesn't like to load from symlinked files, TODO: still put to etc?
+    source => 'puppet:///modules/dhrep/etc/dhrep/digilib/digilib.properties',
+  }
+  ->
+  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
+#    ensure  => link,
+#    target  => '/etc/textgrid/digilib/digilib-service.properties',
+    # dilib doesn't like to load from symlinked files, TODO: still put to etc?
+    source => 'puppet:///modules/dhrep/etc/dhrep/digilib/digilib-service.properties',
   }
 
   ###
@@ -66,33 +92,11 @@ class dhrep::services::digilib (
   }
   # the prescale images will be written by wildfly
   file { "${_vardir}/digilib/prescale":
-    ensure => directory,
-    owner  => 'wildfly',
-    group  => 'wildfly',
-    mode   => '0755',
-  }
-
-  ###
-  # symlink war from deb package to tomcat webapps dir
-  ###
-  file { "/home/${_user}/${_catname}/webapps/digilibservice":
-    ensure  => 'link',
-    target  => "/var/dhrep/webapps/digilibservice",
-    require => [Dhrep::Resources::Servicetomcat[$_catname], Package["digilib-service"]],
-  }
-  ->
-  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
-#    ensure  => link,
-#    target  => '/etc/textgrid/digilib/digilib.properties',
-    # dilib doesn't like to load from symlinked files, TODO: still put to etc?
-    source => '/etc/dhrep/digilib/digilib.properties',
-  }
-  ->
-  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
-#    ensure  => link,
-#    target  => '/etc/textgrid/digilib/digilib-service.properties',
-    # dilib doesn't like to load from symlinked files, TODO: still put to etc?
-    source => '/etc/dhrep/digilib/digilib-service.properties',
+    ensure  => directory,
+    owner   => 'wildfly',
+    group   => 'wildfly',
+    mode    => '0755',
+    require => File["${_vardir}/digilib"],
   }
 
   ###

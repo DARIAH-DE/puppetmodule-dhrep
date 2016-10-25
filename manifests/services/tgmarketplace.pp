@@ -148,7 +148,7 @@ class dhrep::services::tgmarketplace (
   ###
   # apache config, apache should be setup by dhrep::init
   ###
-  file { "/etc/apache2/${scope}/default_vhost_includes/tgmarketplace.conf":
+  file { "/etc/apache2/textgrid/default_vhost_includes/tgmarketplace.conf":
     content => "
     # --------------------------------------------------------------------------
     # TextGrid Marketplace configuration

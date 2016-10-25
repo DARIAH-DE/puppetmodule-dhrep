@@ -167,7 +167,7 @@ class dhrep::services::intern::elasticsearch (
     url => "http://localhost:${_workhorse_http_port}/_nodes/${::hostname}-workhorse/stats/jvm/",
     instance => 'elasticsearch_workhorse',
     keys => {
-      'nodes/*/jvm/mem/heap_max_in_bytes' => {'type' => 'bytes'},
+      'nodes/*/jvm/mem/heap_max_in_bytes'  => {'type' => 'bytes'},
       'nodes/*/jvm/mem/heap_used_in_bytes' => {'type' => 'bytes'},
     }
   }

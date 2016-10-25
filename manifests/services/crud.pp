@@ -118,14 +118,14 @@ class dhrep::services::crud (
     # tgcrud comment and analyse scrpits
     ###
     file { "${_optdir}/crud-analyse.pl":
-      source  => 'puppet:///modules/dhrep/opt/dhrep/crud-analyse.pl',
+      source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/crud-analyse.pl",
       owner   => $_user,
       group   => $_group,
       mode    => '0755',
       require => File[$_optdir],
     }
     file { "${_optdir}/crud-comment.pl":
-      source  => 'puppet:///modules/dhrep/opt/dhrep/crud-comment.pl',
+      source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/crud-comment.pl",
       owner   => $_user,
       group   => $_group,
       mode    => '0700',

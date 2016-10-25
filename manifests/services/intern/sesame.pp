@@ -8,9 +8,8 @@ class dhrep::services::intern::sesame (
   $scope = undef,
 ) inherits dhrep::params {
 
-  $catname       = 'tomcat-sesame'
   $version       = '2.7.13'
-  $file          = "openrdf-sesame-${sesame_version}-sdk.tar.gz"
+  $file          = "openrdf-sesame-${version}-sdk.tar.gz"
 
   $_catname      = $::dhrep::params::config['tomcat_sesame']['catname']
   $_http_port    = $::dhrep::params::config['tomcat_sesame']['http_port']
@@ -36,13 +35,14 @@ class dhrep::services::intern::sesame (
     source  => "http://sourceforge.net/projects/sesame/files/Sesame%202/${version}/${file}/download",
     target  => "/home/${_catname}",
     creates => "/home/${_catname}/openrdf-sesame-${version}",
+    require => Dhrep::Resources::Servicetomcat[$_catname],
   }
   ~>
   tomcat::war { 'openrdf-workbench.war':
     war_ensure    => present,
     catalina_base => "/home/${_catname}/${_catname}",
     war_source    => "/home/${_catname}/openrdf-sesame-${version}/war/openrdf-workbench.war",
-    require       => [Dhrep::Resources::Servicetomcat[$_catname]],
+    require       => Dhrep::Resources::Servicetomcat[$_catname],
   }
   ~>
   tomcat::war { 'openrdf-sesame.war':
@@ -93,7 +93,7 @@ class dhrep::services::intern::sesame (
     require => File[$_backupdir],
   }
   file{ "${_optdir}/sesame-backup.sh" :
-    source  => 'puppet:///modules/dhrep/opt/dhrep/sesame-backup.sh',
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/sesame-backup.sh",
     owner   => $_catname,
     group   => $_catname,
     mode    => '0700',
@@ -101,7 +101,7 @@ class dhrep::services::intern::sesame (
   }
   cron { 'sesame-backup' :
     command  => "${_optdir}/sesame-backup.sh",
-    user     => $catname,
+    user     => $_catname,
     hour     => 22,
     minute   => 33,
   }
@@ -110,10 +110,10 @@ class dhrep::services::intern::sesame (
   # nrpe
   ###
   dariahcommon::nagios_service { 'check_http_sesame':
-    command => "/usr/lib/nagios/plugins/check_http -H localhost -p 9091 -u /openrdf-sesame/repositories -k \"Accept: application/xml\" -s /openrdf-sesame/repositories/textgrid-nonpublic -s /openrdf-sesame/repositories/textgrid-public",
+    command => "/usr/lib/nagios/plugins/check_http -H localhost -p ${_http_port} -u /openrdf-sesame/repositories -k \"Accept: application/xml\" -s /openrdf-sesame/repositories/textgrid-nonpublic -s /openrdf-sesame/repositories/textgrid-public",
   }
   file { "${_optdir}/check_sesame_backups.sh" :
-    source  => 'puppet:///modules/dhrep/opt/dhrep/check_sesame_backups.sh',
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/check_sesame_backups.sh",
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
@@ -123,5 +123,4 @@ class dhrep::services::intern::sesame (
     command => "${_optdir}/check_sesame_backups.sh",
     require => File["${_optdir}/check_sesame_backups.sh"],
   }
-
 }

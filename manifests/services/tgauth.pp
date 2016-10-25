@@ -122,6 +122,7 @@ class dhrep::services::tgauth (
     source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
     recurse => true,
     mode    => '0644',
+    require => File['/var/www'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure => directory,
@@ -136,6 +137,7 @@ class dhrep::services::tgauth (
     group   => root,
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl.erb'),
+    require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl':
     ensure  => present,
@@ -143,6 +145,7 @@ class dhrep::services::tgauth (
     group   => root,
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl.erb'),
+    require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl':
     ensure  => present,
@@ -150,6 +153,7 @@ class dhrep::services::tgauth (
     group   => root,
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl.erb'),
+    require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl':
     ensure  => present,
@@ -157,6 +161,7 @@ class dhrep::services::tgauth (
     group   => root,
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl.erb'),
+    require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl':
     ensure  => present,
@@ -164,6 +169,7 @@ class dhrep::services::tgauth (
     group   => root,
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
+    require => File['/var/www/tgauth'],
   }
 
   ###
@@ -173,8 +179,8 @@ class dhrep::services::tgauth (
     source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.webauth',
     recurse => true,
     mode    => '0644',
+    require => File[$_vardir],
   }
-  ->
   file { '/var/www/info.textgrid.middleware.tgauth.webauth/i18n_cache':
     ensure  => directory,
     owner   => 'www-data',
@@ -202,7 +208,7 @@ class dhrep::services::tgauth (
     require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
   }
   file { '/var/www/1.0/secure':
-    ensure  => link,
+    ensure  => 'link',
     target  => '/var/www/secure/',
     mode    => '0755',
     require => File['/var/www/1.0'],
@@ -412,7 +418,7 @@ class dhrep::services::tgauth (
     require => File[$_backupdir],
   }
   file { "${_optdir}/ldap-backup.sh" :
-    source  => 'puppet:///modules/dhrep/opt/dhrep/ldap-backup.sh',
+    source  => "puppet:///modules/dhrep/${_optdir}/${scope}/ldap-backup.sh",
     owner   => 'root',
     group   => 'root',
     mode    => '0700',
@@ -439,7 +445,7 @@ class dhrep::services::tgauth (
     owner   => 'root',
     group   => 'root',
     mode    => '0700',
-    content => template('dhrep/opt/dhrep/ldap-statistic.pl.erb'),
+    content => template("dhrep/opt/dhrep/${scope}/ldap-statistic.pl.erb"),
     require => [File[$_optdir],File["${_statdir}/ldap"]],
   }
   cron { 'ldap-statistic' :
@@ -457,25 +463,25 @@ class dhrep::services::tgauth (
     command => "/usr/lib/nagios/plugins/check_ldap -H localhost -b dc=textgrid,dc=de -3",
   }
   file { "${_optdir}/check_ldap_statistics.sh" :
-    source  => 'puppet:///modules/dhrep/opt/dhrep/${scope}/check_ldap_statistics.sh',
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/check_ldap_statistics.sh",
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
     require => File["${_optdir}/ldap-statistic.pl"],
   }
   dariahcommon::nagios_service { 'check_ldap_backups':
-    command => "${_optdir}/check_ldap_backups.sh",
+    command => "${_optdir}/${scope}/check_ldap_backups.sh",
     require => File["${_optdir}/check_ldap_backups.sh"],
   }
   file { "${_optdir}/check_ldap_backups.sh" :
-    source  => 'puppet:///modules/dhrep/opt/dhrep/${scope}check_ldap_backups.sh',
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/check_ldap_backups.sh",
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
     require => File['/opt/dhrep/ldap-backup.sh'],
   }
   dariahcommon::nagios_service { 'check_ldap_statistics':
-    command => "${_optdir}/check_ldap_statistics.sh",
+    command => "${_optdir}/${scope}/check_ldap_statistics.sh",
     require => File["${_optdir}/check_ldap_statistics.sh"],
   }
 

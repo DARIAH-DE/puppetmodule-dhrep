@@ -15,9 +15,21 @@ class dhrep::services::iiifmd (
   $_user    = $dhrep::services::tomcat_digilib::user
   $_group   = $dhrep::services::tomcat_digilib::group
 
+  ###
+  # update apt repo and install package
+  ###
   package { 'tg-iiif-metadata':
     ensure  => $version,
     require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
+  }
+
+  ###
+  # symlink war from deb package to tomcat webapps dir
+  ###
+  file { "/home/${_user}/${_catname}/webapps/iiifmd":
+    ensure  => 'link',
+    target  => "${_vardir}/webapps/iiifmd",
+    require => [File["${_confdir}/iiifmd/iiifmd.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
@@ -35,7 +47,7 @@ class dhrep::services::iiifmd (
     group   => 'root',
     mode    => '0644',
     content => template('dhrep/etc/dhrep/iiifmd/iiifmd.properties.erb'),
-    require => File['/etc/dhrep/iiifmd'],
+    require => File["${_confdir}/iiifmd"],
     notify  => Service[$_catname]
   }
 
@@ -49,32 +61,34 @@ class dhrep::services::iiifmd (
     mode   => '0755',
   }
   file { "${_vardir}/iiifmd/cache":
-    ensure => directory,
-    owner  => $_user,
-    group  => $_group,
-    mode   => '0755',
+    ensure  => directory,
+    owner   => $_user,
+    group   => $_group,
+    mode    => '0755',
+    require => File["${_vardir}/iiifmd"],
   }
 
   ###
   # install the collectd plugin for elasticsearch
   ###
-  file { "${_vardir}/nginx-root/textgridrep.de/iiif":
+  file { '/var/www/nginx-root/textgridrep.de/iiif':
     ensure => directory,
     owner  => $_user,
     group  => $_group,
     mode   => '0755',
   }
-  vcsrepo { "${_vardir}nginx-root/textgridrep.de/iiif/mirador":
+  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
     ensure   => present,
     owner    => $_user,
     group    => $_group,
     provider => git,
     source   => 'https://github.com/IIIF/m1.git',
+    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
   }
   ->
   file { '/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html':
-    source => 'puppet:///modules/dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html',
-    mode   => '0644',
+    source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html',
+    mode    => '0644',
   }
   # TODO: npm nodejs build and dhsummit.html
   vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/m2':
@@ -84,14 +98,6 @@ class dhrep::services::iiifmd (
     provider => git,
     source   => 'https://github.com/IIIF/mirador.git',
     revision => 'v2.0.0',
-  }
-
-  ###
-  # symlink war from deb package to tomcat webapps dir
-  ###
-  file { "/home/${_user}/${_catname}/webapps/iiifmd":
-    ensure  => 'link',
-    target  => "${_vardir}/webapps/iiifmd",
-    require => [File["${_confdir}/iiifmd/iiifmd.properties"],Dhrep::Resources::Servicetomcat[$_catname]],
+    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
   }
 }
