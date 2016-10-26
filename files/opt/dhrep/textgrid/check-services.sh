@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#
+# generics
+#
 SERVER="http://localhost"
 CNRM="$(tput sgr0)"
 OK="$(tput setaf 2)OK$CNRM"
@@ -7,6 +10,7 @@ FAILED="$(tput setaf 1)FAILED$CNRM"
 CSTR="$(tput setaf 5)"
 VSTR="$(tput setaf 3)"
 TRN="  ==>  "
+ERRORS=false
 
 #
 # tgauth
@@ -20,6 +24,7 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -34,6 +39,7 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -50,6 +56,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -66,6 +73,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -80,6 +88,7 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -94,6 +103,7 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -111,6 +121,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -127,6 +138,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -143,6 +155,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -159,9 +172,10 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
-# 
+#
 # digilib
 #
 INFO="info"
@@ -173,6 +187,7 @@ if [ -s $INFO ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
+    ERRORS=true
 fi
 
 #
@@ -189,4 +204,16 @@ if [ $SIZE -eq $EQSI ]; then
     echo "    $OK [$SIZE == $EQSI]"
 else
     echo "    $FAILED [$SIZE != $EQSI]"
+    ERRORS=true
 fi
+
+#
+# check for errors
+#
+if $ERRORS ; then
+    echo "...service check $FAILED with exit code 1!"
+    exit 1
+fi
+
+echo "...service check turns out to be $OK"
+exit 0

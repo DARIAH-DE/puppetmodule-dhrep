@@ -6,8 +6,8 @@
 #   add checks to bash script
 #
 class dhrep::services::intern::tgnoid (
-  $scope         = undef,
-  $tgcrud_secret = undef,
+  $scope       = undef,
+  $crud_secret = undef,
 ) {
 
   $tgname    = 'tgnoid'
@@ -44,7 +44,7 @@ class dhrep::services::intern::tgnoid (
   # create apache user for tgnoid
   ###
   exec { 'create_noid_apache_credentials':
-    command => "htpasswd -b -c /etc/apache2/tgnoid.htpasswd tgcrud ${tgcrud_secret}",
+    command => "htpasswd -bc /etc/apache2/tgnoid.htpasswd tgcrud ${crud_secret}",
     creates => '/etc/apache2/tgnoid.htpasswd',
     require => Service['apache2'],
   }

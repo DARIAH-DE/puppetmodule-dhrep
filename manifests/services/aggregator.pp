@@ -3,21 +3,27 @@
 # Class to install and configure aggregator
 #
 class dhrep::services::aggregator (
-  $scope              = undef,
+  $scope   = undef,
   $version = 'latest',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_aggregator
 
-  $_aptdir    = $::dhrep::params::aptdir
   $_confdir   = $::dhrep::params::confdir
   $_catname   = $::dhrep::services::tomcat_aggregator::catname
   $_user      = $::dhrep::services::tomcat_aggregator::user
   $_group     = $::dhrep::services::tomcat_aggregator::group
   $_http_port = $::dhrep::services::tomcat_aggregator::http_port
   $_jmx_port  = $::dhrep::services::tomcat_aggregator::jmx_port
-
   $templates  = "dhrep/etc/dhrep/aggregator"
+
+  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
+  if $scope == 'textgrid' {
+    $_aptdir = '/var/textgrid/webapps'
+  }
+  else {
+    $_aptdir = $::dhrep::params::aptdir
+  }
 
   package { 'aggregator':
     ensure  => $version,

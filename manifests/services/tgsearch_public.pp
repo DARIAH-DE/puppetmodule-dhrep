@@ -14,6 +14,14 @@ class dhrep::services::tgsearch_public (
   $_user      = $::dhrep::services::tomcat_tgsearch::user
   $_group     = $::dhrep::services::tomcat_tgsearch::group
 
+  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
+  if $scope == 'textgrid' {
+    $_aptdir = '/var/textgrid/webapps'
+  }
+  else {
+    $_aptdir = $::dhrep::params::aptdir
+  }
+
   ###
   # update apt repo and install package
   ###
@@ -23,14 +31,16 @@ class dhrep::services::tgsearch_public (
   }
 
   ###
+  # symlink war from deb package to tomcat webapps dir
+  ###
+  file { "/home/${_user}/${_catname}/webapps/tgsearch-public":
+    ensure => 'link',
+    target => "${_aptdir}/tgsearch-public",
+  }
+
+  ###
   # config
   ###
-#  file { "${_confdir}/tgsearch":
-#    ensure => directory,
-#    owner  => 'root',
-#    group  => 'root',
-#    mode   => '0755',
-#  }
   file { "${_confdir}/tgsearch/tgsearch-public.properties":
     ensure  => present,
     owner   => 'root',
@@ -47,13 +57,5 @@ class dhrep::services::tgsearch_public (
     mode    => '0644',
     content => template("dhrep/etc/dhrep/tgsearch-public/log4j.properties.erb"),
     require => File["${_confdir}/tgsearch"],
-  }
-
-  ###
-  # symlink war from deb package to tomcat webapps dir
-  ###
-  file { "/home/${_user}/${_catname}/webapps/tgsearch-public":
-    ensure => 'link',
-    target => "/var/dhrep/webapps/tgsearch-public",
   }
 }

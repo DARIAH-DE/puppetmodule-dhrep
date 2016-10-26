@@ -118,6 +118,7 @@ class dhrep::services::tgauth (
     creates => '/usr/local/src/tgauth-git',
     require => Package['git'],
   }
+  ->
   file { '/var/www/tgauth':
     source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
     recurse => true,

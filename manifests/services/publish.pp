@@ -20,7 +20,14 @@ class dhrep::services::publish (
   $_catname = $::dhrep::services::tomcat_publish::catname
   $_user    = $::dhrep::services::tomcat_publish::user
   $_group   = $::dhrep::services::tomcat_publish::group
-  $_aptdir  = $::dhrep::params::aptdir
+
+  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
+  if $scope == 'textgrid' {
+    $_aptdir = '/var/textgrid/webapps'
+  }
+  else {
+    $_aptdir = $::dhrep::params::aptdir
+  }
 
   $templates = "dhrep/etc/dhrep/publish"
 

@@ -10,8 +10,8 @@ class dhrep::services::tomcat_digilib (
   $http_port    = $::dhrep::params::config['tomcat_digilib']['http_port']
   $control_port = $::dhrep::params::config['tomcat_digilib']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_digilib']['jmx_port']
-  $user         = $catname
-  $group        = $catname
+  $user         = $::dhrep::params::config['tomcat_digilib']['user']
+  $group        = $::dhrep::params::config['tomcat_digilib']['group']
   $uid          = $::dhrep::params::config['tomcat_digilib']['uid']
   $gid          = $::dhrep::params::config['tomcat_digilib']['gid']
   $template     = 'dhrep/etc/default/tomcat.erb'

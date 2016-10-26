@@ -19,7 +19,7 @@ class dhrep (
   $tgauth_authz_shib_pw = undef,
   $tgauth_authz_instance = undef,
   $tgauth_webauth_secret = undef,
-  $tgnoid_tgcrud_secret = undef,
+  $tgnoid_crud_secret = undef,
   $tgdatadirs_create_local_datadirs = undef,
   $tgconfserv_service_base_url = undef,
 ) inherits dhrep::params {
@@ -52,10 +52,12 @@ class dhrep (
       scope => $scope,
     }
     class { 'dhrep::services::intern::tgnoid':
-      before        => Class['dhrep::services::crud'],
-      tgcrud_secret => $tgcrud_secret,
+      scope       => $scope,
+      before      => Class['dhrep::services::crud'],
+      crud_secret => $tgnoid_crud_secret,
     }
     class { 'dhrep::services::intern::tgdatadirs':
+      scope                 => $scope,
       create_local_datadirs => $tgdatadirs_create_local_datadirs,
     }
     class { 'dhrep::services::tgauth':
@@ -95,9 +97,11 @@ class dhrep (
     class { 'dhrep::static::textgridrep_website': }
     class { 'dhrep::static::textgridlab_org': }
     class { 'dhrep::services::tgsearch':
+      scope   => $scope,
       require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
     }
     class { 'dhrep::services::tgsearch_public':
+      scope   => $scope,
       require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame']],
     }
     class { 'dhrep::services::tgmarketplace': }

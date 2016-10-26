@@ -24,13 +24,20 @@ class dhrep::services::crud (
   $_name    = $::dhrep::params::crud_name[$scope]
   $_short   = $::dhrep::params::crud_short[$scope]
   $_version = $::dhrep::params::crud_version[$scope]
-  $_aptdir  = $::dhrep::params::aptdir
   $_confdir = $::dhrep::params::confdir
   $_logdir  = $::dhrep::params::logdir
   $_optdir  = $::dhrep::params::optdir
   $_catname = $::dhrep::services::tomcat_crud::catname
   $_user    = $::dhrep::services::tomcat_crud::user
   $_group   = $::dhrep::services::tomcat_crud::group
+
+  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
+  if $scope == 'textgrid' {
+    $_aptdir = '/var/textgrid/webapps'
+  }
+  else {
+    $_aptdir = $::dhrep::params::aptdir
+  }
 
   $templates = "dhrep/etc/dhrep/crud/${scope}"
 

@@ -10,8 +10,8 @@ class dhrep::services::tomcat_aggregator (
   $http_port    = $::dhrep::params::config['tomcat_aggregator']['http_port']
   $control_port = $::dhrep::params::config['tomcat_aggregator']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_aggregator']['jmx_port']
-  $user         = $catname
-  $group        = $catname
+  $user         = $::dhrep::params::config['tomcat_aggregator']['user']
+  $group        = $::dhrep::params::config['tomcat_aggregator']['group']
   $uid          = $::dhrep::params::config['tomcat_aggregator']['uid']
   $gid          = $::dhrep::params::config['tomcat_aggregator']['gid']
   $template     = 'dhrep/etc/default/tomcat.erb'

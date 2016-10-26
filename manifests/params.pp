@@ -91,7 +91,7 @@ class dhrep::params {
     'textgrid' => 'latest',
     'dariah'   => 'latest'
   }
-  
+
   ###
   # elasticsearch
   ###
@@ -111,6 +111,8 @@ class dhrep::params {
       'jmx_port'     => '9995',
       'gid'          => '1014',
       'uid'          => '1014',
+      'user'         => 'tomcat-aggregator',
+      'group'        => 'tomcat-aggregator',
     },
     'tomcat_crud' => {
       'catname'      => 'tomcat-crud',
@@ -129,6 +131,8 @@ class dhrep::params {
       'jmx_port'     => '9992',
       'gid'          => '1009',
       'uid'          => '1009',
+      'user'         => 'tomcat-digilib',
+      'group'        => 'tomcat-digilib',
     },
     'tomcat_fits' => {
       'catname'      => 'tomcat-fits',
@@ -137,6 +141,8 @@ class dhrep::params {
       'jmx_port'     => '9998',
       'gid'          => '1012',
       'uid'          => '1012',
+      'user'         => 'tomcat-fits',
+      'group'        => 'tomcat-fits',
     },
     'tomcat_oaipmh' => {
       'catname'      => 'tomcat-oaipmh',
@@ -145,6 +151,8 @@ class dhrep::params {
       'jmx_port'     => '9996',
       'gid'          => '1011',
       'uid'          => '1011',
+      'user'         => 'tomcat-oaipmh',
+      'group'        => 'tomcat-oaipmh',
     },
     'tomcat_publish' => {
       'catname'      => 'tomcat-publish',
@@ -163,6 +171,8 @@ class dhrep::params {
       'jmx_port'     => '9991',
       'gid'          => '1008',
       'uid'          => '1008',
+      'user'         => 'tomcat-sesame',
+      'group'        => 'tomcat-sesame',
     },
     'tomcat_tgsearch' => {
       'catname'      => 'tomcat-tgsearch',
@@ -171,6 +181,8 @@ class dhrep::params {
       'jmx_port'     => '9990',
       'gid'          => '1007',
       'uid'          => '1007',
+      'user'         => 'tomcat-tgsearch',
+      'group'        => 'tomcat-tgsearch',
     },
   }
 

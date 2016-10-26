@@ -12,8 +12,15 @@ class dhrep::nginx (
   $dhparam                            = undef,
 ) inherits dhrep::params {
 
-  $_confdir = $::dhrep::params::confdir
+  include dhrep::services::tomcat_aggregator
+  include dhrep::services::tomcat_crud
+  include dhrep::services::tomcat_digilib
+  include dhrep::services::tomcat_oaipmh
+  include dhrep::services::tomcat_publish
+  include dhrep::services::tomcat_sesame
+  include dhrep::services::tomcat_tgsearch
 
+  $_confdir  = $::dhrep::params::confdir
   $templates = "dhrep/etc/dhrep/nginx/"
 
   package {

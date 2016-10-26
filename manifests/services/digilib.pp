@@ -9,7 +9,6 @@ class dhrep::services::digilib (
 
   include dhrep::services::tomcat_digilib
 
-  $_aptdir    = $::dhrep::params::aptdir
   $_confdir   = $::dhrep::params::confdir
   $_vardir    = $::dhrep::params::vardir
   $_catname   = $::dhrep::services::tomcat_digilib::catname
@@ -17,6 +16,14 @@ class dhrep::services::digilib (
   $_group     = $::dhrep::services::tomcat_digilib::group
   $_http_port = $::dhrep::services::tomcat_digilib::http_port
   $_jmx_port  = $::dhrep::services::tomcat_digilib::jmx_port
+
+  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
+  if $scope == 'textgrid' {
+    $_aptdir = '/var/textgrid/webapps'
+  }
+  else {
+    $_aptdir = $::dhrep::params::aptdir
+  }
 
   $templates  = "dhrep/etc/dhrep/digilib/"
 
@@ -35,22 +42,8 @@ class dhrep::services::digilib (
   ###
   file { "/home/${_user}/${_catname}/webapps/digilibservice":
     ensure  => 'link',
-    target  => "/var/dhrep/webapps/digilibservice",
+    target  => "${_aptdir}/digilibservice",
     require => [Dhrep::Resources::Servicetomcat[$_catname], Package["digilib-service"]],
-  }
-  ->
-  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
-#    ensure  => link,
-#    target  => '/etc/textgrid/digilib/digilib.properties',
-    # dilib doesn't like to load from symlinked files, TODO: still put to etc?
-    source => 'puppet:///modules/dhrep/etc/dhrep/digilib/digilib.properties',
-  }
-  ->
-  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
-#    ensure  => link,
-#    target  => '/etc/textgrid/digilib/digilib-service.properties',
-    # dilib doesn't like to load from symlinked files, TODO: still put to etc?
-    source => 'puppet:///modules/dhrep/etc/dhrep/digilib/digilib-service.properties',
   }
 
   ###
@@ -97,6 +90,18 @@ class dhrep::services::digilib (
     group   => 'wildfly',
     mode    => '0755',
     require => File["${_vardir}/digilib"],
+  }
+
+  ###
+  # copy config file
+  ###
+  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
+    source  => "${_confdir}/digilib/digilib.properties",
+    require => [File["/home/${_user}/${_catname}/webapps/digilibservice"],File["${_confdir}/digilib/digilib.properties"]],
+  }
+  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
+    source  => "${_confdir}/digilib/digilib-service.properties",
+    require => [File["/home/${_user}/${_catname}/webapps/digilibservice"],File["${_confdir}/digilib/digilib-service.properties"]],
   }
 
   ###
