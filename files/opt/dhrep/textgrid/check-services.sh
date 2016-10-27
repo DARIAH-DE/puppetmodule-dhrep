@@ -10,7 +10,7 @@ FAILED="$(tput setaf 1)FAILED$CNRM"
 CSTR="$(tput setaf 5)"
 VSTR="$(tput setaf 3)"
 TRN="  ==>  "
-ERRORS=false
+ERRORS=0
 
 #
 # tgauth
@@ -24,7 +24,7 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=1
 fi
 
 #
@@ -39,7 +39,7 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=2
 fi
 
 #
@@ -56,7 +56,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=3
 fi
 
 #
@@ -73,7 +73,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=4
 fi
 
 #
@@ -88,7 +88,7 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=5
 fi
 
 #
@@ -103,7 +103,7 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=6
 fi
 
 #
@@ -121,7 +121,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=7
 fi
 
 #
@@ -138,7 +138,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=8
 fi
 
 #
@@ -155,7 +155,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=9
 fi
 
 #
@@ -172,7 +172,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=10
 fi
 
 #
@@ -187,7 +187,7 @@ if [ -s $INFO ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=true
+    ERRORS=11
 fi
 
 #
@@ -204,16 +204,17 @@ if [ $SIZE -eq $EQSI ]; then
     echo "    $OK [$SIZE == $EQSI]"
 else
     echo "    $FAILED [$SIZE != $EQSI]"
-    ERRORS=true
+    ERRORS=12
 fi
 
 #
 # check for errors
 #
-if $ERRORS ; then
-    echo "...service check $FAILED with exit code 1!"
-    exit 1
+OKIDO=0
+if [ $ERRORS -ne $OKIDO ]; then
+    echo "...service check $FAILED with exit code $ERRORS"
+    exit $ERRORS
 fi
 
 echo "...service check turns out to be $OK"
-exit 0
+exit $ERRORS

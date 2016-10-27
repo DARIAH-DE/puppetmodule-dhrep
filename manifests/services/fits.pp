@@ -44,8 +44,9 @@ class dhrep::services::fits (
     owner   => 'root',
     group   => 'tomcat7',
     mode    => '0755',
-    require => File[$_vardir],
+    require => File[$_aptdir],
   }
+  ->
   staging::file { $fits_service_file:
     source  => $fits_service_source,
     target  => "${_vardir}/${fits_service_file}",
@@ -64,7 +65,7 @@ class dhrep::services::fits (
   file { "/home/${_user}/${_catname}/webapps/fits":
     ensure  => 'link',
     target  => "${_aptdir}/fits",
-    require => [File["/home/${_user}/${_catname}/conf/catalina.properties"], Service[$_catname]],
+    require => [File["${_aptdir}/fits"],Dhrep::Resources::Servicetomcat[$_catname]],
   }
 
   ###
@@ -73,6 +74,7 @@ class dhrep::services::fits (
   file { "/home/${_user}/${_catname}/conf/catalina.properties":
     ensure  => present,
   }
+  ->
   file_line { 'configure_fits_libs_line_1':
     path    => "/home/${_user}/${_catname}/conf/catalina.properties",
     line    => "fits.home=${fits_home}",

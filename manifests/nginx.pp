@@ -19,6 +19,9 @@ class dhrep::nginx (
   include dhrep::services::tomcat_publish
   include dhrep::services::tomcat_sesame
   include dhrep::services::tomcat_tgsearch
+  if $scope == 'dariah' {
+    include dhrep::services::tomcat_fits
+  }
 
   $_confdir  = $::dhrep::params::confdir
   $templates = "dhrep/etc/dhrep/nginx/"

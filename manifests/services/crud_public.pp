@@ -38,7 +38,7 @@ class dhrep::services::crud_public (
   else {
     $_aptdir = $::dhrep::params::aptdir
   }
-  
+
   $templates = "dhrep/etc/dhrep/crud-public/${scope}"
 
   ###

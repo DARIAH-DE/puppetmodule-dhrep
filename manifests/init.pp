@@ -3,15 +3,17 @@
 # Setup and manage a dhrep server with scope "textgrid" or "dariah".
 #
 class dhrep (
+  # generic refs
   $scope = undef,
-  $public_hostname = $::fqdn,
   $elasticsearch_cluster_name = undef,
-  $crud_publish_secret = undef,
-  $oracle_jdk8 = false,
-
-  ###
-  # textgrid specific refs defined here
-  ###
+  $oracle_jdk8 = true,
+  $pid_user = undef,
+  $pid_passwd = undef,
+  $pid_prefix = undef,
+  $pid_secret = undef,
+  $public_hostname = $::fqdn,
+  $publish_pid_secret = undef,
+  # textgrid specific refs
   $tgauth_binddn_pass = undef,
   $tgauth_user_binddn_pass = undef,
   $tgauth_crud_secret = undef,
@@ -19,10 +21,82 @@ class dhrep (
   $tgauth_authz_shib_pw = undef,
   $tgauth_authz_instance = undef,
   $tgauth_webauth_secret = undef,
-  $tgnoid_crud_secret = undef,
-  $tgdatadirs_create_local_datadirs = undef,
   $tgconfserv_service_base_url = undef,
+  $tgcrud_publish_secret = undef,
+  $tgdatadirs_create_local_datadirs = undef,
+  $tgnoid_crud_secret = undef,
+  # dariah specific refs
+  $dhcrud_storage_user = undef,
+  $dhcrud_storage_pw = undef,
+  $dhcrud_pid_secret = undef,
+  $dhcrud_public_storage_user = undef,
+  $dhcrud_public_storage_pw = undef,
+  $dhcrud_public_pid_secret = undef,
 ) inherits dhrep::params {
+
+  ###
+  # folder creation
+  ###
+  file { $::dhrep::params::aptdir:
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File[$::dhrep::params::vardir],
+  }
+  file { $::dhrep::params::backupdir:
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File[$::dhrep::params::vardir],
+  }
+  file { $::dhrep::params::cachedir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0775',
+  }
+  file { $::dhrep::params::confdir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  }
+  file { $::dhrep::params::logdir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  }
+  file { $::dhrep::params::optdir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0775',
+  }
+  file { $::dhrep::params::statdir:
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0701',
+    require => File[$::dhrep::params::vardir],
+  }
+  file { $::dhrep::params::vardir:
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  }
+
+  ###
+  # tomcat
+  ###
+  service { 'tomcat7':
+    ensure  => stopped,
+    enable  => false,
+    require => Package['tomcat7'],
+  }
 
   ###
   # generic internal services used for both scopes
@@ -75,7 +149,8 @@ class dhrep (
     }
     class { 'dhrep::services::crud':
       scope          => $scope,
-      publish_secret => $crud_publish_secret,
+      publish_secret => $tgcrud_publish_secret,
+
       require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::crud_public':
@@ -116,12 +191,23 @@ class dhrep (
     }
     class { 'dhrep::services::crud':
       scope          => $scope,
-      publish_secret => $crud_publish_secret,
+      use_messaging  => false,
+      location       => 'http://box.dariah.local/dhcrud/',
+      extract_techmd => true,
+      storage_user   => $dhcrud_storage_user,
+      storage_pw     => $dhcrud_storage_pw,
+      pid_secret     => $dhcrud_pid_secret,
       require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::crud_public':
-      scope   => $scope,
-      require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::tgwildfly']],
+      scope          => $scope,
+      use_messaging  => false,
+      location       => 'http://box.dariah.local/dhcrud/',
+      extract_techmd => true,
+      storage_user   => $dhcrud_public_storage_user,
+      storage_pw     => $dhcrud_public_storage_pw,
+      pid_secret     => $dhcrud_pid_secret,
+      require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::tgwildfly']],
     }
   }
 
@@ -129,14 +215,19 @@ class dhrep (
   # general external services declared now
   ###
   class { 'dhrep::services::pid':
-    scope => $scope,
+    scope  => $scope,
+    user   => $pid_user,
+    passwd => $pid_passwd,
+    prefix => $pid_prefix,
+    secret => $pid_secret,
   }
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
     require => Class['dhrep::services::intern::elasticsearch'],
   }
   class { 'dhrep::services::publish':
-    scope => $scope,
+    scope      => $scope,
+    pid_secret => $publish_pid_secret,
   }
 
   ###
@@ -200,63 +291,6 @@ class dhrep (
     port   => [80, 443],
     proto  => tcp,
     action => accept,
-  }
-
-  ###
-  # folder creation
-  ###
-  file { $::dhrep::params::backupdir:
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    require => File[$::dhrep::params::vardir],
-  }
-  file { $::dhrep::params::cachedir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0775',
-  }
-  file { $::dhrep::params::confdir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
-  }
-  file { $::dhrep::params::logdir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
-  }
-  file { $::dhrep::params::optdir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0775',
-  }
-  file { $::dhrep::params::statdir:
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0701',
-    require => File[$::dhrep::params::vardir],
-  }
-  file { $::dhrep::params::vardir:
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
-  }
-
-  ###
-  # tomcat
-  ###
-  service { 'tomcat7':
-    ensure  => stopped,
-    enable  => false,
-    require => Package['tomcat7'],
   }
 
   ###
