@@ -20,6 +20,9 @@ class dhrep::services::intern::sesame (
   $_backupdir    = $::dhrep::params::backupdir
   $_optdir       = $::dhrep::params::optdir
 
+  ###
+  # do install sesame: download and extract
+  ###
   dhrep::tools::tgstaging { $file:
     source  => "http://sourceforge.net/projects/sesame/files/Sesame%202/${version}/${file}/download",
     target  => "/home/${_user}",

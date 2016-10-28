@@ -70,11 +70,11 @@ class dhrep::services::fits (
 
   ###
   # add things to fits tomcat configuration
+  # FIXME diese geschichte ist noch verbesserungswürdig! klappt (noch) nicht beim ersten vagrant run!
   ###
   file { "/home/${_user}/${_catname}/conf/catalina.properties":
     ensure  => present,
   }
-  ->
   file_line { 'configure_fits_libs_line_1':
     path    => "/home/${_user}/${_catname}/conf/catalina.properties",
     line    => "fits.home=${fits_home}",

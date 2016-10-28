@@ -42,13 +42,12 @@ class dhrep::services::intern::elasticsearch (
   }
 
   # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
-
   class { '::elasticsearch':
     manage_repo   => true,
     version       => $elasticsearch_version,
     repo_version  => $repo_version,
     #autoupgrade   => true,
-    #package_url   => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${es_version}.deb",
+    #package_url   => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${version}.deb",
     config        => {
       'cluster.name'                         => $cluster_name,
       'discovery.zen.ping.multicast.enabled' => false,

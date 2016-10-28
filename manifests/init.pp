@@ -21,6 +21,7 @@ class dhrep (
   $tgauth_authz_shib_pw = undef,
   $tgauth_authz_instance = undef,
   $tgauth_webauth_secret = undef,
+  $tgauth_no_shib_login = undef,
   $tgconfserv_service_base_url = undef,
   $tgcrud_publish_secret = undef,
   $tgdatadirs_create_local_datadirs = undef,
@@ -143,6 +144,7 @@ class dhrep (
       authz_instance   => $tgauth_authz_instance,
       authz_shib_pw    => $tgauth_authz_shib_pw,
       webauth_secret   => $tgauth_webauth_secret,
+      no_shib_login    => $tgauth_no_shib_login,
     }
     class { 'dhrep::services::intern::messaging':
       scope => $scope,
@@ -264,7 +266,7 @@ class dhrep (
   }
 
   ###
-  # /java8
+  # java8
   ###
   package {
     'openjdk-6-jdk':          ensure => absent;
