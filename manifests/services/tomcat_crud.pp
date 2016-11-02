@@ -17,7 +17,6 @@ class dhrep::services::tomcat_crud (
   $uid          = $::dhrep::params::config['tomcat_crud']['uid']
   $gid          = $::dhrep::params::config['tomcat_crud']['gid']
   $template     = 'dhrep/etc/default/tomcat.crud.erb'
-  $depcat       = 'wildfly'
 
   ###
   # user, home-dir and user-tomcat
@@ -34,6 +33,5 @@ class dhrep::services::tomcat_crud (
     init_dependencies => $depcat,
     xmx               => $xmx,
     xms               => $xms,
-    require           => Service[$depcat],
   }
 }

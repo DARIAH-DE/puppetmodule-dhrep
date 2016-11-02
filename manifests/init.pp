@@ -105,9 +105,6 @@ class dhrep (
   class { 'dhrep::nginx':
     scope => $scope,
   }
-  class { 'dhrep::services::intern::tgwildfly':
-    scope => $scope,
-  }
   class { 'dhrep::services::intern::elasticsearch':
     scope        => $scope,
     cluster_name => $elasticsearch_cluster_name,
@@ -147,6 +144,9 @@ class dhrep (
       no_shib_login    => $tgauth_no_shib_login,
     }
     class { 'dhrep::services::intern::messaging':
+      scope => $scope,
+    }
+    class { 'dhrep::services::intern::tgwildfly':
       scope => $scope,
     }
     class { 'dhrep::services::crud':
@@ -199,7 +199,7 @@ class dhrep (
       storage_user   => $dhcrud_storage_user,
       storage_pw     => $dhcrud_storage_pw,
       pid_secret     => $dhcrud_pid_secret,
-      require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::tgwildfly']],
+      require        => Class['dhrep::services::intern::elasticsearch'],
     }
     class { 'dhrep::services::crud_public':
       scope          => $scope,
@@ -209,7 +209,7 @@ class dhrep (
       storage_user   => $dhcrud_public_storage_user,
       storage_pw     => $dhcrud_public_storage_pw,
       pid_secret     => $dhcrud_pid_secret,
-      require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::tgwildfly']],
+      require        => Class['dhrep::services::intern::elasticsearch'],
     }
   }
 

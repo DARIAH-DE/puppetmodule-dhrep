@@ -37,6 +37,7 @@ class dhrep::services::intern::tgwildfly (
     ajp_port          => '18009',
     # only required if not oracle jdk8...?
     require           => Package['default-jre-headless'],
+    before            => Service['tomcat_crud'],
   }
   ->
   wildfly::config::app_user { 'tgcrud':
