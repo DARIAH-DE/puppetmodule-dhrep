@@ -8,7 +8,7 @@ class dhrep::services::crud (
   $log_level      = 'INFO',
   $use_messaging  = true,
   $location       = '',
-  $storage_host   = 'https://de.dariah.eu/storage/',
+  $storage_host   = '',
   $storage_user   = '',
   $storage_pw     = '',
   $pid_resolver   = 'https://hdl.handle.net/',

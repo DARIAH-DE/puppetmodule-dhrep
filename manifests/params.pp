@@ -5,16 +5,16 @@
 class dhrep::params {
 
   ###
-  # some global folder settings
+  # some global settings
   ###
-  $aptdir    = '/var/dhrep/webapps'
-  $backupdir = '/var/dhrep/backups'
-  $cachedir  = '/var/cache/dhrep'
-  $confdir   = '/etc/dhrep'
-  $logdir    = '/var/log/dhrep'
-  $optdir    = '/opt/dhrep'
-  $statdir   = '/var/dhrep/statistics'
-  $vardir    = '/var/dhrep'
+  $aptdir     = '/var/dhrep/webapps'
+  $backupdir  = '/var/dhrep/backups'
+  $cachedir   = '/var/cache/dhrep'
+  $confdir    = '/etc/dhrep'
+  $logdir     = '/var/log/dhrep'
+  $optdir     = '/opt/dhrep'
+  $statdir    = '/var/dhrep/statistics'
+  $vardir     = '/var/dhrep'
 
   ###
   # crud

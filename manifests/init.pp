@@ -5,6 +5,9 @@
 class dhrep (
   # generic refs
   $scope = undef,
+  $crud_log_level = undef,
+  $crud_public_log_level = undef,
+  $publish_log_level = undef,
   $elasticsearch_cluster_name = undef,
   $oracle_jdk8 = true,
   $pid_user = undef,
@@ -27,9 +30,13 @@ class dhrep (
   $tgdatadirs_create_local_datadirs = undef,
   $tgnoid_crud_secret = undef,
   # dariah specific refs
+  $dhcrud_location = undef,
+  $dhcrud_storage_host = undef,
   $dhcrud_storage_user = undef,
   $dhcrud_storage_pw = undef,
   $dhcrud_pid_secret = undef,
+  $dhcrud_public_location = undef,
+  $dhcrud_public_storage_host = undef,
   $dhcrud_public_storage_user = undef,
   $dhcrud_public_storage_pw = undef,
   $dhcrud_public_pid_secret = undef,
@@ -152,12 +159,13 @@ class dhrep (
     class { 'dhrep::services::crud':
       scope          => $scope,
       publish_secret => $tgcrud_publish_secret,
-
-      require        => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::intern::tgwildfly']],
+      log_level      => $crud_log_level,
+      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'], Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::crud_public':
-      scope   => $scope,
-      require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::intern::tgwildfly']],
+      scope     => $scope,
+      log_level => $crud_public_log_level,
+      require   => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'], Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
@@ -175,11 +183,11 @@ class dhrep (
     class { 'dhrep::static::textgridlab_org': }
     class { 'dhrep::services::tgsearch':
       scope   => $scope,
-      require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame'],Class['dhrep::services::tgauth']],
+      require => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'], Class['dhrep::services::tgauth']],
     }
     class { 'dhrep::services::tgsearch_public':
       scope   => $scope,
-      require => [Class['dhrep::services::intern::elasticsearch'],Class['dhrep::services::intern::sesame']],
+      require => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame']],
     }
     class { 'dhrep::services::tgmarketplace': }
   }
@@ -189,26 +197,30 @@ class dhrep (
   ###
   if $scope == 'dariah' {
     class { 'dhrep::services::fits':
-      scope  => $scope,
+      scope => $scope,
     }
     class { 'dhrep::services::crud':
       scope          => $scope,
       use_messaging  => false,
-      location       => 'http://box.dariah.local/dhcrud/',
+      location       => $dhcrud_location,
       extract_techmd => true,
+      storage_host   => $dhcrud_storage_host,
       storage_user   => $dhcrud_storage_user,
       storage_pw     => $dhcrud_storage_pw,
       pid_secret     => $dhcrud_pid_secret,
+      log_level      => $crud_log_level,
       require        => Class['dhrep::services::intern::elasticsearch'],
     }
     class { 'dhrep::services::crud_public':
       scope          => $scope,
       use_messaging  => false,
-      location       => 'http://box.dariah.local/dhcrud/',
+      location       => $dhcrud_public_location,
       extract_techmd => true,
+      storage_host   => $dhcrud_public_storage_host,
       storage_user   => $dhcrud_public_storage_user,
       storage_pw     => $dhcrud_public_storage_pw,
       pid_secret     => $dhcrud_pid_secret,
+      log_level      => $crud_public_log_level,
       require        => Class['dhrep::services::intern::elasticsearch'],
     }
   }
@@ -230,6 +242,7 @@ class dhrep (
   class { 'dhrep::services::publish':
     scope      => $scope,
     pid_secret => $publish_pid_secret,
+    log_level  => $publish_log_level,
   }
 
   ###
@@ -252,7 +265,7 @@ class dhrep (
       'oracle-java8-installer':
         ensure       => present,
         responsefile => '/tmp/java.preseed',
-        require      => [Apt::Ppa['ppa:webupd8team/java'],File['/tmp/java.preseed']],
+        require      => [Apt::Ppa['ppa:webupd8team/java'], File['/tmp/java.preseed']],
     }
     ->
     package { 'oracle-java8-set-default': ensure => present }
