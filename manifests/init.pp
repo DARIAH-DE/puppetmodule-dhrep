@@ -309,9 +309,10 @@ class dhrep (
   ###
   # vagrant cachier changes this to symlink
   ###
-  unless $::vagrant {
-    file { $::dhrep::params::cachedir:
-      ensure => directory,
-    }
-  }
+  # FIXME UBBO: MUSS INS PROFILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  unless $::vagrant {
+#    file { $::dhrep::params::cachedir:
+#      ensure => directory,
+#    }
+#  }
 }
