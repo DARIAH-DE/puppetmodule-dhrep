@@ -108,6 +108,19 @@ class dhrep::services::tgauth (
     target => "${_confdir}/tgauth/conf",
   }
 
+  ### FIXME remove link is tgauth git master has been changed!
+  file { '/etc/textgrid/':
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+  }
+  file { '/etc/textgrid/tgauth':
+    ensure => link,
+    target => "${_confdir}/tgauth",
+    require => File['/etc/textgrid'],
+  }
+
   ###
   # /var/www/tgauth
   #
@@ -126,10 +139,10 @@ class dhrep::services::tgauth (
     require => File['/var/www'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl':
-    ensure => directory,
-    owner  => root,
-    group  => root,
-    mode   => '0644',
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl':

@@ -10,9 +10,6 @@
     <key name="IDattribute">dariahMappedIds;eduPersonPrincipalName</key>
     <key name="name">DARIAH Community Authentication Server</key>
     <key name="setAttributesDN">cn=manager,dc=dariah,dc=eu</key>
-    <!-- Secret is used for updating attributes only! -->
-    <!-- We are using Shibboleth for authentication here, so we don't need it! -->
-    <!-- %= scope.lookupvar('dhrep::services::tgauth::webauth_dariah_secret') % -->
     <key name="setAttributesPW"></key>
   </authn>
 
@@ -28,9 +25,6 @@
       <!-- dc=dariah,dc=eu,ou=dsa,uid=ShibConnector@application.int ! -->
       <password><%= scope.lookupvar('profiles::textgridrepository::tgauth_authz_shib_pw') %></password>
     </sessioncreator>
-    <!-- setnamsecret is not needed anymore! -->
-    <!-- %= scope.lookupvar('profiles::textgrid::tgauth_webauth_secret') % -->
-    <setnamessecret></setnamessecret>
   </authz>
 
 </conf>
