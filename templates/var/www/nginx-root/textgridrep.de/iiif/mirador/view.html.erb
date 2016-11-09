@@ -29,7 +29,7 @@
         ]
 
       });*/
-        var mloc = "https://textgridlab.org/1.0/iiif/manifests/";
+        var mloc = "https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/manifests/";
         var muri = mloc + getParameters()['uri'] + "/manifest.json";
 
 	console.log("muri " + muri );

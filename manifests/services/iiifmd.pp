@@ -77,7 +77,7 @@ class dhrep::services::iiifmd (
   }
   ->
   file { '/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html':
-    source => 'puppet:///modules/dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html',
+    content => template('dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html.erb'),
     mode   => '0644',
   }
 
