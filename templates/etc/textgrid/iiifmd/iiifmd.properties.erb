@@ -5,8 +5,8 @@ serviceBaseUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif
 sparqlEndpoint=http://localhost:9091/openrdf-sesame/repositories/textgrid-public
 
 # tgcrud url
-tgcrudUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/rest
-tgsearchUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgsearch-public
+tgcrudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/rest
+tgsearchUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgsearch-public
 
 # Elasticsearch config
 esCluster= <%= scope.lookupvar('dhrep::services::intern::tgelasticsearch::cluster_name') %>
