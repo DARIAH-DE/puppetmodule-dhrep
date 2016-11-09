@@ -5,6 +5,9 @@
 class dhrep::services::iiifmd (
   $scope            = undef,
   $version          = 'latest',
+  $iiif_enabled_projects = [],
+  $iiif_blacklist_uris = [],
+  $tgrep_host = 'textgridrep.org',
 ){
 
   include dhrep::services::tomcat_digilib
@@ -87,7 +90,6 @@ class dhrep::services::iiifmd (
     source   => 'https://github.com/IIIF/mirador.git',
     revision => 'v2.0.0',
   }
-
 
   ###
   # symlink war from deb package to tomcat webapps dir
