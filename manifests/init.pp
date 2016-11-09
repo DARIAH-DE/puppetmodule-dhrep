@@ -40,7 +40,7 @@ class dhrep (
     cluster_name => $tgelasticsearch_cluster_name,
   }
 
-  class { 'dhrep::resources::apache': 
+  class { 'dhrep::resources::apache':
     scope => $scope,
   }
 
@@ -163,7 +163,7 @@ class dhrep (
 
   } else {
     apt::ppa { 'ppa:webupd8team/java': ensure => absent }
-    package { 
+    package {
       'oracle-java8-set-default': ensure => absent;
       'oracle-java8-installer':   ensure => absent;
     }
@@ -215,6 +215,29 @@ class dhrep (
     owner  => root,
     group  => root,
     mode   => '0755',
+  }
+
+  file { '/var/textgrid/backups/' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File['/var/textgrid'],
+  }
+
+  file { '/var/textgrid/statistics' :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0701',
+    require => File['/var/textgrid'],
+  }
+
+  file { '/opt/dhrep' :
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0775',
   }
 
   service { 'tomcat7':

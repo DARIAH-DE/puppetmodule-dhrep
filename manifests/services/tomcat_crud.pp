@@ -19,7 +19,7 @@ class dhrep::services::tomcat_crud (
   $depcat       = 'wildfly'
 
   $user         = 'storage'
-  $group        = 'storage'
+  $group        = 'ULSB'
 
   ###
   # user, home-dir and user-tomcat

@@ -92,10 +92,45 @@ class dhrep::services::intern::sesame (
   }
 
   ###
+  # sesame backup script
+  ###
+  file { '/var/textgrid/backups/sesame' :
+    ensure  => directory,
+    owner   => $tgname,
+    group   => $tgname,
+    mode    => '0755',
+    require => File['/var/textgrid/backups'],
+  }
+  file{ '/opt/dhrep/sesame-backup.sh' :
+    source  => 'puppet:///modules/dhrep/opt/dhrep/sesame-backup.sh',
+    owner   => $tgname,
+    group   => $tgname,
+    mode    => '0700',
+    require => [File['/opt/dhrep'],File['/var/textgrid/backups/sesame']],
+  }
+  cron { 'sesame-backup' :
+    command  => '/opt/dhrep/sesame-backup.sh',
+    user     => $tgname,
+    hour     => 22,
+    minute   => 33,
+  }
+
+  ###
   # nrpe
   ###
   dariahcommon::nagios_service { 'check_http_sesame':
     command => "/usr/lib/nagios/plugins/check_http -H localhost -p 9091 -u /openrdf-sesame/repositories -k \"Accept: application/xml\" -s /openrdf-sesame/repositories/textgrid-nonpublic -s /openrdf-sesame/repositories/textgrid-public",
+  }
+  file { '/opt/dhrep/check_sesame_backups.sh' :
+    source  => 'puppet:///modules/dhrep/opt/dhrep/check_sesame_backups.sh',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File['/opt/dhrep/sesame-backup.sh'],
+  }
+  dariahcommon::nagios_service { 'check_sesame_backups':
+    command => "/opt/dhrep/check_sesame_backups.sh",
+    require => File['/opt/dhrep/check_sesame_backups.sh'],
   }
 
 }
