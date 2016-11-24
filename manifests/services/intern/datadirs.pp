@@ -71,7 +71,7 @@ class dhrep::services::intern::datadirs (
 
     mount { '/media/stornext':
       ensure  => 'mounted',
-      device  => 'fs-base3.gwdg.de:/home/textgrid/',
+      device  => 'fs-base3.gwdg.de:/home/textgrid01/',
       fstype  => 'nfs',
       options => 'defaults',
       atboot  => true,
