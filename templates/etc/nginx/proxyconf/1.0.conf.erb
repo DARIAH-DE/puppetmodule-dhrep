@@ -199,6 +199,10 @@ location /voyant {
     proxy_pass http://voyant.de.dariah.eu/voyant;
 }
 
+location /voyant2 {
+    proxy_pass http://voyant.de.dariah.eu/voyant2;
+}
+
 
 # rewrite /textgrid: and /hdl: uris, so they are served by tgcrud
 rewrite ^/(textgrid:[a-z0-9\.]+)$ /1.0/tgcrud-public/rest/$1/data last;
