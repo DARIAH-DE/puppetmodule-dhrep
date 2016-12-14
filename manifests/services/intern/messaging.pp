@@ -7,8 +7,6 @@ class dhrep::services::intern::messaging (
   $enzmeta_textgrid_user     = '',
   $enzmeta_textgrid_password = '',
   $bolrdf_textgrid_user      = '',
-  $bolrdf_textgrid_user      = '',
-
 ) inherits dhrep::params {
 
   $_confdir   = $::dhrep::params::confdir
