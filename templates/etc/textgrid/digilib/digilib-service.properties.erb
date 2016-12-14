@@ -1,4 +1,5 @@
 # properties for TextGrid-digilib-service
 digilib.service.tgconfurl = http://localhost/1.0/confserv/
 #digilib.service.tgcrudurl = http://textgrid-esx1.gwdg.de/1.0/tgcrud/TGCrudService?wsdl
-digilib.service.iiif.baseurl = https://textgridlab.org/1.0/digilib/rest/IIIF
+digilib.service.iiif.baseurl = https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/digilib/rest/IIIF
+
