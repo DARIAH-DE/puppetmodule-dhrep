@@ -2,8 +2,8 @@
 
 <conf xmlns="http://textgrid.info/namespaces/middleware/tgwebauth">
   <authn type="community">
-    <key name="host">auth.dariah.eu</key>
-    <key name="port">389</key>
+    <key name="host"><%= scope.lookupvar('dhrep::services::tgauth::user_ldap_host') %></key>
+    <key name="port"><%= scope.lookupvar('dhrep::services::tgauth::user_ldap_port') %></key>
     <key name="binddn">uid=${login},ou=people,dc=dariah,dc=eu</key>
     <key name="basedn">ou=people,dc=dariah,dc=eu</key>
     <key name="filter">(uid=${login})</key>
