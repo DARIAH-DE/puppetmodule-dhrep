@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export GIT_DIR=/var/www/nginx-root/textgridlab.org/textgridrep-status/.git; 
+export GIT_DIR=/var/www/textgridrep-status/.git; 
 
 git fetch origin master
 git checkout master

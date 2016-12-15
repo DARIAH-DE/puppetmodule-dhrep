@@ -168,19 +168,19 @@ class dhrep::static::textgridlab_org(
   # Repstatus
   #
   exec { 'git_clone_repstatus':
-    command => 'git clone https://github.com/DARIAH-DE/textgridrep-status.git /var/www/nginx-root/textgridlab.org/textgridrep-status',
-    creates => '/var/www/nginx-root/textgridlab.org/textgridrep-status',
-    require => [Package['git'],File['/var/www/nginx-root/textgridlab.org']],
+    command => 'git clone https://github.com/DARIAH-DE/textgridrep-status.git /var/www/textgridrep-status',
+    creates => '/var/www/textgridrep-status',
+    require => [Package['git']],
   }
   ->
   file { '/var/www/nginx-root/textgridlab.org/repstatus.html':
     ensure  => link,
-    target  => '/var/www/nginx-root/textgridlab.org/textgridrep-status/repstatus.html',
+    target  => '/var/www/textgridrep-status/repstatus.html',
   }
   ->
   file { '/var/www/nginx-root/textgridlab.org/repstatus.css':
     ensure  => link,
-    target  => '/var/www/nginx-root/textgridlab.org/textgridrep-status/repstatus.css',
+    target  => '/var/www/textgridrep-status/repstatus.css',
   }
   ->
   file { '/opt/dhrep/update-textgridrep-status.sh':
