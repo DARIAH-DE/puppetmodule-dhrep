@@ -167,16 +167,34 @@ class dhrep::static::textgridlab_org(
   #
   # Repstatus
   #
+  exec { 'git_clone_repstatus':
+    command => 'git clone https://github.com/DARIAH-DE/textgridrep-status.git /var/www/textgridrep-status',
+    creates => '/var/www/textgridrep-status',
+    require => [Package['git']],
+  }
+  ->
   file { '/var/www/nginx-root/textgridlab.org/repstatus.html':
-    source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/repstatus.html',
-    mode    => '0644',
-    require => File['/var/www/nginx-root/textgridlab.org'],
+    ensure  => link,
+    target  => '/var/www/textgridrep-status/repstatus.html',
   }
+  ->
   file { '/var/www/nginx-root/textgridlab.org/repstatus.css':
-    source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/repstatus.css',
-    mode    => '0644',
-    require => File['/var/www/nginx-root/textgridlab.org'],
+    ensure  => link,
+    target  => '/var/www/textgridrep-status/repstatus.css',
   }
+  ->
+  file { '/opt/dhrep/update-textgridrep-status.sh':
+    source  => 'puppet:///modules/dhrep/opt/dhrep/update-textgridrep-status.sh',
+    mode    => '0755',
+  }
+  ->
+  # run every two minutes
+  cron { 'update-textgridrep-status' :
+    command  => '/opt/dhrep/update-textgridrep-status.sh &> /dev/null',
+    user     => 'root',
+    minute   => "*/2",
+  }
+
 
   #
   # Update site: needs StorNext mount to be working!

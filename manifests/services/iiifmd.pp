@@ -3,9 +3,18 @@
 # Class to install and configure iiifmd service.
 #
 class dhrep::services::iiifmd (
+<<<<<<< HEAD
   $scope   = undef,
   $version = 'latest',
 ) inherits dhrep::params {
+=======
+  $scope            = undef,
+  $version          = 'latest',
+  $iiif_enabled_projects = [],
+  $iiif_blacklist_uris = [],
+  $tgrep_host = 'textgridrep.org',
+){
+>>>>>>> master
 
   include dhrep::services::tomcat_digilib
 
@@ -95,7 +104,7 @@ class dhrep::services::iiifmd (
   }
   ->
   file { '/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html':
-    source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html',
+    content => template('dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html.erb'),
     mode    => '0644',
   }
   # TODO: npm nodejs build and dhsummit.html
