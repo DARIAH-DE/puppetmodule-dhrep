@@ -17,7 +17,12 @@ class dhrep::services::tomcat_crud (
   $uid          = $::dhrep::params::config['tomcat_crud']['uid']
   $gid          = $::dhrep::params::config['tomcat_crud']['gid']
   $template     = 'dhrep/etc/default/tomcat.crud.erb'
-  # do we need tomcat-wildfly as a dependency?
+
+  if $scope == 'textgrid' {
+    $depcat = 'wildfly'
+  } else {
+    $depcat = undef
+  }
 
   ###
   # user, home-dir and user-tomcat
