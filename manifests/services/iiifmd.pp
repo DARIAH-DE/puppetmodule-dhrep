@@ -3,18 +3,13 @@
 # Class to install and configure iiifmd service.
 #
 class dhrep::services::iiifmd (
-<<<<<<< HEAD
-  $scope   = undef,
-  $version = 'latest',
-) inherits dhrep::params {
-=======
   $scope            = undef,
   $version          = 'latest',
   $iiif_enabled_projects = [],
   $iiif_blacklist_uris = [],
   $tgrep_host = 'textgridrep.org',
-){
->>>>>>> master
+) inherits dhrep::params {
+
 
   include dhrep::services::tomcat_digilib
 
