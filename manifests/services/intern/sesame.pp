@@ -52,6 +52,7 @@ class dhrep::services::intern::sesame (
     require => User[$_catname]
   }
 
+  # FIXME Ubbo!
   unless $sesame_nonpublic_repo_created {
     dhrep::resources::create_rdf_repository{"${scope}-nonpublic":
       port => $_http_port,
@@ -63,6 +64,7 @@ class dhrep::services::intern::sesame (
     }
   }
 
+  # FIXME Ubbo!
   unless $sesame_public_repo_created {
     dhrep::resources::create_rdf_repository{"${scope}-public":
       port => $_http_port,

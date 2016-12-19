@@ -89,38 +89,40 @@ class dhrep::services::intern::elasticsearch (
   }
 
   # run only once
-  unless $::elastic_repos_initialized {
+#  unless ($::elastic_repos_initialized) {
     # clone commons repo, which contains shell scripts to create textgrid elastic search indexes
+    # FIXME use vcsrepo!
     exec { 'git_clone_tgcommon':
       path    => ['/usr/bin','/bin','/usr/sbin'],
       command => 'git clone git://git.projects.gwdg.de/common.git /usr/local/src/tgcommon-git',
       creates => '/usr/local/src/tgcommon-git',
       require => Package['git'],
     }
-    ->
-    dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
-      url     => "http://localhost:${_master_http_port}/",
-      require => Elasticsearch::Instance['masternode'],
-    }
-    ~>
-    exec { 'create_public_es_index':
-      path    => ['/usr/bin','/bin','/usr/sbin'],
-      cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${_master_http_port}",
-      require => [Package['curl']],
-    }
-    ~>
-    exec { 'create_nonpublic_es_index':
-      path    => ['/usr/bin','/bin','/usr/sbin'],
-      cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${_master_http_port}",
-      require => [Package['curl']],
-    }
-    ~>
-    file { '/etc/facter/facts.d/elastic_repos_initialized.txt':
-      content => 'elastic_repos_initialized=true',
-    }
-  }
+#    ->
+#    dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
+#      url     => "http://localhost:${_master_http_port}/",
+#      require => Elasticsearch::Instance['masternode'],
+#    }
+#    ~>
+# TODO if creating a new dhrep server instance, please manually create es index first before using!!
+#    exec { 'create_public_es_index':
+#      path    => ['/usr/bin','/bin','/usr/sbin'],
+#      cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
+#      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${_master_http_port}",
+#      require => [Package['curl']],
+#    }
+#    ~>
+#    exec { 'create_nonpublic_es_index':
+#      path    => ['/usr/bin','/bin','/usr/sbin'],
+#      cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
+#      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${_master_http_port}",
+#      require => [Package['curl']],
+#    }
+#    ~>
+#    file { '/etc/facter/facts.d/elastic_repos_initialized.txt':
+#      content => 'elastic_repos_initialized=true',
+#    }
+#  }
 
   ###
   # collectd for elasticsearch
