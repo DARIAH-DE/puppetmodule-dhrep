@@ -91,6 +91,11 @@ class dhrep::services::digilib (
     mode    => '0755',
     require => File["${_vardir}/digilib"],
   }
+  # symlink to old data path
+  file { '/var/textgrid/digilib/':
+    ensure => link,
+    target => "${_vardir}/digilib/",
+  }
 
   ###
   # copy config file

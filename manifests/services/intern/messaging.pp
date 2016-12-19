@@ -9,7 +9,7 @@ class dhrep::services::intern::messaging (
   $bolrdf_textgrid_user      = '',
 ) inherits dhrep::params {
 
-  $_confdir   = $::dhrep::params::confdir
+  $_confdir = $::dhrep::params::confdir
 
   exec { 'git_clone_messagebeans':
     command => 'git clone git://git.projects.gwdg.de/textgrid-messagebeans.git /usr/local/src/messagebeans-git',
@@ -41,4 +41,9 @@ class dhrep::services::intern::messaging (
     mode    => '0644',
     content => template('dhrep/etc/dhrep/messagebeans/bolrdf.properties.erb'),
   }
+  # symlink to old config path
+  file { '/etc/textgrid/messagebeans':
+    ensure => link,
+    target => "${_confdir}/messagebeans/",
+  }   
 }
