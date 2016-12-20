@@ -19,7 +19,7 @@ iiifService.url=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dig
 iiifService.conformance=http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level1
 
 # cache directory, needs to be existing and writeable
-cacheDir=/var/textgrid/iiifmd/cache
+cacheDir=/var/dhrep/iiifmd/cache
 
 # xslt file for extracting ordered uris from mets file (from resources/xslt folder)
 metsXsltFile=metsExtract.xsl
@@ -37,4 +37,3 @@ miradorUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/mir
 
 # uris of not incomplete textgrid publications, which cause errors
 brokenUris=<%= @iiif_blacklist_uris.join(",") %>
-

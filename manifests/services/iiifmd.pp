@@ -79,6 +79,12 @@ class dhrep::services::iiifmd (
     mode    => '0755',
     require => File["${_vardir}/iiifmd"],
   }
+  # remove symlink if service has been configured correctly
+  file { '/var/textgrid/iiimd':
+    ensure => link,
+    target => "${_vardir}/iiifmd",
+    require => File['/var/textgrid'],
+  }
 
   ###
   # install the collectd plugin for elasticsearch

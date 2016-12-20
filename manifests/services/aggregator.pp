@@ -47,6 +47,12 @@ class dhrep::services::aggregator (
     content => template("${templates}/aggregator.properties.erb"),
     require =>  File["${_confdir}/aggregator"],
   }
+  # remove symlink if service has been deployed with new beans.xml
+  file { '/etc/textgrid/aggregator':
+    ensure => link,
+    target => "${_confdir}/aggregator",
+    require => File['/etc/textgrid'],
+  }
 
   ###
   # symlink war from deb package to tomcat webapps dir
