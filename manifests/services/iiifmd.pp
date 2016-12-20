@@ -83,7 +83,6 @@ class dhrep::services::iiifmd (
   file { '/var/textgrid/iiimd':
     ensure => link,
     target => "${_vardir}/iiifmd",
-    require => File['/var/textgrid'],
   }
 
   ###
