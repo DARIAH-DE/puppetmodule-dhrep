@@ -62,6 +62,11 @@ class dhrep::services::iiifmd (
     require => File["${_confdir}/iiifmd"],
     notify  => Service[$_catname]
   }
+  # TODO remove symlink if service has been configured correctly!
+  file { '/etc/textgrid/iiifmd':
+    ensure => link,
+    target => "${_confdir}/iiifmd",
+  }
 
   ###
   # data
@@ -79,8 +84,8 @@ class dhrep::services::iiifmd (
     mode    => '0755',
     require => File["${_vardir}/iiifmd"],
   }
-  # remove symlink if service has been configured correctly
-  file { '/var/textgrid/iiimd':
+  # TODO remove symlink if service has been configured correctly!
+  file { '/var/textgrid/iiifmd':
     ensure => link,
     target => "${_vardir}/iiifmd",
   }
