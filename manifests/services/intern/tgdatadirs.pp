@@ -4,7 +4,7 @@
 #
 class dhrep::services::intern::tgdatadirs (
   $scope                   = undef,
-  $create_local_datadirs   = true,
+  $create_local_datadirs   = undef,
   $data_public_location    = '',
   $data_nonpublic_location = '',
 ){
