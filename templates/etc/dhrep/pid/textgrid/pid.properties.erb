@@ -24,9 +24,9 @@
 # EPIC PID service settings (GWDG)
 handleservice.endpoint = <%= scope.lookupvar('dhrep::services::pid::endpoint') %>
 handleservice.path = <%= scope.lookupvar('dhrep::services::pid::path') %>
-handleservice.prefix = <%= scope.lookupvar('dhrep::services::pid::prefix') %>
-handleservice.user = <%= scope.lookupvar('dhrep::services::pid::user') %>
-handleservice.pw = <%= scope.lookupvar('dhrep::services::pid::passwd') %>
+handleservice.prefix = <%= scope.lookupvar('profiles::textgridrepository::pid_prefix') %>
+handleservice.user = <%= scope.lookupvar('profiles::textgridrepository::pid_user') %>
+handleservice.pw = <%= scope.lookupvar('profiles::textgridrepository::pid_passwd') %>
 
 # Handle resolver (read-only)
 resolver.endpoint = https://hdl.handle.net
@@ -36,7 +36,7 @@ resolver.path = /api/handles/
 pid.responsible = <%= scope.lookupvar('dhrep::services::pid::responsible') %>
 pid.creator = <%= scope.lookupvar('dhrep::services::pid::creator') %>
 pid.publisher = <%= scope.lookupvar('dhrep::services::pid::publisher') %>
-pid.secret = <%= scope.lookupvar('dhrep::services::pid::secret') %>
+pid.secret = <%= scope.lookupvar('profiles::textgridrepository::pid_secret') %>
 tgauth.endpoint = http://localhost:8080/tgauth/tgextra.php
 log.location = /var/log/dhrep/tgpid/pid.log
 service.endpoint = http://localhost/1.0/tgpid/
