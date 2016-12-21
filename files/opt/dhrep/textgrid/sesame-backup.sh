@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BACKUP_DIR=/var/textgrid/backups/sesame
+BACKUP_DIR=/var/dhrep/backups/sesame
 SESAME_URL=http://localhost:9091/openrdf-sesame
 CONTENT_TYPE=application/x-turtle
 REPOS="textgrid-nonpublic textgrid-public"

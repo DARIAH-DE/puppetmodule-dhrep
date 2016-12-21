@@ -9,8 +9,8 @@ use Time::Local;
 #use Data::Dump qw(dump);
 
 ### constants
-$default_logfile = "/var/log/textgrid/tgcrud/rollback.log";
-$default_commentfile = "/var/log/textgrid/tgcrud/logcomments.log";
+$default_logfile = "/var/log/dhrep/tgcrud/rollback.log";
+$default_commentfile = "/var/log/dhrep/tgcrud/logcomments.log";
 $default_crud_operation_duration_maximum_time_seconds = 60 * 5;
 
 if (defined $opt_h) {

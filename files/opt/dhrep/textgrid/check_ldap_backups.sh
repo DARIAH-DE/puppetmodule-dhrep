@@ -1,7 +1,7 @@
 #!/bin/bash
 
-P1=/var/textgrid/backups/ldap/ldap-backup.ldif
-P2=/var/textgrid/backups/ldap/ldap-backup_old.ldif
+P1=/var/dhrep/backups/ldap/ldap-backup.ldif
+P2=/var/dhrep/backups/ldap/ldap-backup_old.ldif
 oneday=$((24*60*60))
 twodays=$((2*$oneday))
 
