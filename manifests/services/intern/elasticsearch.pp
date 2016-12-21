@@ -176,9 +176,12 @@ class dhrep::services::intern::elasticsearch (
   ###
   # nrpe
   ###
-  exec { 'nagios-plugin-elasticsearch':
-    command => '/usr/bin/pip install nagios-plugin-elasticsearch',
-    require => Package['python-pip'],
+  package { "nagios-plugin-elasticsearch":
+      # ensure latest does not work right now, compare https://bugs.launchpad.net/ubuntu/+source/dbus/+bug/1593749
+      # possibly with puppet 4? do we need 'latest' at all?
+      # ensure  => latest,
+      ensure => '1.1.0',
+      provider => pip,
   }
   ->
   dariahcommon::nagios_service { 'check_elasticsearch':
