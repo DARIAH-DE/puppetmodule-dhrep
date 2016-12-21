@@ -19,7 +19,10 @@ class dhrep::services::crud (
   if $scope == 'textgrid' {
     include dhrep::services::intern::javagat
   }
-  include dhrep::services::tomcat_crud
+
+  class { 'dhrep::services::tomcat_crud':
+    scope => $scope,
+  }
 
   $_name    = $::dhrep::params::crud_name[$scope]
   $_short   = $::dhrep::params::crud_short[$scope]
