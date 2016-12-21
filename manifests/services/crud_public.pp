@@ -19,7 +19,6 @@ class dhrep::services::crud_public (
   if $scope == 'textgrid' {
     include dhrep::services::intern::javagat
   }
-  include dhrep::services::tomcat_crud
 
   $_name    = $::dhrep::params::crud_public_name[$scope]
   $_short   = $::dhrep::params::crud_public_short[$scope]
@@ -27,9 +26,9 @@ class dhrep::services::crud_public (
   $_confdir = $::dhrep::params::confdir
   $_logdir  = $::dhrep::params::logdir
   $_optdir  = $::dhrep::params::optdir
-  $_catname = $::dhrep::services::tomcat_crud::catname
-  $_user    = $::dhrep::services::tomcat_crud::user
-  $_group   = $::dhrep::services::tomcat_crud::group
+  $_catname = $::dhrep::params::config['tomcat_crud']['catname']
+  $_user    = $::dhrep::params::config['tomcat_crud']['user']
+  $_group   = $::dhrep::params::config['tomcat_crud']['group']
 
   # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {

@@ -167,6 +167,9 @@ class dhrep (
       log_level => $crud_public_log_level,
       require   => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'], Class['dhrep::services::intern::tgwildfly']],
     }
+    class { 'dhrep::services::tomcat_crud':
+      scope => $scope,
+    }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
     }

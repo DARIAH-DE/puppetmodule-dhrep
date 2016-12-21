@@ -18,7 +18,6 @@ class dhrep::services::tomcat_publish (
   $gid          = $::dhrep::params::config['tomcat_publish']['gid']
   $template     = 'dhrep/etc/default/tomcat.publish.erb'
   $depcat       = $::dhrep::params::config['tomcat_crud']['catname']
-  # do we need tomcat-crud as a dependency?
 
   ###
   # user, home-dir and user-tomcat
@@ -35,6 +34,5 @@ class dhrep::services::tomcat_publish (
     init_dependencies => $depcat,
     xmx               => $xmx,
     xms               => $xms,
-    require           => Service[$depcat],
   }
 }

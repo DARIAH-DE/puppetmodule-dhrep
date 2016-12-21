@@ -13,7 +13,6 @@ class dhrep::nginx (
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_aggregator
-  include dhrep::services::tomcat_crud
   include dhrep::services::tomcat_digilib
   include dhrep::services::tomcat_oaipmh
   include dhrep::services::tomcat_publish
@@ -25,6 +24,8 @@ class dhrep::nginx (
 
   $_confdir  = $::dhrep::params::confdir
   $templates = "dhrep/etc/dhrep/nginx/"
+
+  $tomcat_crud_http_port = $::dhrep::params::config['tomcat_crud']['http_port']
 
   package {
     'nginx'    : ensure => present;
