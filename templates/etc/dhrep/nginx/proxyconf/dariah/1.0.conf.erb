@@ -14,7 +14,7 @@ location /dhcrud {
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_crud::http_port') %>/dhcrud-public;
+    proxy_pass http://localhost:<%= @tomcat_crud_http_port %>/dhcrud-public;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
