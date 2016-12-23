@@ -36,7 +36,7 @@ resolver.path = /api/handles/
 pid.responsible = <%= scope.lookupvar('dhrep::services::pid::responsible') %>
 pid.creator = <%= scope.lookupvar('dhrep::services::pid::creator') %>
 pid.publisher = <%= scope.lookupvar('dhrep::services::pid::publisher') %>
-pid.secret = <%= scope.lookupvar('dhrep::services::pid::pid_secret') %>
+pid.secret = <%= scope.lookupvar('dhrep::services::pid::secret') %>
 tgauth.endpoint =
 log.location = /var/log/dhrep/dhpid/pid.log
 service.endpoint = http://localhost:9094/dhpid
