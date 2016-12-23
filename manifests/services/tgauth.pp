@@ -477,25 +477,25 @@ class dhrep::services::tgauth (
     command => "/usr/lib/nagios/plugins/check_ldap -H localhost -b dc=textgrid,dc=de -3",
   }
   file { "${_optdir}/check_ldap_statistics.sh" :
-    source  => "puppet:///modules/dhrep/opt/dhrep/check_ldap_statistics.sh",
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/check_ldap_statistics.sh",
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
     require => File["${_optdir}/ldap-statistic.pl"],
   }
   dariahcommon::nagios_service { 'check_ldap_backups':
-    command => "${_optdir}/${scope}/check_ldap_backups.sh",
+    command => "${_optdir}/check_ldap_backups.sh",
     require => File["${_optdir}/check_ldap_backups.sh"],
   }
   file { "${_optdir}/check_ldap_backups.sh" :
-    source  => "puppet:///modules/dhrep/opt/dhrep/check_ldap_backups.sh",
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/check_ldap_backups.sh",
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
     require => File['/opt/dhrep/ldap-backup.sh'],
   }
   dariahcommon::nagios_service { 'check_ldap_statistics':
-    command => "${_optdir}/${scope}/check_ldap_statistics.sh",
+    command => "${_optdir}/check_ldap_statistics.sh",
     require => File["${_optdir}/check_ldap_statistics.sh"],
   }
 
