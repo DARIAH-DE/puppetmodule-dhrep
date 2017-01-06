@@ -81,5 +81,7 @@ server {
   ssl_ecdh_curve secp384r1;
 <% end -%>
 
+	location /shibboleth { alias /opt/dariahshibboleth/sp-metadata.xml; }
+
 	include /etc/nginx/proxyconf/1.0.conf;
 }
