@@ -122,7 +122,7 @@ class dhrep::services::crud_public (
     # cron for crud comment (scripts creation see crud.pp!) and analyse
     ###
     cron { 'crud-public-analyse':
-      command => "${_optdir}/crud-analyse.pl -l ${_logdir}/${_short}/rollback.log -c ${_logdir}/${_short}/logcomments.log > /dev/null",
+      command => "${_optdir}/crud-analyse.pl -l ${_logdir}/${_short}/rollback.log -c ${_logdir}/${_short}/logcomments.log &> /dev/null",
       user    => $_user,
       minute  => '2-59/5',
     }
