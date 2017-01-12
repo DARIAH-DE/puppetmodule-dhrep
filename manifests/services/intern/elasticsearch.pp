@@ -86,6 +86,7 @@ class dhrep::services::intern::elasticsearch (
 
   ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
     instances  => ['masternode', 'workhorse'],
+    module_dir => 'experimental-highlighter-elasticsearch-plugin',
   }
 
   # run only once
