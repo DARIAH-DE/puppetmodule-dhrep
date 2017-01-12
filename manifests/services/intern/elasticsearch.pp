@@ -162,7 +162,7 @@ class dhrep::services::intern::elasticsearch (
   }
 
   # TODO, move to fe-monitoring
-  package { 'libyajl2': }
+  #package { 'libyajl2': }
 
   collectd::plugin::curl_json { 'elasticsearch_workhorse':
     url => "http://localhost:${_workhorse_http_port}/_nodes/${::hostname}-workhorse/stats/jvm/",
@@ -176,12 +176,14 @@ class dhrep::services::intern::elasticsearch (
   ###
   # nrpe
   ###
+  package{ "python-setuptools" : ensure => installed }
   package { "nagios-plugin-elasticsearch":
       # ensure latest does not work right now, compare https://bugs.launchpad.net/ubuntu/+source/dbus/+bug/1593749
       # possibly with puppet 4? do we need 'latest' at all?
       # ensure  => latest,
       ensure => '1.1.0',
       provider => pip,
+      require => Package['python-setuptools'],
   }
   ->
   dariahcommon::nagios_service { 'check_elasticsearch':

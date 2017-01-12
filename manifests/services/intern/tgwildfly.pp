@@ -30,11 +30,18 @@ class dhrep::services::intern::tgwildfly (
     java_xms          => $xms,
     java_maxpermsize  => $maxpermsize,
     java_opts         => "-Djava.net.preferIPv4Stack=true",
-    mgmt_http_port    => '19990',
-    mgmt_https_port   => '19993',
-    public_http_port  => '18080',
-    public_https_port => '18443',
-    ajp_port          => '18009',
+#    mgmt_http_port    => '19990',
+#    mgmt_https_port   => '19993',
+#    public_http_port  => '18080',
+#    public_https_port => '18443',
+#    ajp_port          => '18009',
+    properties       => {
+      'jboss.management.http.port'    => '19990',
+      'jboss.management.https.port'   => '19993',
+      'jboss.http.port'               => '18080',
+      'jboss.https.port'              => '18443',
+      'jboss.ajp.port'                => '18009',
+    },
     # only required if not oracle jdk8...?
     require           => Package['default-jre-headless'],
     # should be initialised before tomcat_crud...
@@ -59,12 +66,12 @@ class dhrep::services::intern::tgwildfly (
   ###
   staging::file { 'message-beans.war':
     source  => "http://dev.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
-    target  => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
+    target  => "/var/cache/dhrep/message-beans-${message_beans_version}.war",
     require => Class['wildfly'],
   }
   ~>
   file { '/home/wildfly/wildfly/standalone/deployments/message-beans.war':
-    source => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
+    source => "/var/cache/dhrep/message-beans-${message_beans_version}.war",
   }
 
   #  wildfly::deployment { 'message-beans.war':
@@ -82,12 +89,12 @@ class dhrep::services::intern::tgwildfly (
 
   staging::file { 'jolokia.war':
     source  => "http://central.maven.org/maven2/org/jolokia/jolokia-war/1.3.2/jolokia-war-1.3.2.war",
-    target  => "/var/cache/textgrid/jolokia.war",
+    target  => "/var/cache/dhrep/jolokia.war",
     require => Class['wildfly'],
   }
   ~>
   file { '/home/wildfly/wildfly/standalone/deployments/jolokia.war':
-    source => "/var/cache/textgrid/jolokia.war",
+    source => "/var/cache/dhrep/jolokia.war",
   }
 
   collectd::plugin::curl_json { 'wildfly':
