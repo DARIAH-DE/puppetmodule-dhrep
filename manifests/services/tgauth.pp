@@ -473,8 +473,9 @@ class dhrep::services::tgauth (
   ###
   # nrpe for ldap, ldap-backup, and ldap-statistics
   ###
-  dariahcommon::nagios_service { 'check_ldap':
-    command => "/usr/lib/nagios/plugins/check_ldap -H localhost -b dc=textgrid,dc=de -3",
+  nrpe::plugin { 'check_ldap':
+    plugin => 'check_ldap',
+    args   => '-H localhost -b dc=textgrid,dc=de -3',
   }
   file { "${_optdir}/check_ldap_statistics.sh" :
     source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/check_ldap_statistics.sh",
@@ -483,9 +484,9 @@ class dhrep::services::tgauth (
     mode    => '0755',
     require => File["${_optdir}/ldap-statistic.pl"],
   }
-  dariahcommon::nagios_service { 'check_ldap_statistics':
-    command => "${_optdir}/check_ldap_statistics.sh",
-    require => File["${_optdir}/check_ldap_statistics.sh"],
+  nrpe::plugin { 'check_ldap_statistics':
+    plugin     => 'check_ldap_statistics.sh',
+    libexecdir => $_optdir,
   }
   file { "${_optdir}/check_ldap_backups.sh" :
     source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/check_ldap_backups.sh",
@@ -494,9 +495,9 @@ class dhrep::services::tgauth (
     mode    => '0755',
     require => File["${_optdir}/ldap-backup.sh"],
   }
-  dariahcommon::nagios_service { 'check_ldap_backups':
-    command => "${_optdir}/check_ldap_backups.sh",
-    require => File["${_optdir}/check_ldap_backups.sh"],
+  nrpe::plugin { 'check_ldap_backups':
+    plugin     => 'check_ldap_backups.sh',
+    libexecdir => $_optdir,
   }
 
   ###

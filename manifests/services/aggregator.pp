@@ -1,5 +1,3 @@
-# == Class: dhrep::services::aggregator
-#
 # Class to install and configure aggregator
 #
 class dhrep::services::aggregator (
@@ -72,7 +70,6 @@ class dhrep::services::aggregator (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => Class[dariahcommon::nagios],
   }
   file { '/usr/lib/nagios/plugins/check_jmx.jar':
     source  => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_jmx.jar',
@@ -80,7 +77,6 @@ class dhrep::services::aggregator (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => Class[dariahcommon::nagios],
   }
   file { '/usr/lib/nagios/plugins/check_jmx':
     source  => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_jmx',
@@ -88,27 +84,37 @@ class dhrep::services::aggregator (
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File['/usr/lib/nagios/plugins/check_jmx.jar'],
   }
-  dariahcommon::nagios_service { 'check_http_aggregator':
-    command => "/usr/lib/nagios/plugins/check_http -H localhost -t 30 -p ${_http_port} -u /aggregator/version -s \"Aggregator\"",
+  nrpe::plugin { 'check_http_aggregator':
+    plugin => 'check_http',
+    args   => "-H localhost -t 30 -p ${_http_port} -u /aggregator/version -s \"Aggregator\"",
   }
-  dariahcommon::nagios_service { 'check_jmx_aggregator_heap_used':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w 900000000 -c 1000000000",
+  nrpe::plugin { 'check_jmx_aggregator_heap_used':
+    plugin => 'check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w 900000000 -c 1000000000",
   }
-  dariahcommon::nagios_service { 'check_jmx_aggregator_thread_count':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Threading -A ThreadCount",
+  nrpe::plugin { 'check_jmx_aggregator_thread_count':
+    plugin => 'check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Threading -A ThreadCount",
   }
-  dariahcommon::nagios_service { 'check_jmx_aggregator_process_cpu_load':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A ProcessCpuLoad",
+  nrpe::plugin { 'check_jmx_aggregator_process_cpu_load':
+    plugin => 'check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A ProcessCpuLoad",
   }
-  dariahcommon::nagios_service { 'check_jmx_aggregator_open_fd':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A OpenFileDescriptorCount",
+  nrpe::plugin { 'check_jmx_aggregator_process_cpu_load':
+    plugin => 'check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A ProcessCpuLoad",
   }
-  dariahcommon::nagios_service { 'check_jmx_aggregator_avg_response':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"' -A AvgResponseTime",
+  nrpe::plugin { 'check_jmx_aggregator_open_fd':
+    plugin => 'check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A OpenFileDescriptorCount",
   }
-  dariahcommon::nagios_service { 'check_jmx_aggregator_avg_response_html':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\",operation=\"getHTML\"' -A AvgResponseTime",
+  nrpe::plugin { 'check_jmx_aggregator_avg_response':
+    plugin => 'check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"' -A AvgResponseTime",
+  }
+  nrpe::plugin { 'check_jmx_aggregator_avg_response_html':
+    plugin => 'check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\",operation=\"getHTML\"' -A AvgResponseTime",
   }
 }

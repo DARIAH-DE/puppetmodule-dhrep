@@ -187,7 +187,8 @@ class dhrep::services::intern::elasticsearch (
       require => Package['python-setuptools'],
   }
   ->
-  dariahcommon::nagios_service { 'check_elasticsearch':
-    command => "check_elasticsearch -p ${$_master_http_port} -vv",
+  nrpe::plugin { 'check_elasticsearch':
+    plugin => 'check_elasticsearch',
+    args   => "-p ${$_master_http_port} -vv",
   }
 }

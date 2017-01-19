@@ -70,7 +70,9 @@ class dhrep::services::tgsearch (
   ###
   # nrpe
   ###
-  dariahcommon::nagios_service { 'check_http_tgsearch':
-    command => "/usr/lib/nagios/plugins/check_http -H localhost -p ${_http_port} -u /tgsearch",
+  nrpe::plugin { 'check_http_tgsearch':
+    plugin => 'check_http',
+    args   => "-H localhost -p ${_http_port} -u /tgsearch",
   }
+
 }

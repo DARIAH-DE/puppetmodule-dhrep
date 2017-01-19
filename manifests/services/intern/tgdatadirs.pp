@@ -91,8 +91,9 @@ class dhrep::services::intern::tgdatadirs (
     ###
     # nrpe
     ###
-    dariahcommon::nagios_service { 'check_disk_stornext':
-      command => "/usr/lib/nagios/plugins/check_disk --units GB -w 1024 -c 256 -p /media/stornext",
+    nrpe::plugin { 'check_disk_stornext':
+      plugin => 'check_disk',
+      args   => '--units GB -w 1024 -c 256 -p /media/stornext',
     }
 
   }

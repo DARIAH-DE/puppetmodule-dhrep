@@ -52,7 +52,7 @@ class dhrep::nginx (
     owner  => root,
     group  => root,
     mode   => '0644',
-    source => 'puppet:///modules/dariahcommon/etc/ssl/Uni_Goettingen_Kette.pem',
+    source => 'puppet:///modules/profiles/etc/ssl/Uni_Goettingen_Kette_Telekom.pem',
 #    notify => Service['nginx'],
   }
   if $sslkey != undef {

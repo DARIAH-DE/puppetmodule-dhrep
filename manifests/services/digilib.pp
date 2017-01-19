@@ -112,19 +112,24 @@ class dhrep::services::digilib (
   ###
   # nrpe
   ###
-  dariahcommon::nagios_service { 'check_http_digilib':
-    command => "/usr/lib/nagios/plugins/check_http -H localhost -t 30 -p ${_http_port} -u /digilibservice/rest/info -s \"Digilib\"",
+  nrpe::plugin { 'check_http_digilib':
+    plugin => 'check_http',
+    args   => "-H localhost -t 30 -p ${_http_port} -u /digilibservice/rest/info -s \"Digilib\"",
   }
-  dariahcommon::nagios_service { 'check_jmx_digilib_heap_used':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w 1800000000 -c 2000000000",
+  nrpe::plugin { 'check_jmx_digilib_heap_used':
+    plugin => '/check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w 1800000000 -c 2000000000",
   }
-  dariahcommon::nagios_service { 'check_jmx_digilib_thread_count':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Threading -A ThreadCount",
+  nrpe::plugin { 'check_jmx_digilib_thread_count':
+    plugin => '/check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Threading -A ThreadCount",
   }
-  dariahcommon::nagios_service { 'check_jmx_digilib_process_cpu_load':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A ProcessCpuLoad",
+  nrpe::plugin { 'check_jmx_digilib_process_cpu_load':
+    plugin => '/check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A ProcessCpuLoad",
   }
-  dariahcommon::nagios_service { 'check_jmx_digilib_open_fd':
-    command => "/usr/lib/nagios/plugins/check_jmx -U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A OpenFileDescriptorCount",
+  nrpe::plugin { 'check_jmx_digilib_open_fd':
+    plugin => '/check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A OpenFileDescriptorCount",
   }
 }

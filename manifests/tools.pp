@@ -19,8 +19,9 @@ class dhrep::tools {
   ###
   # cron nrpe check
   ###
-  dariahcommon::nagios_service { 'check_cron':
-    command => "/usr/lib/nagios/plugins/check_procs -c 1:20 -w 1:2 -C cron",
+  nrpe::plugin { 'check_cron':
+    plugin => 'check_procs',
+    args   => '-c 1:20 -w 1:2 -C cron',
   }
 
   ###
@@ -37,8 +38,10 @@ class dhrep::tools {
     group   => root,
     mode    => '0755',
   }
-  dariahcommon::nagios_service { 'check_tivoli_root':
-    command => "/usr/lib/nagios/plugins/check_tivoli -c /",
-    require => File['/usr/lib/nagios/plugins/check_tivoli'],
+
+  nrpe::plugin { 'check_tivoli_root':
+    plugin => 'check_tivoli',
+    args   => '-c /',
   }
+ 
 }

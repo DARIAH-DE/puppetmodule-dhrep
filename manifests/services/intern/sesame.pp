@@ -103,8 +103,9 @@ class dhrep::services::intern::sesame (
   ###
   # nrpe
   ###
-  dariahcommon::nagios_service { 'check_http_sesame':
-    command => "/usr/lib/nagios/plugins/check_http -H localhost -p ${_http_port} -u /openrdf-sesame/repositories -k \"Accept: application/xml\" -s /openrdf-sesame/repositories/textgrid-nonpublic -s /openrdf-sesame/repositories/textgrid-public",
+  nrpe::plugin { 'check_http_sesame':
+    plugin => 'check_http',
+    args   => "-H localhost -p ${_http_port} -u /openrdf-sesame/repositories -k \"Accept: application/xml\" -s /openrdf-sesame/repositories/textgrid-nonpublic -s /openrdf-sesame/repositories/textgrid-public",
   }
   file { "${_optdir}/check_sesame_backups.sh" :
     source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/check_sesame_backups.sh",
@@ -112,9 +113,9 @@ class dhrep::services::intern::sesame (
     group   => 'root',
     mode    => '0755',
     require => File["${_optdir}/sesame-backup.sh"],
-  }
-  dariahcommon::nagios_service { 'check_sesame_backups':
-    command => "${_optdir}/check_sesame_backups.sh",
-    require => File["${_optdir}/check_sesame_backups.sh"],
+  }s
+  nrpe::plugin { 'check_sesame_backups':
+    plugin     => 'check_sesame_backups.sh',
+    libexecdir => $_optdir,
   }
 }

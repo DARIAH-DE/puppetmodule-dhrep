@@ -129,8 +129,10 @@ class dhrep::services::crud_public (
     ###
     # nrpe for tgcrud_public
     ###
-    dariahcommon::nagios_service { 'check_rollback_tgcrud_public':
-      command => "${_optdir}/crud-analyse.pl -n -l ${_logdir}/${_short}/rollback.log",
+    nrpe::plugin { 'check_rollback_tgcrud_public':
+      plugin => 'crud-analyse.pl',
+      args   => "-n -l ${_logdir}/${_short}/rollback.log",
+      libexecdir => $_optdir,
     }
   }
 }
