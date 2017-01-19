@@ -9,7 +9,7 @@ class dhrep::services::crud (
   $use_messaging       = true,
   $location            = '',
   $storage_host        = '',
-  $storage_host_public = '';
+  $storage_host_public = '',
   $pid_resolver        = 'https://hdl.handle.net/',
   $extract_techmd      = false,
   $pid_secret          = '',
