@@ -101,10 +101,6 @@ class dhrep::services::aggregator (
     plugin => 'check_jmx',
     args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A ProcessCpuLoad",
   }
-  nrpe::plugin { 'check_jmx_aggregator_process_cpu_load':
-    plugin => 'check_jmx',
-    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A ProcessCpuLoad",
-  }
   nrpe::plugin { 'check_jmx_aggregator_open_fd':
     plugin => 'check_jmx',
     args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A OpenFileDescriptorCount",
