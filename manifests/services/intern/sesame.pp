@@ -113,7 +113,7 @@ class dhrep::services::intern::sesame (
     group   => 'root',
     mode    => '0755',
     require => File["${_optdir}/sesame-backup.sh"],
-  }s
+  }
   nrpe::plugin { 'check_sesame_backups':
     plugin     => 'check_sesame_backups.sh',
     libexecdir => $_optdir,
