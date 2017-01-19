@@ -32,8 +32,7 @@ class dhrep (
   # dariah specific refs
   $dhcrud_location = undef,
   $dhcrud_storage_host = undef,
-  $dhcrud_storage_user = undef,
-  $dhcrud_storage_pw = undef,
+  $dhcrud_storage_host_public = undef,
   $dhcrud_pid_secret = undef,
   $dhcrud_public_location = undef,
   $dhcrud_public_storage_host = undef,
@@ -203,16 +202,15 @@ class dhrep (
       scope => $scope,
     }
     class { 'dhrep::services::crud':
-      scope          => $scope,
-      use_messaging  => false,
-      location       => $dhcrud_location,
-      extract_techmd => true,
-      storage_host   => $dhcrud_storage_host,
-      storage_user   => $dhcrud_storage_user,
-      storage_pw     => $dhcrud_storage_pw,
-      pid_secret     => $dhcrud_pid_secret,
-      log_level      => $crud_log_level,
-      require        => Class['dhrep::services::intern::elasticsearch'],
+      scope               => $scope,
+      use_messaging       => false,
+      location            => $dhcrud_location,
+      extract_techmd      => true,
+      storage_host        => $dhcrud_storage_host,
+      storage_host_public => $dhcrud_storage_host_public,
+      pid_secret          => $dhcrud_pid_secret,
+      log_level           => $crud_log_level,
+      require             => Class['dhrep::services::intern::elasticsearch'],
     }
     class { 'dhrep::services::crud_public':
       scope          => $scope,
