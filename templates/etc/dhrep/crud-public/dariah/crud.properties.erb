@@ -51,17 +51,10 @@ RDFDB_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.servic
 DEFAULT_ENCODING = UTF-8
 
 # The path, all files will be stored to, including the protocol to use. Only
-# "gsiftp://" and "file://" are supportet at the moment (mandatory).
-DEFAULT_DATA_STORAGE_URI = file://localhost//data/nonpublic/productive/
-DEFAULT_DATA_STORAGE_URI_PUBLIC = file://localhost//data/public/productive/
-
-# The DARIAH PublicStorage configuration
-DARIAH_BASE_URL = https://ipedariah1.lsdf.kit.edu/dhpublic/
-DARIAH_IDP_URL = https://ldap-dariah.esc.rzg.mpg.de/idp/profile/SAML2/SOAP/ECP
-DARIAH_USER = <%= scope.lookupvar('dhrep::services::crud_public::storage_user') %>
-DARIAH_PW = <%= scope.lookupvar('dhrep::services::crud_public::storage_pw') %>
-# The DARIAH OwnStorage host.
-OWNSTORAGE_HOST = <%= scope.lookupvar('dhrep::services::crud_public::storage_host') %>
+# "gsiftp://" and "file://" (textgrid)), and "https://" (dariah) are supportet
+# at the moment (mandatory).
+DEFAULT_DATA_STORAGE_URI = <%= scope.lookupvar('dhrep::services::crud::storage_host') %>
+DEFAULT_DATA_STORAGE_URI_PUBLIC = <%= scope.lookupvar('dhrep::services::crud_public::storage_host_public') %>
 
 # Which DATA STORAGE authentication shall be used (e.g. JavaGAT)? Allowed is one
 # of MYPROXY, PROXY, CERT, SLC or NONE. The needed values have to be set
