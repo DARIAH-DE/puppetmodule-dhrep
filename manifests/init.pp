@@ -36,8 +36,7 @@ class dhrep (
   $dhcrud_pid_secret = undef,
   $dhcrud_public_location = undef,
   $dhcrud_public_storage_host = undef,
-  $dhcrud_public_storage_user = undef,
-  $dhcrud_public_storage_pw = undef,
+  $dhcrud_public_storage_host_public = undef,
   $dhcrud_public_pid_secret = undef,
 ) inherits dhrep::params {
 
@@ -213,16 +212,15 @@ class dhrep (
       require             => Class['dhrep::services::intern::elasticsearch'],
     }
     class { 'dhrep::services::crud_public':
-      scope          => $scope,
-      use_messaging  => false,
-      location       => $dhcrud_public_location,
-      extract_techmd => true,
-      storage_host   => $dhcrud_public_storage_host,
-      storage_user   => $dhcrud_public_storage_user,
-      storage_pw     => $dhcrud_public_storage_pw,
-      pid_secret     => $dhcrud_pid_secret,
-      log_level      => $crud_public_log_level,
-      require        => Class['dhrep::services::intern::elasticsearch'],
+      scope               => $scope,
+      use_messaging       => false,
+      location            => $dhcrud_public_location,
+      extract_techmd      => true,
+      storage_host        => $dhcrud_public_storage_host,
+      storage_host_public => $dhcrud_public_storage_host_public,
+      pid_secret          => $dhcrud_pid_secret,
+      log_level           => $crud_public_log_level,
+      require             => Class['dhrep::services::intern::elasticsearch'],
     }
   }
 
