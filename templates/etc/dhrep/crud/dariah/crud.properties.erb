@@ -54,7 +54,7 @@ DEFAULT_ENCODING = UTF-8
 # "gsiftp://" and "file://" (textgrid)), and "https://" (dariah) are supportet
 # at the moment (mandatory).
 DEFAULT_DATA_STORAGE_URI = <%= scope.lookupvar('dhrep::services::crud::storage_host') %>
-DEFAULT_DATA_STORAGE_URI_PUBLIC = <%= scope.lookupvar('dhrep::services::crud_public::storage_host_public') %>
+DEFAULT_DATA_STORAGE_URI_PUBLIC = <%= scope.lookupvar('dhrep::services::crud::storage_host_public') %>
 
 # Which DATA STORAGE authentication shall be used (e.g. JavaGAT)? Allowed is one
 # of MYPROXY, PROXY, CERT, SLC or NONE. The needed values have to be set
