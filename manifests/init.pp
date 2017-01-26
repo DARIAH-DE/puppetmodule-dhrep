@@ -239,9 +239,10 @@ class dhrep (
     require => Class['dhrep::services::intern::elasticsearch'],
   }
   class { 'dhrep::services::publish':
-    scope      => $scope,
-    pid_secret => $publish_pid_secret,
-    log_level  => $publish_log_level,
+    scope        => $scope,
+    pid_secret   => $publish_pid_secret,
+    log_level    => $publish_log_level,
+    storage_host => $dhcrud_storage_host,
   }
 
   ###
