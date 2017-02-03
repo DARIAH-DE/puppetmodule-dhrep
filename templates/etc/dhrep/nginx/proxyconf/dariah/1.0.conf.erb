@@ -1,6 +1,6 @@
 # locations for /
 
-root /var/www/nginx-root/
+root /var/www/nginx-root/;
 
 location /oaipmh {
     proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_oaipmh::http_port') %>/oaipmh;
