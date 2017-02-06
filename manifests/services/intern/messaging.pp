@@ -11,19 +11,6 @@ class dhrep::services::intern::messaging (
 
   $_confdir = $::dhrep::params::confdir
 
-  exec { 'git_clone_messagebeans':
-    command => 'git clone git://git.projects.gwdg.de/textgrid-messagebeans.git /usr/local/src/messagebeans-git',
-    path    => ['/usr/bin','/bin','/usr/sbin'],
-    creates => '/usr/local/src/messagebeans-git',
-    require => Package['git'],
-  }
-  file { '/root/.m2':
-    ensure => directory,
-  }
-  file { '/root/.m2/settings.xml':
-    ensure => present,
-    source => 'puppet:///modules/dhrep/root/m2-settings.xml',
-  }
   file { "${_confdir}/messagebeans":
     ensure => directory,
   }
