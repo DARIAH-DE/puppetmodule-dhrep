@@ -26,7 +26,7 @@ server {
 	#listen   80; ## listen for ipv4; this line is default and implied
 	#listen   [::]:80 default_server ipv6only=on; ## listen for ipv6
 
-	root /var/www/nginx-root/textgridlab.org;
+	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
 
 	# Make site accessible from http://localhost/
@@ -45,7 +45,7 @@ server {
 		# copied from http://blog.kovyrin.net/2006/04/29/monitoring-nginx-with-rrdtool/
 		stub_status on;
 		access_log off;
-		allow 134.94.199.61; # Icinga DARIAH Jülich
+#		allow 134.94.199.61; # Icinga DARIAH Jülich
 		allow 134.76.20.211; # Icinga DARIAH GWDG
 		allow 127.0.0.1;     # Localhost as well :)
 		deny all;
@@ -65,7 +65,7 @@ server {
 
 	server_name localhost;
 
-	root /var/www/nginx-root/textgridlab.org;
+	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
 
 	ssl on;

@@ -10,14 +10,18 @@ class dhrep::nginx (
   $sslcert                            = undef,
   $sslkey                             = undef,
   $dhparam                            = undef,
+  $nginx_root                         = undef,
 ) inherits dhrep::params {
 
-  include dhrep::services::tomcat_aggregator
-  include dhrep::services::tomcat_digilib
   include dhrep::services::tomcat_oaipmh
   include dhrep::services::tomcat_publish
-  include dhrep::services::tomcat_sesame
-  include dhrep::services::tomcat_tgsearch
+
+  if $scope == 'textgrid' {
+    include dhrep::services::tomcat_aggregator
+    include dhrep::services::tomcat_digilib
+    include dhrep::services::tomcat_sesame
+    include dhrep::services::tomcat_tgsearch
+  }  
   if $scope == 'dariah' {
     include dhrep::services::tomcat_fits
   }
