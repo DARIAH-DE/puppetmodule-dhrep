@@ -4,6 +4,8 @@
 #
 class dhrep::services::tomcat_sesame (
   $scope = undef,
+  $xmx   = $::dhrep::params::tomcat_sesame_xmx,
+  $xms   = $::dhrep::params::tomcat_sesame_xms,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_sesame']['catname']
@@ -28,5 +30,7 @@ class dhrep::services::tomcat_sesame (
     control_port      => $control_port,
     jmx_port          => $jmx_port,
     defaults_template => $template,
+    xmx               => $xmx,
+    xms               => $xms,
   }
 }

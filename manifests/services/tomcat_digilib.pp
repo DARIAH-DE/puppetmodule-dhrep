@@ -4,6 +4,8 @@
 #
 class dhrep::services::tomcat_digilib (
   $scope = undef,
+  $xmx   = $::dhrep::params::tomcat_digilib_xmx,
+  $xms   = $::dhrep::params::tomcat_digilib_xms,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_digilib']['catname']
@@ -28,5 +30,7 @@ class dhrep::services::tomcat_digilib (
     control_port      => $control_port,
     jmx_port          => $jmx_port,
     defaults_template => $template,
+    xmx               => $xmx,
+    xms               => $xms,
   }
 }
