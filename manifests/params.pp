@@ -226,8 +226,8 @@ class dhrep::params {
       $tomcat_oaipmh_xms          = '512m'
       $tomcat_sesame_xmx          = '768m'
       $tomcat_sesame_xms          = '768m'
-      $tomcat_digilib_xmx         = '1280m'
-      $tomcat_digilib_xms         = '1280m'
+      $tomcat_digilib_xmx         = '1536m'
+      $tomcat_digilib_xms         = '1536m'
     }
     default: {
       $elasticsearch_es_heap_size = '512m'
