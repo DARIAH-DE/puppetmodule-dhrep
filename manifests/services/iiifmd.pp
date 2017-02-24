@@ -99,27 +99,27 @@ class dhrep::services::iiifmd (
     group  => $_group,
     mode   => '0755',
   }
-  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
-    ensure   => present,
-    owner    => $_user,
-    group    => $_group,
-    provider => git,
-    source   => 'https://github.com/IIIF/m1.git',
-    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
-  }
-  ->
-  file { '/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html':
-    content => template('dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html.erb'),
-    mode    => '0644',
-  }
+#  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
+#    ensure   => present,
+#    owner    => $_user,
+#    group    => $_group,
+#    provider => git,
+#    source   => 'https://github.com/IIIF/m1.git',
+#    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
+#  }
+#  ->
+#  file { '/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html':
+#    content => template('dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html.erb'),
+#    mode    => '0644',
+#  }
   # TODO: npm nodejs build and dhsummit.html
-  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/m2':
-    ensure   => present,
-    owner    => $_user,
-    group    => $_group,
-    provider => git,
-    source   => 'https://github.com/IIIF/mirador.git',
-    revision => 'v2.0.0',
-    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
-  }
+#  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/m2':
+#    ensure   => present,
+#    owner    => $_user,
+#    group    => $_group,
+#    provider => git,
+#    source   => 'https://github.com/IIIF/mirador.git',
+#    revision => 'v2.0.0',
+#    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
+#  }
 }
