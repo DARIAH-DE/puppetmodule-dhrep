@@ -16,23 +16,23 @@ class dhrep::services::tomcat_publish (
   $group        = $::dhrep::params::config['tomcat_publish']['group']
   $uid          = $::dhrep::params::config['tomcat_publish']['uid']
   $gid          = $::dhrep::params::config['tomcat_publish']['gid']
-  $template     = 'dhrep/etc/default/tomcat.publish.erb'
   $depcat       = $::dhrep::params::config['tomcat_crud']['catname']
 
   ###
   # user, home-dir and user-tomcat
   ###
-  dhrep::resources::servicetomcat { $catname:
-    user              => $user,
-    group             => $group,
-    uid               => $uid,
-    gid               => $gid,
-    http_port         => $http_port,
-    control_port      => $control_port,
-    jmx_port          => $jmx_port,
-    defaults_template => $template,
-    init_dependencies => $depcat,
-    xmx               => $xmx,
-    xms               => $xms,
+  usertomcat::create { $catname:
+    user                 => $user,
+    group                => $group,
+    uid                  => $uid,
+    gid                  => $gid,
+    http_port            => $http_port,
+    control_port         => $control_port,
+    jmx_port             => $jmx_port,
+    additional_java_opts => '-Dfile.encoding=UTF-8',
+    init_dependencies    => $depcat,
+    xmx                  => $xmx,
+    xms                  => $xms,
+    collectd_enabled     => true,
   }
 }

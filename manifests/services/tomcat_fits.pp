@@ -4,6 +4,8 @@
 #
 class dhrep::services::tomcat_fits (
   $scope = undef,
+  $xmx   = $dhrep::params::servicetomcat_xmx,
+  $xms   = $dhrep::params::servicetomcat_xms,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_fits']['catname']
@@ -14,12 +16,11 @@ class dhrep::services::tomcat_fits (
   $group        = $::dhrep::params::config['tomcat_fits']['group']
   $uid          = $::dhrep::params::config['tomcat_fits']['uid']
   $gid          = $::dhrep::params::config['tomcat_fits']['gid']
-  $template     = 'dhrep/etc/default/tomcat.erb'
 
   ###
   # user, home-dir and user-tomcat
   ###
-  dhrep::resources::servicetomcat { $catname:
+  usertomcat::create { $catname:
     user              => $user,
     group             => $fgroup,
     uid               => $uid,
@@ -27,6 +28,8 @@ class dhrep::services::tomcat_fits (
     http_port         => $http_port,
     control_port      => $control_port,
     jmx_port          => $jmx_port,
-    defaults_template => $template,
+    xmx               => $xmx,
+    xms               => $xms,
+    collectd_enabled  => true,
   }
 }

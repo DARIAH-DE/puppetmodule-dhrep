@@ -40,6 +40,8 @@ class dhrep (
   $dhcrud_public_pid_secret = undef,
 ) inherits dhrep::params {
 
+  require dhrep::tools
+
   ###
   # folder creation
   ###
@@ -290,9 +292,6 @@ class dhrep (
     'openjdk-7-jdk':          ensure => present;
     # Creates symlink /usr/lib/jvm/default-java.
     'default-jre-headless':   ensure => present;
-    'tomcat7':                ensure => present;
-    'tomcat7-user':           ensure => present;
-    'libtcnative-1':          ensure => present;
     'mc':                     ensure => present;
     'maven':                  ensure => present;
     'make':                   ensure => present;

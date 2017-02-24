@@ -27,21 +27,21 @@ class dhrep::services::intern::sesame (
     source  => "http://sourceforge.net/projects/sesame/files/Sesame%202/${version}/${file}/download",
     target  => "/home/${_user}",
     creates => "/home/${_user}/openrdf-sesame-${version}",
-    require => Dhrep::Resources::Servicetomcat[$_catname],
+    require => Usertomcat::Create[$_catname],
   }
   ~>
   tomcat::war { 'openrdf-workbench.war':
     war_ensure    => present,
     catalina_base => "/home/${_user}/${_catname}",
     war_source    => "/home/${_user}/openrdf-sesame-${version}/war/openrdf-workbench.war",
-    require       => Dhrep::Resources::Servicetomcat[$_catname],
+    require       => Usertomcat::Create[$_catname],
   }
   ~>
   tomcat::war { 'openrdf-sesame.war':
     war_ensure    => present,
     catalina_base => "/home/${_user}/${_catname}",
     war_source    => "/home/${_user}/openrdf-sesame-${version}/war/openrdf-sesame.war",
-    require       => [Dhrep::Resources::Servicetomcat[$_catname],Tomcat::War['openrdf-workbench.war']],
+    require       => [Usertomcat::Create[$_catname],Tomcat::War['openrdf-workbench.war']],
   }
 
   file { "/home/${_catname}/mime.ttl":

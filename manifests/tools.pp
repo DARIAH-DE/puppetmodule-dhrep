@@ -12,10 +12,6 @@ class dhrep::tools {
     source  => 'puppet:///modules/dhrep/tools/wait_for_url_ready.sh',
   }
 
-  file { "/usr/local/src/tomcat-apr.patch":
-    source => 'puppet:///modules/dhrep/tools/tomcat-apr.patch'
-  }
-
   ###
   # cron nrpe check
   ###

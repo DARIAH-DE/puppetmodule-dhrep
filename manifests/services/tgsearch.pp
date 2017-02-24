@@ -28,7 +28,7 @@ class dhrep::services::tgsearch (
   ###
   package { 'tgsearch-nonpublic-webapp':
     ensure  => $version,
-    require => [Exec['update_dariah_apt_repository'],Dhrep::Resources::Servicetomcat[$_catname]],
+    require => [Exec['update_dariah_apt_repository'],Usertomcat::Create[$_catname]],
   }
 
   ###
@@ -37,7 +37,7 @@ class dhrep::services::tgsearch (
   file { "/home/${_user}/${_catname}/webapps/tgsearch":
     ensure  => 'link',
     target  => "${_aptdir}/tgsearch-nonpublic",
-    require => Dhrep::Resources::Servicetomcat[$_catname],
+    require => Usertomcat::Create[$_catname],
   }
 
   ###
