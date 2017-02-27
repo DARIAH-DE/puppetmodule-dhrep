@@ -33,9 +33,9 @@ class dhrep::services::crud_public (
   if $scope == 'textgrid' {
     $_aptdir = '/var/textgrid/webapps'
 
-    file { "/var/dhrep/webapps":
+    file { "/var/dhrep/webapps/${_short}":
       ensure => 'link',
-      target => "${_aptdir}",
+      target => "/var/textgrid/webapps/${_short}",
     }
   }
   else {
