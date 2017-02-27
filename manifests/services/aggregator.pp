@@ -18,6 +18,14 @@ class dhrep::services::aggregator (
   # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {
     $_aptdir = '/var/textgrid/webapps'
+
+    ### FIXME remove link if we dont need it anymore!
+    file { '/etc/textgrid/':
+      ensure  => directory,
+      owner   => root,
+      group   => root,
+      mode    => '0644',
+    }
   }
   else {
     $_aptdir = $::dhrep::params::aptdir
