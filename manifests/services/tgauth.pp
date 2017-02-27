@@ -1,4 +1,4 @@
-# == Class: dhrep::services::tgsearch
+# == Class: dhrep::services::tgauth
 #
 # Class to install and configure tgauth.
 #
