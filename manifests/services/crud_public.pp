@@ -32,11 +32,6 @@ class dhrep::services::crud_public (
   # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {
     $_aptdir = '/var/textgrid/webapps'
-
-    file { "/var/dhrep/webapps/${_short}":
-      ensure => 'link',
-      target => "/var/textgrid/webapps/${_short}",
-    }
   }
   else {
     $_aptdir = $::dhrep::params::aptdir
