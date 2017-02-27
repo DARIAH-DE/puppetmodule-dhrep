@@ -12,8 +12,6 @@ class dhrep::services::tomcat_fits (
   $http_port    = $::dhrep::params::config['tomcat_fits']['http_port']
   $control_port = $::dhrep::params::config['tomcat_fits']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_fits']['jmx_port']
-  $user         = $::dhrep::params::config['tomcat_fits']['user']
-  $group        = $::dhrep::params::config['tomcat_fits']['group']
   $uid          = $::dhrep::params::config['tomcat_fits']['uid']
   $gid          = $::dhrep::params::config['tomcat_fits']['gid']
 
@@ -21,8 +19,6 @@ class dhrep::services::tomcat_fits (
   # user, home-dir and user-tomcat
   ###
   usertomcat::create { $catname:
-    user              => $user,
-    group             => $fgroup,
     uid               => $uid,
     gid               => $gid,
     http_port         => $http_port,

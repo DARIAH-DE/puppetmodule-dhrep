@@ -12,8 +12,6 @@ class dhrep::services::tgsearch (
   $_confdir   = $::dhrep::params::confdir
   $_catname   = $::dhrep::services::tomcat_tgsearch::catname
   $_http_port = $::dhrep::services::tomcat_tgsearch::http_port
-  $_user      = $::dhrep::services::tomcat_tgsearch::user
-  $_group     = $::dhrep::services::tomcat_tgsearch::group
 
   # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {
@@ -34,7 +32,7 @@ class dhrep::services::tgsearch (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/tgsearch":
+  file { "/home/${_catname}/${_catname}/webapps/tgsearch":
     ensure  => 'link',
     target  => "${_aptdir}/tgsearch-nonpublic",
     require => Usertomcat::Create[$_catname],

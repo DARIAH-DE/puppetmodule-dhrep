@@ -16,8 +16,6 @@ class dhrep::services::iiifmd (
   $_confdir = $::dhrep::params::confdir
   $_vardir  = $::dhrep::params::vardir
   $_catname = $dhrep::services::tomcat_digilib::catname
-  $_user    = $dhrep::services::tomcat_digilib::user
-  $_group   = $dhrep::services::tomcat_digilib::group
 
   # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {
@@ -38,7 +36,7 @@ class dhrep::services::iiifmd (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/iiifmd":
+  file { "/home/${_catname}/${_catname}/webapps/iiifmd":
     ensure  => 'link',
     target  => "${_aptdir}/iiifmd",
     require => [File["${_confdir}/iiifmd/iiifmd.properties"],Usertomcat::Create[$_catname]],
@@ -73,14 +71,14 @@ class dhrep::services::iiifmd (
   ###
   file { "${_vardir}/iiifmd":
     ensure => directory,
-    owner  => $_user,
-    group  => $_group,
+    owner  => $_catname,
+    group  => $_catname,
     mode   => '0755',
   }
   file { "${_vardir}/iiifmd/cache":
     ensure  => directory,
-    owner   => $_user,
-    group   => $_group,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0755',
     require => File["${_vardir}/iiifmd"],
   }
@@ -95,14 +93,14 @@ class dhrep::services::iiifmd (
   ###
   file { '/var/www/nginx-root/textgridrep.de/iiif':
     ensure => directory,
-    owner  => $_user,
-    group  => $_group,
+    owner  => $_catname,
+    group  => $_catname,
     mode   => '0755',
   }
 #  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
 #    ensure   => present,
-#    owner    => $_user,
-#    group    => $_group,
+#    owner    => $_catname,
+#    group    => $_catname,
 #    provider => git,
 #    source   => 'https://github.com/IIIF/m1.git',
 #    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
@@ -115,8 +113,8 @@ class dhrep::services::iiifmd (
   # TODO: npm nodejs build and dhsummit.html
 #  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/m2':
 #    ensure   => present,
-#    owner    => $_user,
-#    group    => $_group,
+#    owner    => $_catname,
+#    group    => $_catname,
 #    provider => git,
 #    source   => 'https://github.com/IIIF/mirador.git',
 #    revision => 'v2.0.0',

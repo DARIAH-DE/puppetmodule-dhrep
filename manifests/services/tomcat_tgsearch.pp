@@ -12,8 +12,6 @@ class dhrep::services::tomcat_tgsearch (
   $http_port    = $::dhrep::params::config['tomcat_tgsearch']['http_port']
   $control_port = $::dhrep::params::config['tomcat_tgsearch']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_tgsearch']['jmx_port']
-  $user         = $::dhrep::params::config['tomcat_tgsearch']['user']
-  $group        = $::dhrep::params::config['tomcat_tgsearch']['group']
   $uid          = $::dhrep::params::config['tomcat_tgsearch']['uid']
   $gid          = $::dhrep::params::config['tomcat_tgsearch']['gid']
 
@@ -21,8 +19,6 @@ class dhrep::services::tomcat_tgsearch (
   # user, home-dir and user-tomcat
   ###
   usertomcat::create { $catname:
-    user              => $user,
-    group             => $group,
     uid               => $uid,
     gid               => $gid,
     http_port         => $http_port,

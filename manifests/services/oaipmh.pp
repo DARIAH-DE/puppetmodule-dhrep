@@ -15,8 +15,6 @@ class dhrep::services::oaipmh (
   $_logdir  = $::dhrep::params::logdir
   $_aptdir  = $::dhrep::params::aptdir
   $_catname = $::dhrep::services::tomcat_oaipmh::catname
-  $_user    = $::dhrep::services::tomcat_oaipmh::user
-  $_group   = $::dhrep::services::tomcat_oaipmh::group
 
   $templates = "dhrep/etc/dhrep/oaipmh/${scope}"
 
@@ -31,7 +29,7 @@ class dhrep::services::oaipmh (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/oaipmh":
+  file { "/home/${_catname}/${_catname}/webapps/oaipmh":
     ensure  => 'link',
     target  => "${_aptdir}/oaipmh",
     require => [File["${_confdir}/oaipmh/oaipmh.properties"],Usertomcat::Create[$_catname]],
@@ -48,8 +46,8 @@ class dhrep::services::oaipmh (
   }
   file { "${_confdir}/oaipmh/oaipmh.properties":
     ensure  => present,
-    owner   => $_user,
-    group   => $_group,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0640',
     content => template("${templates}/oaipmh.properties.erb"),
     require => File["${_confdir}/oaipmh"],
@@ -61,16 +59,16 @@ class dhrep::services::oaipmh (
   ###
   file { "${_confdir}/oaipmh/log4j.oaipmh.properties":
     ensure  => present,
-    owner   => $_user,
-    group   => $_group,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0640',
     content => template("${templates}/log4j.properties.erb"),
     require => File["${_confdir}/oaipmh"],
   }
   file { "${_logdir}/oaipmh":
     ensure  => directory,
-    owner   => $_user,
-    group   => $_group,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0755',
     require => File[$_logdir],
   }

@@ -12,8 +12,6 @@ class dhrep::services::tomcat_sesame (
   $http_port    = $::dhrep::params::config['tomcat_sesame']['http_port']
   $control_port = $::dhrep::params::config['tomcat_sesame']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_sesame']['jmx_port']
-  $user         = $::dhrep::params::config['tomcat_sesame']['user']
-  $group        = $::dhrep::params::config['tomcat_sesame']['group']
   $uid          = $::dhrep::params::config['tomcat_sesame']['uid']
   $gid          = $::dhrep::params::config['tomcat_sesame']['gid']
 
@@ -21,8 +19,6 @@ class dhrep::services::tomcat_sesame (
   # user, home-dir and user-tomcat
   ###
   usertomcat::create { $catname:
-    user              => $user,
-    group             => $group,
     uid               => $uid,
     gid               => $gid,
     http_port         => $http_port,
