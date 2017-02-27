@@ -15,8 +15,6 @@ class dhrep::services::intern::sesame (
 
   $_catname      = $::dhrep::services::tomcat_sesame::catname
   $_http_port    = $::dhrep::services::tomcat_sesame::http_port
-  $_user         = $::dhrep::services::tomcat_sesame::user
-  $_group        = $::dhrep::services::tomcat_sesame::group
   $_backupdir    = $::dhrep::params::backupdir
   $_optdir       = $::dhrep::params::optdir
 
@@ -25,28 +23,28 @@ class dhrep::services::intern::sesame (
   ###
   dhrep::tools::tgstaging { $file:
     source  => "http://sourceforge.net/projects/sesame/files/Sesame%202/${version}/${file}/download",
-    target  => "/home/${_user}",
-    creates => "/home/${_user}/openrdf-sesame-${version}",
+    target  => "/home/${_catname}",
+    creates => "/home/${_catname}/openrdf-sesame-${version}",
     require => Usertomcat::Create[$_catname],
   }
   ~>
   tomcat::war { 'openrdf-workbench.war':
     war_ensure    => present,
-    catalina_base => "/home/${_user}/${_catname}",
-    war_source    => "/home/${_user}/openrdf-sesame-${version}/war/openrdf-workbench.war",
+    catalina_base => "/home/${_catname}/${_catname}",
+    war_source    => "/home/${_catname}/openrdf-sesame-${version}/war/openrdf-workbench.war",
     require       => Usertomcat::Create[$_catname],
   }
   ~>
   tomcat::war { 'openrdf-sesame.war':
     war_ensure    => present,
-    catalina_base => "/home/${_user}/${_catname}",
-    war_source    => "/home/${_user}/openrdf-sesame-${version}/war/openrdf-sesame.war",
+    catalina_base => "/home/${_catname}/${_catname}",
+    war_source    => "/home/${_catname}/openrdf-sesame-${version}/war/openrdf-sesame.war",
     require       => [Usertomcat::Create[$_catname],Tomcat::War['openrdf-workbench.war']],
   }
 
   file { "/home/${_catname}/mime.ttl":
     ensure  => present,
-    owner   => $_user,
+    owner   => $_catname,
     mode    => '0644',
     source  => 'puppet:///modules/dhrep/rdf/mime.ttl',
     require => User[$_catname]
@@ -81,21 +79,21 @@ class dhrep::services::intern::sesame (
   ###
   file { "${_backupdir}/sesame" :
     ensure  => directory,
-    owner   => $_user,
-    group   => $_group,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0755',
     require => File[$_backupdir],
   }
   file{ "${_optdir}/sesame-backup.sh" :
     source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/sesame-backup.sh",
-    owner   => $_user,
-    group   => $_group,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0700',
     require => [File[$_optdir],File["${_backupdir}/sesame"]],
   }
   cron { 'sesame-backup' :
     command  => "${_optdir}/sesame-backup.sh",
-    user     => $_user,
+    user     => $_catname,
     hour     => 22,
     minute   => 33,
   }

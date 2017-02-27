@@ -9,8 +9,6 @@ class dhrep::services::aggregator (
 
   $_confdir   = $::dhrep::params::confdir
   $_catname   = $::dhrep::services::tomcat_aggregator::catname
-  $_user      = $::dhrep::services::tomcat_aggregator::user
-  $_group     = $::dhrep::services::tomcat_aggregator::group
   $_http_port = $::dhrep::services::tomcat_aggregator::http_port
   $_jmx_port  = $::dhrep::services::tomcat_aggregator::jmx_port
   $templates  = "dhrep/etc/dhrep/aggregator"
@@ -63,7 +61,7 @@ class dhrep::services::aggregator (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/aggregator":
+  file { "/home/${_catname}/${_catname}/webapps/aggregator":
     ensure  => 'link',
     target  => "${_aptdir}/aggregator",
     require => [File["${_confdir}/aggregator/aggregator.properties"],Usertomcat::Create[$_catname]],

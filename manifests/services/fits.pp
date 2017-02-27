@@ -12,8 +12,6 @@ class dhrep::services::fits (
   $_aptdir             = $::dhrep::params::aptdir
   $_vardir             = $::dhrep::params::vardir
   $_catname            = $::dhrep::services::tomcat_fits::catname
-  $_user               = $::dhrep::services::tomcat_fits::user
-  $_group              = $::dhrep::services::tomcat_fits::group
 
   $fits_folder         = "fits-${fits_version}"
   $fits_file           = "${fits_folder}_0.zip"
@@ -62,7 +60,7 @@ class dhrep::services::fits (
   ###
   # symlink war from extracted war file to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/fits":
+  file { "/home/${_catname}/${_catname}/webapps/fits":
     ensure  => 'link',
     target  => "${_aptdir}/fits",
     require => [File["${_aptdir}/fits"],Usertomcat::Create[$_catname]],
@@ -72,17 +70,17 @@ class dhrep::services::fits (
   # add things to fits tomcat configuration
   # FIXME diese geschichte ist noch verbesserungswürdig! klappt (noch) nicht beim ersten vagrant run!
   ###
-  file { "/home/${_user}/${_catname}/conf/catalina.properties":
+  file { "/home/${_catname}/${_catname}/conf/catalina.properties":
     ensure  => present,
   }
   file_line { 'configure_fits_libs_line_1':
-    path    => "/home/${_user}/${_catname}/conf/catalina.properties",
+    path    => "/home/${_catname}/${_catname}/conf/catalina.properties",
     line    => "fits.home=${fits_home}",
-    require => File["/home/${_user}/${_catname}/conf/catalina.properties"],
+    require => File["/home/${_catname}/${_catname}/conf/catalina.properties"],
   }
   ->
   file_line { 'configure_fits_libs_line_2':
-    path    => "/home/${_user}/${_catname}/conf/catalina.properties",
+    path    => "/home/${_catname}/${_catname}/conf/catalina.properties",
     line    => "shared.loader=\${fits.home}/lib/*.jar",
     notify  => Service[$_catname],
   }

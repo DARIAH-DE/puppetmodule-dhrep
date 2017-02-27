@@ -12,8 +12,6 @@ class dhrep::services::digilib (
   $_confdir   = $::dhrep::params::confdir
   $_vardir    = $::dhrep::params::vardir
   $_catname   = $::dhrep::services::tomcat_digilib::catname
-  $_user      = $::dhrep::services::tomcat_digilib::user
-  $_group     = $::dhrep::services::tomcat_digilib::group
   $_http_port = $::dhrep::services::tomcat_digilib::http_port
   $_jmx_port  = $::dhrep::services::tomcat_digilib::jmx_port
 
@@ -40,7 +38,7 @@ class dhrep::services::digilib (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/digilibservice":
+  file { "/home/${_catname}/${_catname}/webapps/digilibservice":
     ensure  => 'link',
     target  => "${_aptdir}/digilibservice",
     require => [Usertomcat::Create[$_catname], Package["digilib-service"]],
@@ -100,13 +98,13 @@ class dhrep::services::digilib (
   ###
   # copy config file
   ###
-  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
+  file { "/home/${_catname}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib.properties":
     source  => "${_confdir}/digilib/digilib.properties",
-    require => [File["/home/${_user}/${_catname}/webapps/digilibservice"],File["${_confdir}/digilib/digilib.properties"]],
+    require => [File["/home/${_catname}/${_catname}/webapps/digilibservice"],File["${_confdir}/digilib/digilib.properties"]],
   }
-  file { "/home/${_user}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
+  file { "/home/${_catname}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
     source  => "${_confdir}/digilib/digilib-service.properties",
-    require => [File["/home/${_user}/${_catname}/webapps/digilibservice"],File["${_confdir}/digilib/digilib-service.properties"]],
+    require => [File["/home/${_catname}/${_catname}/webapps/digilibservice"],File["${_confdir}/digilib/digilib-service.properties"]],
   }
 
   ###

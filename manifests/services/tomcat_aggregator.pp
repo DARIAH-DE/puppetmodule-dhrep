@@ -12,8 +12,6 @@ class dhrep::services::tomcat_aggregator (
   $http_port    = $::dhrep::params::config['tomcat_aggregator']['http_port']
   $control_port = $::dhrep::params::config['tomcat_aggregator']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_aggregator']['jmx_port']
-  $user         = $::dhrep::params::config['tomcat_aggregator']['user']
-  $group        = $::dhrep::params::config['tomcat_aggregator']['group']
   $uid          = $::dhrep::params::config['tomcat_aggregator']['uid']
   $gid          = $::dhrep::params::config['tomcat_aggregator']['gid']
 
@@ -21,8 +19,6 @@ class dhrep::services::tomcat_aggregator (
   # user, home-dir and user-tomcat
   ###
   usertomcat::create { $catname:
-    user              => $user,
-    group             => $group,
     uid               => $uid,
     gid               => $gid,
     http_port         => $http_port,
