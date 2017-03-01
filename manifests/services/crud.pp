@@ -19,25 +19,16 @@ class dhrep::services::crud (
     include dhrep::services::intern::javagat
   }
 
-  $_name    = $::dhrep::params::crud_name[$scope]
-  $_short   = $::dhrep::params::crud_short[$scope]
-  $_version = $::dhrep::params::crud_version[$scope]
-  $_confdir = $::dhrep::params::confdir
-  $_logdir  = $::dhrep::params::logdir
-  $_optdir  = $::dhrep::params::optdir
-  $_catname = $::dhrep::params::config['tomcat_crud']['catname']
-  $_user    = $::dhrep::params::config['tomcat_crud']['user']
-  $_group   = $::dhrep::params::config['tomcat_crud']['group']
-  $_aptdir  = $::dhrep::params::aptdir
- 
-  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
-#  if $scope == 'textgrid' {
-#    $_aptdir = '/var/textgrid/webapps'
-#  }
-#  else {
-#    $_aptdir = $::dhrep::params::aptdir
-#  }
-
+  $_name     = $::dhrep::params::crud_name[$scope]
+  $_short    = $::dhrep::params::crud_short[$scope]
+  $_version  = $::dhrep::params::crud_version[$scope]
+  $_confdir  = $::dhrep::params::confdir
+  $_logdir   = $::dhrep::params::logdir
+  $_optdir   = $::dhrep::params::optdir
+  $_catname  = $::dhrep::params::config['tomcat_crud']['catname']
+  $_user     = $::dhrep::params::config['tomcat_crud']['user']
+  $_group    = $::dhrep::params::config['tomcat_crud']['group']
+  $_aptdir   = $::dhrep::params::aptdir
   $templates = "dhrep/etc/dhrep/crud/${scope}"
 
   ###

@@ -12,24 +12,15 @@ class dhrep::services::publish (
 
   include dhrep::services::tomcat_publish
 
-  $_name    = $::dhrep::params::publish_name[$scope]
-  $_short   = $::dhrep::params::publish_short[$scope]
-  $_version = $::dhrep::params::publish_version[$scope]
-  $_confdir = $::dhrep::params::confdir
-  $_logdir  = $::dhrep::params::logdir
-  $_catname = $::dhrep::services::tomcat_publish::catname
-  $_user    = $::dhrep::services::tomcat_publish::user
-  $_group   = $::dhrep::services::tomcat_publish::group
-#  $_aptdir  = $::dhrep::params::aptdir
-
-  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
-  if $scope == 'textgrid' {
-    $_aptdir = '/var/textgrid/webapps'
-  }
-  else {
-    $_aptdir = $::dhrep::params::aptdir
-  }
-
+  $_name     = $::dhrep::params::publish_name[$scope]
+  $_short    = $::dhrep::params::publish_short[$scope]
+  $_version  = $::dhrep::params::publish_version[$scope]
+  $_confdir  = $::dhrep::params::confdir
+  $_logdir   = $::dhrep::params::logdir
+  $_catname  = $::dhrep::services::tomcat_publish::catname
+  $_user     = $::dhrep::services::tomcat_publish::user
+  $_group    = $::dhrep::services::tomcat_publish::group
+  $_aptdir   = $::dhrep::params::aptdir
   $templates = "dhrep/etc/dhrep/publish"
 
   ###
