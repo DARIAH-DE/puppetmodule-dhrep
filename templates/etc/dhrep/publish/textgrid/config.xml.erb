@@ -229,29 +229,31 @@
 				<value>http://localhost:9090/tgsearch</value>
 			</property>
 			<property>
-				<!-- Add required namespaces for evaluating xpath-expressions below separate
-					prefix from url with = -->
+				<field>tgsearchUrl</field>
+				<value>http://localhost:9090/tgsearch</value>
+			</property>
+			<property>
 				<field>xpathNamespaces</field>
 				<value>tg=http://textgrid.info/namespaces/metadata/core/2010</value>
 			</property>
 			<property>
-				<!-- Add xpath expressions for fields which are required for publishing
-					an Edition here -->
 				<field>editionRequiredFields</field>
 				<value>/tg:object/tg:edition/tg:isEditionOf</value>
 				<value>/tg:object/tg:edition/tg:license</value>
 			</property>
 			<property>
-				<!-- Add xpath expressions for fields which are required for publishing
-					an Item here -->
 				<field>itemRequiredFields</field>
 				<value>/tg:object/tg:item/tg:rightsHolder</value>
 			</property>
 			<property>
-				<!-- Add xpath expressions for fields which are required for publishing
-					a collection here -->
 				<field>collectionRequiredFields</field>
-				<value></value>
+				<value>/tg:object/tg:collection/tg:collector</value>
+			</property>
+			<property>
+				<field>workRequiredFields</field>
+				<value>/tg:object/tg:work/tg:agent</value>
+				<value>/tg:object/tg:work/tg:dateOfCreation</value>
+				<value>/tg:object/tg:work/tg:genre</value>
 			</property>
 		</class>
 		<class name="actionmodule.textgrid.publish.PublishCheckWorldReadable">
