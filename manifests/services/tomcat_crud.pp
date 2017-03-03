@@ -26,7 +26,7 @@ class dhrep::services::tomcat_crud (
   ###
   # user, home-dir and user-tomcat
   ###
-  usertomcat::create { $catname:
+  usertomcat::instance { $catname:
     user                 => $user,
     group                => $group,
     uid                  => $uid,

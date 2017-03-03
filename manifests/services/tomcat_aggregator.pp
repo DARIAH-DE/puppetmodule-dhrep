@@ -18,7 +18,7 @@ class dhrep::services::tomcat_aggregator (
   ###
   # user, home-dir and user-tomcat
   ###
-  usertomcat::create { $catname:
+  usertomcat::instance { $catname:
     uid               => $uid,
     gid               => $gid,
     http_port         => $http_port,
