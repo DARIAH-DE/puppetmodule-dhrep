@@ -63,7 +63,7 @@ class dhrep::services::fits (
   file { "/home/${_catname}/${_catname}/webapps/fits":
     ensure  => 'link',
     target  => "${_aptdir}/fits",
-    require => [File["${_aptdir}/fits"],Usertomcat::Create[$_catname]],
+    require => [File["${_aptdir}/fits"],Usertomcat::Instance[$_catname]],
   }
 
   ###
