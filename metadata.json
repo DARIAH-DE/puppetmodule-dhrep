@@ -4,9 +4,9 @@
   "author": "Maximilian Brodhun, Stefan E. Funk, Carsten Thiel, Ubbo Veentjer",
   "license": "Apache-2.0",
   "summary": "DARIAH-DE puppet module for the TextGrid and DARIAH repository.",
-  "source": "https://projects.gwdg.de/projects/textgrid-puppetmodule/repository",
-  "project_page": "https://projects.gwdg.de/projects/textgrid-puppetmodule",
-  "issues_url": "https://projects.gwdg.de/projects/textgrid-puppetmodule/issues",
+  "source": "https://github.com/DARIAH-DE/puppetmodule-dhrep.git",
+  "project_page": "https://github.com/DARIAH-DE/puppetmodule-dhrep",
+  "issues_url": "https://github.com/DARIAH-DE/puppetmodule-dhrep/issues",
   "tags": ["dariah", "textgrid","repository"],
   "operatingsystem_support": [
     {
