@@ -36,7 +36,7 @@ class dhrep::services::crud (
   ###
   package { $_name:
     ensure  => $_version,
-    require => [Exec['update_dariah_apt_repository'], Usertomcat::Create[$_catname]],
+    require => [Exec['update_dariah_apt_repository'], Usertomcat::Instance[$_catname]],
   }
 
   ###
@@ -45,7 +45,7 @@ class dhrep::services::crud (
   file { "/home/${_user}/${_catname}/webapps/${_short}":
     ensure  => 'link',
     target  => "${_aptdir}/${_short}",
-    require => [File["${_confdir}/${_short}/beans.properties"], Usertomcat::Create[$_catname]],
+    require => [File["${_confdir}/${_short}/beans.properties"], Usertomcat::Instance[$_catname]],
   }
 
   ###

@@ -30,7 +30,7 @@ class dhrep::services::iiifmd (
   ###
   package { 'tg-iiif-metadata':
     ensure  => $version,
-    require => [Exec['update_dariah_apt_repository'],Usertomcat::Create[$_catname]],
+    require => [Exec['update_dariah_apt_repository'],Usertomcat::Instance[$_catname]],
   }
 
   ###
@@ -39,7 +39,7 @@ class dhrep::services::iiifmd (
   file { "/home/${_catname}/${_catname}/webapps/iiifmd":
     ensure  => 'link',
     target  => "${_aptdir}/iiifmd",
-    require => [File["${_confdir}/iiifmd/iiifmd.properties"],Usertomcat::Create[$_catname]],
+    require => [File["${_confdir}/iiifmd/iiifmd.properties"],Usertomcat::Instance[$_catname]],
   }
 
   ###

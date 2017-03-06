@@ -35,7 +35,7 @@ class dhrep::services::pid (
   ###
   package { $_name:
     ensure  => $_version,
-    require => [Exec['update_dariah_apt_repository'],Usertomcat::Create[$_catname]],
+    require => [Exec['update_dariah_apt_repository'],Usertomcat::Instance[$_catname]],
   }
 
   ###
@@ -44,7 +44,7 @@ class dhrep::services::pid (
   file { "/home/${_user}/${_catname}/webapps/${_short}":
     ensure => 'link',
     target  => "${_aptdir}/pid",
-    require => [File["${_confdir}/${_short}/pid.properties"],Usertomcat::Create[$_catname]],
+    require => [File["${_confdir}/${_short}/pid.properties"],Usertomcat::Instance[$_catname]],
   }
 
   ###

@@ -32,7 +32,7 @@ class dhrep::services::digilib (
     'libvips37': ensure        => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
     'libvips-tools': ensure    => present;
     'digilib-service': ensure  => $version,
-                       require => [Exec['update_dariah_apt_repository'],Usertomcat::Create[$_catname]],
+                       require => [Exec['update_dariah_apt_repository'],Usertomcat::Instance[$_catname]],
   }
 
   ###
@@ -41,7 +41,7 @@ class dhrep::services::digilib (
   file { "/home/${_catname}/${_catname}/webapps/digilibservice":
     ensure  => 'link',
     target  => "${_aptdir}/digilibservice",
-    require => [Usertomcat::Create[$_catname], Package["digilib-service"]],
+    require => [Usertomcat::Instance[$_catname], Package["digilib-service"]],
   }
 
   ###

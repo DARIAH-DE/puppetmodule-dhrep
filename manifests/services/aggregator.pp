@@ -31,7 +31,7 @@ class dhrep::services::aggregator (
 
   package { 'aggregator':
     ensure  => $version,
-    require => [Exec['update_dariah_apt_repository'],Usertomcat::Create[$_catname]],
+    require => [Exec['update_dariah_apt_repository'],Usertomcat::Instance[$_catname]],
   }
 
   ###
@@ -64,7 +64,7 @@ class dhrep::services::aggregator (
   file { "/home/${_catname}/${_catname}/webapps/aggregator":
     ensure  => 'link',
     target  => "${_aptdir}/aggregator",
-    require => [File["${_confdir}/aggregator/aggregator.properties"],Usertomcat::Create[$_catname]],
+    require => [File["${_confdir}/aggregator/aggregator.properties"],Usertomcat::Instance[$_catname]],
   }
 
   ###
