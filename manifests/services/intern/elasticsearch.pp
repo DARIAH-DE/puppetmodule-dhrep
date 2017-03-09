@@ -188,7 +188,8 @@ class dhrep::services::intern::elasticsearch (
   }
   ->
   nrpe::plugin { 'check_elasticsearch':
-    plugin => 'check_elasticsearch',
-    args   => "-p ${$_master_http_port} -vv",
+    plugin     => 'check_elasticsearch',
+    libexecdir => '/usr/local/bin',
+    args       => "-p ${$_master_http_port} -vv",
   }
 }
