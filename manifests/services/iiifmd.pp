@@ -89,7 +89,7 @@ class dhrep::services::iiifmd (
   }
 
   ###
-  # install the collectd plugin for elasticsearch
+  # install mirador
   ###
   file { '/var/www/nginx-root/textgridrep.de/iiif':
     ensure => directory,
@@ -97,6 +97,10 @@ class dhrep::services::iiifmd (
     group  => $_catname,
     mode   => '0755',
   }
+
+  package { 'textgrid-mirador': ensure  => present }
+
+
 #  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
 #    ensure   => present,
 #    owner    => $_catname,
