@@ -33,7 +33,7 @@ listedProjects=<%= @iiif_enabled_projects.join(",") %>
 # url for textgridrep website
 textgridrepUrl=https://<%= @tgrep_host %>/
 
-miradorUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/mirador/view.html?uri=
+miradorUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/mirador/?uri=
 
 # uris of not incomplete textgrid publications, which cause errors
 brokenUris=<%= @iiif_blacklist_uris.join(",") %>
