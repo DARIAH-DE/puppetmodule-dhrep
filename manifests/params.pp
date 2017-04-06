@@ -171,6 +171,7 @@ class dhrep::params {
       'jmx_port'     => '9990',
       'gid'          => '1007',
       'uid'          => '1007',
+
     },
   }
 
@@ -214,8 +215,8 @@ class dhrep::params {
       $tomcat_oaipmh_xms          = '512m'
       $tomcat_sesame_xmx          = '768m'
       $tomcat_sesame_xms          = '768m'
-      $tomcat_digilib_xmx         = '1536m'
-      $tomcat_digilib_xms         = '1536m'
+      $tomcat_digilib_xmx         = '2048m'
+      $tomcat_digilib_xms         = '2048m'
     }
     default: {
       $elasticsearch_es_heap_size = '512m'
