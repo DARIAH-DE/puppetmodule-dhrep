@@ -1,0 +1,5 @@
+User-Agent: * 
+Disallow: /1.0/aggregator/zip/
+Disallow: /1.0/aggregator/teicorpus/
+Disallow: /1.0/aggregator/epub/
+

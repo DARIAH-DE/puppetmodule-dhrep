@@ -109,7 +109,7 @@ class dhrep::static::textgridlab_org(
   #
 
   #
-  # HTML files: index.html, favicon.ico, jira.html, error sites, and images
+  # HTML files: index.html, favicon.ico, jira.html, error sites, robots.txt and images
   #
   file { '/var/www/nginx-root/textgridlab.org/index.html':
     source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/index.html',
@@ -133,6 +133,11 @@ class dhrep::static::textgridlab_org(
   }
   file { '/var/www/nginx-root/textgridlab.org/50x.html':
     source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/50x.html',
+    mode    => '0644',
+    require => File['/var/www/nginx-root/textgridlab.org'],
+  }
+  file { '/var/www/nginx-root/textgridlab.org/robots.txt':
+    source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/robots.txt',
     mode    => '0644',
     require => File['/var/www/nginx-root/textgridlab.org'],
   }
