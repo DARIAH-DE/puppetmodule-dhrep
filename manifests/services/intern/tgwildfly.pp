@@ -118,4 +118,16 @@ class dhrep::services::intern::tgwildfly (
     dateext      => true,
     dateformat   => '.%Y-%m-%d'
   }
+
+  ###
+  # nrpe
+  ###
+  nrpe::plugin { 'check_tgwildfly_memory':
+    plugin => 'check_http',
+    args   => '-H localhost -p 18080 -u /jolokia/read/java.lang:type=Memory -s HeapMemoryUsage -s NonHeapMemoryUsage',
+  }
+  nrpe::plugin { 'check_tgwildfly_uptime':
+    plugin => 'check_http',
+    args   => '-H localhost -p 18080 -u /jolokia/read/java.lang:type=Runtime/Uptime -s Uptime',
+  }
 }

@@ -3,8 +3,9 @@
 # Class to install and configure the DARIAH fits.
 #
 class dhrep::services::fits (
-  $scope        = undef,
-  $fits_version = '0.10.1',
+  $scope                = undef,
+  $fits_version         = '1.0.6',
+  $fits_servlet_version = '1.1.3',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_fits
@@ -14,10 +15,10 @@ class dhrep::services::fits (
   $_catname            = $::dhrep::services::tomcat_fits::catname
 
   $fits_folder         = "fits-${fits_version}"
-  $fits_file           = "${fits_folder}_0.zip"
+  $fits_file           = "${fits_folder}.zip"
   $fits_source         = "http://projects.iq.harvard.edu/files/fits/files/${fits_file}"
-  $fits_service_file   = 'FITSservlet-1.0.0.war'
-  $fits_service_source = 'http://projects.iq.harvard.edu/files/fits/files/fitsservlet-1.0.0.war'
+  $fits_service_file   = "fits-${fits_servlet_version}.war"
+  $fits_service_source = "http://projects.iq.harvard.edu/files/fits/files/fits-${fits_servlet_version}.war"
   $fits_home           = "/home/${_catname}/${fits_folder}"
 
   ###
