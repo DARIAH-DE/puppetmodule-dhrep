@@ -9,6 +9,10 @@ class dhrep::resources::apache (
   $port  = '8080',
 ){
 
+  file { "/etc/apache2":
+    ensure => directory,
+  }
+
   file { "/etc/apache2/${scope}":
     ensure => directory,
   }

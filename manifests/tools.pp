@@ -4,6 +4,10 @@
 #
 class dhrep::tools {
 
+  package {
+    'wget':          ensure => present;
+  }
+
   ###
   # misc files
   ###
