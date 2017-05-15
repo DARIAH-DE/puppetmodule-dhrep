@@ -15,6 +15,8 @@ class dhrep::services::digilib (
   $_catname   = $::dhrep::services::tomcat_digilib::catname
   $_http_port = $::dhrep::services::tomcat_digilib::http_port
   $_jmx_port  = $::dhrep::services::tomcat_digilib::jmx_port
+  $_http_port2 = $::dhrep::services::tomcat_digilib2::http_port
+  $_jmx_port2  = $::dhrep::services::tomcat_digilib2::jmx_port
 
   # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {
@@ -124,7 +126,23 @@ class dhrep::services::digilib (
   }
 
   ###
-  # nrpe
+  # restart both digilib-tomcats every day at a different time
+  ###
+  cron { 'restart-tomcat-digilib':
+    command => 'service tomcat-digilib restart &> /dev/null',
+    user    => 'root',
+    hour    => '1',
+    minute  => '0',
+  }
+  cron { 'restart-tomcat-digilib2':
+    command => 'service tomcat-digilib2 restart &> /dev/null',
+    user    => 'root',
+    hour    => '2',
+    minute  => '0',
+  }
+
+  ###
+  # nrpe digilib
   ###
   nrpe::plugin { 'check_http_digilib':
     plugin => 'check_http',
@@ -146,4 +164,29 @@ class dhrep::services::digilib (
     plugin => '/check_jmx',
     args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=OperatingSystem -A OpenFileDescriptorCount",
   }
+  ###
+  # nrpe digilib2
+  ###
+  nrpe::plugin { 'check_http_digilib2':
+    plugin => 'check_http',
+    args   => "-H localhost -t 30 -p ${_http_port2} -u /digilibservice/rest/info -s \"Digilib\"",
+  }
+  nrpe::plugin { 'check_jmx_digilib2_heap_used':
+    plugin => '/check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port2}/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w 1800000000 -c 2000000000",
+  }
+  nrpe::plugin { 'check_jmx_digilib2_thread_count':
+    plugin => '/check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port2}/jmxrmi -O java.lang:type=Threading -A ThreadCount",
+  }
+  nrpe::plugin { 'check_jmx_digilib2_process_cpu_load':
+    plugin => '/check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port2}/jmxrmi -O java.lang:type=OperatingSystem -A ProcessCpuLoad",
+  }
+  nrpe::plugin { 'check_jmx_digilib2_open_fd':
+    plugin => '/check_jmx',
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port2}/jmxrmi -O java.lang:type=OperatingSystem -A OpenFileDescriptorCount",
+  }
+
+
 }
