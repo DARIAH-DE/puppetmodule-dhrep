@@ -103,14 +103,14 @@ location /1.0/tgpid {
 }
 
 location /1.0/digilib {
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_digilib::http_port') %>/digilibservice;
+    proxy_pass http://digilib_balancer/digilibservice;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
 
 location /1.0/digilib/rest/IIIF {
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_digilib::http_port') %>/digilibservice/rest/IIIF;
+    proxy_pass http://digilib_balancer/digilibservice/rest/IIIF;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;

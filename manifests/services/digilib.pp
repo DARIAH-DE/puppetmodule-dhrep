@@ -8,6 +8,7 @@ class dhrep::services::digilib (
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_digilib
+  include dhrep::services::tomcat_digilib2
 
   $_confdir   = $::dhrep::params::confdir
   $_vardir    = $::dhrep::params::vardir
@@ -43,6 +44,12 @@ class dhrep::services::digilib (
     target  => "${_aptdir}/digilibservice",
     require => [Usertomcat::Instance[$_catname], Package["digilib-service"]],
   }
+  file { "/home/${_catname}/${_catname}2/webapps/digilibservice":
+    ensure  => 'link',
+    target  => "${_aptdir}/digilibservice",
+    require => [Usertomcat::Instance['tomcat-digilib2'], Package["digilib-service"]],
+  }
+
 
   ###
   # config
@@ -105,6 +112,15 @@ class dhrep::services::digilib (
   file { "/home/${_catname}/${_catname}/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
     source  => "${_confdir}/digilib/digilib-service.properties",
     require => [File["/home/${_catname}/${_catname}/webapps/digilibservice"],File["${_confdir}/digilib/digilib-service.properties"]],
+  }
+
+  file { "/home/${_catname}/${_catname}2/webapps/digilibservice/WEB-INF/classes/digilib.properties":
+    source  => "${_confdir}/digilib/digilib.properties",
+    require => [File["/home/${_catname}/${_catname}2/webapps/digilibservice"],File["${_confdir}/digilib/digilib.properties"]],
+  }
+  file { "/home/${_catname}/${_catname}2/webapps/digilibservice/WEB-INF/classes/digilib-service.properties":
+    source  => "${_confdir}/digilib/digilib-service.properties",
+    require => [File["/home/${_catname}/${_catname}2/webapps/digilibservice"],File["${_confdir}/digilib/digilib-service.properties"]],
   }
 
   ###
