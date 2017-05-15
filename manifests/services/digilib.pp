@@ -10,11 +10,12 @@ class dhrep::services::digilib (
   include dhrep::services::tomcat_digilib
   include dhrep::services::tomcat_digilib2
 
-  $_confdir   = $::dhrep::params::confdir
-  $_vardir    = $::dhrep::params::vardir
-  $_catname   = $::dhrep::services::tomcat_digilib::catname
-  $_http_port = $::dhrep::services::tomcat_digilib::http_port
-  $_jmx_port  = $::dhrep::services::tomcat_digilib::jmx_port
+  $_confdir    = $::dhrep::params::confdir
+  $_vardir     = $::dhrep::params::vardir
+  $_catname    = $::dhrep::services::tomcat_digilib::catname
+  $_xmx        = $::dhrep::services::tomcat_digilib::xmx
+  $_http_port  = $::dhrep::services::tomcat_digilib::http_port
+  $_jmx_port   = $::dhrep::services::tomcat_digilib::jmx_port
   $_http_port2 = $::dhrep::services::tomcat_digilib2::http_port
   $_jmx_port2  = $::dhrep::services::tomcat_digilib2::jmx_port
 
@@ -141,6 +142,25 @@ class dhrep::services::digilib (
     minute  => '0',
   }
 
+  # calculate critical and warning values from xmx for nrpe
+  $xmx_in_byte = inline_template("<%
+        mem,unit = @_xmx.scan(/\d+|\D+/)
+        mem = mem.to_f
+        case unit
+            when nil
+              mem *= (1<<0)
+            when 'k'
+              mem *= (1<<10)
+            when 'm'
+              mem *= (1<<20)
+            when 'g'
+              mem *= (1<<30)
+        end
+        %><%= mem.to_i %>")
+  # warn at 85%, crit at 95%
+  $mem_warn = inline_template("<%= (@xmx_in_byte.to_f * 0.85 ).to_i %>")
+  $mem_crit = inline_template("<%= (@xmx_in_byte.to_f * 0.95 ).to_i %>")
+
   ###
   # nrpe digilib
   ###
@@ -150,7 +170,7 @@ class dhrep::services::digilib (
   }
   nrpe::plugin { 'check_jmx_digilib_heap_used':
     plugin => '/check_jmx',
-    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w 1800000000 -c 2000000000",
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w ${mem_warn} -c ${mem_crit}",
   }
   nrpe::plugin { 'check_jmx_digilib_thread_count':
     plugin => '/check_jmx',
@@ -173,7 +193,7 @@ class dhrep::services::digilib (
   }
   nrpe::plugin { 'check_jmx_digilib2_heap_used':
     plugin => '/check_jmx',
-    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port2}/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w 1800000000 -c 2000000000",
+    args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port2}/jmxrmi -O java.lang:type=Memory -A HeapMemoryUsage -K used -I HeapMemoryUsage -J used -w ${mem_warn} -c ${mem_crit}",
   }
   nrpe::plugin { 'check_jmx_digilib2_thread_count':
     plugin => '/check_jmx',
