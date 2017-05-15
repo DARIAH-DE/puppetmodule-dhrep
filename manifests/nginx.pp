@@ -19,6 +19,7 @@ class dhrep::nginx (
   if $scope == 'textgrid' {
     include dhrep::services::tomcat_aggregator
     include dhrep::services::tomcat_digilib
+    include dhrep::services::tomcat_digilib2
     include dhrep::services::tomcat_sesame
     include dhrep::services::tomcat_tgsearch
   }  
