@@ -11,23 +11,23 @@ location /1.0/tgrep {
 }
 
 location /1.0/tgauth {
-    proxy_pass http://localhost:8080/tgauth;
+    proxy_pass http://127.0.0.1:8080/tgauth;
 }
 
 location /1.0/WebAuthN {
-    proxy_pass http://localhost:8080/WebAuthN;
+    proxy_pass http://127.0.0.1:8080/WebAuthN;
 }
 
 location /1.0/Shibboleth.sso {
-    proxy_pass http://localhost:8080/1.0/Shibboleth.sso;
+    proxy_pass http://127.0.0.1:8080/1.0/Shibboleth.sso;
 }
 
 location /1.0/secure {
-    proxy_pass http://localhost:8080/1.0/secure;
+    proxy_pass http://127.0.0.1:8080/1.0/secure;
 }
 
 location /1.0/triplestore {
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_sesame::http_port') %>/openrdf-sesame/repositories;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_sesame::http_port') %>/openrdf-sesame/repositories;
     limit_except GET {
        deny all;
     }
@@ -37,7 +37,7 @@ location /1.0/triplestore {
 }
 
 location /1.0/tgoaipmh {
-    proxy_pass		http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_oaipmh::http_port') %>/oaipmh;
+    proxy_pass		http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_oaipmh::http_port') %>/oaipmh;
     proxy_set_header	X-Real-IP $remote_addr;
     proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header	Host $http_host;
@@ -46,7 +46,7 @@ location /1.0/tgoaipmh {
 location /1.0/tgsearch {
     gzip on;
     gzip_types text/plain application/xml;
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
@@ -55,7 +55,7 @@ location /1.0/tgsearch {
 location /1.0/tgsearch-public {
     gzip on;
     gzip_types text/plain application/xml;
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch-public;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch-public;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
@@ -68,7 +68,7 @@ location /1.0/tgcrud {
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
-    proxy_pass http://localhost:<%= @tomcat_crud_http_port %>/tgcrud;
+    proxy_pass http://127.0.0.1:<%= @tomcat_crud_http_port %>/tgcrud;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
@@ -81,14 +81,14 @@ location /1.0/tgcrud-public {
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
-    proxy_pass http://localhost:<%= @tomcat_crud_http_port %>/tgcrud-public;
+    proxy_pass http://127.0.0.1:<%= @tomcat_crud_http_port %>/tgcrud-public;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
 
 location /1.0/tgpublish {
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/tgpublish;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/tgpublish;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
@@ -96,7 +96,7 @@ location /1.0/tgpublish {
 }
 
 location /1.0/tgpid {
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/tgpid;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/tgpid;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
@@ -121,7 +121,7 @@ location /1.0/digilib/rest/IIIF {
 location /1.0/iiif/manifests {
     gzip on;
     gzip_types text/plain application/json;
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_digilib::http_port') %>/iiifmd;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_digilib::http_port') %>/iiifmd;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
@@ -145,7 +145,7 @@ location /1.0/aggregator {
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_aggregator::http_port') %>/aggregator;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_aggregator::http_port') %>/aggregator;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host localhost:<%= scope.lookupvar('dhrep::services::tomcat_aggregator::http_port') %>;
@@ -155,7 +155,7 @@ location /1.0/aggregator/html {
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_aggregator::http_port') %>/aggregator/html;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_aggregator::http_port') %>/aggregator/html;
     # cache aggregator html for 10 years ;-)
     proxy_cache aggregator;
     proxy_cache_valid 10y;
@@ -170,14 +170,14 @@ location /1.0/tgsearch-public/navigation/toplevel  {
     gzip_types text/plain application/xml;
     proxy_cache tgsearch;
     proxy_cache_valid 24h;
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch-public/navigation/toplevel;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch-public/navigation/toplevel;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
 
 location /marketplace {
-    proxy_pass http://localhost:8080/marketplace;
+    proxy_pass http://127.0.0.1:8080/marketplace;
 }
 
 location /tgnsearch {
