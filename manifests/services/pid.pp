@@ -42,7 +42,7 @@ class dhrep::services::pid (
   # symlink war from deb package to tomcat webapps dir
   ###
   file { "/home/${_user}/${_catname}/webapps/${_short}":
-    ensure => 'link',
+    ensure  => link,
     target  => "${_aptdir}/pid",
     require => [File["${_confdir}/${_short}/pid.properties"],Usertomcat::Instance[$_catname]],
   }
@@ -57,7 +57,7 @@ class dhrep::services::pid (
     mode   => '0755',
   }
   file { "${_confdir}/${_short}/pid.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -86,6 +86,6 @@ class dhrep::services::pid (
     missingok    => true,
     ifempty      => true,
     dateext      => true,
-    dateformat   => '.%Y-%m-%d'
+    dateformat   => '.%Y-%m-%d',
   }
 }

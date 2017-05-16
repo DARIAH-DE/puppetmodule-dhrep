@@ -13,8 +13,8 @@ define dhrep::users_addadmin (
   $mail        = '',
   $sshkey_type = '',
   $sshkey      = '',
-  $shell       = '/bin/bash') 
-{
+  $shell       = '/bin/bash'
+) {
 
   user { $username:
     ensure     => present,
@@ -27,7 +27,7 @@ define dhrep::users_addadmin (
     managehome => true,
     require    => [Package['zsh'],Package['bash']],
   }
-  
+
   if ($sshkey != '') {
     ssh_authorized_key {"sshkey_${username}":
       ensure => present,
@@ -67,5 +67,4 @@ define dhrep::users_addadmin (
       require => File['/etc/aliases'],
     }
   }
-
 }

@@ -44,8 +44,7 @@ class dhrep::services::tgauth (
   $_vardir    = $::dhrep::params::vardir
 
   apt::ppa { 'ppa:rtandy/openldap-backports': }
-  ->
-  package {
+  -> package {
     'slapd':      ensure => present;
     'ldap-utils': ensure => present;
     'db5.3-util': ensure => present;
@@ -75,28 +74,28 @@ class dhrep::services::tgauth (
     require => File["${_confdir}/tgauth"],
   }
   file { "${_confdir}/tgauth/conf/rbac.conf":
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/rbac.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/rbacSoap.conf":
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/rbacSoap.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/system.conf":
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/system.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/config_tgwebauth.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -130,8 +129,7 @@ class dhrep::services::tgauth (
     creates => '/usr/local/src/tgauth-git',
     require => Package['git'],
   }
-  ->
-  file { '/var/www/tgauth':
+  -> file { '/var/www/tgauth':
     source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
     recurse => true,
     mode    => '0644',
@@ -145,7 +143,7 @@ class dhrep::services::tgauth (
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -153,7 +151,7 @@ class dhrep::services::tgauth (
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -161,7 +159,7 @@ class dhrep::services::tgauth (
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -169,7 +167,7 @@ class dhrep::services::tgauth (
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -177,7 +175,7 @@ class dhrep::services::tgauth (
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -231,7 +229,7 @@ class dhrep::services::tgauth (
   # shibboleth config (set IdP's entityID)
   ###
   file { '/var/www/WebAuthN/js/dariah.js':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -251,7 +249,7 @@ class dhrep::services::tgauth (
   # ldap config
   ###
   file { '/etc/ldap/ldap.conf':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -276,45 +274,40 @@ class dhrep::services::tgauth (
   # test
   ###
   file { '/tmp/ldap-cn-config-test.ldif':
-    ensure  => present,
+    ensure  => file,
     content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
     require => Service['slapd'],
   }
   unless $tgauth_ldap_initialized {
-      $slapd_rootpw_sha = sha1digest($slapd_rootpw)
+    $slapd_rootpw_sha = sha1digest($slapd_rootpw)
 
-      file { '/tmp/ldap-cn-config.ldif':
-        ensure  => present,
-        content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
-        require => Service['slapd'],
-      }
-      ~>
-      file { '/tmp/tgldapconf.sh':
-        source => 'puppet:///modules/dhrep/ldap/tgldapconf.sh',
-        mode   => '0744',
-      }
-      ~>
-      exec { 'tgldapconf.sh':
-        command => '/tmp/tgldapconf.sh',
-        require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
-      }
-      ~>
-      file { '/tmp/ldap-rbac-template.ldif':
-        ensure  => present,
-        content => template('dhrep/ldap/rbac-data.ldif.erb'),
-      }
-      ~>
-      # should only run once, if ldap template is added (with help of notify and refreshonly)
-      exec { 'ldapadd_ldap_template':
-        command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
-        refreshonly => true,
-        require     => [Package['ldap-utils'], Service['slapd']],
-        logoutput   => true,
-      }
-      ->
-      file {'/etc/facter/facts.d/tgauth_ldap_initialized.txt':
-        content => 'tgauth_ldap_initialized=true',
-      }
+    file { '/tmp/ldap-cn-config.ldif':
+      ensure  => file,
+      content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
+      require => Service['slapd'],
+    }
+    ~> file { '/tmp/tgldapconf.sh':
+      source => 'puppet:///modules/dhrep/ldap/tgldapconf.sh',
+      mode   => '0744',
+    }
+    ~> exec { 'tgldapconf.sh':
+      command => '/tmp/tgldapconf.sh',
+      require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
+    }
+    ~> file { '/tmp/ldap-rbac-template.ldif':
+      ensure  => ,
+      content => template('dhrep/ldap/rbac-data.ldif.erb'),
+    }
+    # should only run once, if ldap template is added (with help of notify and refreshonly)
+    ~> exec { 'ldapadd_ldap_template':
+      command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
+      refreshonly => true,
+      require     => [Package['ldap-utils'], Service['slapd']],
+      logoutput   => true,
+    }
+    -> file {'/etc/facter/facts.d/tgauth_ldap_initialized.txt':
+      content => 'tgauth_ldap_initialized=true',
+    }
   }
   service{ 'slapd':
     ensure  => running,
@@ -350,7 +343,7 @@ class dhrep::services::tgauth (
       Require all granted
     </Directory>
     ",
-    notify => Service['apache2'],
+    notify  => Service['apache2'],
   }
 
   ###
@@ -368,7 +361,7 @@ class dhrep::services::tgauth (
     owner   => 'root',
     group   => 'root',
     mode    => '0700',
-    require => [File[$_optdir],File["${_backupdir}/ldap"]]
+    require => [File[$_optdir],File["${_backupdir}/ldap"]],
   }
   cron { 'ldap-backup' :
     command => "${_optdir}/ldap-backup.sh > /dev/null",
@@ -435,5 +428,5 @@ class dhrep::services::tgauth (
   ###
   # monitor slapd with collectd
   ###
-   collectd::plugin::processes::process { 'slapd' : }
+  collectd::plugin::processes::process { 'slapd' : }
 }

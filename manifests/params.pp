@@ -21,15 +21,15 @@ class dhrep::params {
   ###
   $crud_name = {
     'textgrid' => 'tgcrud-webapp',
-    'dariah'   => 'dhcrud-webapp'
+    'dariah'   => 'dhcrud-webapp',
   }
   $crud_short = {
     'textgrid' => 'tgcrud',
-    'dariah'   => 'dhcrud'
+    'dariah'   => 'dhcrud',
   }
   $crud_version = {
     'textgrid' => 'latest',
-    'dariah'   => 'latest'
+    'dariah'   => 'latest',
   }
 
   ###
@@ -37,15 +37,15 @@ class dhrep::params {
   ###
   $crud_public_name = {
     'textgrid' => 'tgcrud-webapp-public',
-    'dariah'   => 'dhcrud-webapp-public'
+    'dariah'   => 'dhcrud-webapp-public',
   }
   $crud_public_short = {
     'textgrid' => 'tgcrud-public',
-    'dariah'   => 'dhcrud-public'
+    'dariah'   => 'dhcrud-public',
   }
   $crud_public_version = {
     'textgrid' => 'latest',
-    'dariah'   => 'latest'
+    'dariah'   => 'latest',
   }
 
   ###
@@ -53,15 +53,15 @@ class dhrep::params {
   ###
   $publish_name = {
     'textgrid' => 'kolibri-tgpublish-service',
-    'dariah'   => 'kolibri-dhpublish-service'
+    'dariah'   => 'kolibri-dhpublish-service',
   }
   $publish_short = {
     'textgrid' => 'tgpublish',
-    'dariah'   => 'dhpublish'
+    'dariah'   => 'dhpublish',
   }
   $publish_version = {
     'textgrid' => 'latest',
-    'dariah'   => 'latest'
+    'dariah'   => 'latest',
   }
 
   ###
@@ -69,15 +69,15 @@ class dhrep::params {
   ###
   $pid_name = {
     'textgrid' => 'pid-webapp',
-    'dariah'   => 'pid-webapp'
+    'dariah'   => 'pid-webapp',
   }
   $pid_short = {
     'textgrid' => 'tgpid',
-    'dariah'   => 'dhpid'
+    'dariah'   => 'dhpid',
   }
   $pid_version = {
     'textgrid' => 'latest',
-    'dariah'   => 'latest'
+    'dariah'   => 'latest',
   }
 
   ###
@@ -85,11 +85,11 @@ class dhrep::params {
   ###
   $oaipmh_name = {
     'textgrid' => 'oaipmh-webapp',
-    'dariah'   => 'oaipmh-webapp'
+    'dariah'   => 'oaipmh-webapp',
   }
   $oaipmh_version = {
     'textgrid' => 'latest',
-    'dariah'   => 'latest'
+    'dariah'   => 'latest',
   }
 
   ###

@@ -163,12 +163,14 @@ class dhrep (
       scope          => $scope,
       publish_secret => $tgcrud_publish_secret,
       log_level      => $crud_log_level,
-      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'], Class['dhrep::services::intern::tgwildfly']],
+      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
+      Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::crud_public':
       scope     => $scope,
       log_level => $crud_public_log_level,
-      require   => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'], Class['dhrep::services::intern::tgwildfly']],
+      require   => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
+      Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
@@ -186,7 +188,8 @@ class dhrep (
     class { 'dhrep::static::textgridlab_org': }
     class { 'dhrep::services::tgsearch':
       scope   => $scope,
-      require => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'], Class['dhrep::services::tgauth']],
+      require => [Class['dhrep::services::intern::elasticsearch'],
+      Class['dhrep::services::intern::sesame'], Class['dhrep::services::tgauth']],
     }
     class { 'dhrep::services::tgsearch_public':
       scope   => $scope,
@@ -263,15 +266,13 @@ class dhrep (
     }
 
     apt::ppa { 'ppa:webupd8team/java': }
-    ->
-    package {
+    -> package {
       'oracle-java8-installer':
         ensure       => present,
         responsefile => '/tmp/java.preseed',
         require      => [Apt::Ppa['ppa:webupd8team/java'], File['/tmp/java.preseed']],
     }
-    ->
-    package { 'oracle-java8-set-default': ensure => present }
+    -> package { 'oracle-java8-set-default': ensure => present }
 
   } else {
     apt::ppa { 'ppa:webupd8team/java': ensure => absent }
@@ -303,7 +304,7 @@ class dhrep (
   # firewall rules)
   ###
   firewall { '100 allow http and https access':
-    dport   => [80, 443],
+    dport  => [80, 443],
     proto  => tcp,
     action => accept,
   }

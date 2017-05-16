@@ -4,7 +4,7 @@
 #
 class dhrep::services::fits (
   $scope                = undef,
-  $fits_version         = '1.0.6',
+  $fits_version         = '1.1.0',
   $fits_servlet_version = '1.1.3',
 ) inherits dhrep::params {
 
@@ -27,9 +27,9 @@ class dhrep::services::fits (
   staging::file { $fits_file:
     source  => $fits_source,
     target  => "${_vardir}/${fits_file}",
+    timeout => 300000,
   }
-  ->
-  staging::extract { $fits_file:
+  -> staging::extract { $fits_file:
     source  => "${_vardir}/${fits_file}",
     target  => "/home/${_catname}/",
     creates => "/home/${_catname}/${fits_folder}",
@@ -45,13 +45,11 @@ class dhrep::services::fits (
     mode    => '0755',
     require => File[$_aptdir],
   }
-  ->
-  staging::file { $fits_service_file:
-    source  => $fits_service_source,
-    target  => "${_vardir}/${fits_service_file}",
+  -> staging::file { $fits_service_file:
+    source => $fits_service_source,
+    target => "${_vardir}/${fits_service_file}",
   }
-  ->
-  staging::extract { $fits_service_file:
+  -> staging::extract { $fits_service_file:
     source  => "${_vardir}/${fits_service_file}",
     target  => "${_aptdir}/fits/",
     creates => "${_aptdir}/fits/WEB-INF",
@@ -69,20 +67,22 @@ class dhrep::services::fits (
 
   ###
   # add things to fits tomcat configuration
-  # FIXME diese geschichte ist noch verbesserungswürdig! klappt (noch) nicht beim ersten vagrant run!
+  # FIXME may still not be working at first vagrant run!
   ###
   file { "/home/${_catname}/${_catname}/conf/catalina.properties":
-    ensure  => present,
+    ensure => file,
   }
-  file_line { 'configure_fits_libs_line_1':
-    path    => "/home/${_catname}/${_catname}/conf/catalina.properties",
-    line    => "fits.home=${fits_home}",
-    require => File["/home/${_catname}/${_catname}/conf/catalina.properties"],
+  ~> file_line { 'configure_fits_libs_line_1':
+    path => "/home/${_catname}/${_catname}/conf/catalina.properties",
+    line => "fits.home=${fits_home}",
   }
-  ->
-  file_line { 'configure_fits_libs_line_2':
-    path    => "/home/${_catname}/${_catname}/conf/catalina.properties",
-    line    => "shared.loader=\${fits.home}/lib/*.jar",
-    notify  => Service[$_catname],
+  ~> file_line { 'configure_fits_libs_line_2':
+    path => "/home/${_catname}/${_catname}/conf/catalina.properties",
+    line => "shared.loader=\${fits.home}/lib/*.jar",
+  }
+  ~> file_line { 'configure_fits_libs_line_3':
+    path   => "/home/${_catname}/${_catname}/conf/catalina.properties",
+    line   => "log4j.configuration=\${fits.home}/log4j.properties",
+    notify => Service[$_catname],
   }
 }

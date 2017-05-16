@@ -7,9 +7,9 @@ class dhrep::tools {
   ###
   # misc files
   ###
-  file { "/usr/local/bin/wait_for_url_ready.sh":
-    mode    => '0744',
-    source  => 'puppet:///modules/dhrep/tools/wait_for_url_ready.sh',
+  file { '/usr/local/bin/wait_for_url_ready.sh':
+    mode   => '0744',
+    source => 'puppet:///modules/dhrep/tools/wait_for_url_ready.sh',
   }
 
   ###
@@ -28,16 +28,15 @@ class dhrep::tools {
     mode  => '0660',
   }
   file { '/usr/lib/nagios/plugins/check_tivoli':
-    source  => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_tivoli',
-    ensure  => present,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure => file,
+    source => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_tivoli',
+    owner  => root,
+    group  => root,
+    mode   => '0755',
   }
 
   nrpe::plugin { 'check_tivoli_root':
     plugin => 'check_tivoli',
     args   => '-c /',
   }
- 
 }

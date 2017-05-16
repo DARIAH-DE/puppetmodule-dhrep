@@ -56,7 +56,7 @@ class dhrep::services::crud_public (
     mode   => '0755',
   }
   file { "${_confdir}/${_short}/crud.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -65,7 +65,7 @@ class dhrep::services::crud_public (
     notify  => Service[$_catname],
   }
   file { "${_confdir}/${_short}/beans.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -77,7 +77,7 @@ class dhrep::services::crud_public (
   # logging
   ###
   file { "${_confdir}/${_short}/crud.log4j":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -101,7 +101,7 @@ class dhrep::services::crud_public (
     missingok    => true,
     ifempty      => true,
     dateext      => true,
-    dateformat   => '.%Y-%m-%d'
+    dateformat   => '.%Y-%m-%d',
   }
 
   ###
@@ -122,8 +122,8 @@ class dhrep::services::crud_public (
     # nrpe for tgcrud_public
     ###
     nrpe::plugin { 'check_rollback_tgcrud_public':
-      plugin => 'crud-analyse.pl',
-      args   => "-n -l ${_logdir}/${_short}/rollback.log",
+      plugin     => 'crud-analyse.pl',
+      args       => "-n -l ${_logdir}/${_short}/rollback.log",
       libexecdir => $_optdir,
     }
   }

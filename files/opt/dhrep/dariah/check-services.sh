@@ -17,7 +17,7 @@ ERRORS=false
 #
 FILE="version"
 CRUD=$SERVER":9093/dhcrud-public/"$FILE
-echo "checking "$CSTR"dhcrud"$CNRM $TRN $CRUD
+echo "checking "$CSTR"dhcrud"$CNRM" (intern)"$TRN $CRUD
 wget -q $CRUD
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
@@ -26,11 +26,12 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    rm $FILE
     ERRORS=true
 fi
 
 #
-# dhcrud public
+# dhcrud (public) don't worry, it is correct this way :-)
 #
 FILE="version"
 CRUD=$SERVER":9093/dhcrud/"$FILE
@@ -43,6 +44,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    rm $FILE
     ERRORS=true
 fi
 
@@ -60,6 +62,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    rm $FILE
     ERRORS=true
 fi
 
@@ -77,6 +80,7 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    rm $FILE
     ERRORS=true
 fi
 
@@ -85,7 +89,7 @@ fi
 #
 FILE="version"
 PID=$SERVER":9094/dhpid/"$FILE
-echo "checking "$CSTR"dhpid"$CNRM $TRN $PID
+echo "checking "$CSTR"dhpid"$CNRM" (intern)"$TRN $PID
 wget -q $PID
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
@@ -94,29 +98,87 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
+    rm $FILE
     ERRORS=true
 fi
 
 #
 # elasticsearch masternode
 #
-#FILE="curl"
-#MASTERNODE=$SERVER":9092"
-#echo "checking "$CSTR"elasticsearch masternode"$CNRM $TRN $curl
-#curl $MASTERNODE
-#if [ -s $FILE ]; then
-#    echo -n "    $OK ["$VSTR
-#    cat $FILE
-#    rm $FILE
-#    echo §CNRM"]"
-#else
-#    echo "    $FAILED"
-#    ERRORS=true
-#fi
+FILE="curl"
+MASTERNODE=$SERVER":9202"
+echo "checking "$CSTR"es masternode"$CNRM" (intern)"$TRN $MASTERNODE
+curl -s $MASTERNODE > $FILE
+URGL=`grep "200" curl`
+if [ -s $FILE -a  "$URGL" = '  "status" : 200,' ]; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
 
 #
 # elasticsearch workhorse
 #
+FILE="curl"
+WORKHORSE=$SERVER":9203"
+echo "checking "$CSTR"es workhorse"$CNRM" (intern)"$TRN $WORKHORSE
+curl -s $WORKHORSE > $FILE
+URGL=`grep "200" $FILE`
+if [ -s $FILE ] && [ "$URGL" = '  "status" : 200,' ]; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
+
+#
+# fits core
+#
+FILE="/opt/dhrep/output"
+echo "checking "$CSTR"fits core"$CNRM" (intern)"$TRN
+cd /home/tomcat-fits/fits-1.1.0
+./fits.sh -i License.md -o $FILE
+URGL=`grep toolname=\"FITS\" $FILE`
+URGL=`echo ${URGL:85:5}`
+if [ -s $FILE ] && [ "$URGL" = "1.1.0"  ] ; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    rm fits.log
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    rm fits.log
+    ERRORS=true
+fi
+
+#
+# fits service
+#
+FILE="version"
+FITS=$SERVER":9098/fits/"$FILE
+echo "checking "$CSTR"fits service"$CNRM" (intern)"$TRN
+wget -q $FITS
+if [ -s $FILE ]; then
+    echo -n "    $OK ["$VSTR
+    cat $FILE | xargs echo -n
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
 
 #
 # check for errors

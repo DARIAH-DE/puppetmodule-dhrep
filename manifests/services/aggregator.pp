@@ -11,7 +11,7 @@ class dhrep::services::aggregator (
   $_catname   = $::dhrep::services::tomcat_aggregator::catname
   $_http_port = $::dhrep::services::tomcat_aggregator::http_port
   $_jmx_port  = $::dhrep::services::tomcat_aggregator::jmx_port
-  $templates  = "dhrep/etc/dhrep/aggregator"
+  $templates  = 'dhrep/etc/dhrep/aggregator'
 
   # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {
@@ -19,10 +19,10 @@ class dhrep::services::aggregator (
 
     ### FIXME remove link if we dont need it anymore!
     file { '/etc/textgrid/':
-      ensure  => directory,
-      owner   => root,
-      group   => root,
-      mode    => '0644',
+      ensure => directory,
+      owner  => root,
+      group  => root,
+      mode   => '0644',
     }
   }
   else {
@@ -44,7 +44,7 @@ class dhrep::services::aggregator (
     mode   => '0755',
   }
   file { "${_confdir}/aggregator/aggregator.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
@@ -53,8 +53,8 @@ class dhrep::services::aggregator (
   }
   # remove symlink if service has been deployed with new beans.xml
   file { '/etc/textgrid/aggregator':
-    ensure => link,
-    target => "${_confdir}/aggregator",
+    ensure  => link,
+    target  => "${_confdir}/aggregator",
     require => File['/etc/textgrid'],
   }
 
@@ -71,25 +71,25 @@ class dhrep::services::aggregator (
   # nrpe for aggregator
   ###
   file { '/etc/nagios-plugins/config/jmx.cfg':
-    source  => 'puppet:///modules/dhrep/etc/nagios-plugins/config/jmx.cfg',
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
+    ensure => file,
+    source => 'puppet:///modules/dhrep/etc/nagios-plugins/config/jmx.cfg',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
   }
   file { '/usr/lib/nagios/plugins/check_jmx.jar':
-    source  => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_jmx.jar',
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
+    ensure => file,
+    source => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_jmx.jar',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
   }
   file { '/usr/lib/nagios/plugins/check_jmx':
-    source  => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_jmx',
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
+    ensure => file,
+    source => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_jmx',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
   }
   nrpe::plugin { 'check_http_aggregator':
     plugin => 'check_http',

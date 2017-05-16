@@ -21,7 +21,7 @@ class dhrep::services::publish (
   $_user     = $::dhrep::services::tomcat_publish::user
   $_group    = $::dhrep::services::tomcat_publish::group
   $_aptdir   = $::dhrep::params::aptdir
-  $templates = "dhrep/etc/dhrep/publish"
+  $templates = 'dhrep/etc/dhrep/publish'
 
   ###
   # update apt repo and install package
@@ -50,7 +50,7 @@ class dhrep::services::publish (
     mode   => '0755',
   }
   file { "${_confdir}/${_short}/config.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -59,7 +59,7 @@ class dhrep::services::publish (
     notify  => Service[$_catname],
   }
   file { "${_confdir}/${_short}/beans.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -67,7 +67,7 @@ class dhrep::services::publish (
     require => File["${_confdir}/${_short}"],
   }
   file { "${_confdir}/${_short}/policies.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -76,7 +76,7 @@ class dhrep::services::publish (
     notify  => Service[$_catname],
   }
   file { "${_confdir}/${_short}/mets_template.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -85,7 +85,7 @@ class dhrep::services::publish (
     notify  => Service[$_catname],
   }
   file { "${_confdir}/${_short}/map_dias2jhove.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -94,7 +94,7 @@ class dhrep::services::publish (
     notify  => Service[$_catname],
   }
   file { "${_confdir}/${_short}/dias_formatregistry.xml":
-    ensure  => present,
+    ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
@@ -149,7 +149,7 @@ class dhrep::services::publish (
     missingok    => true,
     ifempty      => true,
     dateext      => true,
-    dateformat   => '.%Y-%m-%d'
+    dateformat   => '.%Y-%m-%d',
   }
 
   ###
@@ -160,7 +160,7 @@ class dhrep::services::publish (
     # add elasticsearch script for removing nearly publish flag from elasticsearch
     ###
     file { '/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy':
-      ensure  => present,
+      ensure  => file,
       owner   => 'elasticsearch',
       group   => 'elasticsearch',
       mode    => '0640',

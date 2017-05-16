@@ -6,14 +6,16 @@
 	<!-- Policy for publishing into the DARIAH repository -->
 	<policy name="DHPublish">
 		<step class="dariahde.publish.PublishStart">
-			<step class="dariahde.publish.CheckCollection">
-				<step class="dariahde.publish.GetPids">
-					<step class="dariahde.publish.CreateCollection">
-						<step class="dariahde.publish.MetadataProcessor">
-							<step class="dariahde.publish.SubmitFiles">
-								<step class="dariahde.publish.UpdatePidMetadata">
-									<step class="dariahde.publish.NotifyCollectionRegistry">
-										<step class="dariahde.publish.PublishComplete" />
+			<step class="dariahde.publish.ReadCollectionModels">
+				<step class="dariahde.publish.CheckCollections">
+					<step class="dariahde.publish.GetPids">
+						<step class="dariahde.publish.CreateCollections">
+							<step class="dariahde.publish.MetadataProcessor">
+								<step class="dariahde.publish.SubmitFiles">
+						    			<step class="dariahde.publish.UpdatePidMetadata">
+										<step class="dariahde.publish.NotifyCollectionRegistry">
+											<step class="dariahde.publish.PublishComplete" />
+										</step>
 									</step>
 								</step>
 							</step>
