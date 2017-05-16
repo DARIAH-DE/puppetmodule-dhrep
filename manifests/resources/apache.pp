@@ -9,7 +9,7 @@ class dhrep::resources::apache (
   $port  = '8080',
 ){
 
-  file { "/etc/apache2":
+  file { '/etc/apache2':
     ensure => directory,
   }
 
@@ -35,11 +35,11 @@ class dhrep::resources::apache (
 
   # TODO: sites-available & a2ensite
   $defaultvhost = "/etc/apache2/sites-enabled/25-${::fqdn}.conf"
-    concat { $defaultvhost:
-      owner  => root,
-      group  => root,
-      mode   => '0644',
-      notify => Service['apache2'],
+  concat { $defaultvhost:
+    owner  => root,
+    group  => root,
+    mode   => '0644',
+    notify => Service['apache2'],
   }
 
   # Shibboleth configuration for Apache
@@ -50,7 +50,7 @@ class dhrep::resources::apache (
     default => 'mod_shib_22.so',
   }
   package { 'libapache2-mod-shib2':
-    ensure => absent
+    ensure => absent,
   }
   ::apache::mod { 'shib2':
     id  => 'mod_shib',
@@ -108,5 +108,4 @@ class dhrep::resources::apache (
     ",
     order   => 990,
   }
-
 }
