@@ -127,6 +127,18 @@ class dhrep::services::digilib (
   }
 
   ###
+  # nginx upstream conf for digilib
+  ###
+  file { '/etc/nginx/conf.d/digilib.conf':
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('dhrep/etc/dhrep/nginx/conf.d/digilib.conf.erb'),
+    notify  => Service['nginx'],
+  }
+
+  ###
   # restart both digilib-tomcats every day at a different time
   ###
   cron { 'restart-tomcat-digilib':
