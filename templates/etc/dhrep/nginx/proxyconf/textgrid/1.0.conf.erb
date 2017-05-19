@@ -118,6 +118,15 @@ location /1.0/digilib/rest/IIIF {
     proxy_cache_valid 48h;
 }
 
+location /1.0/digilib/rest/digilib {
+    proxy_pass http://digilib_balancer/digilibservice/rest/digilib;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+    proxy_cache digilib_digilib;
+    proxy_cache_valid 48h;
+}
+
 location /1.0/iiif/manifests {
     gzip on;
     gzip_types text/plain application/json;
