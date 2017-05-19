@@ -130,6 +130,12 @@ class dhrep::params {
       'gid'          => '1009',
       'uid'          => '1009',
     },
+    'tomcat_digilib2' => {
+      'catname'      => 'tomcat-digilib2',
+      'http_port'    => '9192',
+      'control_port' => '9107',
+      'jmx_port'     => '9912',
+    },
     'tomcat_fits' => {
       'catname'      => 'tomcat-fits',
       'http_port'    => '9098',
@@ -215,26 +221,26 @@ class dhrep::params {
       $tomcat_oaipmh_xms          = '512m'
       $tomcat_sesame_xmx          = '768m'
       $tomcat_sesame_xms          = '768m'
-      $tomcat_digilib_xmx         = '2048m'
-      $tomcat_digilib_xms         = '2048m'
+      $tomcat_digilib_xmx         = '1280m'
+      $tomcat_digilib_xms         = '1280m'
     }
     default: {
       $elasticsearch_es_heap_size = '512m'
       $servicetomcat_xmx          = '1024m'
-      $servicetomcat_xms          = '128m'
+      $servicetomcat_xms          = '32m'
       $tomcat_crud_xmx            = '1024m'
-      $tomcat_crud_xms            = '128m'
+      $tomcat_crud_xms            = '32m'
       $tomcat_publish_xmx         = '1024m'
-      $tomcat_publish_xms         = '128m'
+      $tomcat_publish_xms         = '32m'
       $wildfly_xmx                = '384m'
-      $wildfly_xms                = '256m'
+      $wildfly_xms                = '32m'
       $wildfly_maxpermsize        = '256m'
       $tomcat_oaipmh_xmx          = '512m'
-      $tomcat_oaipmh_xms          = '128m'
-      $tomcat_sesame_xmx          = '512m'
-      $tomcat_sesame_xms          = '128m'
+      $tomcat_oaipmh_xms          = '32m'
+      $tomcat_sesame_xmx          = '256m'
+      $tomcat_sesame_xms          = '32m'
       $tomcat_digilib_xmx         = '512m'
-      $tomcat_digilib_xms         = '128m'
+      $tomcat_digilib_xms         = '32m'
     }
   }
 }

@@ -19,6 +19,7 @@ class dhrep::nginx (
   if $scope == 'textgrid' {
     include dhrep::services::tomcat_aggregator
     include dhrep::services::tomcat_digilib
+    include dhrep::services::tomcat_digilib2
     include dhrep::services::tomcat_sesame
     include dhrep::services::tomcat_tgsearch
   }  
@@ -159,5 +160,34 @@ class dhrep::nginx (
     ensure  => running,
     enable  => true,
     require => [Package['nginx'],Package['ssl-cert']],
+  }
+
+  logrotate::rule { 'nginx':
+    path          => '/var/log/nginx/*.log',
+    rotate        => 90,
+    rotate_every  => 'day',
+    compress      => true,
+    copytruncate  => true,
+    delaycompress => true,
+    missingok     => true,
+    ifempty       => true,
+    dateext       => true,
+    dateformat    => '.%Y-%m-%d',
+    prerotate     => 'if [ -d /etc/logrotate.d/httpd-prerotate ]; then run-parts /etc/logrotate.d/httpd-prerotate; fi;',
+    postrotate    => '[ -s /run/nginx.pid ] && kill -USR1 `cat /run/nginx.pid`',
+  }
+
+  file {'/opt/dhrep/anonymizer_nginx.sh':
+    ensure => file,
+    owner  => 'root',
+    mode   => '0755',
+    source => 'puppet:///modules/dhrep/opt/dhrep/anonymizer_nginx.sh'
+  }
+
+  cron { 'anonymizer_nginx' :
+    command => '/opt/dhrep/anonymizer_nginx.sh',
+    user    => 'root',
+    hour    => '22',
+    minute  => '07',
   }
 }

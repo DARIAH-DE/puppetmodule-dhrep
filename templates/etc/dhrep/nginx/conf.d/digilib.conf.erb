@@ -1,0 +1,6 @@
+# digilib load balancer
+upstream digilib_balancer {
+  server 127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_digilib::http_port') %>;
+  server 127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_digilib2::http_port') %>;
+}
+
