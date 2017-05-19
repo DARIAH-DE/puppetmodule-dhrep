@@ -10,7 +10,6 @@ class dhrep::services::intern::javagat (
   ###
   # javagat
   ###
-
   dhrep::tools::tgstaging { "JavaGAT-${javagat_version}-binary.zip":
     source  => "http://gforge.cs.vu.nl/gf/download/frsrelease/154/1196/JavaGAT-${javagat_version}-binary.zip",
     target  => '/usr/local',
@@ -21,5 +20,4 @@ class dhrep::services::intern::javagat (
     ensure => link,
     target => "/usr/local/JavaGAT-${javagat_version}",
   }
-
 }

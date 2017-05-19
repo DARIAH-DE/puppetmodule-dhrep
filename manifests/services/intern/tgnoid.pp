@@ -35,8 +35,7 @@ class dhrep::services::intern::tgnoid (
     shell      => '/bin/bash',
     managehome => true,
   }
-  ->
-  file { "/home/${noiduser}":
+  -> file { "/home/${noiduser}":
     mode => '0755',
   }
 
@@ -48,13 +47,11 @@ class dhrep::services::intern::tgnoid (
     creates => '/etc/apache2/tgnoid.htpasswd',
     require => Service['apache2'],
   }
-  ~>
-  exec { 'change_noid_apache_credential_permissions':
+  ~> exec { 'change_noid_apache_credential_permissions':
     command     => 'chmod 600 /etc/apache2/tgnoid.htpasswd',
     refreshonly => true,
   }
-  ~>
-  exec { 'change_noid_apache_credential_owner':
+  ~> exec { 'change_noid_apache_credential_owner':
     command     => 'chown www-data:root /etc/apache2/tgnoid.htpasswd',
     refreshonly => true,
   }
@@ -67,12 +64,10 @@ class dhrep::services::intern::tgnoid (
     mode    => '0744',
     require => User[$noiduser],
   }
-  ~>
-  file { '/home/tgnoid/tgnoid.patch':
+  ~> file { '/home/tgnoid/tgnoid.patch':
     source => 'puppet:///modules/dhrep/tgnoid/tgnoid.patch',
   }
-  ~>
-  exec { 'install_tgnoid':
+  ~> exec { 'install_tgnoid':
     command   => '/home/tgnoid/install_tgnoid.sh',
     creates   => '/home/tgnoid/htdocs/nd/textgrid/NOID',
     logoutput => true,
@@ -81,7 +76,7 @@ class dhrep::services::intern::tgnoid (
   ###
   # apache config, apache should be setup by dhrep::init
   ###
-  file { "/etc/apache2/textgrid/default_vhost_includes/tgnoid.conf":
+  file { '/etc/apache2/textgrid/default_vhost_includes/tgnoid.conf':
     content => "
     # --------------------------------------------------------------------------
     # All the NOID configuration things following here for minting TextGrid URIs
@@ -109,7 +104,7 @@ class dhrep::services::intern::tgnoid (
     # End of NOID configuration
     # --------------------------------------------------------------------------
     ",
-    notify => Service['apache2']
+    notify  => Service['apache2'],
   }
 
   ###
