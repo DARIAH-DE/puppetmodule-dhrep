@@ -3,16 +3,21 @@
 # Class to install and configure public crud service.
 #
 class dhrep::services::crud_public (
-  $scope               = undef,
-  $publish_secret      = undef,
-  $log_level           = 'INFO',
-  $use_messaging       = true,
-  $location            = '',
-  $storage_host        = '',
-  $storage_host_public = '',
-  $pid_resolver        = 'https://hdl.handle.net/',
-  $extract_techmd      = false,
-  $pid_secret          = '',
+  $scope                        = undef,
+  $publish_secret               = undef,
+  $log_level                    = 'INFO',
+  $use_messaging                = true,
+  $location                     = undef,
+  $id_implementation            = undef,
+  $aai_implementation           = undef,
+  $data_storage_implementation  = undef,
+  $idxdb_storage_implementation = undef,
+  $rdfdb_storage_implementation = undef,
+  $storage_host                 = undef,
+  $storage_host_public          = undef,
+  $pid_resolver                 = 'https://hdl.handle.net/',
+  $extract_techmd               = false,
+  $pid_secret                   = 'pid_secret',
 ) inherits dhrep::params {
 
   if $scope == 'textgrid' {
@@ -101,7 +106,7 @@ class dhrep::services::crud_public (
     missingok    => true,
     ifempty      => true,
     dateext      => true,
-    dateformat   => '.%Y-%m-%d'
+    dateformat   => '.%Y-%m-%d',
   }
 
   ###
@@ -122,8 +127,8 @@ class dhrep::services::crud_public (
     # nrpe for tgcrud_public
     ###
     nrpe::plugin { 'check_rollback_tgcrud_public':
-      plugin => 'crud-analyse.pl',
-      args   => "-n -l ${_logdir}/${_short}/rollback.log",
+      plugin     => 'crud-analyse.pl',
+      args       => "-n -l ${_logdir}/${_short}/rollback.log",
       libexecdir => $_optdir,
     }
   }
