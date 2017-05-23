@@ -1,7 +1,7 @@
 # == Class: dhrep::services::crud
 #
 # Class to install and configure non-public crud service.
-#
+# 
 class dhrep::services::crud (
   $scope                        = undef,
   $publish_secret               = undef,
