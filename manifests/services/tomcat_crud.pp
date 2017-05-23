@@ -34,7 +34,7 @@ class dhrep::services::tomcat_crud (
     http_port            => $http_port,
     control_port         => $control_port,
     jmx_port             => $jmx_port,
-    additional_java_opts => '-Dgat.adaptor.path=/usr/local/javagat/lib/adaptors -Dfile.encoding=UTF-8',
+    additional_java_opts => '-Dfile.encoding=UTF-8',
     init_dependencies    => $depcat,
     xmx                  => $xmx,
     xms                  => $xms,

@@ -20,10 +20,6 @@ class dhrep::services::crud_public (
   $pid_secret                   = 'pid_secret',
 ) inherits dhrep::params {
 
-  if $scope == 'textgrid' {
-    include dhrep::services::intern::javagat
-  }
-
   $_name     = $::dhrep::params::crud_public_name[$scope]
   $_short    = $::dhrep::params::crud_public_short[$scope]
   $_version  = $::dhrep::params::crud_public_version[$scope]
