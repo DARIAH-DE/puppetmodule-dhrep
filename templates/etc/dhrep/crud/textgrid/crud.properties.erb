@@ -35,23 +35,23 @@ LOG4J_CONFIGFILE = /etc/dhrep/tgcrud/crud.log4j
 HANDLE_RESOLVER_URL = http://pid.gwdg.de/handles/
 
 # The ID implementation to use for URI creation.
-ID_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceIdentifierNoidImpl
+ID_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::id_implementation') %>
 # The security implementation (AAI) to use for authentification and authorization.
-AAI_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceAaiTgextraImpl
+AAI_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::aai_implementation') %>
 # GRID storage implementation class.
-DATA_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceStorageGatImpl
+DATA_STORAGE_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::data_storage_implementation') %>
 # XMLDB storage implementation class.
-IDXDB_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceStorageElasticSearchImpl
+IDXDB_STORAGE_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::idxdb_storage_implementation') %>
 # RDFDB storage implementation class.
-RDFDB_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceStorageSesameImpl
+RDFDB_STORAGE_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::rdfdb_storage_implementation') %>
 
 # The default encoding of all used XML operations (default: UTF-8).
 DEFAULT_ENCODING = UTF-8
 
 # The path, all files will be stored to, including the protocol to use. Only
 # "gsiftp://" and "file://" are supportet at the moment (mandatory).
-DEFAULT_DATA_STORAGE_URI = file://localhost//data/nonpublic/productive/
-DEFAULT_DATA_STORAGE_URI_PUBLIC = file://localhost//data/public/productive/
+DEFAULT_DATA_STORAGE_URI = <%= scope.lookupvar('dhrep::services::crud::storage_host') %>
+DEFAULT_DATA_STORAGE_URI_PUBLIC = <%= scope.lookupvar('dhrep::services::crud::storage_host_public') %>
 
 # Which DATA STORAGE authentication shall be used (e.g. JavaGAT)? Allowed is one
 # of MYPROXY, PROXY, CERT, SLC or NONE. The needed values have to be set
