@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <policies xmlns="koLibRI-policies" xmlns:koLibRI="koLibRI-policies"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="koLibRI-policies http://kopal.langzeitarchivierung.de/schema/koLibRI/policies.xsd">
 
 	<!-- Policy for publishing into the DARIAH repository -->
@@ -9,12 +9,14 @@
 			<step class="dariahde.publish.ReadCollectionModels">
 				<step class="dariahde.publish.CheckCollections">
 					<step class="dariahde.publish.GetPids">
-						<step class="dariahde.publish.CreateCollections">
-							<step class="dariahde.publish.MetadataProcessor">
-								<step class="dariahde.publish.SubmitFiles">
-						    			<step class="dariahde.publish.UpdatePidMetadata">
-										<step class="dariahde.publish.NotifyCollectionRegistry">
-											<step class="dariahde.publish.PublishComplete" />
+						<step class="dariahde.publish.GetDois">
+							<step class="dariahde.publish.CreateCollections">
+								<step class="dariahde.publish.MetadataProcessor">
+									<step class="dariahde.publish.SubmitFiles">
+							    			<step class="dariahde.publish.UpdatePidMetadata">
+											<step class="dariahde.publish.NotifyCollectionRegistry">
+												<step class="dariahde.publish.PublishComplete" />
+											</step>
 										</step>
 									</step>
 								</step>
