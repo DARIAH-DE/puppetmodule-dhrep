@@ -73,14 +73,17 @@ class dhrep::services::fits (
     ensure => file,
   }
   ~> file_line { 'configure_fits_libs_line_1':
-    path => "/home/${_catname}/${_catname}/conf/catalina.properties",
-    line => "fits.home=${fits_home}",
+    ensure => present,
+    path   => "/home/${_catname}/${_catname}/conf/catalina.properties",
+    line   => "fits.home=${fits_home}",
   }
   ~> file_line { 'configure_fits_libs_line_2':
-    path => "/home/${_catname}/${_catname}/conf/catalina.properties",
-    line => "shared.loader=\${fits.home}/lib/*.jar",
+    ensure => present,
+    path   => "/home/${_catname}/${_catname}/conf/catalina.properties",
+    line   => "shared.loader=\${fits.home}/lib/*.jar",
   }
   ~> file_line { 'configure_fits_libs_line_3':
+    ensure => present,
     path   => "/home/${_catname}/${_catname}/conf/catalina.properties",
     line   => "log4j.configuration=\${fits.home}/log4j.properties",
     notify => Service[$_catname],
