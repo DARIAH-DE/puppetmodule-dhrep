@@ -33,6 +33,10 @@ LOG4J_CONFIGFILE = /etc/dhrep/dhcrud/crud.log4j
 
 # The Handle resolver URL (resolving only!).
 PID_RESOLVER = <%= scope.lookupvar('dhrep::services::crud::pid_resolver') %>
+# The ORCID resolver URL.
+ORCID_RSOLVER = https://orcid.org/
+# The GND resolver URL.
+GND_RESOLVER = http://d-nb.info/gnd/
 # The DC-crud location for PID metadata.
 CRUD_LOCATION = <%= scope.lookupvar('dhrep::services::crud::location') %>
 

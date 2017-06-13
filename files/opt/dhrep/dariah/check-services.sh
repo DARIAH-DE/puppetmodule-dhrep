@@ -167,7 +167,7 @@ fi
 #
 FILE="version"
 FITS=$SERVER":9098/fits/"$FILE
-echo "checking "$CSTR"fits service"$CNRM" (intern)"$TRN
+echo "checking "$CSTR"fits service"$CNRM" (intern)"$TRN $FITS
 wget -q $FITS
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
