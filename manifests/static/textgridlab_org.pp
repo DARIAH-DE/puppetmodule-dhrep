@@ -172,20 +172,27 @@ class dhrep::static::textgridlab_org(
   #
   # Repstatus
   #
+  # TODO: delete
+  file { '/var/www/textgridrep-status':
+    ensure  => absent,
+    recurse => true,
+    purge   => true,
+    force   => true,
+  }
   exec { 'git_clone_repstatus':
-    command => 'git clone https://github.com/DARIAH-DE/textgridrep-status.git /var/www/textgridrep-status',
-    creates => '/var/www/textgridrep-status',
+    command => 'git clone https://github.com/DARIAH-DE/status.git /var/www/dariah-de-status',
+    creates => '/var/www/dariah-de-status',
     require => [Package['git']],
   }
   ->
   file { '/var/www/nginx-root/textgridlab.org/repstatus.html':
     ensure  => link,
-    target  => '/var/www/textgridrep-status/repstatus.html',
+    target  => '/var/www/dariah-de-status/textgrid/repstatus.html',
   }
   ->
   file { '/var/www/nginx-root/textgridlab.org/repstatus.css':
     ensure  => link,
-    target  => '/var/www/textgridrep-status/repstatus.css',
+    target  => '/var/www/dariah-de-status/textgrid/repstatus.css',
   }
   ->
   file { '/opt/dhrep/update-textgridrep-status.sh':

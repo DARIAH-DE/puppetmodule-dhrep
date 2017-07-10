@@ -41,15 +41,15 @@ GND_RESOLVER = http://d-nb.info/gnd/
 CRUD_LOCATION = <%= scope.lookupvar('dhrep::services::crud::location') %>
 
 # The ID implementation to use for identifier creation.
-ID_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.DHCrudServiceIdentifierPidImpl
+ID_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::id_implementation') %>
 # The security implementation (AAI) to use for authentification and authorization.
-AAI_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceAaiTgextraImpl
+AAI_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::aai_implementation') %>
 # GRID storage implementation class.
-DATA_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.DHCrudServiceStorageDariahImpl
+DATA_STORAGE_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::data_storage_implementation') %>
 # XMLDB storage implementation class.
-IDXDB_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.DHCrudServiceStorageElasticSearchImpl
+IDXDB_STORAGE_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::idxdb_storage_implementation') %>
 # RDFDB storage implementation class.
-RDFDB_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceStorageSesameImpl
+RDFDB_STORAGE_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud::rdfdb_storage_implementation') %>
 
 # The default encoding of all used XML operations (default: UTF-8).
 DEFAULT_ENCODING = UTF-8

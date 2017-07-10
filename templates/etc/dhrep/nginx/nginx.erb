@@ -60,8 +60,9 @@ http {
 	proxy_buffer_size 64k;
 	proxy_buffers 8 128k;
 	proxy_cache_path /var/www/nginx-cache/tgsearch levels=1:2 keys_zone=tgsearch:12m;
-	proxy_cache_path /var/www/nginx-cache/aggregator levels=1:2 keys_zone=aggregator:12m max_size=100g;
-	proxy_cache_path /var/www/nginx-cache/digilib_iiif levels=1:2 keys_zone=digilib_iiif:12m max_size=100g;
+	proxy_cache_path /var/www/nginx-cache/aggregator levels=1:2 inactive=30d keys_zone=aggregator:12m max_size=100g;
+	proxy_cache_path /var/www/nginx-cache/digilib_iiif levels=1:2 inactive=60d keys_zone=digilib_iiif:12m max_size=100g;
+	proxy_cache_path /var/www/nginx-cache/digilib_digilib levels=1:2 inactive=60d keys_zone=digilib_digilib:12m max_size=100g;
 
   # SSL (for textgrid)
   ssl_session_cache shared:SSL:32m;

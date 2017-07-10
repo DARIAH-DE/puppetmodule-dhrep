@@ -3,21 +3,22 @@
 # Class to install and configure public crud service.
 #
 class dhrep::services::crud_public (
-  $scope               = undef,
-  $publish_secret      = undef,
-  $log_level           = 'INFO',
-  $use_messaging       = true,
-  $location            = '',
-  $storage_host        = '',
-  $storage_host_public = '',
-  $pid_resolver        = 'https://hdl.handle.net/',
-  $extract_techmd      = false,
-  $pid_secret          = '',
+  $scope                        = undef,
+  $publish_secret               = undef,
+  $log_level                    = 'INFO',
+  $use_messaging                = true,
+  $location                     = undef,
+  $id_implementation            = undef,
+  $aai_implementation           = undef,
+  $data_storage_implementation  = undef,
+  $idxdb_storage_implementation = undef,
+  $rdfdb_storage_implementation = undef,
+  $storage_host                 = undef,
+  $storage_host_public          = undef,
+  $pid_resolver                 = 'https://hdl.handle.net/',
+  $extract_techmd               = false,
+  $pid_secret                   = 'pid_secret',
 ) inherits dhrep::params {
-
-  if $scope == 'textgrid' {
-    include dhrep::services::intern::javagat
-  }
 
   $_name     = $::dhrep::params::crud_public_name[$scope]
   $_short    = $::dhrep::params::crud_public_short[$scope]
