@@ -3,16 +3,21 @@
 # Class to install and configure pid service.
 #
 class dhrep::services::pid (
-  $scope       = undef,
-  $endpoint    = 'http://pid.gwdg.de',
-  $path        = '/handles/',
-  $prefix      = undef,
-  $user        = undef,
-  $passwd      = undef,
-  $responsible = '',
-  $creator     = '',
-  $publisher   = '',
-  $secret      = undef,
+  $scope          = undef,
+  $endpoint       = 'http://pid.gwdg.de',
+  $path           = '/handles/',
+  $prefix         = undef,
+  $user           = undef,
+  $passwd         = undef,
+  $responsible    = '',
+  $creator        = '',
+  $publisher      = '',
+  $secret         = undef,
+  $doi_prefix     = '',
+  $doi_endpoint   = '',
+  $doi_user       = '',
+  $doi_passwd     = '',
+  $doi_target_url = '',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish

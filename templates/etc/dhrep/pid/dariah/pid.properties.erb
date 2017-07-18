@@ -32,6 +32,17 @@ handleservice.pw = <%= scope.lookupvar('dhrep::services::pid::passwd') %>
 resolver.endpoint = http://hdl.handle.net
 resolver.path = /api/handles/
 
+# DataCite DOI service
+# DOI Prefix without /!
+doi.prefix = <%= scope.lookupvar('dhrep::services::pid::doi_prefix') %>
+# DOI Server
+doi.server = <%= scope.lookupvar('dhrep::services::pid::doi_endpoint') %>
+doi.user = <%= scope.lookupvar('dhrep::services::pid::doi_user') %>
+doi.pw = <%= scope.lookupvar('dhrep::services::pid::doi_passwd') %>
+# This is the target of the DOI identifier, currently we use the Handle server
+# because we need custom metadata. Please keep the #ID as placeholder!
+doi.targetUrl = <%= scope.lookupvar('dhrep::services::pid::doi_target_url') %>
+
 # More settings
 pid.responsible = <%= scope.lookupvar('dhrep::services::pid::responsible') %>
 pid.creator = <%= scope.lookupvar('dhrep::services::pid::creator') %>
