@@ -6,6 +6,7 @@ class dhrep::services::tomcat_tgsearch (
   $scope = undef,
   $xmx   = $dhrep::params::servicetomcat_xmx,
   $xms   = $dhrep::params::servicetomcat_xms,
+  $telegraf = false,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_tgsearch']['catname']
@@ -27,6 +28,7 @@ class dhrep::services::tomcat_tgsearch (
     xmx               => $xmx,
     xms               => $xms,
     collectd_enabled  => true,
+    telegraf_enabled  => $telegraf,
   }
 
 }
