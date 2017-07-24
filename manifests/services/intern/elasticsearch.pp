@@ -126,51 +126,16 @@ class dhrep::services::intern::elasticsearch (
 #  }
 
   ###
-  # collectd for elasticsearch
+  # telegraf for elasticsearch
   ###
-
-  # install the collectd plugin for elasticsearch
-  vcsrepo { '/opt/collectd-elasticsearch':
-    ensure   => present,
-    owner    => 'root',
-    group    => 'root',
-    provider => git,
-    source   => 'https://github.com/phobos182/collectd-elasticsearch.git',
-  }
-
-  @file { '/etc/collectd/conf.d/88-elastic.conf':
-    tag     => 'gwdgmetrics_collectd',
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    content => "<LoadPlugin \"python\">
-    Globals true
-</LoadPlugin>
-
-<Plugin \"python\">
-    ModulePath \"/opt/collectd-elasticsearch/\"
-
-    Import \"elasticsearch\"
-
-    <Module \"elasticsearch\">
-        Verbose false
-        Version \"1.0\"
-        Cluster \"${cluster_name}\"
-        Port ${_master_http_port}
-    </Module>
-</Plugin>
-",
-  }
-
-  # TODO, move to fe-monitoring
-  #package { 'libyajl2': }
-
-  collectd::plugin::curl_json { 'elasticsearch_workhorse':
-    url => "http://localhost:${_workhorse_http_port}/_nodes/${::hostname}-workhorse/stats/jvm/",
-    instance => 'elasticsearch_workhorse',
-    keys => {
-      'nodes/*/jvm/mem/heap_max_in_bytes'  => {'type' => 'bytes'},
-      'nodes/*/jvm/mem/heap_used_in_bytes' => {'type' => 'bytes'},
+  telegraf::input { "elasticsearch_workhorse":
+    plugin_type => 'elasticsearch',
+    options     => {
+      'servers'        => "[\"http://localhost:${_master_http_port}\", \"http://localhost:${_workhorse_http_port}\"]",
+      'http_timeout'   => '5s',
+      'local'          => true,
+      'cluster_health' => false,
+      'cluster_stats'  => false,
     }
   }
 
