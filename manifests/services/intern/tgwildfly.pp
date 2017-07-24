@@ -87,14 +87,9 @@ class dhrep::services::intern::tgwildfly (
   #  ',
   #  }
 
-  staging::file { 'jolokia.war':
-    source  => "http://central.maven.org/maven2/org/jolokia/jolokia-war/1.3.2/jolokia-war-1.3.2.war",
-    target  => "/var/cache/dhrep/jolokia.war",
-    require => Class['wildfly'],
-  }
-  ~>
+  require 'usertomcat::jolokia'
   file { '/home/wildfly/wildfly/standalone/deployments/jolokia.war':
-    source => "/var/cache/dhrep/jolokia.war",
+    source => "/var/cache/jolokia.war",
   }
 
   collectd::plugin::curl_json { 'wildfly':
