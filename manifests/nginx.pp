@@ -194,7 +194,7 @@ class dhrep::nginx (
   telegraf::input { 'nginx':
     plugin_type => 'nginx',
     options     => {
-      'urls'             => ['http://localhost/nginx_status'],
+      'urls' => ['http://localhost/nginx_status'],
     }
   }
 }
