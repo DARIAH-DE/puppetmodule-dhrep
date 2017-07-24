@@ -50,4 +50,5 @@ pid.publisher = <%= scope.lookupvar('dhrep::services::pid::publisher') %>
 pid.secret = <%= scope.lookupvar('dhrep::services::pid::secret') %>
 tgauth.endpoint =
 log.location = /var/log/dhrep/dhpid/pid.log
+log.level = INFO
 service.endpoint = http://localhost:9094/dhpid

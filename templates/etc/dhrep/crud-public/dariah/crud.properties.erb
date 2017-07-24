@@ -33,6 +33,8 @@ LOG4J_CONFIGFILE = /etc/dhrep/dhcrud-public/crud.log4j
 
 # The Handle resolver URL (resolving only!).
 PID_RESOLVER = <%= scope.lookupvar('dhrep::services::crud_public::pid_resolver') %>
+# The DOI resolver URL (resolving only!).
+DOI_RESOLVER = https://dx.doi.org/
 # The ORCID resolver URL.
 ORCID_RESOLVER = https://orcid.org/
 # The GND resolver URL.
