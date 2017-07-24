@@ -92,12 +92,27 @@ class dhrep::services::intern::tgwildfly (
     source => "/var/cache/jolokia.war",
   }
 
-  collectd::plugin::curl_json { 'wildfly':
-    url      => "http://localhost:18080/jolokia/read/java.lang:type=Memory",
-    instance => 'wildfly',
-    keys => {
-      'value/NonHeapMemoryUsage/*' => {'type' => 'bytes'},
-      'value/HeapMemoryUsage/*'    => {'type' => 'bytes'},
+  telegraf::input { 'jolokia_wildfly':
+    plugin_type => 'jolokia',
+    options     => {
+      'context' => '/jolokia/',
+    },
+    sections    => {
+      'jolokia.servers' => {
+        'name'   => 'wildfly',
+        'host' => '127.0.0.1',
+        'port' => '18080',
+      },
+      'jolokia.metrics' => {
+        'name' => 'heap_memory_usage',
+        'mbean' => 'java.lang:type=Memory',
+        'attribute' => 'HeapMemoryUsage',
+      },
+      'jolokia.metrics' => {
+        'name' => 'process_cpu_load',
+        'mbean' => 'java.lang:type=OperatingSystem',
+        'attribute' => 'ProcessCpuLoad',
+      },
     },
   }
 

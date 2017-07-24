@@ -6,7 +6,6 @@ class dhrep::services::tomcat_digilib2 (
   $scope = undef,
   $xmx   = $::dhrep::params::tomcat_digilib_xmx,
   $xms   = $::dhrep::params::tomcat_digilib_xms,
-  $telegraf = false,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_digilib2']['catname']
@@ -31,7 +30,6 @@ class dhrep::services::tomcat_digilib2 (
     jmx_port          => $jmx_port,
     xmx               => $xmx,
     xms               => $xms,
-    collectd_enabled  => true,
-    telegraf_enabled  => $telegraf,
+    telegraf_enabled  => true,
   }
 }
