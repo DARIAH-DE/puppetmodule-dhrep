@@ -190,4 +190,12 @@ class dhrep::nginx (
     hour    => '22',
     minute  => '07',
   }
+
+  telegraf::input { 'nginx':
+    plugin_type => 'nginx',
+    options     => {
+      'urls'             => ['http://localhost/nginx_status'],
+      'response_timeout' => '5s',
+    }
+  }
 }

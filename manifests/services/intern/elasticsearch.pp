@@ -128,7 +128,7 @@ class dhrep::services::intern::elasticsearch (
   ###
   # telegraf for elasticsearch
   ###
-  telegraf::input { "elasticsearch_workhorse":
+  telegraf::input { 'elasticsearch_workhorse':
     plugin_type => 'elasticsearch',
     options     => {
       'servers'        => ["http://localhost:${_master_http_port}", "http://localhost:${_workhorse_http_port}"],
