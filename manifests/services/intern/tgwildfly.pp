@@ -79,7 +79,7 @@ class dhrep::services::intern::tgwildfly (
   #  }
 
   ###
-  # collectd for wildfly
+  # telegraf for wildfly
   ###
 
   #  wildfly::deployment { 'jolokia.war':
