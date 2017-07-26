@@ -44,17 +44,14 @@ class dhrep::resources::apache (
 
   # Shibboleth configuration for Apache
   # (see dariahshibboleth/README.md)
-  $mod_shibd_so = $::apache::apache_version ?
-  {
-    '2.4'   => 'mod_shib_24.so',
-    default => 'mod_shib_22.so',
-  }
   package { 'libapache2-mod-shib2':
-    ensure => absent
+    ensure => present,
+    before => Package['shibboleth'],
   }
+
   ::apache::mod { 'shib2':
     id  => 'mod_shib',
-    lib => $mod_shibd_so,
+    lib => 'mod_shib2.so',
   }
 
   concat::fragment{'apache_default_head':
