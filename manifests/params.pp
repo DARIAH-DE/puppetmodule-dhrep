@@ -98,9 +98,6 @@ class dhrep::params {
   $publikator_name = {
     'dariah'   => 'publikator-webapp',
   }
-  $publikator_short = {
-    'dariah'   => 'publikator',
-  }
   $publikator_version = {
     'dariah'   => 'latest',
   }

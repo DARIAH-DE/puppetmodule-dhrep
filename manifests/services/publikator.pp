@@ -9,14 +9,11 @@ class dhrep::services::publikator (
   include dhrep::services::tomcat_publikator
 
   $_name     = $::dhrep::params::publikator_name[$scope]
-  $_short    = $::dhrep::params::publikator_short[$scope]
   $_version  = $::dhrep::params::publikator_version[$scope]
   $_confdir  = $::dhrep::params::confdir
   $_logdir   = $::dhrep::params::logdir
   $_optdir   = $::dhrep::params::optdir
   $_catname  = $::dhrep::params::config['tomcat_publikator']['catname']
-  $_user     = $::dhrep::params::config['tomcat_publikator']['user']
-  $_group    = $::dhrep::params::config['tomcat_publikator']['group']
   $_aptdir   = $::dhrep::params::aptdir
   $templates = "dhrep/etc/dhrep/publikator/${scope}"
 
@@ -31,28 +28,28 @@ class dhrep::services::publikator (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/${_short}":
+  file { "/home/${_catname}/${_catname}/webapps/publikator":
     ensure  => 'link',
-    target  => "${_aptdir}/${_short}",
-    require => [File["${_confdir}/${_short}/web.xml"], Usertomcat::Instance[$_catname]],
+    target  => "${_aptdir}/publikator",
+    require => [File["${_confdir}/publikator/web.xml"], Usertomcat::Instance[$_catname]],
   }
 
   ###
   # config
   ###
-  file { "${_confdir}/${_short}":
+  file { "${_confdir}/publikator":
     ensure => directory,
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
   }
-  file { "${_confdir}/${_short}/web.xml":
+  file { "${_confdir}/publikator/web.xml":
     ensure  => file,
-    owner   => $_user,
-    group   => $_group,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0640',
     content => template("${templates}/web.xml.erb"),
-    require => File["${_confdir}/${_short}"],
+    require => File["${_confdir}/publikator"],
   }
 
   ###

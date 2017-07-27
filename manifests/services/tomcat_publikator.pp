@@ -12,8 +12,6 @@ class dhrep::services::tomcat_publikator (
   $http_port    = $::dhrep::params::config['tomcat_publikator']['http_port']
   $control_port = $::dhrep::params::config['tomcat_publikator']['control_port']
   $jmx_port     = $::dhrep::params::config['tomcat_publikator']['jmx_port']
-  $user         = $::dhrep::params::config['tomcat_publikator']['user']
-  $group        = $::dhrep::params::config['tomcat_publikator']['group']
   $uid          = $::dhrep::params::config['tomcat_publikator']['uid']
   $gid          = $::dhrep::params::config['tomcat_publikator']['gid']
 
@@ -21,8 +19,6 @@ class dhrep::services::tomcat_publikator (
   # user, home-dir and user-tomcat
   ###
   usertomcat::instance { $catname:
-    user                 => $user,
-    group                => $group,
     uid                  => $uid,
     gid                  => $gid,
     http_port            => $http_port,
