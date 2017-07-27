@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+  <display-name>Publikator standalone</display-name>
+  <env-entry>
+    <description>Enable AAI</description>
+    <env-entry-name>enableAAI</env-entry-name>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+    <env-entry-value>true</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Enable subcollections</description>
+    <env-entry-name>subcollectionsEnabled</env-entry-name>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+    <env-entry-value>true</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>DARIAH-DE OwnStorage URL</description>
+    <env-entry-name>dariahStorageUrl</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>https://de.dariah.eu/storage/</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>DH-publish URL</description>
+    <env-entry-name>dhpublishUrl</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>http://repository.de.dariah.eu/dhpublish/</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>DH-crud URL</description>
+    <env-entry-name>dhcrudUrl</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>http://repository.de.dariah.eu/dhcrud/</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Collection Registry URL</description>
+    <env-entry-name>collectionRegistryUrl</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>http://demo2.dariah.eu/colreg/</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Generic Search URL</description>
+    <env-entry-name>genericSearchUrl</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>http://dev3.dariah.eu/search/</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>PID Service URL</description>
+    <env-entry-name>pidServiceUrl</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>https://hdl.handle.net/</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Offset to refresh status info in publishing process</description>
+    <env-entry-name>refresh</env-entry-name>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+    <env-entry-value>1845</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Default timeout for service calls</description>
+    <env-entry-name>serviceTimeout</env-entry-name>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+    <env-entry-value>19127</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Enable Seafile collections</description>
+    <env-entry-name>seafileEnabled</env-entry-name>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+    <env-entry-value>false</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Seafile URL</description>
+    <env-entry-name>seafileUrl</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>https://sftest.de.dariah.eu</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Secret for decrypting Seafile token</description>
+    <env-entry-name>seafileTokenSecret</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value></env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>SSLCertVerification</description>
+    <env-entry-name>SSLCertVerification</env-entry-name>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+    <env-entry-value>true</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Skip publish status check (faster, for GUI debugging)</description>
+    <env-entry-name>skipPublishStatusCheck</env-entry-name>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+    <env-entry-value>false</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Use dryrun instead of real publishing</description>
+    <env-entry-name>dryrun</env-entry-name>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+    <env-entry-value>false</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Debug mode</description>
+    <env-entry-name>debug</env-entry-name>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+    <env-entry-value>true</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Override user's ePPN with that one from below</description>
+    <env-entry-name>overrideEppn</env-entry-name>
+    <env-entry-type>java.lang.Boolean</env-entry-type>
+    <env-entry-value>false</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Always publish with this ePPN, overrides user's ePPN</description>
+    <env-entry-name>eppn</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value></env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Link to Documentation</description>
+    <env-entry-name>linkToDocumentation</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Link to Bug Tracker</description>
+    <env-entry-name>linkToBugtracker</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>https://projects.gwdg.de/projects/dariah-de-repository/issues?query_id=151</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Name of Contact</description>
+    <env-entry-name>nameOfContact</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>Stefan E. Funk</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Mail of Contact</description>
+    <env-entry-name>mailOfContact</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>funk@sub.uni-goettingen.de</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Redis Server host</description>
+    <env-entry-name>redisHostname</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>localhost</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Redis Server Port</description>
+    <env-entry-name>redisPort</env-entry-name>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+    <env-entry-value>6379</env-entry-value>
+  </env-entry>
+  <env-entry>
+    <description>Redis maximum number of connections</description>
+    <env-entry-name>redisMaxParallel</env-entry-name>
+    <env-entry-type>java.lang.Integer</env-entry-type>
+    <env-entry-value>40</env-entry-value>
+  </env-entry>
+  <welcome-file-list>
+    <welcome-file>mainView</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
