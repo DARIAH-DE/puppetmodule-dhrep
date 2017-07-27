@@ -4,8 +4,8 @@
 #
 class dhrep::services::tomcat_fits (
   $scope = undef,
-  $xmx   = $dhrep::params::servicetomcat_xmx,
-  $xms   = $dhrep::params::servicetomcat_xms,
+  $xmx   = $::dhrep::params::tomcat_fits_xmx,
+  $xms   = $::dhrep::params::tomcat_fits_xms,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_fits']['catname']

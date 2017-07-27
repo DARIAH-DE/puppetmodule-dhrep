@@ -7,6 +7,13 @@ location /oaipmh {
     proxy_set_header        Host $http_host;
 }
 
+location /publish {
+    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator-webapp;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
+
 location /dhcrud {
     gzip on;
     gzip_types multipart/related application/xop+xml text/xml;
