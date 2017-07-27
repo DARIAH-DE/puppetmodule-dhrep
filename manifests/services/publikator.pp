@@ -3,8 +3,10 @@
 # Class to install and configure THE PUBLIKATOR service.
 #
 class dhrep::services::publikator (
-  $scope                        = undef,
+  $scope = undef,
 ) inherits dhrep::params {
+
+  include dhrep::services::tomcat_publikator
 
   $_name     = $::dhrep::params::publikator_name[$scope]
   $_short    = $::dhrep::params::publikator_short[$scope]
@@ -71,16 +73,16 @@ class dhrep::services::publikator (
 #    mode    => '0755',
 #    require => File[$_logdir],
 #  }
-  logrotate::rule { $_short:
-    path         => "${_logdir}/${_short}/crud.log",
-    require      => File["${_logdir}/${_short}"],
-    rotate       => 30,
-    rotate_every => 'day',
-    compress     => true,
-    copytruncate => true,
-    missingok    => true,
-    ifempty      => true,
-    dateext      => true,
-    dateformat   => '.%Y-%m-%d',
-  }
+#  logrotate::rule { $_short:
+#    path         => "${_logdir}/${_short}/crud.log",
+#    require      => File["${_logdir}/${_short}"],
+#    rotate       => 30,
+#    rotate_every => 'day',
+#    compress     => true,
+#    copytruncate => true,
+#    missingok    => true,
+#    ifempty      => true,
+#    dateext      => true,
+#    dateformat   => '.%Y-%m-%d',
+#  }
 }

@@ -95,14 +95,14 @@ class dhrep::params {
   ###
   # publikator
   ###
-  $publikator_name ={
-    'dariah'   => 'publikator',
+  $publikator_name = {
+    'dariah'   => 'publikator-webapp',
   }
   $publikator_short = {
     'dariah'   => 'publikator',
   }
   $publikator_version = {
-    'dariah'   => 'publikator',
+    'dariah'   => 'latest',
   }
 
   ###
@@ -194,7 +194,7 @@ class dhrep::params {
     'tomcat_publikator' => {
       'catname'      => 'tomcat-publikator',
       'http_port'    => '9099',
-      'control_port' => '9013',
+      'control_port' => '9014',
       'jmx_port'     => '9999',
       'gid'          => '1015',
       'uid'          => '1015',

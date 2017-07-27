@@ -4,8 +4,8 @@
 #
 class dhrep::services::tomcat_publikator (
   $scope = undef,
-  $xmx   = $::dhrep::params::tomcat_publikator_xmx,
-  $xms   = $::dhrep::params::tomcat_publikator_xms,
+  $xmx   = $dhrep::params::servicetomcat_xmx,
+  $xms   = $dhrep::params::servicetomcat_xms,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_publikator']['catname']

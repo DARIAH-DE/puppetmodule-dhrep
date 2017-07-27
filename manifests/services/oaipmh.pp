@@ -3,7 +3,7 @@
 # Class to install and configure oaipmh service
 #
 class dhrep::services::oaipmh (
-  $scope   = undef,
+  $scope = undef,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_oaipmh
@@ -23,7 +23,7 @@ class dhrep::services::oaipmh (
   ###
   package { $_name:
     ensure  => $_version,
-    require => [Exec['update_dariah_apt_repository'],Usertomcat::Instance[$_catname]],
+    require => [Exec['update_dariah_apt_repository'], Usertomcat::Instance[$_catname]],
   }
 
   ###
@@ -32,7 +32,7 @@ class dhrep::services::oaipmh (
   file { "/home/${_catname}/${_catname}/webapps/oaipmh":
     ensure  => 'link',
     target  => "${_aptdir}/oaipmh",
-    require => [File["${_confdir}/oaipmh/oaipmh.properties"],Usertomcat::Instance[$_catname]],
+    require => [File["${_confdir}/oaipmh/oaipmh.properties"], Usertomcat::Instance[$_catname]],
   }
 
   ###
