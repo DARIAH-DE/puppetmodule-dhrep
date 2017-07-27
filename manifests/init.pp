@@ -227,6 +227,9 @@ class dhrep (
       log_level           => $crud_public_log_level,
       require             => Class['dhrep::services::intern::elasticsearch'],
     }
+    class { 'dhrep::services::publikator':
+      scope => $scope,
+    }
     class { 'dhrep::static::repository_de_dariah_eu': }
   }
 

@@ -45,7 +45,7 @@ class dhrep::services::oaipmh (
     mode   => '0755',
   }
   file { "${_confdir}/oaipmh/oaipmh.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => $_catname,
     group   => $_catname,
     mode    => '0640',
@@ -58,7 +58,7 @@ class dhrep::services::oaipmh (
   # logging
   ###
   file { "${_confdir}/oaipmh/log4j.oaipmh.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => $_catname,
     group   => $_catname,
     mode    => '0640',
@@ -82,6 +82,6 @@ class dhrep::services::oaipmh (
     missingok    => true,
     ifempty      => true,
     dateext      => true,
-    dateformat   => '.%Y-%m-%d'
+    dateformat   => '.%Y-%m-%d',
   }
 }

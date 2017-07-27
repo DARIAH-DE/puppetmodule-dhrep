@@ -93,6 +93,19 @@ class dhrep::params {
   }
 
   ###
+  # publikator
+  ###
+  $publikator_name ={
+    'dariah'   => 'publikator',
+  }
+  $publikator_short = {
+    'dariah'   => 'publikator',
+  }
+  $publikator_version = {
+    'dariah'   => 'publikator',
+  }
+
+  ###
   # elasticsearch
   ###
   $elasticsearch_master_http_port    = '9202'
@@ -177,7 +190,14 @@ class dhrep::params {
       'jmx_port'     => '9990',
       'gid'          => '1007',
       'uid'          => '1007',
-
+    },
+    'tomcat_publikator' => {
+      'catname'      => 'tomcat-publikator',
+      'http_port'    => '9099',
+      'control_port' => '9013',
+      'jmx_port'     => '9999',
+      'gid'          => '1015',
+      'uid'          => '1015',
     },
   }
 

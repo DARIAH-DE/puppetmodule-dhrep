@@ -19,7 +19,6 @@ class dhrep::services::tomcat_oaipmh (
   # user, home-dir and user-tomcat
   ###
   usertomcat::instance { $catname:
-<<<<<<< HEAD
     uid              => $uid,
     gid              => $gid,
     http_port        => $http_port,
@@ -27,16 +26,6 @@ class dhrep::services::tomcat_oaipmh (
     jmx_port         => $jmx_port,
     xmx              => $xmx,
     xms              => $xms,
-    collectd_enabled => true,
-=======
-    uid               => $uid,
-    gid               => $gid,
-    http_port         => $http_port,
-    control_port      => $control_port,
-    jmx_port          => $jmx_port,
-    xmx               => $xmx,
-    xms               => $xms,
-    telegraf_enabled  => true,
->>>>>>> master
+    telegraf_enabled => true,
   }
 }
