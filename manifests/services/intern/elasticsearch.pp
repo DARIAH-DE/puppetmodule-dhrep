@@ -67,7 +67,7 @@ class dhrep::services::intern::elasticsearch (
       'http.port'                        => $_master_http_port,
       'transport.tcp.port'               => $_master_tcp_port,
       'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${_workhorse_tcp_port}",
-    }
+    },
   }
 
   ::elasticsearch::instance { 'workhorse':
@@ -77,7 +77,7 @@ class dhrep::services::intern::elasticsearch (
       'http.port'                        => $_workhorse_http_port,
       'transport.tcp.port'               => $_workhorse_tcp_port,
       'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${_master_tcp_port}",
-    }
+    },
   }
 
   ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
@@ -90,15 +90,15 @@ class dhrep::services::intern::elasticsearch (
   }
 
   # run only once
-#  unless ($::elastic_repos_initialized) {
-    # clone commons repo, which contains shell scripts to create textgrid elastic search indexes
-    # FIXME use vcsrepo!
-    exec { 'git_clone_tgcommon':
-      path    => ['/usr/bin','/bin','/usr/sbin'],
-      command => 'git clone git://git.projects.gwdg.de/common.git /usr/local/src/tgcommon-git',
-      creates => '/usr/local/src/tgcommon-git',
-      require => Package['git'],
-    }
+  #  unless ($::elastic_repos_initialized) {
+  # clone commons repo, which contains shell scripts to create textgrid elastic search indexes
+  # FIXME use vcsrepo!
+  exec { 'git_clone_tgcommon':
+    path    => ['/usr/bin','/bin','/usr/sbin'],
+    command => 'git clone git://git.projects.gwdg.de/common.git /usr/local/src/tgcommon-git',
+    creates => '/usr/local/src/tgcommon-git',
+    require => Package['git'],
+  }
 #    ->
 #    dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
 #      url     => "http://localhost:${_master_http_port}/",
@@ -126,68 +126,32 @@ class dhrep::services::intern::elasticsearch (
 #  }
 
   ###
-  # collectd for elasticsearch
+  # telegraf for elasticsearch
   ###
-
-  # install the collectd plugin for elasticsearch
-  vcsrepo { '/opt/collectd-elasticsearch':
-    ensure   => present,
-    owner    => 'root',
-    group    => 'root',
-    provider => git,
-    source   => 'https://github.com/phobos182/collectd-elasticsearch.git',
-  }
-
-  @file { '/etc/collectd/conf.d/88-elastic.conf':
-    tag     => 'gwdgmetrics_collectd',
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    content => "<LoadPlugin \"python\">
-    Globals true
-</LoadPlugin>
-
-<Plugin \"python\">
-    ModulePath \"/opt/collectd-elasticsearch/\"
-
-    Import \"elasticsearch\"
-
-    <Module \"elasticsearch\">
-        Verbose false
-        Version \"1.0\"
-        Cluster \"${cluster_name}\"
-        Port ${_master_http_port}
-    </Module>
-</Plugin>
-",
-  }
-
-  # TODO, move to fe-monitoring
-  #package { 'libyajl2': }
-
-  collectd::plugin::curl_json { 'elasticsearch_workhorse':
-    url => "http://localhost:${_workhorse_http_port}/_nodes/${::hostname}-workhorse/stats/jvm/",
-    instance => 'elasticsearch_workhorse',
-    keys => {
-      'nodes/*/jvm/mem/heap_max_in_bytes'  => {'type' => 'bytes'},
-      'nodes/*/jvm/mem/heap_used_in_bytes' => {'type' => 'bytes'},
-    }
+  telegraf::input { 'elasticsearch_workhorse':
+    plugin_type => 'elasticsearch',
+    options     => {
+      'servers'        => ["http://localhost:${_master_http_port}", "http://localhost:${_workhorse_http_port}"],
+      'http_timeout'   => '5s',
+      'local'          => true,
+      'cluster_health' => false,
+      'cluster_stats'  => false,
+    },
   }
 
   ###
   # nrpe
   ###
-  package{ "python-setuptools" : ensure => installed }
-  package { "nagios-plugin-elasticsearch":
-      # ensure latest does not work right now, compare https://bugs.launchpad.net/ubuntu/+source/dbus/+bug/1593749
-      # possibly with puppet 4? do we need 'latest' at all?
-      # ensure  => latest,
-      ensure => '1.1.0',
-      provider => pip,
-      require => Package['python-setuptools'],
+  package{ 'python-setuptools' : ensure => installed }
+  package { 'nagios-plugin-elasticsearch':
+    # ensure latest does not work right now, compare https://bugs.launchpad.net/ubuntu/+source/dbus/+bug/1593749
+    # possibly with puppet 4? do we need 'latest' at all?
+    # ensure  => latest,
+    ensure   => '1.1.0',
+    provider => pip,
+    require  => Package['python-setuptools'],
   }
-  ->
-  nrpe::plugin { 'check_elasticsearch':
+  -> nrpe::plugin { 'check_elasticsearch':
     plugin     => 'check_elasticsearch',
     libexecdir => '/usr/local/bin',
     args       => "-p ${$_master_http_port} -vv",

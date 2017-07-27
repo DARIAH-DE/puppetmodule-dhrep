@@ -33,6 +33,6 @@ class dhrep::services::tomcat_publish (
     init_dependencies    => $depcat,
     xmx                  => $xmx,
     xms                  => $xms,
-    collectd_enabled     => true,
+    telegraf_enabled     => true,
   }
 }

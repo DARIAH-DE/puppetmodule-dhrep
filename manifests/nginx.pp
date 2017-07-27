@@ -22,13 +22,13 @@ class dhrep::nginx (
     include dhrep::services::tomcat_digilib2
     include dhrep::services::tomcat_sesame
     include dhrep::services::tomcat_tgsearch
-  }  
+  }
   if $scope == 'dariah' {
     include dhrep::services::tomcat_fits
   }
 
   $_confdir  = $::dhrep::params::confdir
-  $templates = "dhrep/etc/dhrep/nginx/"
+  $templates = 'dhrep/etc/dhrep/nginx/'
 
   $tomcat_crud_http_port = $::dhrep::params::config['tomcat_crud']['http_port']
 
@@ -53,7 +53,7 @@ class dhrep::nginx (
   # TODO: for nginx we use chained cert, possibly merge to chain by puppet magic?
   # for now the "kette" is not used, but a chained cert below
   file { '/etc/ssl/Uni_Goettingen_Kette.pem':
-    ensure => present,
+    ensure => file,
     owner  => root,
     group  => root,
     mode   => '0644',
@@ -62,7 +62,7 @@ class dhrep::nginx (
   }
   if $sslkey != undef {
     file { "/etc/ssl/${::fqdn}.key.pem":
-      ensure => present,
+      ensure => file,
       owner  => root,
       group  => root,
       mode   => '0600',
@@ -72,7 +72,7 @@ class dhrep::nginx (
   }
   if $sslcert != undef {
     file { "/etc/ssl/${::fqdn}.chain.cert.pem":
-      ensure => present,
+      ensure => file,
       owner  => root,
       group  => root,
       mode   => '0644',
@@ -83,8 +83,8 @@ class dhrep::nginx (
   # todo: else create dhparam:
   # openssl dhparam -out /etc/nginx/dhparam2048.pem 2048
   if $dhparam != undef {
-    file { "/etc/nginx/dhparam2048.pem":
-      ensure => present,
+    file { '/etc/nginx/dhparam2048.pem':
+      ensure => file,
       owner  => root,
       group  => root,
       mode   => '0644',
@@ -129,34 +129,30 @@ class dhrep::nginx (
     mode    => '0755',
     require => Package['nginx'],
   }
-  ->
-  file { '/etc/nginx/proxyconf/1.0.conf':
-    ensure  => present,
+  -> file { '/etc/nginx/proxyconf/1.0.conf':
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template("${templates}/proxyconf/${scope}/1.0.conf.erb"),
     notify  => Service['nginx'],
   }
-  ->
-  file { '/etc/nginx/nginx.conf':
-    ensure  => present,
+  -> file { '/etc/nginx/nginx.conf':
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template("${templates}/nginx.erb"),
     notify  => Service['nginx'],
   }
-  ->
-  file { '/etc/nginx/sites-available/default':
-    ensure  => present,
+  -> file { '/etc/nginx/sites-available/default':
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template("${templates}/sites-available/default.erb"),
   }
-  ~>
-  service { 'nginx':
+  ~> service { 'nginx':
     ensure  => running,
     enable  => true,
     require => [Package['nginx'],Package['ssl-cert']],
@@ -181,7 +177,7 @@ class dhrep::nginx (
     ensure => file,
     owner  => 'root',
     mode   => '0755',
-    source => 'puppet:///modules/dhrep/opt/dhrep/anonymizer_nginx.sh'
+    source => 'puppet:///modules/dhrep/opt/dhrep/anonymizer_nginx.sh',
   }
 
   cron { 'anonymizer_nginx' :
@@ -189,5 +185,12 @@ class dhrep::nginx (
     user    => 'root',
     hour    => '22',
     minute  => '07',
+  }
+
+  telegraf::input { 'nginx':
+    plugin_type => 'nginx',
+    options     => {
+      'urls' => ['http://localhost/nginx_status'],
+    },
   }
 }

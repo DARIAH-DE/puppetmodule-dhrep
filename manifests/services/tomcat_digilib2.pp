@@ -21,15 +21,15 @@ class dhrep::services::tomcat_digilib2 (
   # user, home-dir and user-tomcat
   ###
   usertomcat::instance { $catname:
-    user              => $user,
-    group             => $user,
-    uid               => $uid,
-    gid               => $gid,
-    http_port         => $http_port,
-    control_port      => $control_port,
-    jmx_port          => $jmx_port,
-    xmx               => $xmx,
-    xms               => $xms,
-    collectd_enabled  => true,
+    user             => $user,
+    group            => $user,
+    uid              => $uid,
+    gid              => $gid,
+    http_port        => $http_port,
+    control_port     => $control_port,
+    jmx_port         => $jmx_port,
+    xmx              => $xmx,
+    xms              => $xms,
+    telegraf_enabled => true,
   }
 }

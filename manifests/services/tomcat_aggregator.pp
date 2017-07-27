@@ -19,13 +19,13 @@ class dhrep::services::tomcat_aggregator (
   # user, home-dir and user-tomcat
   ###
   usertomcat::instance { $catname:
-    uid               => $uid,
-    gid               => $gid,
-    http_port         => $http_port,
-    control_port      => $control_port,
-    jmx_port          => $jmx_port,
-    xmx               => $xmx,
-    xms               => $xms,
-    collectd_enabled  => true,
+    uid              => $uid,
+    gid              => $gid,
+    http_port        => $http_port,
+    control_port     => $control_port,
+    jmx_port         => $jmx_port,
+    xmx              => $xmx,
+    xms              => $xms,
+    telegraf_enabled => true,
   }
 }
