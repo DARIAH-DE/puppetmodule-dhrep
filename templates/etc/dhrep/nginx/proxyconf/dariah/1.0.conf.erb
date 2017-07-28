@@ -29,7 +29,7 @@ location /dhcrud {
 ###
 # dhpublish
 ###
-# FIXME Only Publish GUI must have access!! Setup AAI!!
+# FIXME Only Publikator and publish API must have access!! Setup AAI!!
 location /dhpublish {
     proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/dhpublish;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -40,8 +40,10 @@ location /dhpublish {
 ###
 # publikator
 ###
+# FIXME Take port from tomcat_publikator HTTP Port!! It's not working right now!!
 location /publikator {
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator;
+    proxy_pass http://localhost:9099/publikator;
+#    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;

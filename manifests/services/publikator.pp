@@ -55,6 +55,40 @@ class dhrep::services::publikator (
   }
 
   ###
+  # apache config, apache should be there (e.g. by dhrep::init.pp or dariah
+  # profile::apache)
+  ###
+  file { "/etc/apache2/${scope}/default_vhost_includes/publikator.conf":
+    content => "
+    # --------------------------------------------------------------------------
+    # All PUBLIKATOR configuration
+    # --------------------------------------------------------------------------
+
+    ProxyPass         /publikator  http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator nocanon
+    ProxyPassReverse  /publikator  http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator
+    ProxyPassReverse  /publikator  https://${::fqdn}/publikator
+
+    <Proxy http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator*>
+
+       AuthType shibboleth
+       Require shibboleth
+       ShibUseHeaders On
+
+       RequestHeader set eppn %{eppn}e env=eppn
+       RequestHeader set isMemberOf %{isMemberOf}e env=isMemberOf
+
+    </Proxy>
+
+    <Location /publikator/secure>
+      AuthType shibboleth
+      ShibRequestSetting requireSession 1
+      require valid-user
+    </Location>
+    ",
+    notify  => Service['apache2'],
+  }
+
+  ###
   # logging
   ###
 #  file { "${_confdir}/${_short}/crud.log4j":

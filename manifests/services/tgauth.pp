@@ -428,15 +428,10 @@ class dhrep::services::tgauth (
   ###
   # monitor slapd with telegraf
   ###
-<<<<<<< HEAD
-  collectd::plugin::processes::process { 'slapd' : }
-=======
   telegraf::input { 'slapd_procstat':
     plugin_type => 'procstat',
     options     => {
       'pid_file' => '/var/run/slapd/slapd.pid',
-    }
+    },
   }
-
->>>>>>> master
 }

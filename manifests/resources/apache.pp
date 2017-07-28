@@ -65,12 +65,20 @@ class dhrep::resources::apache (
     ServerAdmin webmaster@localhost
     UseCanonicalName On
 
-    DocumentRoot /var/www
-
     <Directory />
         Options FollowSymLinks
         AllowOverride None
-    </Directory>
+  </Directory>
+  ",
+    order   => 010,
+  }
+
+  if $scope == 'textgrid' {
+    concat::fragment{'apache_textgrid':
+      target  => $defaultvhost,
+      content => "
+    DocumentRoot /var/www
+
     <Directory /var/www/>
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
@@ -83,7 +91,14 @@ class dhrep::resources::apache (
         Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
         Require all granted
     </Directory>
+    ",
+      order   => 020,
+    }
+  }
 
+  concat::fragment{'apache_default_tail':
+    target  => $defaultvhost,
+    content => "
     IncludeOptional /etc/apache2/${scope}/default_vhost_includes/*.conf
 
     ErrorLog \${APACHE_LOG_DIR}/error.log
@@ -93,13 +108,6 @@ class dhrep::resources::apache (
     LogLevel warn
 
     CustomLog \${APACHE_LOG_DIR}/access.log combined
-    ",
-    order   => 010,
-  }
-
-  concat::fragment{'apache_default_tail':
-    target  => $defaultvhost,
-    content => "
 </VirtualHost>
     ",
     order   => 990,
