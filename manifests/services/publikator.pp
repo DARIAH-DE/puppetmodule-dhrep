@@ -15,6 +15,7 @@ class dhrep::services::publikator (
   $_optdir   = $::dhrep::params::optdir
   $_catname  = $::dhrep::params::config['tomcat_publikator']['catname']
   $_aptdir   = $::dhrep::params::aptdir
+
   $templates = "dhrep/etc/dhrep/publikator/${scope}"
 
   ###
@@ -50,6 +51,7 @@ class dhrep::services::publikator (
     mode    => '0640',
     content => template("${templates}/web.xml.erb"),
     require => File["${_confdir}/publikator"],
+    notify  => Service[$_catname],
   }
 
   ###

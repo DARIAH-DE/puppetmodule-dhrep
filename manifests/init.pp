@@ -112,6 +112,9 @@ class dhrep (
   class { 'dhrep::nginx':
     scope => $scope,
   }
+  class { 'dhrep::resources::apache':
+    scope => $scope,
+  }
   class { 'dhrep::services::intern::elasticsearch':
     scope        => $scope,
     cluster_name => $elasticsearch_cluster_name,
@@ -127,9 +130,6 @@ class dhrep (
   # services for scope textgrid configured here
   ###
   if $scope == 'textgrid' {
-    class { 'dhrep::resources::apache':
-      scope => $scope,
-    }
     class { 'dhrep::services::intern::sesame':
       scope => $scope,
     }
@@ -214,7 +214,7 @@ class dhrep (
       storage_host_public => $dhcrud_storage_host_public,
       pid_secret          => $dhcrud_pid_secret,
       log_level           => $crud_log_level,
-      require             => Class['dhrep::services::intern::elasticsearch'],
+      require             => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::fits']],
     }
     class { 'dhrep::services::crud_public':
       scope               => $scope,
@@ -228,7 +228,8 @@ class dhrep (
       require             => Class['dhrep::services::intern::elasticsearch'],
     }
     class { 'dhrep::services::publikator':
-      scope => $scope,
+      scope   => $scope,
+      require => Class['dhrep::services::publish'],
     }
     class { 'dhrep::static::repository_de_dariah_eu': }
   }

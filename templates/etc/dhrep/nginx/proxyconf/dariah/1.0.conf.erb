@@ -1,5 +1,8 @@
 # locations for /
 
+###
+# oaipmh
+###
 location /oaipmh {
     proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_oaipmh::http_port') %>/oaipmh;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -7,13 +10,9 @@ location /oaipmh {
     proxy_set_header        Host $http_host;
 }
 
-location /publish {
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator;
-    proxy_set_header        X-Real-IP $remote_addr;
-    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header        Host $http_host;
-}
-
+###
+# dhcrud
+###
 location /dhcrud {
     gzip on;
     gzip_types multipart/related application/xop+xml text/xml;
@@ -27,6 +26,9 @@ location /dhcrud {
     proxy_set_header        Host $http_host;
 }
 
+###
+# dhpublish
+###
 # FIXME Only Publish GUI must have access!! Setup AAI!!
 location /dhpublish {
     proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/dhpublish;
@@ -35,6 +37,19 @@ location /dhpublish {
     proxy_set_header        Host $http_host;
 }
 
+###
+# publikator
+###
+location /publikator {
+    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
+
+###
+# pid
+###
 # Only accessed from internal!
 #location /pid {
 #    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/dhpid;
@@ -43,8 +58,12 @@ location /dhpublish {
 #    proxy_set_header        Host $http_host;
 #}
 
+###
+# fits
+###
+# Only accessed from internal!
 #location /fits {
-#    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_fits::http_port') %>/fits/FitsService;
+#    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_fits::http_port') %>/fits;
 #    proxy_set_header        X-Real-IP $remote_addr;
 #    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
 #    proxy_set_header        Host $http_host;
