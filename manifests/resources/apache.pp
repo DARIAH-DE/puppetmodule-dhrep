@@ -45,8 +45,7 @@ class dhrep::resources::apache (
   # Shibboleth configuration for Apache
   # (see dariahshibboleth/README.md)
   package { 'libapache2-mod-shib2':
-    ensure => present,
-    before => Package['shibboleth'],
+    ensure => absent,
   }
 
   ::apache::mod { 'shib2':
