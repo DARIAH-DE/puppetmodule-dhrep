@@ -5,7 +5,7 @@
 class dhrep::tools {
 
   package {
-    'wget':          ensure => present;
+    'wget': ensure => present;
   }
 
   ###

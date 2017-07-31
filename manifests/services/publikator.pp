@@ -4,6 +4,32 @@
 #
 class dhrep::services::publikator (
   $scope = undef,
+  $enable_aai = true,
+  $subcollections_enabled = true,
+  $dariah_storage_url = undef,
+  $dhpublish_url = undef,
+  $dhcrud_url = undef,
+  $collection_registry_url = undef,
+  $generic_search_url = undef,
+  $pid_service_url = 'https://hdl.handle.net/',
+  $refresh = 1750,
+  $service_timeout = 10000,
+  $seafile_enabled = false,
+  $seafile_url = '',
+  $seafile_token_secret = '',
+  $ssl_cert_verification = true,
+  $skip_publish_status_check = false,
+  $dryrun = false,
+  $debug = false,
+  $override_eppn = false,
+  $eppn = '',
+  $link_to_documentation = 'https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository',
+  $link_to_bugtracker = 'https://projects.gwdg.de/projects/dariah-de-repository/issues?query_id=151',
+  $name_of_contact = undef,
+  $mail_of_contact = undef,
+  $redis_hostname = 'localhost',
+  $redis_port = 6379,
+  $redis_max_parallel = 40,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
@@ -59,32 +85,7 @@ class dhrep::services::publikator (
   # profile::apache)
   ###
   file { "/etc/apache2/${scope}/default_vhost_includes/publikator.conf":
-    content => "
-    # --------------------------------------------------------------------------
-    # All PUBLIKATOR configuration
-    # --------------------------------------------------------------------------
-
-    ProxyPass         /publikator  http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator nocanon
-    ProxyPassReverse  /publikator  http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator
-    ProxyPassReverse  /publikator  https://${::fqdn}/publikator
-
-    <Proxy http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator*>
-
-       AuthType shibboleth
-       Require shibboleth
-       ShibUseHeaders On
-
-       RequestHeader set eppn %{eppn}e env=eppn
-       RequestHeader set isMemberOf %{isMemberOf}e env=isMemberOf
-
-    </Proxy>
-
-    <Location /publikator/secure>
-      AuthType shibboleth
-      ShibRequestSetting requireSession 1
-      require valid-user
-    </Location>
-    ",
+    content => template("${templates}/publikator.conf.erb"),
     notify  => Service['apache2'],
   }
 

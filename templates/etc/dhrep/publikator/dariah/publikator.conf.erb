@@ -1,0 +1,21 @@
+# --------------------------------------------------------------------------
+# All PUBLIKATOR configuration
+# --------------------------------------------------------------------------
+
+ProxyPass         /publikator  http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator nocanon
+ProxyPassReverse  /publikator  http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator
+ProxyPassReverse  /publikator  https://${::fqdn}/publikator
+
+<Proxy http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator*>
+   AuthType shibboleth
+   Require shibboleth
+   ShibUseHeaders On
+   RequestHeader set eppn %{eppn}e env=eppn
+   RequestHeader set isMemberOf %{isMemberOf}e env=isMemberOf
+</Proxy>
+
+<Location /publikator/secure>
+  AuthType shibboleth
+  ShibRequestSetting requireSession 1
+  require valid-user
+</Location>
