@@ -8,7 +8,7 @@
 #   the url to wait for
 #
 # [*retry*]
-#   how much retries, till giving up, defaults to 20, 
+#   how much retries, till giving up, defaults to 20,
 #   there is 1 sec waiting beetween each try
 #
 # [*refreshonly*]
@@ -33,5 +33,4 @@ define dhrep::tools::wait_for_url_ready (
     require     => Package['wget'],
 #   logoutput   => true,
   }
-
 }

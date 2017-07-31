@@ -20,7 +20,6 @@ class dhrep::static::textgridlab_org(
     group  => root,
     mode   => '0755',
   }
-  ->
 
   #
   # Clone metadata schemas from GIT and copy tp car/www/
@@ -28,13 +27,12 @@ class dhrep::static::textgridlab_org(
   # TODO Get files from a certain 1.0 tag!
   # TODO Cloning does not yield automatic updates via pull!!
   #
-  exec { 'git_clone_textgrid_metadata':
+  -> exec { 'git_clone_textgrid_metadata':
     command => 'git clone git://git.projects.gwdg.de/textgrid-metadata.git /usr/local/src/textgrid-metadata-git',
     creates => '/usr/local/src/textgrid-metadata-git',
     require => Package['git'],
   }
-  ->
-  file { '/var/www/nginx-root/textgridlab.org/schema':
+  -> file { '/var/www/nginx-root/textgridlab.org/schema':
     ensure => directory,
     owner  => root,
     group  => root,
@@ -80,10 +78,10 @@ class dhrep::static::textgridlab_org(
   # TextGridRep Documentation (common index file and folder)
   #
   file { '/var/www/nginx-root/textgridlab.org/doc':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
   }
   file { '/var/www/nginx-root/textgridlab.org/doc/index.html':
     source  => 'puppet:///modules/dhrep/var/www/nginx-root/textgridlab.org/doc/index.html',
@@ -94,12 +92,11 @@ class dhrep::static::textgridlab_org(
   #
   # TextGridRep API Documentation DEB package (Sphinx-based)
   #
-  package { "textgrid-doc":
+  package { 'textgrid-doc':
     ensure  => latest,
     require => Exec['update_dariah_apt_repository'],
   }
-  ->
-  file { '/var/www/nginx-root/textgridlab.org/doc/services':
+  -> file { '/var/www/nginx-root/textgridlab.org/doc/services':
     ensure => link,
     target => '/var/www/doc/services',
   }
@@ -184,27 +181,23 @@ class dhrep::static::textgridlab_org(
     creates => '/var/www/dariah-de-status',
     require => [Package['git']],
   }
-  ->
-  file { '/var/www/nginx-root/textgridlab.org/repstatus.html':
-    ensure  => link,
-    target  => '/var/www/dariah-de-status/textgrid/repstatus.html',
+  -> file { '/var/www/nginx-root/textgridlab.org/repstatus.html':
+    ensure => link,
+    target => '/var/www/dariah-de-status/textgrid/repstatus.html',
   }
-  ->
-  file { '/var/www/nginx-root/textgridlab.org/repstatus.css':
-    ensure  => link,
-    target  => '/var/www/dariah-de-status/textgrid/repstatus.css',
+  -> file { '/var/www/nginx-root/textgridlab.org/repstatus.css':
+    ensure => link,
+    target => '/var/www/dariah-de-status/textgrid/repstatus.css',
   }
-  ->
-  file { '/opt/dhrep/update-textgridrep-status.sh':
-    source  => 'puppet:///modules/dhrep/opt/dhrep/update-textgridrep-status.sh',
-    mode    => '0755',
+  -> file { '/opt/dhrep/update-textgridrep-status.sh':
+    source => 'puppet:///modules/dhrep/opt/dhrep/update-textgridrep-status.sh',
+    mode   => '0755',
   }
-  ->
   # run every two minutes
-  cron { 'update-textgridrep-status' :
-    command  => '/opt/dhrep/update-textgridrep-status.sh &> /dev/null',
-    user     => 'root',
-    minute   => "*/2",
+  -> cron { 'update-textgridrep-status' :
+    command => '/opt/dhrep/update-textgridrep-status.sh &> /dev/null',
+    user    => 'root',
+    minute  => '*/2',
   }
 
 
@@ -212,15 +205,15 @@ class dhrep::static::textgridlab_org(
   # Update site: needs StorNext mount to be working!
   #
   file { '/var/www/nginx-root/textgridlab.org/updates':
-    ensure  => link,
-    target  => '/media/stornext/tglab/updates',
+    ensure => link,
+    target => '/media/stornext/tglab/updates',
   }
 
   #
   # TG-lab download files: needs StorNext mount to be working!
   #
   file { '/var/www/nginx-root/textgridlab.org/download':
-    ensure  => link,
-    target  => '/media/stornext/tglab/download',
+    ensure => link,
+    target => '/media/stornext/tglab/download',
   }
 }

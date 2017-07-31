@@ -15,10 +15,10 @@ class dhrep::static::repository_de_dariah_eu(
   # DARIAH-DE Repository Documentation (common index file and folder)
   #
   file { '/var/www/nginx-root/doc':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
+    ensure => directory,
+    owner  => root,
+    group  => root,
+    mode   => '0755',
   }
 #
 # TODO Make index file for repository later.
@@ -32,12 +32,11 @@ class dhrep::static::repository_de_dariah_eu(
   #
   # TextGridRep API Documentation DEB package (Sphinx-based)
   #
-  package { "dariah-de-doc":
+  package { 'dariah-de-doc':
     ensure  => latest,
     require => Exec['update_dariah_apt_repository'],
   }
-  ->
-  file { '/var/www/nginx-root/doc/services':
+  -> file { '/var/www/nginx-root/doc/services':
     ensure => link,
     target => '/var/www/doc/services',
   }

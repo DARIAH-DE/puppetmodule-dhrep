@@ -19,33 +19,28 @@ class dhrep::static::textgridrep_website(
     group  => 'root',
     mode   => '0755',
   }
-  ->
-  exec { 'git_clone_textgridrep':
+  -> exec { 'git_clone_textgridrep':
     command => 'git clone git://git.projects.gwdg.de/textgridrep-webseite.git /var/www/nginx-root/textgridrep.de/textgridrep-webseite',
     creates => '/var/www/nginx-root/textgridrep.de/textgridrep-webseite',
     require => Package['git'],
   }
-  ->
-  file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox':
+  -> file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox':
     source  => 'file:///var/www/nginx-root/textgridrep.de/textgridrep-webseite',
     recurse => true,
   }
-  ->
-  file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite/sandbox':
+  -> file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite/sandbox':
     ensure => 'link',
     target => '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox',
   }
-  ->
-  file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite/js/config.js':
-    ensure  => present,
+  -> file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite/js/config.js':
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/nginx-root/textgridrep-webseite/config.js.erb'),
   }
-  ->
-  file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox/js/config.js':
-    ensure  => present,
+  -> file { '/var/www/nginx-root/textgridrep.de/textgridrep-webseite-sandbox/js/config.js':
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
@@ -53,22 +48,20 @@ class dhrep::static::textgridrep_website(
   }
 
   file { '/etc/nginx/sites-available/textgridrep':
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
     content => template('dhrep/etc/dhrep/nginx/sites-available/textgridrep.erb'),
   }
-  ->
-  file { '/etc/nginx/proxyconf/textgridrep.common.conf':
-    ensure  => present,
+  -> file { '/etc/nginx/proxyconf/textgridrep.common.conf':
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
     content => template('dhrep/etc/dhrep/nginx/proxyconf/textgridrep.common.conf.erb'),
   }
-  ->
-  file { '/etc/nginx/sites-enabled/textgridrep':
+  -> file { '/etc/nginx/sites-enabled/textgridrep':
     ensure => 'link',
     source => '/etc/nginx/sites-available/textgridrep',
     notify => Service['nginx'],
