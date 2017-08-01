@@ -47,14 +47,16 @@ class dhrep::resources::apache (
 
   # Shibboleth configuration for Apache
   # (see dariahshibboleth/README.md)
-  package { 'libapache2-mod-shib2':
-    ensure => present,
-    before => Package['shibboleth'],
-  }
+  if $scope == 'textgrid' {
+    package { 'libapache2-mod-shib2':
+      ensure => present,
+      before => Package['shibboleth'],
+    }
 
-  ::apache::mod { 'shib2':
-    id  => 'mod_shib',
-    lib => 'mod_shib2.so',
+    ::apache::mod { 'shib2':
+      id  => 'mod_shib',
+      lib => 'mod_shib2.so',
+    }
   }
 
   concat::fragment{'apache_default_head':
