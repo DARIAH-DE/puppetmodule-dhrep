@@ -2,15 +2,18 @@
 # All PUBLIKATOR configuration
 # --------------------------------------------------------------------------
 
-ProxyPass         /publikator  http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator nocanon
-ProxyPassReverse  /publikator  http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator
-ProxyPassReverse  /publikator  https://${::fqdn}/publikator
+ProxyPass         /publikator  http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator nocanon
+ProxyPassReverse  /publikator  http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator
+ProxyPassReverse  /publikator  https://<%= scope.lookupvar('::fqdn') %>/publikator
 
-<Proxy http://localhost:${dhrep::services::tomcat_publikator::http_port}/publikator*>
+<Proxy http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator*>
    AuthType shibboleth
    Require shibboleth
    ShibUseHeaders On
    RequestHeader set eppn %{eppn}e env=eppn
+   RequestHeader set cn %{cn}e
+   RequestHeader set sn %{sn}e
+   RequestHeader set givenName %{givenName}e
    RequestHeader set isMemberOf %{isMemberOf}e env=isMemberOf
 </Proxy>
 

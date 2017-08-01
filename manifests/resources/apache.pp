@@ -29,9 +29,12 @@ class dhrep::resources::apache (
 
   apache::listen { $port: }
 
-  include apache::mod::php
-  include apache::mod::rewrite
-  include apache::mod::cgi
+  include '::apache::mod::php'
+  include '::apache::mod::rewrite'
+  include '::apache::mod::cgi'
+  include '::apache::mod::proxy'
+  include '::apache::mod::proxy_http'
+  include '::apache::mod::headers'
 
   # TODO: sites-available & a2ensite
   $defaultvhost = "/etc/apache2/sites-enabled/25-${::fqdn}.conf"
@@ -45,7 +48,8 @@ class dhrep::resources::apache (
   # Shibboleth configuration for Apache
   # (see dariahshibboleth/README.md)
   package { 'libapache2-mod-shib2':
-    ensure => absent,
+    ensure => present,
+    before => Package['shibboleth'],
   }
 
   ::apache::mod { 'shib2':
