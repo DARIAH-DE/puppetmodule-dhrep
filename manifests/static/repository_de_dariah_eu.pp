@@ -20,14 +20,15 @@ class dhrep::static::repository_de_dariah_eu(
     group  => root,
     mode   => '0755',
   }
-#
-# TODO Make index file for repository later.
-#
-#  file { '/var/www/nginx-root/doc/index.html':
-#    source  => 'puppet:///modules/dhrep/var/www/nginx-root/doc/index.html',
-#    mode    => '0644',
-#    require => File['/var/www/nginx-root/doc'],
-# }
+
+  #
+  # index.html file for repository.
+  #
+  file { '/var/www/nginx-root/index.html':
+    source  => 'puppet:///modules/dhrep/var/www/nginx-root/dariah/index.html',
+    mode    => '0644',
+    require => File['/var/www/nginx-root'],
+  }
 
   #
   # TextGridRep API Documentation DEB package (Sphinx-based)
