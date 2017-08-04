@@ -7,6 +7,11 @@
     <env-entry-type>java.lang.Boolean</env-entry-type>
     <env-entry-value><%= scope.lookupvar('dhrep::services::publikator::enable_aai') %></env-entry-value>
   </env-entry>
+  <description>AAI Logout URL</description>
+    <env-entry-name>logoutAAI</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value><%= scope.lookupvar('dhrep::services::publikator::logout_aai') %></env-entry-value>
+  </env-entry>
   <env-entry>
     <description>Enable subcollections</description>
     <env-entry-name>subcollectionsEnabled</env-entry-name>
@@ -159,6 +164,5 @@
   </env-entry>
   <welcome-file-list>
     <welcome-file>mainView</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
 </web-app>
