@@ -18,6 +18,7 @@ class dhrep::services::pid (
   $doi_user       = '',
   $doi_passwd     = '',
   $doi_target_url = '',
+  $doi_publisher  = '',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish
