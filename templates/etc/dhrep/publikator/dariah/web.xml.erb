@@ -7,7 +7,8 @@
     <env-entry-type>java.lang.Boolean</env-entry-type>
     <env-entry-value><%= scope.lookupvar('dhrep::services::publikator::enable_aai') %></env-entry-value>
   </env-entry>
-  <description>AAI Logout URL</description>
+  <env-entry>
+    <description>AAI Logout URL</description>
     <env-entry-name>logoutAAI</env-entry-name>
     <env-entry-type>java.lang.String</env-entry-type>
     <env-entry-value><%= scope.lookupvar('dhrep::services::publikator::logout_aai') %></env-entry-value>
