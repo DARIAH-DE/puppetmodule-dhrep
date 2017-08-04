@@ -85,7 +85,7 @@ class dhrep::services::publikator (
   # set link from tomcat to conf file
   file { "/home/${_catname}/${_catname}/webapps/publikator/WEB-INF/web.xml":
     ensure  => 'link',
-    target  => "${_confdir}/publikator",
+    target  => "${_confdir}/publikator/web.xml",
     require => [File["${_confdir}/publikator/web.xml"], Usertomcat::Instance[$_catname]],
   }
 
