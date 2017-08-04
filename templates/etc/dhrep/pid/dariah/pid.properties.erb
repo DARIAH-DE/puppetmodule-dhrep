@@ -42,6 +42,7 @@ doi.pw = <%= scope.lookupvar('dhrep::services::pid::doi_passwd') %>
 # This is the target of the DOI identifier, currently we use the Handle server
 # because we need custom metadata. Please keep the #ID as placeholder!
 doi.targetUrl = <%= scope.lookupvar('dhrep::services::pid::doi_target_url') %>
+doi.publisher = <%= scope.lookupvar('dhrep::services::pid::doi_publisher') %>
 
 # More settings
 pid.responsible = <%= scope.lookupvar('dhrep::services::pid::responsible') %>
