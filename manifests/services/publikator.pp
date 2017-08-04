@@ -30,6 +30,7 @@ class dhrep::services::publikator (
   $redis_hostname = 'localhost',
   $redis_port = 6379,
   $redis_max_parallel = 40,
+  $logout_aai = '',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
