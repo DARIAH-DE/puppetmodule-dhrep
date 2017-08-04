@@ -80,13 +80,13 @@ class dhrep::services::publikator (
     mode    => '0640',
     content => template("${templates}/web.xml.erb"),
     require => File["${_confdir}/publikator"],
-    notify  => Service[$_catname],
   }
-  # set link from tomcat to conf file
-  file { "/home/${_catname}/${_catname}/webapps/publikator/WEB-INF/web.xml":
+  # set link from tomcat to conf file, then notify tomcat!
+  -> file { "/home/${_catname}/${_catname}/webapps/publikator/WEB-INF/web.xml":
     ensure  => 'link',
     target  => "${_confdir}/publikator/web.xml",
     require => [File["${_confdir}/publikator/web.xml"], Usertomcat::Instance[$_catname]],
+    notify  => Service[$_catname],
   }
 
   ###
