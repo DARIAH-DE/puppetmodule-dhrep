@@ -30,7 +30,7 @@ class dhrep::services::publikator (
   $redis_hostname = 'localhost',
   $redis_port = 6379,
   $redis_max_parallel = 40,
-  $logout_aai = '',
+  $logout_aai = "${::fqdn}/Shibboleth.sso/Logout",
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
