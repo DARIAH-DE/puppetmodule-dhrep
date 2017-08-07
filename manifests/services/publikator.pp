@@ -59,11 +59,11 @@ class dhrep::services::publikator (
   file { "/home/${_catname}/${_catname}/webapps/publikator":
     ensure  => 'link',
     target  => "${_aptdir}/publikator",
-    require => [File["${_confdir}/publikator/web.xml"], Usertomcat::Instance[$_catname]],
+    require => Usertomcat::Instance[$_catname],
   }
 
   ###
-  # override jndi vars from web.xml
+  # override jndi vars from context.xml
   ###
   file { "/home/${_catname}/${_catname}/conf/context.xml":
     ensure  => file,
@@ -85,22 +85,6 @@ class dhrep::services::publikator (
     group  => 'root',
     mode   => '0755',
   }
-  # copy web.xml file from template to confdir
-#  file { "${_confdir}/publikator/web.xml":
-#    ensure  => file,
-#    owner   => $_catname,
-#    group   => $_catname,
-#    mode    => '0640',
-#    content => template("${templates}/web.xml.erb"),
-#    require => File["${_confdir}/publikator"],
-#  }
-  # set link from tomcat to conf file, then notify tomcat!
-#  -> file { "/home/${_catname}/${_catname}/webapps/publikator/WEB-INF/web.xml":
-#    ensure  => 'link',
-#    target  => "${_confdir}/publikator/web.xml",
-#    require => [File["${_confdir}/publikator/web.xml"], Usertomcat::Instance[$_catname]],
-#    notify  => Service[$_catname],
-#  }
 
   ###
   # apache config, apache should be there (e.g. by dhrep::init.pp or dariah
