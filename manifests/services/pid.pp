@@ -11,7 +11,6 @@ class dhrep::services::pid (
   $passwd         = undef,
   $responsible    = '',
   $creator        = '',
-  $publisher      = '',
   $secret         = undef,
   $doi_prefix     = '',
   $doi_endpoint   = '',
