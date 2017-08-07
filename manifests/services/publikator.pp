@@ -63,19 +63,6 @@ class dhrep::services::publikator (
   }
 
   ###
-  # override jndi vars from context.xml
-  ###
-  file { "/home/${_catname}/${_catname}/conf/context.xml":
-    ensure  => file,
-    owner   => $_catname,
-    group   => $_catname,
-    mode    => '0640',
-    content => template("${templates}/context.xml.erb"),
-    require => Usertomcat::Instance[$_catname],
-    notify  => Service[$_catname],
-  }
-
-  ###
   # config
   ###
   # create confdir for publikator
@@ -84,6 +71,19 @@ class dhrep::services::publikator (
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
+  }
+
+  ###
+  # override jndi vars from context.xml
+  ###
+  file { "/home/${_catname}/${_catname}/conf/context.xml":
+    ensure  => file,
+    owner   => $_catname,
+    group   => $_catname,
+    mode    => '0640',
+    content => template("${templates}/context.xml.erb"),
+    require => File["${_confdir}/publikator"],
+    notify  => Service[$_catname],
   }
 
   ###
