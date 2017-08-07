@@ -52,7 +52,7 @@ fi
 # dhpublish
 #
 FILE="version"
-PUBLISH=$SERVER"/dhpublish/"$FILE
+PUBLISH=$SERVER":9094/dhpublish/"$FILE
 echo "checking "$CSTR"dhpublish"$CNRM $TRN $PUBLISH
 wget -q $PUBLISH
 if [ -s $FILE ]; then
@@ -70,7 +70,7 @@ fi
 # oaipmh
 #
 FILE="version"
-OAIPMH=$SERVER"/oaipmh/oai/"$FILE
+OAIPMH=$SERVER":9097/oaipmh/oai/"$FILE
 echo "checking "$CSTR"oaipmh"$CNRM $TRN $OAIPMH
 wget -q $OAIPMH
 if [ -s $FILE ]; then
