@@ -141,6 +141,18 @@
 			<field>repositoryOaiEndpoint</field>
 			<value>http://<%= scope.lookupvar('::fqdn') %>/oaipmh/oai</value>
 		</property>
+		<property>
+			<field>redisHostname</field>
+			<value><%= scope.lookupvar('dhrep::services::publikator::redis_hostname') %></value>
+		</property>
+		<property>
+			<field>redisPort</field>
+			<value><%= scope.lookupvar('dhrep::services::publikator::redis_port') %></value>
+		</property>
+		<property>
+			<field>setRedisMaxParallel</field>
+			<value><%= scope.lookupvar('dhrep::services::publikator::redis_max_parallel') %></value>
+		</property>
 		<!-- DARIAH Repository globally configured values END -->
 	</common>
 
