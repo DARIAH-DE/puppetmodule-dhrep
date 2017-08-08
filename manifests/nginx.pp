@@ -25,6 +25,7 @@ class dhrep::nginx (
   }
   if $scope == 'dariah' {
     include dhrep::services::tomcat_fits
+    include dhrep::services::tomcat_publikator
   }
 
   $_confdir  = $::dhrep::params::confdir
