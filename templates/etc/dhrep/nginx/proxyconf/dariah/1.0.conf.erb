@@ -42,6 +42,12 @@ location /1.0/dhpublish {
 ###
 # FIXME Take port from publikator's apache HTTP Port!! It's not working right now!!
 location /publikator {
+    gzip on;
+    gzip_types multipart/related application/xop+xml text/xml;
+    client_max_body_size 1000m;
+    proxy_read_timeout 900s;
+    proxy_send_timeout 900s;
+    proxy_connect_timeout 120s;
     proxy_pass http://localhost:8080/publikator;
 #    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -59,18 +65,18 @@ location /Shibboleth.sso {
 ###
 # pid
 ###
-# Only accessed from internal!
-#location /pid {
-#    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/dhpid;
-#    proxy_set_header        X-Real-IP $remote_addr;
-#    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-#    proxy_set_header        Host $http_host;
-#}
+# ONLY ACCESSED FROM INTERNAL!! DO UNCOMMENT IF NOT TESTING ANYMORE!!
+location /1.0/pid {
+    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/dhpid;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
 
 ###
 # fits
 ###
-# Only accessed from internal!
+# ONLY ACCESSED FROM INTERNAL!!
 #location /fits {
 #    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_fits::http_port') %>/fits;
 #    proxy_set_header        X-Real-IP $remote_addr;
