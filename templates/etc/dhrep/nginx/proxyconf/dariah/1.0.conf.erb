@@ -64,13 +64,13 @@ location /Shibboleth.sso {
 ###
 # pid
 ###
-# ONLY ACCESSED FROM INTERNAL!!
-#location /1.0/pid {
-#    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/dhpid;
-#    proxy_set_header        X-Real-IP $remote_addr;
-#    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-#    proxy_set_header        Host $http_host;
-#}
+# ONLY ACCESSED FROM INTERNAL!! COMMENT IN IF TESTING!!
+location /1.0/pid {
+    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_pid::http_port') %>/dhpid;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
 
 ###
 # fits

@@ -88,7 +88,7 @@ fi
 # pid
 #
 FILE="version"
-PID=$SERVER":9094/dhpid/"$FILE
+PID=$SERVER":9100/dhpid/"$FILE
 echo "checking "$CSTR"dhpid"$CNRM" (intern)"$TRN $PID
 wget -q $PID
 if [ -s $FILE ]; then

@@ -117,12 +117,12 @@
 		</property>
 		<property>
 			<field>dhcrudEndpoint</field>
-			<value>http://localhost:9093/dhcrud/</value>
+			<value>http://localhost:<%= @crud_port %>/dhcrud/</value>
 			<description>The endpoint of the DH-crud service</description>
 		</property>
 		<property>
 			<field>dhpidEndpoint</field>
-			<value>http://localhost:9094/dhpid/</value>
+			<value>http://localhost:<%= @pid_port %>/dhpid/</value>
 		</property>
 		<property>
 			<field>pidSecret</field>

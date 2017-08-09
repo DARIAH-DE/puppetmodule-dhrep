@@ -29,6 +29,9 @@ class dhrep::services::publish (
   $_group    = $::dhrep::services::tomcat_publish::group
   $_aptdir   = $::dhrep::params::aptdir
   $templates = 'dhrep/etc/dhrep/publish'
+  # TODO Find a better solution to put pid and crud ports into publish's config.xml!
+  $crud_port = $::dhrep::params::config['tomcat_crud']['http_port'];
+  $pid_port  = $::dhrep::params::config['tomcat_pid']['http_port'];
 
   ###
   # update apt repo and install package
