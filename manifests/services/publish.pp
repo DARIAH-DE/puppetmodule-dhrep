@@ -10,7 +10,8 @@ class dhrep::services::publish (
   $storage_host       = 'https://de.dariah.eu/storage/',
   $redis_hostname     = 'localhost',
   $redis_port         = 6379,
-  $redis_max_parallel = 40,
+  $redis_max_parallel = 100,
+  $redis_database_no  = 1,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish
