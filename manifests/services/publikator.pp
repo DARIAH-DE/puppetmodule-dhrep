@@ -34,6 +34,7 @@ class dhrep::services::publikator (
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
+  include dhrep::services::intern::redis
 
   $_name     = $::dhrep::params::publikator_name[$scope]
   $_version  = $::dhrep::params::publikator_version[$scope]
