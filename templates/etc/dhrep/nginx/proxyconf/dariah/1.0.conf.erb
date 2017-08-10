@@ -55,6 +55,14 @@ location /publikator {
 }
 
 ###
+# publikator
+###
+# DO REMOVE AFTER WORKSHOP!!
+location /second-publikator {
+    proxy_pass https://devportal.de.dariah.eu/group/dariah-imp1/publish;
+}
+
+###
 # SHIBBOLETH! YEAH!
 ###
 location /Shibboleth.sso {
