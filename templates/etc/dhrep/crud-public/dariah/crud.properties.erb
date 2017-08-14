@@ -32,7 +32,7 @@ METADATA_NAMESPACE = http://textgrid.info/namespaces/metadata/core/2010
 LOG4J_CONFIGFILE = /etc/dhrep/dhcrud-public/crud.log4j
 
 # The Handle resolver URL (resolving only!).
-PID_RESOLVER = <%= scope.lookupvar('dhrep::services::crud_public::pid_resolver') %>
+PID_RESOLVER = <%= @pid_resolver %>
 # The DOI resolver URL (resolving only!).
 DOI_RESOLVER = https://dx.doi.org/
 # The ORCID resolver URL.
@@ -40,18 +40,18 @@ ORCID_RESOLVER = https://orcid.org/
 # The GND resolver URL.
 GND_RESOLVER = http://d-nb.info/gnd/
 # The DC-crud location for PID metadata.
-CRUD_LOCATION = <%= scope.lookupvar('dhrep::services::crud_public::location') %>
+CRUD_LOCATION = <%= @location %>
 
 # The ID implementation to use for identifier creation.
-ID_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.DHCrudServiceIdentifierPidImpl
+ID_IMPLEMENTATION = <%= @id_implementation %>
 # The security implementation (AAI) to use for authentification and authorization.
-AAI_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceAaiTgextraImpl
+AAI_IMPLEMENTATION = <%= @aai_implementation %>
 # GRID storage implementation class.
-DATA_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.DHCrudServiceStorageDariahImpl
+DATA_STORAGE_IMPLEMENTATION = <%= @data_storage_implementation %>
 # XMLDB storage implementation class.
-IDXDB_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.DHCrudServiceStorageElasticSearchImpl
+IDXDB_STORAGE_IMPLEMENTATION = <%= @idxdb_storage_implementation %>
 # RDFDB storage implementation class.
-RDFDB_STORAGE_IMPLEMENTATION = info.textgrid.namespaces.middleware.tgcrud.services.tgcrudservice.TGCrudServiceStorageSesameImpl
+RDFDB_STORAGE_IMPLEMENTATION = <%= @rdfdb_storage_implementation %>
 
 # The default encoding of all used XML operations (default: UTF-8).
 DEFAULT_ENCODING = UTF-8
@@ -59,8 +59,8 @@ DEFAULT_ENCODING = UTF-8
 # The path, all files will be stored to, including the protocol to use. Only
 # "gsiftp://" and "file://" (textgrid)), and "https://" (dariah) are supported
 # at the moment (mandatory).
-DEFAULT_DATA_STORAGE_URI = <%= scope.lookupvar('dhrep::services::crud_public::storage_host') %>
-DEFAULT_DATA_STORAGE_URI_PUBLIC = <%= scope.lookupvar('dhrep::services::crud_public::storage_host_public') %>
+DEFAULT_DATA_STORAGE_URI = <%= @storage_host %>
+DEFAULT_DATA_STORAGE_URI_PUBLIC = <%= @storage_host_public %>
 
 # Which DATA STORAGE authentication shall be used (e.g. JavaGAT)? Allowed is one
 # of MYPROXY, PROXY, CERT, SLC or NONE. The needed values have to be set
@@ -108,21 +108,21 @@ IDXDB_PASS_PUBLIC = *
 IDXDB_PAIRTREE_USAGE = FALSE
 
 # The URI settings.
-ID_SERVICE_URL = http://localhost:9094/pid
+ID_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_pid::http_port') %>/pid
 ID_SERVICE_USER = *
-ID_SERVICE_PASS = <%= scope.lookupvar('dhrep::services::crud_public::pid_secret') %>
+ID_SERVICE_PASS = <%= @pid_secret %>
 ID_AUTOMAGIC_UNLOCKING_TIME = 1800000
 
 # Password for the #MOVEPUBLIC method.
 PUBLISH_SECRET = *
 
 # Settings for the message producer.
-USE_MESSAGING = <%= scope.lookupvar('dhrep::services::crud_public::use_messaging') %>
+USE_MESSAGING = <%= @use_messaging %>
 INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContextFactory
 MESSAGING_PROVIDER_URL = *
 MESSAGING_SECURITY_PRINCIPAL = *
 MESSAGING_SECURITY_CREDENTIALS = *
 
 # Settings for technical metadata extraction via FITS.
-EXTRACT_TECHMD = <%= scope.lookupvar('dhrep::services::crud_public::extract_techmd') %>
+EXTRACT_TECHMD = <%= @extract_techmd %>
 FITS_LOCATION = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_fits::http_port') %>/fits/
