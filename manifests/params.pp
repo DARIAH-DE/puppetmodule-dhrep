@@ -196,6 +196,14 @@ class dhrep::params {
       'gid'          => '1015',
       'uid'          => '1015',
     },
+    'tomcat_pid' => {
+      'catname'      => 'tomcat-pid',
+      'http_port'    => '9100',
+      'control_port' => '9015',
+      'jmx_port'     => '10000',
+      'gid'          => '1016',
+      'uid'          => '1016',
+    },
   }
 
   ###

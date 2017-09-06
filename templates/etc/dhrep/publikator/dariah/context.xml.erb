@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!-- The contents of this file will be loaded for each web application -->
+<Context>
+
+  <!-- Default set of monitored resources -->
+  <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+  <!-- Uncomment this to disable session persistence across Tomcat restarts -->
+  <!--
+  <Manager pathname="" />
+  -->
+
+  <!-- Uncomment this to enable Comet connection tacking (provides events
+       on session expiration as well as webapp lifecycle) -->
+  <!--
+  <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
+  -->
+
+  <!-- BASIC SETTINGS -->
+  <Environment name="enableAAI" value="<%= @enable_aai %>" type="java.lang.Boolean" override="false" description="Enable AAI"/>
+  <Environment name="logoutAAI" value="<%= @logout_aai %>" type="java.lang.String" override="false" description="AAI Logout URL"/>
+  <Environment name="subcollectionsEnabled" value="<%= @subcollections_enabled %>" type="java.lang.Boolean" override="false" description="Enable subcollections"/>
+  <Environment name="dariahStorageUrl" value="<%= @dariah_storage_url %>" type="java.lang.String" override="false" description="DARIAH-DE OwnStorage URL"/>
+  <Environment name="dhpublishUrl" value="<%= @dhpublish_url %>" type="java.lang.String" override="false" description="DH-publish URL"/>
+  <Environment name="dhcrudUrl" value="<%= @dhcrud_url %>" type="java.lang.String" override="false" description="DH-crud URL"/>
+  <Environment name="collectionRegistryUrl" value="<%= @collection_registry_url %>" type="java.lang.String" override="false" description="Collection Registry URL"/>
+  <Environment name="genericSearchUrl" value="<%= @generic_search_url %>" type="java.lang.String" override="false" description="Generic Search URL"/>
+  <Environment name="pidServiceUrl" value="<%= @pid_service_url %>" type="java.lang.String" override="false" description="PID Service URL"/>
+  <Environment name="refresh" value="<%= @refresh %>" type="java.lang.Integer" override="false" description="Offset to refresh status info in publishing process"/>
+  <Environment name="serviceTimeout" value="<%= @service_timeout %>" type="java.lang.Integer" override="false" description="Default timeout for service calls"/>
+
+  <!-- SEAFILE SETTINGS -->
+  <Environment name="seafileEnabled" value="<%= @seafile_enabled %>" type="java.lang.Boolean" override="false" description="Enable Seafile collections"/>
+  <Environment name="seafileUrl" value="<%= @seafile_url %>" type="java.lang.String" override="false" description="Seafile URL"/>
+  <Environment name="seafileTokenSecret" value="<%= @seafile_token_secret %>" type="java.lang.String" override="false" description="Secret for decrypting Seafile token"/>
+
+  <!-- DEVELOPER OPTIONS -->
+  <Environment name="SSLCertVerification" value="<%= @ssl_cert_verification %>" type="java.lang.Boolean" override="false" description="SSLCertVerification"/>
+  <Environment name="skipPublishStatusCheck" value="<%= @skip_publish_status_check %>" type="java.lang.Boolean" override="false" description="Skip publish status check (for GUI debugging)"/>
+  <Environment name="dryrun" value="<%= @dryrun %>" type="java.lang.Boolean" override="false" description="Use dryrun instead of real publishing"/>
+  <Environment name="debug" value="<%= @debug %>" type="java.lang.Boolean" override="false" description="Debug mode"/>
+  <Environment name="overrideEppn" value="<%= @override_eppn %>" type="java.lang.Boolean" override="false" description="Override user's ePPN with that one from below"/>
+  <Environment name="eppn" value="<%= @eppn %>" type="java.lang.String" override="false" description="Always publish with this ePPN, overrides user's ePPN"/>
+
+  <!-- DOCUMENTATION -->
+  <Environment name="linkToDocumentation" value="<%= @link_to_documentation %>" type="java.lang.String" override="false" description="Link to Documentation"/>
+  <Environment name="linkToBugtracker" value="<%= @link_to_bugtracker %>" type="java.lang.String" override="false" description="Link to Bug Tracker"/>
+  <Environment name="nameOfContact" value="<%= @name_of_contact %>" type="java.lang.String" override="false" description="Name of Contact"/>
+  <Environment name="mailOfContact" value="<%= @mail_of_contact %>" type="java.lang.String" override="false" description="Mail of Contact"/>
+
+  <!-- REDIS DB SETTINGS -->
+  <Environment name="redisHostname" value="<%= @redis_hostname %>" type="java.lang.String" override="false" description="Redis Server host"/>
+  <Environment name="redisPort" value="<%= @redis_port %>" type="java.lang.Integer" override="false" description="Redis Server Port"/>
+  <Environment name="redisMaxParallel" value="<%= @redis_max_parallel %>" type="java.lang.Integer" override="false" description="Redis maximum number of connections"/>
+
+</Context>

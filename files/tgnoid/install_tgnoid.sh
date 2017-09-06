@@ -63,7 +63,7 @@ chmod 775 nd/textgrid
 chmod 775 nd/textgrid/NOID
 echo "$NI recursively set user, group, and permissions"
 
-# Test minting the first 13 TExtGrid URIs.
+# Test minting the first 13 TextGrid URIs.
 cd nd/textgrid
 noid mint 7
 echo "$NI first seven textgrid uris successfully minted"

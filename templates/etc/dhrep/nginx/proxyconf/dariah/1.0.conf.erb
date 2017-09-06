@@ -3,7 +3,7 @@
 ###
 # oaipmh
 ###
-location /oaipmh {
+location /1.0/oaipmh {
     proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_oaipmh::http_port') %>/oaipmh;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -13,7 +13,7 @@ location /oaipmh {
 ###
 # dhcrud
 ###
-location /dhcrud {
+location /1.0/dhcrud {
     gzip on;
     gzip_types multipart/related application/xop+xml text/xml;
     client_max_body_size 1000m;
@@ -30,7 +30,7 @@ location /dhcrud {
 # dhpublish
 ###
 # FIXME Only Publikator and publish API must have access!! Setup AAI!!
-location /dhpublish {
+location /1.0/dhpublish {
     proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/dhpublish;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -40,14 +40,31 @@ location /dhpublish {
 ###
 # publikator
 ###
-# FIXME Take port from publikator's apache HTTP Port!! It's not working right now!!
 location /publikator {
+    gzip on;
+    gzip_types multipart/related application/xop+xml text/xml;
+    client_max_body_size 1000m;
+    proxy_read_timeout 900s;
+    proxy_send_timeout 900s;
+    proxy_connect_timeout 120s;
+    # Nginx must relay to Apache because of Shibboleth authentication!
     proxy_pass http://localhost:8080/publikator;
-#    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
+
+###
+# publikator
+###
+# DO REMOVE AFTER WORKSHOP!!
+location /second-publikator {
+    proxy_pass https://devportal.de.dariah.eu/group/dariah-imp1/publish;
+}
+
+###
+# SHIBBOLETH! YEAH!
+###
 location /Shibboleth.sso {
     proxy_pass http://127.0.0.1:8080/Shibboleth.sso;
 }
@@ -55,18 +72,18 @@ location /Shibboleth.sso {
 ###
 # pid
 ###
-# Only accessed from internal!
-#location /pid {
-#    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/dhpid;
-#    proxy_set_header        X-Real-IP $remote_addr;
-#    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-#    proxy_set_header        Host $http_host;
-#}
+# ONLY ACCESSED FROM INTERNAL!! COMMENT IN IF TESTING!!
+location /1.0/pid {
+    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_pid::http_port') %>/dhpid;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
 
 ###
 # fits
 ###
-# Only accessed from internal!
+# ONLY ACCESSED FROM INTERNAL!!
 #location /fits {
 #    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_fits::http_port') %>/fits;
 #    proxy_set_header        X-Real-IP $remote_addr;

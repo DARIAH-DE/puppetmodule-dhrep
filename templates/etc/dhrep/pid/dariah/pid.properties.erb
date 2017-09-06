@@ -22,11 +22,11 @@
 ###
 
 # EPIC PID service settings (GWDG)
-handleservice.endpoint = <%= scope.lookupvar('dhrep::services::pid::endpoint') %>
-handleservice.path = <%= scope.lookupvar('dhrep::services::pid::path') %>
-handleservice.prefix = <%= scope.lookupvar('dhrep::services::pid::prefix') %>
-handleservice.user = <%= scope.lookupvar('dhrep::services::pid::user') %>
-handleservice.pw = <%= scope.lookupvar('dhrep::services::pid::passwd') %>
+handleservice.endpoint = <%= @endpoint %>
+handleservice.path = <%= @path %>
+handleservice.prefix = <%= @prefix %>
+handleservice.user = <%= @user %>
+handleservice.pw = <%= @passwd %>
 
 # Handle resolver (read-only)
 resolver.endpoint = http://hdl.handle.net
@@ -34,21 +34,21 @@ resolver.path = /api/handles/
 
 # DataCite DOI service
 # DOI Prefix without /!
-doi.prefix = <%= scope.lookupvar('dhrep::services::pid::doi_prefix') %>
+doi.prefix = <%= @doi_prefix %>
 # DOI Server
-doi.server = <%= scope.lookupvar('dhrep::services::pid::doi_endpoint') %>
-doi.user = <%= scope.lookupvar('dhrep::services::pid::doi_user') %>
-doi.pw = <%= scope.lookupvar('dhrep::services::pid::doi_passwd') %>
+doi.server = <%= @doi_endpoint %>
+doi.user = <%= @doi_user %>
+doi.pw = <%= @doi_passwd %>
 # This is the target of the DOI identifier, currently we use the Handle server
 # because we need custom metadata. Please keep the #ID as placeholder!
-doi.targetUrl = <%= scope.lookupvar('dhrep::services::pid::doi_target_url') %>
+doi.targetUrl = <%= @doi_target_url %>
+doi.publisher = <%= @doi_publisher %>
 
 # More settings
-pid.responsible = <%= scope.lookupvar('dhrep::services::pid::responsible') %>
-pid.creator = <%= scope.lookupvar('dhrep::services::pid::creator') %>
-pid.publisher = <%= scope.lookupvar('dhrep::services::pid::publisher') %>
-pid.secret = <%= scope.lookupvar('dhrep::services::pid::secret') %>
+pid.responsible = <%= @responsible %>
+pid.creator = <%= @creator %>
+pid.secret = <%= @secret %>
 tgauth.endpoint =
 log.location = /var/log/dhrep/dhpid/pid.log
-log.level = INFO
-service.endpoint = http://localhost:9094/dhpid
+log.level = ALL
+service.endpoint = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_pid::http_port') %>/dhpid

@@ -17,7 +17,7 @@ ProxyPassReverse  /publikator  https://<%= scope.lookupvar('::fqdn') %>/publikat
    RequestHeader set isMemberOf %{isMemberOf}e env=isMemberOf
 </Proxy>
 
-<Location /publikator/secure>
+<Location /publikator/login>
   AuthType shibboleth
   ShibRequestSetting requireSession 1
   require valid-user

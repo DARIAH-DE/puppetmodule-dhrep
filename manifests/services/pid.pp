@@ -11,16 +11,16 @@ class dhrep::services::pid (
   $passwd         = undef,
   $responsible    = '',
   $creator        = '',
-  $publisher      = '',
   $secret         = undef,
   $doi_prefix     = '',
   $doi_endpoint   = '',
   $doi_user       = '',
   $doi_passwd     = '',
   $doi_target_url = '',
+  $doi_publisher  = '',
 ) inherits dhrep::params {
 
-  include dhrep::services::tomcat_publish
+  include dhrep::services::tomcat_pid
 
   $_name    = $::dhrep::params::pid_name[$scope]
   $_short   = $::dhrep::params::pid_short[$scope]
@@ -29,9 +29,7 @@ class dhrep::services::pid (
   $_vardir  = $::dhrep::params::vardir
   $_logdir  = $::dhrep::params::logdir
   $_aptdir  = $::dhrep::params::aptdir
-  $_catname = $::dhrep::services::tomcat_publish::catname
-  $_user    = $::dhrep::services::tomcat_publish::user
-  $_group   = $::dhrep::services::tomcat_publish::group
+  $_catname = $::dhrep::services::tomcat_pid::catname
 
   $templates = "dhrep/etc/dhrep/pid/${scope}"
 
@@ -46,7 +44,7 @@ class dhrep::services::pid (
   ###
   # symlink war from deb package to tomcat webapps dir
   ###
-  file { "/home/${_user}/${_catname}/webapps/${_short}":
+  file { "/home/${_catname}/${_catname}/webapps/${_short}":
     ensure  => link,
     target  => "${_aptdir}/pid",
     require => [File["${_confdir}/${_short}/pid.properties"],Usertomcat::Instance[$_catname]],
@@ -63,8 +61,8 @@ class dhrep::services::pid (
   }
   file { "${_confdir}/${_short}/pid.properties":
     ensure  => file,
-    owner   => $_user,
-    group   => $_group,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0640',
     content => template("${templates}/pid.properties.erb"),
     require => File["${_confdir}/${_short}"],
@@ -76,8 +74,8 @@ class dhrep::services::pid (
   ###
   file { "${_logdir}/${_short}":
     ensure  => directory,
-    owner   => $_user,
-    group   => $_group,
+    owner   => $_catname,
+    group   => $_catname,
     mode    => '0755',
     require => File[$_logdir],
   }

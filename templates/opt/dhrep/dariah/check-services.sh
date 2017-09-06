@@ -16,7 +16,7 @@ ERRORS=false
 # dhcrud
 #
 FILE="version"
-CRUD=$SERVER":9093/dhcrud-public/"$FILE
+CRUD=$SERVER":<%= @crud_port %>/dhcrud-public/"$FILE
 echo "checking "$CSTR"dhcrud"$CNRM" (intern)"$TRN $CRUD
 wget -q $CRUD
 if [ -s $FILE ]; then
@@ -34,7 +34,7 @@ fi
 # dhcrud (public) don't worry, it is correct this way :-)
 #
 FILE="version"
-CRUD=$SERVER":9093/dhcrud/"$FILE
+CRUD=$SERVER":<%= @crud_port %>/dhcrud/"$FILE
 echo "checking "$CSTR"dhcrud public"$CNRM $TRN $CRUD
 wget -q $CRUD
 if [ -s $FILE ]; then
@@ -52,7 +52,7 @@ fi
 # dhpublish
 #
 FILE="version"
-PUBLISH=$SERVER"/dhpublish/"$FILE
+PUBLISH=$SERVER":<%= @publish_port %>/dhpublish/"$FILE
 echo "checking "$CSTR"dhpublish"$CNRM $TRN $PUBLISH
 wget -q $PUBLISH
 if [ -s $FILE ]; then
@@ -70,7 +70,7 @@ fi
 # oaipmh
 #
 FILE="version"
-OAIPMH=$SERVER"/oaipmh/oai/"$FILE
+OAIPMH=$SERVER":<%= @oaipmh_port %>/oaipmh/oai/"$FILE
 echo "checking "$CSTR"oaipmh"$CNRM $TRN $OAIPMH
 wget -q $OAIPMH
 if [ -s $FILE ]; then
@@ -88,7 +88,7 @@ fi
 # pid
 #
 FILE="version"
-PID=$SERVER":9094/dhpid/"$FILE
+PID=$SERVER":<%= @pid_port %>/dhpid/"$FILE
 echo "checking "$CSTR"dhpid"$CNRM" (intern)"$TRN $PID
 wget -q $PID
 if [ -s $FILE ]; then
@@ -106,7 +106,7 @@ fi
 # elasticsearch masternode
 #
 FILE="curl"
-MASTERNODE=$SERVER":9202"
+MASTERNODE=$SERVER":<%= @elasticsearch_master_http_port %>"
 echo "checking "$CSTR"es masternode"$CNRM" (intern)"$TRN $MASTERNODE
 curl -s $MASTERNODE > $FILE
 URGL=`grep "200" curl`
@@ -125,7 +125,7 @@ fi
 # elasticsearch workhorse
 #
 FILE="curl"
-WORKHORSE=$SERVER":9203"
+WORKHORSE=$SERVER":<%= @elasticsearch_workhorse_http_port %>"
 echo "checking "$CSTR"es workhorse"$CNRM" (intern)"$TRN $WORKHORSE
 curl -s $WORKHORSE > $FILE
 URGL=`grep "200" $FILE`
@@ -166,7 +166,7 @@ fi
 # fits service
 #
 FILE="version"
-FITS=$SERVER":9098/fits/"$FILE
+FITS=$SERVER":<%= @fits_port %>/fits/"$FILE
 echo "checking "$CSTR"fits service"$CNRM" (intern)"$TRN $FITS
 wget -q $FITS
 if [ -s $FILE ]; then

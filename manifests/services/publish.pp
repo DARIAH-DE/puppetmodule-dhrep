@@ -3,11 +3,15 @@
 # Class to install and configure publish service.
 #
 class dhrep::services::publish (
-  $scope        = undef,
-  $log_level    = 'INFO',
-  $fake_pids    = false,
-  $pid_secret   = 'secret',
-  $storage_host = 'https://de.dariah.eu/storage/'
+  $scope              = undef,
+  $log_level          = 'INFO',
+  $fake_pids          = false,
+  $pid_secret         = 'secret',
+  $storage_host       = 'https://de.dariah.eu/storage/',
+  $redis_hostname     = 'localhost',
+  $redis_port         = 6379,
+  $redis_max_parallel = 100,
+  $redis_database_no  = 1,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish
@@ -26,6 +30,9 @@ class dhrep::services::publish (
   $_group    = $::dhrep::services::tomcat_publish::group
   $_aptdir   = $::dhrep::params::aptdir
   $templates = 'dhrep/etc/dhrep/publish'
+  # TODO Find a better solution to put pid and crud ports into publish's config.xml!
+  $crud_port = $::dhrep::params::config['tomcat_crud']['http_port'];
+  $pid_port  = $::dhrep::params::config['tomcat_pid']['http_port'];
 
   ###
   # update apt repo and install package

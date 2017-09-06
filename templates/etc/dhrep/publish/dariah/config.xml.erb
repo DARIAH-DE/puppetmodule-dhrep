@@ -8,7 +8,7 @@
 	<common>
 		<property>
 			<field>logLevel</field>
-			<value><%= scope.lookupvar('dhrep::services::publish::log_level') %></value>
+			<value><%= @log_level %></value>
 			<description>The log level for the WorkflowTool application. Possible are ALL, FINEST, FINER, FINE, INFO, WARNING, SEVERE and OFF.</description>
 		</property>
 		<property>
@@ -112,21 +112,21 @@
 		<!-- DARIAH Repository globally configured values START -->
 		<property>
 			<field>ownStorageEndpoint</field>
-			<value><%= scope.lookupvar('dhrep::services::publish::storage_host') %></value>
+			<value><%= @storage_host %></value>
 			<description>The URI of the Storage Service implementation (DARIAH OwnStorage)</description>
 		</property>
 		<property>
 			<field>dhcrudEndpoint</field>
-			<value>http://localhost:9093/dhcrud/</value>
+			<value>http://localhost:<%= @crud_port %>/dhcrud/</value>
 			<description>The endpoint of the DH-crud service</description>
 		</property>
 		<property>
 			<field>dhpidEndpoint</field>
-			<value>http://localhost:9094/dhpid/</value>
+			<value>http://localhost:<%= @pid_port %>/dhpid/</value>
 		</property>
 		<property>
 			<field>pidSecret</field>
-			<value><%= scope.lookupvar('dhrep::services::publish::pid_secret') %></value>
+			<value><%= @pid_secret %></value>
 		</property>
 		<property>
 			<field>crEndpoint</field>
@@ -140,6 +140,22 @@
 		<property>
 			<field>repositoryOaiEndpoint</field>
 			<value>http://<%= scope.lookupvar('::fqdn') %>/oaipmh/oai</value>
+		</property>
+		<property>
+			<field>redisHostname</field>
+			<value><%= @redis_hostname %></value>
+		</property>
+		<property>
+			<field>redisPort</field>
+			<value><%= @redis_port %></value>
+		</property>
+		<property>
+			<field>redisMaxParallel</field>
+			<value><%= @redis_max_parallel %></value>
+		</property>
+		<property>
+			<field>redisDatabaseNo</field>
+			<value><%= @redis_database_no %></value>
 		</property>
 		<!-- DARIAH Repository globally configured values END -->
 	</common>
@@ -190,7 +206,7 @@
 			</property>
 			<property>
 				<field>infoResponseCachingTime</field>
-				<value>600000</value>
+				<value>50000</value>
 				<description>The time info responses are cached.</description>
 			</property>
 		</class>

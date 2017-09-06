@@ -3,36 +3,38 @@
 # Class to install and configure THE PUBLIKATOR service.
 #
 class dhrep::services::publikator (
-  $scope = undef,
-  $enable_aai = true,
-  $subcollections_enabled = true,
-  $dariah_storage_url = undef,
-  $dhpublish_url = undef,
-  $dhcrud_url = undef,
-  $collection_registry_url = undef,
-  $generic_search_url = undef,
-  $pid_service_url = 'https://hdl.handle.net/',
-  $refresh = 1750,
-  $service_timeout = 10000,
-  $seafile_enabled = false,
-  $seafile_url = '',
-  $seafile_token_secret = '',
-  $ssl_cert_verification = true,
+  $scope                     = undef,
+  $enable_aai                = true,
+  $subcollections_enabled    = true,
+  $dariah_storage_url        = undef,
+  $dhpublish_url             = undef,
+  $dhcrud_url                = undef,
+  $collection_registry_url   = undef,
+  $generic_search_url        = undef,
+  $pid_service_url           = 'https://hdl.handle.net/',
+  $refresh                   = 2000,
+  $service_timeout           = 10000,
+  $seafile_enabled           = false,
+  $seafile_url               = '',
+  $seafile_token_secret      = '',
+  $ssl_cert_verification     = true,
   $skip_publish_status_check = false,
-  $dryrun = false,
-  $debug = false,
-  $override_eppn = false,
-  $eppn = '',
-  $link_to_documentation = 'https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository',
-  $link_to_bugtracker = 'https://projects.gwdg.de/projects/dariah-de-repository/issues?query_id=151',
-  $name_of_contact = undef,
-  $mail_of_contact = undef,
-  $redis_hostname = 'localhost',
-  $redis_port = 6379,
-  $redis_max_parallel = 40,
+  $dryrun                    = false,
+  $debug                     = false,
+  $override_eppn             = false,
+  $eppn                      = '',
+  $link_to_documentation     = 'https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository',
+  $link_to_bugtracker        = 'https://projects.gwdg.de/projects/dariah-de-repository/issues?query_id=151',
+  $name_of_contact           = undef,
+  $mail_of_contact           = undef,
+  $redis_hostname            = 'localhost',
+  $redis_port                = 6379,
+  $redis_max_parallel        = 40,
+  $logout_aai                = "${::fqdn}/Shibboleth.sso/Logout",
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
+  include dhrep::services::intern::redis
 
   $_name     = $::dhrep::params::publikator_name[$scope]
   $_version  = $::dhrep::params::publikator_version[$scope]
@@ -58,24 +60,29 @@ class dhrep::services::publikator (
   file { "/home/${_catname}/${_catname}/webapps/publikator":
     ensure  => 'link',
     target  => "${_aptdir}/publikator",
-    require => [File["${_confdir}/publikator/web.xml"], Usertomcat::Instance[$_catname]],
+    require => Usertomcat::Instance[$_catname],
   }
 
   ###
   # config
   ###
+  # create confdir for publikator
   file { "${_confdir}/publikator":
     ensure => directory,
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
   }
-  file { "${_confdir}/publikator/web.xml":
+
+  ###
+  # override jndi vars from context.xml
+  ###
+  file { "/home/${_catname}/${_catname}/conf/context.xml":
     ensure  => file,
     owner   => $_catname,
     group   => $_catname,
     mode    => '0640',
-    content => template("${templates}/web.xml.erb"),
+    content => template("${templates}/context.xml.erb"),
     require => File["${_confdir}/publikator"],
     notify  => Service[$_catname],
   }

@@ -15,6 +15,7 @@ class dhrep::nginx (
 
   include dhrep::services::tomcat_oaipmh
   include dhrep::services::tomcat_publish
+  include dhrep::services::tomcat_pid
 
   if $scope == 'textgrid' {
     include dhrep::services::tomcat_aggregator
@@ -25,6 +26,7 @@ class dhrep::nginx (
   }
   if $scope == 'dariah' {
     include dhrep::services::tomcat_fits
+    include dhrep::services::tomcat_publikator
   }
 
   $_confdir  = $::dhrep::params::confdir
