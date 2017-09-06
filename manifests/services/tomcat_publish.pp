@@ -16,7 +16,8 @@ class dhrep::services::tomcat_publish (
   $group        = $::dhrep::params::config['tomcat_publish']['group']
   $uid          = $::dhrep::params::config['tomcat_publish']['uid']
   $gid          = $::dhrep::params::config['tomcat_publish']['gid']
-  $depcat       = $::dhrep::params::config['tomcat_crud']['catname']
+  $depcat_crud  = $::dhrep::params::config['tomcat_crud']['catname']
+  $depcat_pid   = $::dhrep::params::config['tomcat_pid']['catname']
 
   ###
   # user, home-dir and user-tomcat
@@ -30,7 +31,7 @@ class dhrep::services::tomcat_publish (
     control_port         => $control_port,
     jmx_port             => $jmx_port,
     additional_java_opts => '-Dfile.encoding=UTF-8',
-    init_dependencies    => $depcat,
+    init_dependencies    => "${depcat_crud} ${depcat_pid}",
     xmx                  => $xmx,
     xms                  => $xms,
     telegraf_enabled     => true,
