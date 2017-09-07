@@ -30,6 +30,8 @@ class dhrep::services::publikator (
   $redis_hostname            = 'localhost',
   $redis_port                = 6379,
   $redis_max_parallel        = 40,
+  $publish_secret            = undef,
+  $badge_text                = 'DEV',
   $logout_aai                = "${::fqdn}/Shibboleth.sso/Logout",
 ) inherits dhrep::params {
 
