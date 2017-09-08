@@ -16,6 +16,10 @@ class dhrep::services::crud_public (
   $storage_host                 = undef,
   $storage_host_public          = undef,
   $pid_resolver                 = 'https://hdl.handle.net/',
+  $doi_resolver                 = 'https://dx.doi-org/',
+  $orcid_resolver               = 'https://orcid.org/',
+  $gnd_resolver                 = 'http://d-nb.info/gnd/',
+  $oaipmh_location              = undef,
   $extract_techmd               = false,
   $pid_secret                   = 'pid_secret',
 ) inherits dhrep::params {
