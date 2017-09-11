@@ -295,7 +295,7 @@ class dhrep::services::tgauth (
       require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
     }
     ~> file { '/tmp/ldap-rbac-template.ldif':
-      ensure  => ,
+      ensure  => file,
       content => template('dhrep/ldap/rbac-data.ldif.erb'),
     }
     # should only run once, if ldap template is added (with help of notify and refreshonly)
