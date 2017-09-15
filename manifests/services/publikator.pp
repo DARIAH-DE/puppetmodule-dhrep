@@ -12,6 +12,7 @@ class dhrep::services::publikator (
   $collection_registry_url   = undef,
   $generic_search_url        = undef,
   $pid_service_url           = 'https://hdl.handle.net/',
+  $pdp_token_server_url      = undef,
   $refresh                   = 2000,
   $service_timeout           = 10000,
   $seafile_enabled           = false,
