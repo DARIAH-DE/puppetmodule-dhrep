@@ -10,4 +10,12 @@ class dhrep::services::intern::redis (
   class { '::redis':
     appendonly => true,
   }
+
+  telegraf::input { 'redis':
+    plugin_type => 'redis',
+    options     => {
+      'servers' => ["tcp://localhost:6379"],
+    },
+  }
+
 }
