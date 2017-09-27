@@ -25,6 +25,8 @@ class dhrep::services::publikator (
   $override_eppn             = false,
   $eppn                      = '',
   $link_to_documentation     = 'https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository',
+  $link_to_faq               = 'https://wiki.de.dariah.eu/display/publicde/FAQs+zum+Publikator',
+  $link_to_apidoc            = '',
   $link_to_bugtracker        = 'https://projects.gwdg.de/projects/dariah-de-repository/issues?query_id=151',
   $name_of_contact           = undef,
   $mail_of_contact           = undef,
