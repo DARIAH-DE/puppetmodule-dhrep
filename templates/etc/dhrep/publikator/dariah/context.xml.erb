@@ -75,7 +75,7 @@
 
   <!-- STATSD reporting SETTINGS -->
   <Environment name="statsdEnable" value="<%= @statsd_enable %>" type="java.lang.Boolean" override="false" description="Enable statsd reporting"/>
-  <Environment name="statsdHostname" value="<%= @statsd_hostname %>" type="java.lang.Integer" override="false" description="Statsd hostname"/>
+  <Environment name="statsdHostname" value="<%= @statsd_hostname %>" type="java.lang.String" override="false" description="Statsd hostname"/>
   <Environment name="statsdPort" value="<%= @statsd_port %>" type="java.lang.Integer" override="false" description="Statsd port"/>
 
 </Context>
