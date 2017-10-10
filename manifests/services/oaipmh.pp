@@ -3,7 +3,8 @@
 # Class to install and configure oaipmh service
 #
 class dhrep::services::oaipmh (
-  $scope = undef,
+  $scope            = undef,
+  $format_to_filter = undef,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_oaipmh

@@ -71,7 +71,7 @@ typeList = descriptiveMetadata.dc:type
 rangeField = administrativeMetadata.dcterms:modified
 identifierListFields = descriptiveMetadata.dc:identifier, descriptiveMetadata.dc:date, descriptiveMetadata.dc:format, administrativeMetadata.dcterms:identifier, administrativeMetadata.dcterms:modified
 formatField = descriptiveMetadata.dc:format
-formatToFilter = text/tg.collection+tg.aggregation+xml
+formatToFilter = <%= @format_to_filter %>
 dateOfObjectCreation = administrativeMetadata.dcterms:modified
 relationToFurtherMetadataObject = descriptiveMetadata.dc:relation
 repositoryObjectURIPrefix = hdl:
