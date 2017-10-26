@@ -1,5 +1,3 @@
-# locations for /
-
 ###
 # oaipmh
 ###
@@ -21,9 +19,11 @@ location /1.0/dhcrud {
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
     proxy_pass http://localhost:<%= @tomcat_crud_http_port %>/dhcrud-public;
-    proxy_set_header        X-Real-IP $remote_addr;
-    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header        Host $http_host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    # Workaround for CXF not setting GZIP content-length correctly.
+    proxy_set_header Accept-Encoding "";
 }
 
 ###
@@ -51,18 +51,12 @@ location /publikator {
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
+    # Workaround for CXF not setting GZIP content-length correctly.
+    proxy_set_header Accept-Encoding "";
 }
 
 ###
-# publikator
-###
-# DO REMOVE AFTER WORKSHOP!!
-location /second-publikator {
-    proxy_pass https://devportal.de.dariah.eu/group/dariah-imp1/publish;
-}
-
-###
-# SHIBBOLETH! YEAH!
+# shibboleth
 ###
 location /Shibboleth.sso {
     proxy_pass http://127.0.0.1:8080/Shibboleth.sso;
@@ -71,13 +65,13 @@ location /Shibboleth.sso {
 ###
 # pid
 ###
-# ONLY ACCESSED FROM INTERNAL!! COMMENT IN IF TESTING!!
-location /1.0/pid {
-    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_pid::http_port') %>/dhpid;
-    proxy_set_header        X-Real-IP $remote_addr;
-    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header        Host $http_host;
-}
+# ONLY ACCESSED FROM INTERNAL!!
+#location /1.0/pid {
+#    proxy_pass http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_pid::http_port') %>/dhpid;
+#    proxy_set_header        X-Real-IP $remote_addr;
+#    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+#    proxy_set_header        Host $http_host;
+#}
 
 ###
 # fits

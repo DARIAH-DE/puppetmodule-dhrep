@@ -109,7 +109,7 @@
 			<value>15000</value>
 		</property>
 
-		<!-- DARIAH Repository globally configured values START -->
+		<!-- DARIAH Repository globaly configured values START -->
 		<property>
 			<field>ownStorageEndpoint</field>
 			<value><%= @storage_host %></value>
@@ -232,6 +232,10 @@
 				<value>dc:title</value>
 				<value>dc:creator</value>
 				<value>dc:rights</value>
+			</property>
+			<property>
+				<field>failIfAlreadyPublishedOnPublish</field>
+				<value><%= @fail_if_already_published_on_publish %></value>
 			</property>
 		</class>
 		<!-- class name="actionmodule.dariahde.publish.CreateCollections"> -->
