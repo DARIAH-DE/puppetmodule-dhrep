@@ -241,6 +241,17 @@
 		<!-- class name="actionmodule.dariahde.publish.CreateCollections"> -->
 			<!-- globally configured: dhcrudEndpoint -->
 		<!-- </class> -->
+		<class name="actionmodule.dariahde.publish.RegisterDois">
+			<!-- globally configured: pidSecret -->
+			<property>
+				<field>failsafeDelay</field>
+				<value>100</value>
+			</property>
+			<property>
+				<field>failsafeMaxRetries</field>
+				<value>3</value>
+			</property>
+		</class>
 		<class name="actionmodule.dariahde.publish.SubmitFiles">
 			<!-- globally configured: dhcrudEndpoint -->
 			<property>
