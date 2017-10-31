@@ -14,6 +14,7 @@ class dhrep::services::publish (
   $redis_max_parallel                   = 100,
   $redis_database_no                    = 1,
   $fail_if_already_published_on_publish = true,
+  $error_timeout                        = 3600000,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish

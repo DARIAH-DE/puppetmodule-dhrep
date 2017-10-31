@@ -209,9 +209,9 @@
 				<description>The repeat interval the DHPublish data queue is checked.</description>
 			</property>
 			<property>
-				<field>infoResponseCachingTime</field>
-				<value>50000</value>
-				<description>The time info responses are cached.</description>
+				<field>errorTimeout</field>
+				<value><%= @error_timeout %></value>
+				<description>The time after a long running process is being set to ERROR.</description>
 			</property>
 		</class>
 
