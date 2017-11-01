@@ -16,7 +16,7 @@ class dhrep::services::crud_public (
   $storage_host                 = undef,
   $storage_host_public          = undef,
   $pid_resolver                 = 'https://hdl.handle.net/',
-  $doi_resolver                 = 'https://dx.doi-org/',
+  $doi_resolver                 = 'https://dx.doi.org/',
   $orcid_resolver               = 'https://orcid.org/',
   $gnd_resolver                 = 'http://d-nb.info/gnd/',
   $oaipmh_location              = undef,
