@@ -40,6 +40,7 @@ class dhrep::services::publikator (
   $statsd_enable             = false,
   $statsd_hostname           = localhost,
   $statsd_port               = 8125,
+  $skip_landing_page         = false,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
