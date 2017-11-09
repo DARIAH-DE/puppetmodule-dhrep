@@ -19,7 +19,7 @@ class dhrep::services::crud (
   $doi_resolver                 = 'https://dx.doi.org/',
   $orcid_resolver               = 'https://orcid.org/',
   $gnd_resolver                 = 'http://d-nb.info/gnd/',
-  $publikator_location          = '',
+  $publikator_location          = 'https://repository.de.dariah.eu/publikator',
   $name_of_contact              = 'DARIAH-DE',
   $mail_of_contact              = 'support@de.dariah.eu',
   $oaipmh_location              = undef,
