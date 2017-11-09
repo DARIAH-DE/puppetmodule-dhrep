@@ -15,6 +15,7 @@ class dhrep::services::publish (
   $redis_database_no                    = 1,
   $fail_if_already_published_on_publish = true,
   $error_timeout                        = 3600000,
+  $super_collection_id                  = '',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish
