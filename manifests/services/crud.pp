@@ -21,7 +21,7 @@ class dhrep::services::crud (
   $gnd_resolver                 = 'http://d-nb.info/gnd/',
   $publikator_location          = 'https://repository.de.dariah.eu/publikator',
   $documentation_location       = 'https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository',
-  $api_documentation_location   = 'https://repository.de.dariah.eu/doc/services'
+  $api_documentation_location   = 'https://repository.de.dariah.eu/doc/services',
   $name_of_contact              = 'DARIAH-DE',
   $mail_of_contact              = 'support@de.dariah.eu',
   $oaipmh_location              = undef,
