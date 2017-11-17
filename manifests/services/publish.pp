@@ -16,6 +16,7 @@ class dhrep::services::publish (
   $fail_if_already_published_on_publish = true,
   $error_timeout                        = 3600000,
   $super_collection_id                  = '',
+  $default_process_starter              = 'dariahde.publish.DHPublish',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish
