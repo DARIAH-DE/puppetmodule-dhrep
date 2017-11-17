@@ -17,6 +17,7 @@ class dhrep::services::publish (
   $error_timeout                        = 3600000,
   $super_collection_id                  = '',
   $default_process_starter              = 'dariahde.publish.DHPublish',
+  $policies_file                        = 'policies.xml',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish
@@ -82,12 +83,12 @@ class dhrep::services::publish (
     content => template("${templates}/${scope}/beans.properties.erb"),
     require => File["${_confdir}/${_short}"],
   }
-  file { "${_confdir}/${_short}/policies.xml":
+  file { "${_confdir}/${_short}/${policies_file}":
     ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
-    content => template("${templates}/${scope}/policies.xml.erb"),
+    content => template("${templates}/${scope}/${policies_file}.erb"),
     require => File["${_confdir}/${_short}"],
     notify  => Service[$_catname],
   }
