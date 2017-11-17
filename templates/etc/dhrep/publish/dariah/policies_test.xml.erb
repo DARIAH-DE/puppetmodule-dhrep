@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policies xmlns="koLibRI-policies" xmlns:koLibRI="koLibRI-policies"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="koLibRI-policies http://kopal.langzeitarchivierung.de/schema/koLibRI/policies.xsd">
+
+  <!-- Policy for publishing into the DARIAH repository -->
+	<policy name="DHPublish">
+		<step class="dariahde.publish.PublishStart">
+			<step class="dariahde.publish.ReadCollectionModels">
+				<step class="dariahde.publish.CheckCollections">
+					<step class="dariahde.publish.GetPids">
+						<step class="dariahde.publish.RegisterDois">
+							<step class="dariahde.publish.CreateCollections">
+								<step class="dariahde.publish.MetadataProcessor">
+									<step class="dariahde.publish.SubmitFiles">
+							    	<step class="dariahde.publish.UpdatePidMetadata">
+											<step class="dariahde.publish.NotifyCollectionRegistry">
+                        <step class="dariahde.publish.StoreOverallRDF">
+												  <step class="dariahde.publish.PublishComplete" />
+                        </step>
+											</step>
+										</step>
+									</step>
+								</step>
+							</step>
+						</step>
+					</step>
+				</step>
+			</step>
+		</step>
+	</policy>
+
+	<!-- Simple policy for testing things -->
+	<policy name="Test">
+		<step class="dahriahde.publish.PublishStart">
+			<step class="dariahde.publish.PublishComplete" />
+		</step>
+	</policy>
+</policies>
