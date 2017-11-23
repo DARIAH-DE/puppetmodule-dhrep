@@ -16,6 +16,10 @@ class dhrep::services::publish (
   $fail_if_already_published_on_publish = true,
   $error_timeout                        = 3600000,
   $super_collection_id                  = '',
+  $dhpid_client_timeout                 = 60000,
+  $dhcrud_client_timeout                = 60000,
+  $cr_client_timeout                    = 5000,
+  $cr_endpoint                          = 'https://colreg.de.dariah.eu/',
   $default_process_starter              = 'dariahde.publish.DHPublish',
   $policies_file                        = 'policies.xml',
 ) inherits dhrep::params {

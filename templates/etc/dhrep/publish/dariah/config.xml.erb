@@ -121,8 +121,16 @@
 			<description>The endpoint of the DH-crud service</description>
 		</property>
 		<property>
+			<field>dhcrudClientTimeout</field>
+			<value><%= @dhcrud_client_timeout %></value>
+		</property>
+		<property>
 			<field>dhpidEndpoint</field>
 			<value>http://localhost:<%= @pid_port %>/dhpid/</value>
+		</property>
+		<property>
+			<field>dhpidClientTimeout</field>
+			<value><%= @dhpid_client_timeout %></value>
 		</property>
 		<property>
 			<field>pidSecret</field>
@@ -134,12 +142,11 @@
 		</property>
 		<property>
 			<field>crEndpoint</field>
-			<value>http://demo2.dariah.eu/colreg/</value>
+			<value><%= @cr_endpoint %></value>
 		</property>
 		<property>
-			<field>crOaiPath</field>
-			<value>oaipmh/?verb=GetRecord&amp;metadataPrefix=dcddm&amp;identifier=</value>
-			<description>The URI of the Collection Registry OAI service.</description>
+			<field>crClientTimeout</field>
+			<value><%= @cr_client_timeout %></value>
 		</property>
 		<property>
 			<field>repositoryOaiEndpoint</field>
