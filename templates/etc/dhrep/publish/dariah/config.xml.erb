@@ -271,8 +271,12 @@
 				<description>The time in millis each file is being created in dryrun mode.</description>
 			</property>
 		</class>
-		<!-- <class name="actionmodule.dariahde.publish.NotifyCollectionRegistry"> -->
+		<class name="actionmodule.dariahde.publish.NotifyCollectionRegistry">
 			<!-- globally configured: crEndpoint, oaiEndpoint, pidSecret -->
-		<!-- </class> -->
+			<property>
+				<field>crSubmitDraftPath</field>
+				<value><%= $cr_submit_draft_path %></value>
+			</property>
+		</class>
 	</modules>
 </config>
