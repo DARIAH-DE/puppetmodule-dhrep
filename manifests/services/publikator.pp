@@ -35,12 +35,13 @@ class dhrep::services::publikator (
   $redis_port                = 6379,
   $redis_max_parallel        = 40,
   $publish_secret            = undef,
-  $badge_text                = 'DEV',
+  $badge_text                = '',
   $logout_aai                = "${::fqdn}/Shibboleth.sso/Logout",
   $statsd_enable             = false,
   $statsd_hostname           = localhost,
   $statsd_port               = 8125,
   $skip_landing_page         = false,
+  $instance_name             = 'PROD',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
