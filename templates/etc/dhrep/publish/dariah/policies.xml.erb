@@ -15,8 +15,10 @@
 									<step class="dariahde.publish.SubmitFiles">
 							    	<step class="dariahde.publish.UpdatePidMetadata">
 											<step class="dariahde.publish.NotifyCollectionRegistry">
-												<step class="dariahde.publish.PublishComplete" />
-											</step>
+                        <step class="dariahde.publish.StoreOverallRDF">
+						              <step class="dariahde.publish.PublishComplete" />
+                        </step>
+                      </step>
 										</step>
 									</step>
 								</step>
