@@ -20,9 +20,9 @@ ProxyPassReverse  /publikator  https://<%= scope.lookupvar('::fqdn') %>/publikat
 <Location /publikator/login>
   AuthType shibboleth
   ShibRequestSetting requireSession 1
-<% if scope.lookupvar('dhrep::publikator_lock_to_group') == nil %>
+<% if scope.lookupvar('dhrep::publikator_lock_to_group') == nil -%>
   require valid-user
-<% else %>
-  require isMemberOf <%= scope.lookupvar('dhrep::publikator_lock_to_group') %>
-<% end %>
+<% else -%>
+  require shib-attr isMemberOf <%= scope.lookupvar('dhrep::publikator_lock_to_group') %>
+<% end -%>
 </Location>
