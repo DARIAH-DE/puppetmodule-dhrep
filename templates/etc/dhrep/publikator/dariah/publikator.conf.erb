@@ -23,6 +23,6 @@ ProxyPassReverse  /publikator  https://<%= scope.lookupvar('::fqdn') %>/publikat
 <% if scope.lookupvar('dhrep::publikator_lock_to_group') == nil %>
   require valid-user
 <% else %>
-  require isMemberOf
+  require isMemberOf <%= scope.lookupvar('dhrep::publikator_lock_to_group') %>
 <% end %>
 </Location>
