@@ -15,7 +15,7 @@ RS_ENDPOINT = http://<%= scope.lookupvar('::fqdn') %>/1.0/oaipmh
 elasticSearch.url = 127.0.0.1
 elasticSearch.port = <%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>
 elasticSearch.clusterName = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
-elasticSearch.index = textgrid-public
+elasticSearch.index = dariah-public
 elasticSearch.type = metadata
 
 ############################
