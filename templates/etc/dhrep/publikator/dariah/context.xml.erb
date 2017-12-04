@@ -49,6 +49,8 @@
   <Environment name="serviceTimeout" value="<%= @service_timeout %>" type="java.lang.Integer" override="false" description="Default timeout for service calls"/>
   <Environment name="publishSecret" value="<%= @publish_secret %>" type="java.lang.String" override="false" description="Secret for using the DH-publish service"/>
   <Environment name="badgeText" value="<%= @badge_text %>" type="java.lang.String" override="false" description="Text for badge after Publikator's Title"/>
+  <Environment name="maxUploadSize" value="<%= @maxuploadsize %>" type="java.lang.Integer" override="false" description="Maximum allowed size in MB for one file for the file upload. Note that nginx conf on cdstar needs to be changed, too."/>
+
 
   <!-- SEAFILE SETTINGS -->
   <Environment name="seafileEnabled" value="<%= @seafile_enabled %>" type="java.lang.Boolean" override="false" description="Enable Seafile collections"/>

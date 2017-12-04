@@ -36,6 +36,7 @@ class dhrep::services::publikator (
   $redis_max_parallel        = 40,
   $publish_secret            = undef,
   $badge_text                = '',
+  $maxuploadsize             = 4096,
   $logout_aai                = "${::fqdn}/Shibboleth.sso/Logout",
   $statsd_enable             = false,
   $statsd_hostname           = localhost,
