@@ -38,6 +38,8 @@ class dhrep (
   $dhcrud_public_storage_host = undef,
   $dhcrud_public_storage_host_public = undef,
   $dhcrud_public_pid_secret = undef,
+  #publikator
+  $publikator_lock_to_group = undef,
 ) inherits dhrep::params {
 
   require dhrep::tools
