@@ -67,6 +67,24 @@ else
 fi
 
 #
+# dhpublish
+#
+FILE="version"
+PUBLISH=$SERVER":<%= @publikator_port %>/publikator/"$FILE
+echo "checking "$CSTR"publikator"$CNRM $TRN $PUBLISH
+wget -q $PUBLISH
+if [ -s $FILE ]; then
+    echo -n "    $OK ["$VSTR
+    cat $FILE
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
+
+#
 # oaipmh
 #
 FILE="version"
