@@ -95,7 +95,7 @@ VALIDATE_BASELINE = FALSE
 
 # The URI of the Tgextra service endpopint (mandatory).
 AAI_SERVICE_URL = http://localhost:8080/tgauth/tgextra.php
-AAI_CRUD_SERVICE_URL =  http://localhost:8080/tgauth/tgextra-crud.php
+AAI_CRUD_SERVICE_URL = http://localhost:8080/tgauth/tgextra-crud.php
 AAI_SPECIAL_SECRET = *
 AAI_CLIENT_STUB_TIMEOUT = 45000
 
@@ -111,7 +111,7 @@ SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results
 
 # The Index DB namespapce, if XML.
 IDXDB_NAMESPACE = urn:elasticsearch
-IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata
+IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/<%= @scope %>-public/metadata
 IDXDB_CLUSTER_NAME = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 IDXDB_USER = *
 IDXDB_PASS = *
