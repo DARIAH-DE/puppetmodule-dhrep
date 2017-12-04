@@ -1,6 +1,9 @@
 # --------------------------------------------------------------------------
 # All PUBLIKATOR configuration
 # --------------------------------------------------------------------------
+Alias /accessdenied.html /opt/dariahshibboleth/accessdenied.html
+ErrorDocument 403 /accessdenied.html
+ErrorDocument 401 /accessdenied.html
 
 ProxyPass         /publikator  http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator nocanon
 ProxyPassReverse  /publikator  http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator
