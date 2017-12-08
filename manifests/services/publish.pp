@@ -24,6 +24,7 @@ class dhrep::services::publish (
   $cr_oai_path                          = 'colreg/oaipmh',
   $default_process_starter              = 'dariahde.publish.DHPublish',
   $policies_file                        = 'policies.xml',
+  $maintenance                          = false,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publish
