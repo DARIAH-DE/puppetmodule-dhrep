@@ -26,6 +26,7 @@ class dhrep::services::crud (
   $name_of_contact              = 'DARIAH-DE',
   $mail_of_contact              = 'support@de.dariah.eu',
   $oaipmh_location              = undef,
+  $datacite_location            = 'https://search.datacite.org/works/',
   $extract_techmd               = false,
   $pid_secret                   = 'pid_secret',
 ) inherits dhrep::params {
