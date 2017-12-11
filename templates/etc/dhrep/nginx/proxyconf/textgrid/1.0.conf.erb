@@ -110,6 +110,11 @@ location /1.0/digilib {
 }
 
 location /1.0/digilib/rest/IIIF {
+    # the cached resource has the CORS header only if the Origin-header was present in the request which went into cache
+    # so here we set the CORS header always, and ignore the upstream entry, all the other CORS related stuff (prefligt, etc) 
+    # should still be handled by upstream cxf service
+    proxy_hide_header Access-Control-Allow-Origin;
+    add_header Access-Control-Allow-Origin *;
     proxy_pass http://digilib_balancer/digilibservice/rest/IIIF;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
