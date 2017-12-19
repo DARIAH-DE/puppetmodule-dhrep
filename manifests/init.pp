@@ -124,9 +124,13 @@ class dhrep (
   class { 'dhrep::tools::check_services':
     scope => $scope,
   }
+  class { 'dhrep::tools::cli':
+    scope => $scope,
+  }
   class { 'dhrep::services::tomcat_crud':
     scope => $scope,
   }
+
 
   ###
   # services for scope textgrid configured here

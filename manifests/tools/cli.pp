@@ -2,7 +2,9 @@
 #
 # Class for cli-tools, yeah!
 #
-class dhrep::tools::cli {
+class dhrep::tools::cli (
+  $scope = undef,
+) inherits dhrep::params {
 
   if $scope == 'textgrid' {
     $_optdir = $::dhrep::params::optdir
