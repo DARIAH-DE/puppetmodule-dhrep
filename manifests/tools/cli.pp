@@ -27,7 +27,7 @@ class dhrep::tools::cli (
     # the ldap pw for inspect-tgobject.sh / textgrid-shared.sh
     ###
     file { "/etc/dhrep/consistency_check.conf" :
-      content => inline_template('<%=LDAP_PW=scope.lookupvar("profiles::textgridrepository::tgauth_binddn_pass")%>'),
+      content => inline_template('LDAP_PW=\'<%=scope.lookupvar("profiles::textgridrepository::tgauth_binddn_pass")%>\''),
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
