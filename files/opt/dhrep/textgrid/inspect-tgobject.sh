@@ -106,7 +106,7 @@ else
     fi
 fi
 
-isInEs $id
+isInElasticsearch $id
 ES_RESULT=$?
 
 if [ "$ES_RESULT" -ne "0" ]; then
@@ -114,7 +114,7 @@ if [ "$ES_RESULT" -ne "0" ]; then
 else
     echo "$id in ElasticSeach"
     if [ "$VERBOSE" -gt "0" ]; then
-        esDump "${id}"
+        elasticsearchDump "${id}"
     fi
 fi
 
