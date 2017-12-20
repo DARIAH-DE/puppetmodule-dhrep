@@ -23,6 +23,7 @@ LDAP_PW=''
 
 # source common functions and settings
 source "${SCRIPTPATH}"/functions.d/textgrid-shared.sh
+source "${SCRIPTPATH}"/functions.d/inspect.sh
 
 VERBOSE=0
 
@@ -79,28 +80,28 @@ id=${uri#*:}
 path=$(id2path $id)
 
 if [ -d $path ] ; then
-    echo "${path} exists"
+    ok "${path} exists"
     #ls -alh $path/textgrid*
 else 
-    echo -e "\e[31m${path} does not exist in storage\e[0m"
+   error "${path} does not exist in storage"
 fi
 
 isInLdap "textgrid:${id}"
 LDAP_RESULT=$?
 
 if [ "$LDAP_RESULT" -ne "0" ]; then
-    echo -e "\e[31m$id not in rbac\e[0m"
+    error "$id not in rbac"
 else
-    echo "$id in rbac (public/nonpublic not differentiated in rbac)"
+    ok "$id in rbac (public/nonpublic not differentiated in rbac)"
 fi
 
 isInSesame "textgrid:${id}"
 SESAME_RESULT=$?
 
 if [ "$SESAME_RESULT" -ne "0" ]; then
-    echo -e "\e[31m$id not in sesame\e[0m"
+    error "$id not in sesame"
 else
-    echo "$id in sesame"
+    ok "$id in sesame"
     if [ "$VERBOSE" -gt "0" ]; then
         sesameDump "textgrid:${id}"
     fi
@@ -110,11 +111,13 @@ isInElasticsearch $id
 ES_RESULT=$?
 
 if [ "$ES_RESULT" -ne "0" ]; then
-    echo -e "\e[31m$id not in ElasticSearch\e[0m"
+    error "$id not in ElasticSearch"
 else
-    echo "$id in ElasticSeach"
+    ok "$id in ElasticSeach"
     if [ "$VERBOSE" -gt "0" ]; then
         elasticsearchDump "${id}"
     fi
 fi
+
+validateOnDiskMd5 $id
 

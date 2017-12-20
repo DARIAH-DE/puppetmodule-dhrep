@@ -9,6 +9,8 @@ class dhrep::tools::cli (
   if $scope == 'textgrid' {
     $_optdir = $::dhrep::params::optdir
 
+    package { 'xqilla': ensure => present }
+
     ###
     # shell tools for repo inspection
     ###
@@ -22,6 +24,11 @@ class dhrep::tools::cli (
     file { '/opt/dhrep/functions.d/textgrid-shared.sh':
       mode   => '0777',
       source => 'puppet:///modules/dhrep/opt/dhrep/textgrid/functions.d/textgrid-shared.sh',
+      require => File['/opt/dhrep/functions.d'],
+    }
+    file { '/opt/dhrep/functions.d/inspect.sh':
+      mode   => '0777',
+      source => 'puppet:///modules/dhrep/opt/dhrep/textgrid/functions.d/inspect.sh',
       require => File['/opt/dhrep/functions.d'],
     }
     file { '/opt/dhrep/inspect-tgobject.sh':
