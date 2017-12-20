@@ -12,10 +12,17 @@ class dhrep::tools::cli (
     ###
     # shell tools for repo inspection
     ###
+    file { '/opt/dhrep/functions.d':
+      ensure  => directory,
+      owner   => root,
+      group   => root,
+      mode    => '0755',
+      require => File[$_optdir],
+    }
     file { '/opt/dhrep/functions.d/textgrid-shared.sh':
       mode   => '0744',
       source => 'puppet:///modules/dhrep/opt/dhrep/textgrid/functions.d/textgrid-shared.sh',
-      require => File[$_optdir],
+      require => File['/opt/dhrep/functions.d'],
     }
     file { '/opt/dhrep/inspect-tgobject.sh':
       mode   => '0744',
