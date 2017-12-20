@@ -20,12 +20,12 @@ class dhrep::tools::cli (
       require => File[$_optdir],
     }
     file { '/opt/dhrep/functions.d/textgrid-shared.sh':
-      mode   => '0744',
+      mode   => '0777',
       source => 'puppet:///modules/dhrep/opt/dhrep/textgrid/functions.d/textgrid-shared.sh',
       require => File['/opt/dhrep/functions.d'],
     }
     file { '/opt/dhrep/inspect-tgobject.sh':
-      mode   => '0744',
+      mode   => '0777',
       source => 'puppet:///modules/dhrep/opt/dhrep/textgrid/inspect-tgobject.sh',
       require => File[$_optdir],
     }
@@ -37,7 +37,7 @@ class dhrep::tools::cli (
       content => inline_template('LDAP_PW=\'<%=scope.lookupvar("profiles::textgridrepository::tgauth_binddn_pass")%>\''),
       owner   => 'root',
       group   => 'root',
-      mode    => '0755',
+      mode    => '0644',
     }
   }
 }
