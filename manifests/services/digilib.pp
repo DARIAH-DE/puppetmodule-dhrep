@@ -5,6 +5,7 @@
 class dhrep::services::digilib (
   $scope   = undef,
   $version = 'latest',
+  $prescale_location = undef,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_digilib
@@ -91,13 +92,22 @@ class dhrep::services::digilib (
     group  => 'root',
     mode   => '0755',
   }
-  # the prescale images will be written by wildfly
-  file { "${_vardir}/digilib/prescale":
-    ensure  => directory,
-    owner   => 'wildfly',
-    group   => 'wildfly',
-    mode    => '0755',
-    require => File["${_vardir}/digilib"],
+  if($prescale_location) {
+    # create link to external prescale-dir, e.g. on nfs mount
+    file { "${_vardir}/digilib/prescale":
+      ensure => 'link',
+      target => $prescale_location,
+    }
+  } else {
+    # create local prescale dir
+    # the prescale images will be written by wildfly
+    file { "${_vardir}/digilib/prescale":
+      ensure  => directory,
+      owner   => 'wildfly',
+      group   => 'wildfly',
+      mode    => '0755',
+      require => File["${_vardir}/digilib"],
+    }
   }
   # symlink to old data path
   file { '/var/textgrid/digilib/':
