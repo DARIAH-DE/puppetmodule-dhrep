@@ -1,7 +1,5 @@
 #!/bin/bash
 
-LIMIT=50
-
 # find all elasticsearch entries where the internal id (._id) does not match the 
 # id in json metadata (textgridUri without the 'textgrid:'-prefix).
 # needs the idMatchesTextgridUri.groovy script in elasticsearch script dir.
@@ -25,7 +23,7 @@ function run_query {
       }
     },
     "from": 0,
-    "size": ${LIMIT},
+    "size": 30,
     "fields": ["textgridUri"]
   }'`
   echo $JSON
@@ -35,9 +33,10 @@ function idsFromJSON {
   echo $1 | jq -r '.hits.hits[] | ._id'
 }
 
+echo "NOTE: this script may need 5 minutes or more to finish."
+
 case "$1" in
   nagios)
-    LIMIT=1 # only the hits field is interesting for this test
     JSON=$(run_query)
     # https://www.digitalocean.com/community/tutorials/how-to-create-nagios-plugins-with-bash-on-ubuntu-12-10
     HITS=`echo $JSON| jq .hits.total`
@@ -65,11 +64,11 @@ case "$1" in
     done
     ;;
   *)
-    echo "no param1 given. usage: ${0} PARAM"
-    echo "PARAMs:"
+    echo -e "\e[31mno Parameter 1 given.\e[0m Usage: ${0} PARAM"
+    echo "Possible PARAMs:"
     echo "nagios - run as nagios check"
-    echo "all - show elasticsearch response for query (limit in query is ${LIMIT})"
-    echo "uris - show only broken uris (limit in query is ${LIMIT})"
+    echo "all - show elasticsearch response for query (limit in query is 30)"
+    echo "uris - show only broken uris (limit in query is 30)"
     echo "hdcheck - for each broken uri test if it exists in storage"
     ;;
 esac
