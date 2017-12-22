@@ -1,5 +1,16 @@
 #!/bin/bash
 
+case "$0" in
+    /*)
+        SCRIPTPATH=$(dirname "$0")
+        ;;
+    *)
+        SCRIPTPATH=$(dirname "$PWD/$0")
+        ;;
+esac
+
+ID_FILE="${SCRIPTPATH}esindex_broken_ids.log"
+
 # find all elasticsearch entries where the internal id (._id) does not match the 
 # id in json metadata (textgridUri without the 'textgrid:'-prefix).
 # needs the idMatchesTextgridUri.groovy script in elasticsearch script dir.
@@ -33,12 +44,19 @@ function idsFromJSON {
   echo $1 | jq -r '.hits.hits[] | ._id'
 }
 
-echo "NOTE: this script may need 5 minutes or more to finish."
-
 case "$1" in
+  ids2file)
+    rm $ID_FILE
+    JSON=$(run_query)
+    for uri in $(idsFromJSON $JSON); do
+      echo $uri >> $ID_FILE
+    done
+  ;;
+# old stuff
   hitsonly) 
     JSON=$(run_query)
     echo $JSON| jq .hits.total
+    ;;
   nagios)
     JSON=$(run_query)
     # https://www.digitalocean.com/community/tutorials/how-to-create-nagios-plugins-with-bash-on-ubuntu-12-10
@@ -51,6 +69,7 @@ case "$1" in
       exit 0
     ;;
   all)
+    echo "NOTE: this script may need 5 minutes or more to finish."
     JSON=$(run_query)
     echo $JSON | jq .
     ;;
@@ -70,11 +89,13 @@ case "$1" in
     echo -e "\e[31mNo command given.\e[0m" 
     echo "Usage: ${0} COMMAND"
     echo "Possible COMMANDs:"
-    echo "  all - show elasticsearch response for query (limit in query is 30)"
-    echo "  uris - show only broken uris (limit in query is 30)"
-    echo "  hdcheck - for each broken uri test if it exists in storage"
-    echo "  nagios - run as nagios check"
-    echo "  hitsonly - only print number of fund inconsistencies, e.g. for writing to file per cronjob for nagios"
+    echo "  ids2file  - generate list of broken ids and save to ${ID_FILE} - recommended to use this command for further analysis and nagios"
+    echo "Slow commands:"
+    echo "  all       - show elasticsearch response for query (limit in query is 30)"
+    echo "  uris      - show only broken uris (limit in query is 30)"
+    echo "  hdcheck   - for each broken uri test if it exists in storage"
+    echo "  nagios    - run as nagios check"
+    echo "  hitsonly  - only print number of fund inconsistencies, e.g. for writing to file per cronjob for nagios"
     ;;
 esac
 
