@@ -61,6 +61,19 @@ class dhrep::tools::cli (
       source  => 'puppet:///modules/dhrep/etc/elasticsearch/masternode/scripts/idMatchesTextgridUri.groovy',
       require => File['/etc/elasticsearch/masternode/scripts/'],
     }
+    # the cronjob for es-index check
+    cron { 'es_index_check' :
+      command => "${_optdir}/consistency/check_es_index.sh ids2file > /dev/null",
+      user    => 'root',
+      hour    => 01,
+      minute  => 03,
+    }
+    # the nagios command for es-index check
+    nrpe::plugin { 'check_ldap_statistics':
+      plugin     => 'check_es_index.sh',
+      args       => 'nagios',
+      libexecdir => "${_optdir}/consistency",
+    }
 
     ###
     # the ldap pw for inspect-tgobject.sh / textgrid-shared.sh

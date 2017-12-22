@@ -9,7 +9,7 @@ case "$0" in
         ;;
 esac
 
-ID_FILE="${SCRIPTPATH}esindex_broken_ids.log"
+ID_FILE="${SCRIPTPATH}/esindex_broken_ids.log"
 
 # find all elasticsearch entries where the internal id (._id) does not match the 
 # id in json metadata (textgridUri without the 'textgrid:'-prefix).
@@ -54,7 +54,7 @@ case "$1" in
   ;;
   nagios)
     # https://www.digitalocean.com/community/tutorials/how-to-create-nagios-plugins-with-bash-on-ubuntu-12-10
-    HITS=`wc -l ${ID_FILE}`
+    HITS=`wc -l ${ID_FILE} | cut -d " " -f1`
     if ((HITS > 0)); then
       echo "CRITICAL - found $HITS entries in elasticsearch where ID does not match textgridUri"
       exit 2
