@@ -69,7 +69,7 @@ class dhrep::tools::cli (
       minute  => 03,
     }
     # the nagios command for es-index check
-    nrpe::plugin { 'check_ldap_statistics':
+    nrpe::plugin { 'check_es_index_consistency':
       plugin     => 'check_es_index.sh',
       args       => 'nagios',
       libexecdir => "${_optdir}/consistency",
