@@ -46,8 +46,9 @@ function idsFromJSON {
 
 case "$1" in
   ids2file)
-    rm $ID_FILE
     JSON=$(run_query)
+    rm $ID_FILE
+    touch $ID_FILE
     for uri in $(idsFromJSON $JSON); do
       echo $uri >> $ID_FILE
     done
