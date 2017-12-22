@@ -36,6 +36,9 @@ function idsFromJSON {
 echo "NOTE: this script may need 5 minutes or more to finish."
 
 case "$1" in
+  hitsonly) 
+    JSON=$(run_query)
+    echo $JSON| jq .hits.total
   nagios)
     JSON=$(run_query)
     # https://www.digitalocean.com/community/tutorials/how-to-create-nagios-plugins-with-bash-on-ubuntu-12-10
@@ -64,12 +67,14 @@ case "$1" in
     done
     ;;
   *)
-    echo -e "\e[31mno Parameter 1 given.\e[0m Usage: ${0} PARAM"
-    echo "Possible PARAMs:"
-    echo "nagios - run as nagios check"
-    echo "all - show elasticsearch response for query (limit in query is 30)"
-    echo "uris - show only broken uris (limit in query is 30)"
-    echo "hdcheck - for each broken uri test if it exists in storage"
+    echo -e "\e[31mNo command given.\e[0m" 
+    echo "Usage: ${0} COMMAND"
+    echo "Possible COMMANDs:"
+    echo "  all - show elasticsearch response for query (limit in query is 30)"
+    echo "  uris - show only broken uris (limit in query is 30)"
+    echo "  hdcheck - for each broken uri test if it exists in storage"
+    echo "  nagios - run as nagios check"
+    echo "  hitsonly - only print number of fund inconsistencies, e.g. for writing to file per cronjob for nagios"
     ;;
 esac
 
