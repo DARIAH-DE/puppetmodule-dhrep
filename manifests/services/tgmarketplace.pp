@@ -30,7 +30,7 @@ class dhrep::services::tgmarketplace (
   # TODO cloning does not yield automatic updates via pull!!
   ###
   exec { 'git_clone_textgrid_marketplace':
-    command => 'git clone git://git.projects.gwdg.de/textgridlab-marketplace.git /usr/local/src/textgrid-marketplace-git',
+    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgridlab-marketplace.git /usr/local/src/textgrid-marketplace-git',
     creates => '/usr/local/src/textgrid-marketplace-git',
     require => Package['git'],
   }

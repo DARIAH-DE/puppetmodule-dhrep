@@ -106,26 +106,13 @@ class dhrep::services::tgauth (
     target => "${_confdir}/tgauth/conf",
   }
 
-  ### FIXME remove link is tgauth git master has been changed!
-#  file { '/etc/textgrid/':
-#    ensure  => directory,
-#    owner   => root,
-#    group   => root,
-#    mode    => '0644',
-#  }
-#  file { '/etc/textgrid/tgauth':
-#    ensure => link,
-#    target => "${_confdir}/tgauth",
-#    require => File['/etc/textgrid'],
-#  }
-
   ###
   # /var/www/tgauth
   #
   # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
   ###
   exec { 'git_clone_tgauth':
-    command => 'git clone git://git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
+    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
     creates => '/usr/local/src/tgauth-git',
     require => Package['git'],
   }
@@ -256,12 +243,12 @@ class dhrep::services::tgauth (
     content => template('dhrep/etc/ldap/ldap.conf.erb'),
   }
   # ldap needs to know its own id for multi-master replikation
-#  augeas { 'slapd_default':
-#    changes => [
-#      "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
-#    ],
-#    notify  => Service['slapd'],
-#  }
+  #  augeas { 'slapd_default':
+  #    changes => [
+  #      "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
+  #    ],
+  #    notify  => Service['slapd'],
+  #  }
 
   # todo: changes group of /etc/ldap/schemas from root to staff, ok?
   #  file { '/etc/ldap/schema/':

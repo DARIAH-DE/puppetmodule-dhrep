@@ -20,7 +20,7 @@ class dhrep::static::textgridrep_website(
     mode   => '0755',
   }
   -> exec { 'git_clone_textgridrep':
-    command => 'git clone git://git.projects.gwdg.de/textgridrep-webseite.git /var/www/nginx-root/textgridrep.de/textgridrep-webseite',
+    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/textgridrep-webseite.git /var/www/nginx-root/textgridrep.de/textgridrep-webseite',
     creates => '/var/www/nginx-root/textgridrep.de/textgridrep-webseite',
     require => Package['git'],
   }

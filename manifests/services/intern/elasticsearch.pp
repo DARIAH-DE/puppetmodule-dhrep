@@ -51,8 +51,8 @@ class dhrep::services::intern::elasticsearch (
     config        => {
       'cluster.name'                         => $cluster_name,
       'discovery.zen.ping.multicast.enabled' => false,
-# es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
-#      'network.host' => '127.0.0.1',
+      # es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
+      # 'network.host' => '127.0.0.1',
     },
     init_defaults => {
       'ES_HEAP_SIZE' => $_es_heap_size,
@@ -95,7 +95,7 @@ class dhrep::services::intern::elasticsearch (
   # FIXME use vcsrepo!
   exec { 'git_clone_tgcommon':
     path    => ['/usr/bin','/bin','/usr/sbin'],
-    command => 'git clone git://git.projects.gwdg.de/common.git /usr/local/src/tgcommon-git',
+    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/common.git /usr/local/src/tgcommon-git',
     creates => '/usr/local/src/tgcommon-git',
     require => Package['git'],
   }
@@ -108,15 +108,15 @@ class dhrep::services::intern::elasticsearch (
 # TODO if creating a new dhrep server instance, please manually create es index first before using!!
 #    exec { 'create_public_es_index':
 #      path    => ['/usr/bin','/bin','/usr/sbin'],
-#      cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-#      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllPublic.sh localhost:${_master_http_port}",
+#      cwd     => "/usr/local/src/tgcommon-git/esutils/tools/${scope}/createIndex/",
+#      command => "./createAllPublic.sh localhost:${_master_http_port}",
 #      require => [Package['curl']],
 #    }
 #    ~>
 #    exec { 'create_nonpublic_es_index':
 #      path    => ['/usr/bin','/bin','/usr/sbin'],
-#      cwd     => '/usr/local/src/tgcommon-git/esutils/tools/createIndex/',
-#      command => "/usr/local/src/tgcommon-git/esutils/tools/createIndex/createAllNonpublic.sh localhost:${_master_http_port}",
+#      cwd     => "/usr/local/src/tgcommon-git/esutils/tools/${scope}/createIndex/",
+#      command => "./createAllNonpublic.sh localhost:${_master_http_port}",
 #      require => [Package['curl']],
 #    }
 #    ~>
