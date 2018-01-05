@@ -10,7 +10,7 @@ FAILED="$(tput setaf 1)FAILED$CNRM"
 CSTR="$(tput setaf 5)"
 VSTR="$(tput setaf 3)"
 TRN="  ==>  "
-ERRORS=0
+ERRORS=false
 
 #
 # tgauth
@@ -24,7 +24,8 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=1
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -39,7 +40,8 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=2
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -56,7 +58,8 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=3
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -73,7 +76,8 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=4
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -88,7 +92,8 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=5
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -103,7 +108,8 @@ if [ -s $FILE ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=6
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -121,7 +127,8 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=7
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -138,7 +145,8 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=8
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -155,7 +163,8 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=9
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -172,7 +181,8 @@ if [ -s $FILE ]; then
     echo $CNRM"]"
 else
     echo "    $FAILED"
-    ERRORS=10
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
@@ -187,12 +197,47 @@ if [ -s $INFO ]; then
     echo "    $OK"
 else
     echo "    $FAILED"
-    ERRORS=11
+    rm -f $FILE
+    ERRORS=true
 fi
 
 #
-# sesame
+# sesame nonpublic
 #
+FILE="curl"
+SESAME=$SERVER"/1.0/triplestore?query=info"
+echo "checking "$CSTR"sesame nonpublic"$CNRM $TRN $SESAME
+curl -s $SESAME > $FILE
+URGL=`grep -m 1 -o "textgrid-nonpublic" curl`
+if [ -s $FILE -a "$URGL" = 'textgrid-nonpublic' ]; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm -f $FILE
+    ERRORS=true
+fi
+
+#
+# sesame public
+#
+FILE="curl"
+SESAME=$SERVER"/1.0/triplestore?query=info"
+echo "checking "$CSTR"sesame public"$CNRM $TRN $SESAME
+curl -s $SESAME > $FILE
+URGL=`grep -m 1 -o "textgrid-public" curl`
+if [ -s $FILE -a "$URGL" = 'textgrid-public' ]; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm -f $FILE
+    ERRORS=true
+fi
 
 #
 # elasticsearch masternode
@@ -205,11 +250,11 @@ URGL=`grep "200" curl`
 if [ -s $FILE -a  "$URGL" = '  "status" : 200,' ]; then
     echo -n "    $OK ["$VSTR
     echo -n $URGL
-    rm $FILE
     echo $CNRM"]"
+    rm $FILE
 else
     echo "    $FAILED"
-    rm $FILE
+    rm -f $FILE
     ERRORS=true
 fi
 
@@ -224,11 +269,11 @@ URGL=`grep "200" $FILE`
 if [ -s $FILE ] && [ "$URGL" = '  "status" : 200,' ]; then
     echo -n "    $OK ["$VSTR
     echo -n $URGL
-    rm $FILE
     echo $CNRM"]"
+    rm $FILE
 else
     echo "    $FAILED"
-    rm $FILE
+    rm -f $FILE
     ERRORS=true
 fi
 
@@ -250,17 +295,16 @@ if [ $SIZE -eq $EQSI ]; then
     echo "    $OK [$SIZE == $EQSI]"
 else
     echo "    $FAILED [$SIZE != $EQSI]"
-    ERRORS=12
+    ERRORS=true
 fi
 
 #
 # check for errors
 #
-OKIDO=0
-if [ $ERRORS -ne $OKIDO ]; then
-    echo "...service check $FAILED with exit code $ERRORS"
-    exit $ERRORS
+if $ERRORS ; then
+    echo "...service check $FAILED with exit code 1!"
+    exit 1
 fi
 
 echo "...service check turns out to be $OK"
-exit $ERRORS
+exit 0
