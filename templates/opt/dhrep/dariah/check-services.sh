@@ -67,7 +67,7 @@ else
 fi
 
 #
-# publikator
+# TODO publikator
 #
 #FILE="version"
 #PUBLISH=$SERVER":<%= @publikator_port %>/publikator/"$FILE

@@ -191,6 +191,52 @@ else
 fi
 
 #
+# sesame
+#
+
+#
+# elasticsearch masternode
+#
+FILE="curl"
+MASTERNODE=$SERVER":<%= @elasticsearch_master_http_port %>"
+echo "checking "$CSTR"es masternode"$CNRM" (intern)"$TRN $MASTERNODE
+curl -s $MASTERNODE > $FILE
+URGL=`grep "200" curl`
+if [ -s $FILE -a  "$URGL" = '  "status" : 200,' ]; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
+
+#
+# elasticsearch workhorse
+#
+FILE="curl"
+WORKHORSE=$SERVER":<%= @elasticsearch_workhorse_http_port %>"
+echo "checking "$CSTR"es workhorse"$CNRM" (intern)"$TRN $WORKHORSE
+curl -s $WORKHORSE > $FILE
+URGL=`grep "200" $FILE`
+if [ -s $FILE ] && [ "$URGL" = '  "status" : 200,' ]; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
+
+#
+# TODO wildfly?
+#
+
+#
 # static metadata schema
 #
 FILE="textgrid-metadata_2010.xsd"
