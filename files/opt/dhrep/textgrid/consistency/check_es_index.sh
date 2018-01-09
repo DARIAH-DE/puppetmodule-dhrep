@@ -57,11 +57,14 @@ case "$1" in
     # https://www.digitalocean.com/community/tutorials/how-to-create-nagios-plugins-with-bash-on-ubuntu-12-10
     HITS=`wc -l ${ID_FILE} | cut -d " " -f1`
     if ((HITS > 0)); then
-      echo "CRITICAL - found $HITS entries in elasticsearch where ID does not match textgridUri"
-      exit 2
+      # uncomment below for changing icinga status from warning to critical
+      #echo "CRITICAL - found $HITS entries in elasticsearch where ID does not match textgridUri"
+      #exit 2
+      echo "WARNING - found $HITS entries in elasticsearch where ID does not match textgridUri"
+      exit 1
     fi
     echo "OK - IDs and textgridUris in elasticsearch do all match"
-      exit 0
+    exit 0
     ;;
 # old stuff
   hitsonly) 
