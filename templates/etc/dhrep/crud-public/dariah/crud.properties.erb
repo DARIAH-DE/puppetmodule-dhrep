@@ -103,10 +103,10 @@ AAI_CLIENT_STUB_TIMEOUT = 45000
 
 # The RDF database namespace (mandatory).
 RDFDB_NAMESPACE = http://textgrid.info/relation-ns
-RDFDB_SERVICE_URL = http://localhost:9091/openrdf-sesame/repositories/textgrid-public
+RDFDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_sesame::http_port') %>/openrdf-sesame/repositories/textgrid-public
 RDFDB_USER = *
 RDFDB_PASS = *
-RDFDB_SERVICE_URL_PUBLIC = http://localhost:9091/openrdf-sesame/repositories/textgrid-public
+RDFDB_SERVICE_URL_PUBLIC = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_sesame::http_port') %>/openrdf-sesame/repositories/textgrid-public
 RDFDB_USER_PUBLIC = *
 RDFDB_PASS_PUBLIC = *
 SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results

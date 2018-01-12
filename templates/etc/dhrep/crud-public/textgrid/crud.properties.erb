@@ -35,23 +35,23 @@ LOG4J_CONFIGFILE = /etc/dhrep/tgcrud-public/crud.log4j
 HANDLE_RESOLVER_URL = http://pid.gwdg.de/handles/
 
 # The ID implementation to use for URI creation.
-ID_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud_public::id_implementation') %>
+ID_IMPLEMENTATION = <%= @id_implementation %>
 # The security implementation (AAI) to use for authentification and authorization.
-AAI_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud_public::aai_implementation') %>
+AAI_IMPLEMENTATION = <%= @aai_implementation %>
 # GRID storage implementation class.
-DATA_STORAGE_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud_public::data_storage_implementation') %>
+DATA_STORAGE_IMPLEMENTATION = <%= @data_storage_implementation %>
 # XMLDB storage implementation class.
-IDXDB_STORAGE_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud_public::idxdb_storage_implementation') %>
+IDXDB_STORAGE_IMPLEMENTATION = <%= @idxdb_storage_implementation %>
 # RDFDB storage implementation class.
-RDFDB_STORAGE_IMPLEMENTATION = <%= scope.lookupvar('dhrep::services::crud_public::rdfdb_storage_implementation') %>
+RDFDB_STORAGE_IMPLEMENTATION = <%= @rdfdb_storage_implementation %>
 
 # The default encoding of all used XML operations (default: UTF-8).
 DEFAULT_ENCODING = UTF-8
 
 # The path, all files will be stored to, including the protocol to use. Only
 # "gsiftp://" and "file://" are supportet at the moment (mandatory).
-DEFAULT_DATA_STORAGE_URI = <%= scope.lookupvar('dhrep::services::crud_public::storage_host') %>
-DEFAULT_DATA_STORAGE_URI_PUBLIC = <%= scope.lookupvar('dhrep::services::crud_public::storage_host_public') %>
+DEFAULT_DATA_STORAGE_URI = <%= @storage_host %>
+DEFAULT_DATA_STORAGE_URI_PUBLIC = <%= @storage_host_public %>
 
 # Which DATA STORAGE authentication shall be used (e.g. JavaGAT)? Allowed is one
 # of MYPROXY, PROXY, CERT, SLC or NONE. The needed values have to be set
@@ -79,13 +79,13 @@ AAI_CLIENT_STUB_TIMEOUT = 45000
 
 # The RDF database namespace (mandatory).
 RDFDB_NAMESPACE = http://textgrid.info/relation-ns
-RDFDB_SERVICE_URL = http://localhost:9091/openrdf-sesame/repositories/textgrid-public
+RDFDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_sesame::http_port') %>/openrdf-sesame/repositories/textgrid-public
 RDFDB_USER = *
 RDFDB_PASS = *
-#RDFDB_SERVICE_URL_PUBLIC =http://localhost:9091/openrdf-sesame/repositories/textgrid-public
-#RDFDB_USER_PUBLIC = *
-#RDFDB_PASS_PUBLIC = *
-#SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results
+RDFDB_SERVICE_URL_PUBLIC = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_sesame::http_port') %>/openrdf-sesame/repositories/textgrid-public
+RDFDB_USER_PUBLIC = *
+RDFDB_PASS_PUBLIC = *
+SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results
 
 # The Index DB namespapce, if XML.
 IDXDB_NAMESPACE = urn:elasticsearch
@@ -93,10 +93,10 @@ IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::params::elastic
 IDXDB_CLUSTER_NAME = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 IDXDB_USER = *
 IDXDB_PASS = *
-#IDXDB_SERVICE_URL_PUBLIC = http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata
-#IDXDB_USER_PUBLIC = *
-#IDXDB_PASS_PUBLIC = *
-#IDXDB_PAIRTREE_USAGE = FALSE
+IDXDB_SERVICE_URL_PUBLIC = http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata
+IDXDB_USER_PUBLIC = *
+IDXDB_PASS_PUBLIC = *
+IDXDB_PAIRTREE_USAGE = FALSE
 
 # The URI settings.
 ID_SERVICE_URL = http://localhost:8080/nd/noidu_textgrid/
@@ -105,10 +105,10 @@ ID_SERVICE_PASS = <%= scope.lookupvar('dhrep::services::intern::tgnoid::crud_sec
 ID_AUTOMAGIC_UNLOCKING_TIME = 1800000
 
 # Password for the #MOVEPUBLIC method.
-PUBLISH_SECRET = <%= scope.lookupvar('dhrep::services::crud_public::publish_secret') %>
+PUBLISH_SECRET = <%= @publish_secret %>
 
 # Settings for the message producer.
-USE_MESSAGING = <%= scope.lookupvar('dhrep::services::crud_public::use_messaging') %>
+USE_MESSAGING = <%= @use_messaging %>
 INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContextFactory
 MESSAGING_PROVIDER_URL = http-remoting://127.0.0.1:18080
 MESSAGING_SECURITY_PRINCIPAL = tgcrud
