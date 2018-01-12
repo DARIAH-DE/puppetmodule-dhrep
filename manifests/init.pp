@@ -130,7 +130,9 @@ class dhrep (
   class { 'dhrep::services::tomcat_crud':
     scope => $scope,
   }
-
+  class { 'dhrep::services::fits':
+    scope => $scope,
+  }
 
   ###
   # services for scope textgrid configured here
@@ -173,10 +175,11 @@ class dhrep (
       Class['dhrep::services::intern::tgwildfly']],
     }
     class { 'dhrep::services::crud_public':
-      scope     => $scope,
-      log_level => $crud_public_log_level,
-      require   => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
-      Class['dhrep::services::intern::tgwildfly']],
+      scope          => $scope,
+      log_level      => $crud_public_log_level,
+      extract_techmd => true,
+      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
+      Class['dhrep::services::intern::tgwildfly'], Class['dhrep::services::fits']],
     }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
@@ -208,9 +211,6 @@ class dhrep (
   # services for scope dariah following now (mainly due to different dependencies)
   ###
   if $scope == 'dariah' {
-    class { 'dhrep::services::fits':
-      scope => $scope,
-    }
     class { 'dhrep::services::crud':
       scope               => $scope,
       use_messaging       => false,

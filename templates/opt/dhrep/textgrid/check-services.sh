@@ -278,6 +278,46 @@ else
 fi
 
 #
+# fits core
+#
+FILE="/opt/dhrep/output"
+echo "checking "$CSTR"fits core"$CNRM" (intern)"$TRN
+cd /home/tomcat-fits/fits-1.1.0
+./fits.sh -i License.md -o $FILE
+URGL=`grep toolname=\"FITS\" $FILE`
+URGL=`echo ${URGL:85:5}`
+if [ -s $FILE ] && [ "$URGL" = "1.1.0"  ] ; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    rm fits.log
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm -f $FILE
+    rm -f fits.log
+    ERRORS=true
+fi
+
+#
+# fits service
+#
+FILE="version"
+FITS=$SERVER":<%= @fits_port %>/fits/"$FILE
+echo "checking "$CSTR"fits service"$CNRM" (intern)"$TRN $FITS
+wget -q $FITS
+if [ -s $FILE ]; then
+    echo -n "    $OK ["$VSTR
+    cat $FILE | xargs echo -n
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm -f $FILE
+    ERRORS=true
+fi
+
+#
 # TODO wildfly?
 #
 

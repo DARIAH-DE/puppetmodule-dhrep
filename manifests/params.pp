@@ -235,6 +235,28 @@ class dhrep::params {
       $tomcat_digilib_xmx         = '64m'
       $tomcat_digilib_xms         = '32m'
     }
+    'master_fu': {
+      $elasticsearch_es_heap_size = '256m'
+      $servicetomcat_xmx          = '256m'
+      $servicetomcat_xms          = '32m'
+      $tomcat_crud_xmx            = '512m'
+      $tomcat_crud_xms            = '32m'
+      $tomcat_publish_xmx         = '512m'
+      $tomcat_publish_xms         = '32m'
+      $wildfly_xmx                = '256m'
+      $wildfly_xms                = '32m'
+      $wildfly_maxpermsize        = '256m'
+      $tomcat_oaipmh_xmx          = '256m'
+      $tomcat_oaipmh_xms          = '32m'
+      $tomcat_publikator_xmx      = '256m'
+      $tomcat_publikator_xms      = '32m'
+      $tomcat_fits_xmx            = '256m'
+      $tomcat_fits_xms            = '32m'
+      $tomcat_sesame_xmx          = '256m'
+      $tomcat_sesame_xms          = '32m'
+      $tomcat_digilib_xmx         = '256m'
+      $tomcat_digilib_xms         = '32m'
+    }
     'server': {
       $elasticsearch_es_heap_size = '3072m'
       $servicetomcat_xmx          = '1024m'

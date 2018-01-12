@@ -113,3 +113,7 @@ INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContex
 MESSAGING_PROVIDER_URL = http-remoting://127.0.0.1:18080
 MESSAGING_SECURITY_PRINCIPAL = tgcrud
 MESSAGING_SECURITY_CREDENTIALS = secret
+
+# Settings for technical metadata extraction via FITS.
+EXTRACT_TECHMD = <%= @extract_techmd %>
+FITS_LOCATION = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_fits::http_port') %>/fits/
