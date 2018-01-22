@@ -381,21 +381,19 @@ class dhrep::services::tgauth (
     require => File[$_vardir],
   }
 
-  if $scope != 'dariah' {
-	  file { "${_optdir}/ldap-statistic.pl" :
-		 owner   => 'root',
-		 group   => 'root',
-		 mode    => '0700',
-		 content => template("dhrep/opt/dhrep/${scope}/ldap-statistic.pl.erb"),
-		 require => [File[$_optdir],File["${_statdir}/ldap"]],
-	  }
-	  cron { 'ldap-statistic' :
-		 command  => "${_optdir}/ldap-statistic.pl -a -c ${_statdir}/ldap/rbacusers-`date --iso`.csv -u ${_statdir}/ldap/rbacusers-`date --iso`.txt > /dev/null",
-		 user     => 'root',
-		 hour     => 23,
-		 minute   => 53,
-		 monthday => 01,
-	  }
+  file { "${_optdir}/ldap-statistic.pl" :
+	 owner   => 'root',
+	 group   => 'root',
+	 mode    => '0700',
+	 content => template("dhrep/opt/dhrep/${scope}/ldap-statistic.pl.erb"),
+	 require => [File[$_optdir],File["${_statdir}/ldap"]],
+  }
+  cron { 'ldap-statistic' :
+	 command  => "${_optdir}/ldap-statistic.pl -a -c ${_statdir}/ldap/rbacusers-`date --iso`.csv -u ${_statdir}/ldap/rbacusers-`date --iso`.txt > /dev/null",
+	 user     => 'root',
+	 hour     => 23,
+	 minute   => 53,
+	 monthday => 01,
   }
   ###
   # nrpe for ldap, ldap-backup, and ldap-statistics
