@@ -162,12 +162,13 @@ fi
 # fits core
 #
 FILE="/opt/dhrep/output"
+FITS_VERSION=1.2.0
 echo "checking "$CSTR"fits core"$CNRM" (intern)"$TRN
-cd /home/tomcat-fits/fits-1.2.0
+cd /home/tomcat-fits/fits-$FITS_VERSION
 ./fits.sh -i License.md -o $FILE
 URGL=`grep toolname=\"FITS\" $FILE`
 URGL=`echo ${URGL:85:5}`
-if [ -s $FILE ] && [ "$URGL" = "1.1.0"  ] ; then
+if [ -s $FILE ] && [ "$URGL" = "$FITS_VERSION"  ] ; then
     echo -n "    $OK ["$VSTR
     echo -n $URGL
     rm $FILE
