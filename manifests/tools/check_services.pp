@@ -6,6 +6,8 @@ class dhrep::tools::check_services (
   $scope = undef,
 ) inherits dhrep::params {
 
+  include dhrep::services::fits
+
   $_optdir = $::dhrep::params::optdir
 
   # TODO Find a better solution to put service ports into check-services file!

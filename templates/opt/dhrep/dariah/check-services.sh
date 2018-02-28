@@ -163,7 +163,7 @@ fi
 #
 FILE="/opt/dhrep/output"
 echo "checking "$CSTR"fits core"$CNRM" (intern)"$TRN
-cd /home/tomcat-fits/fits-1.1.0
+cd /home/tomcat-fits/<%= scope.lookupvar("dhrep::services::fits::fits_version") %>
 ./fits.sh -i License.md -o $FILE
 URGL=`grep toolname=\"FITS\" $FILE`
 URGL=`echo ${URGL:85:5}`
