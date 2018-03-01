@@ -28,7 +28,7 @@ class dhrep::services::tgauth (
   $sidcheck_secret   = undef,
   $rbac_base         = "http://${::fqdn}/1.0/tgauth/",
   $authz_shib_pw     = undef,
-  $authz_instance    = '',
+  $authz_instance    = undef,
   $slapd_rootpw      = undef,
   $ldap_replication  = false,
   $ldap_clusternodes = [],
@@ -256,12 +256,12 @@ class dhrep::services::tgauth (
     content => template('dhrep/etc/ldap/ldap.conf.erb'),
   }
   # ldap needs to know its own id for multi-master replikation
-#  augeas { 'slapd_default':
-#    changes => [
-#      "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
-#    ],
-#    notify  => Service['slapd'],
-#  }
+  #  augeas { 'slapd_default':
+  #    changes => [
+  #      "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
+  #    ],
+  #    notify  => Service['slapd'],
+  #  }
 
   # todo: changes group of /etc/ldap/schemas from root to staff, ok?
   #  file { '/etc/ldap/schema/':
@@ -271,44 +271,51 @@ class dhrep::services::tgauth (
   #  }
 
   ###
-  # test
+  # create init ldap files for ldap creation
   ###
-  file { '/tmp/ldap-cn-config-test.ldif':
-    ensure  => file,
-    content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
+  file { "${_optdir}/ldap-init":
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0701',
     require => Service['slapd'],
   }
-  unless $tgauth_ldap_initialized {
-    $slapd_rootpw_sha = sha1digest($slapd_rootpw)
+  #  unless $tgauth_ldap_initialized {
 
-    file { '/tmp/ldap-cn-config.ldif':
-      ensure  => file,
-      content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
-      require => Service['slapd'],
-    }
-    ~> file { '/tmp/tgldapconf.sh':
-      source => 'puppet:///modules/dhrep/ldap/tgldapconf.sh',
-      mode   => '0744',
-    }
-    ~> exec { 'tgldapconf.sh':
-      command => '/tmp/tgldapconf.sh',
-      require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
-    }
-    ~> file { '/tmp/ldap-rbac-template.ldif':
-      ensure  => file,
-      content => template('dhrep/ldap/rbac-data.ldif.erb'),
-    }
-    # should only run once, if ldap template is added (with help of notify and refreshonly)
-    ~> exec { 'ldapadd_ldap_template':
-      command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
-      refreshonly => true,
-      require     => [Package['ldap-utils'], Service['slapd']],
-      logoutput   => true,
-    }
-    -> file {'/etc/facter/facts.d/tgauth_ldap_initialized.txt':
-      content => 'tgauth_ldap_initialized=true',
-    }
+  # set root ldap password
+  $slapd_rootpw_sha = sha1digest($slapd_rootpw)
+
+  file { "${_optdir}/ldap-init/ldap-cn-config.ldif":
+    ensure  => file,
+    content => template('dhrep/ldap/ldap-cn-config.ldif.erb'),
+    require => File["${_optdir}/ldap-init"],
   }
+  file { "${_optdir}/ldap-init/tgldapconf.sh":
+    source  => 'puppet:///modules/dhrep/ldap/tgldapconf.sh',
+    mode    => '0744',
+    require => File["${_optdir}/ldap-init"],
+  }
+  #    ~> exec { 'tgldapconf.sh':
+  #      command => '/tmp/tgldapconf.sh',
+  #      require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
+  #    }
+  file { "${_optdir}/ldap-init/ldap-rbac-template.ldif":
+    ensure  => file,
+    content => template('dhrep/ldap/rbac-data.ldif.erb'),
+    require => File["${_optdir}/ldap-init"],
+  }
+  # should only run once! if ldap template is added (with help of notify and refreshonly)
+  # FIXME use a single script for creating fresh ldap, sesame, and elasticsearch databases!
+  #    ~> exec { 'ldapadd_ldap_template':
+  #      command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
+  #      refreshonly => true,
+  #      require     => [Package['ldap-utils'], Service['slapd']],
+  #      logoutput   => true,
+  #    }
+  #    -> file {'/etc/facter/facts.d/tgauth_ldap_initialized.txt':
+  #      content => 'tgauth_ldap_initialized=true',
+  #    }
+  #  }
   service{ 'slapd':
     ensure  => running,
     enable  => true,
@@ -367,7 +374,7 @@ class dhrep::services::tgauth (
     command => "${_optdir}/ldap-backup.sh > /dev/null",
     user    => 'root',
     hour    => 22,
-    minute  => 03,
+    minute  => '03',
   }
 
   ###
@@ -382,18 +389,18 @@ class dhrep::services::tgauth (
   }
 
   file { "${_optdir}/ldap-statistic.pl" :
-	 owner   => 'root',
-	 group   => 'root',
-	 mode    => '0700',
-	 content => template("dhrep/opt/dhrep/${scope}/ldap-statistic.pl.erb"),
-	 require => [File[$_optdir],File["${_statdir}/ldap"]],
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0700',
+    content => template("dhrep/opt/dhrep/${scope}/ldap-statistic.pl.erb"),
+    require => [File[$_optdir],File["${_statdir}/ldap"]],
   }
   cron { 'ldap-statistic' :
-	 command  => "${_optdir}/ldap-statistic.pl -a -c ${_statdir}/ldap/rbacusers-`date --iso`.csv -u ${_statdir}/ldap/rbacusers-`date --iso`.txt > /dev/null",
-	 user     => 'root',
-	 hour     => 23,
-	 minute   => 53,
-	 monthday => 01,
+    command  => "${_optdir}/ldap-statistic.pl -a -c ${_statdir}/ldap/rbacusers-`date --iso`.csv -u ${_statdir}/ldap/rbacusers-`date --iso`.txt > /dev/null",
+    user     => 'root',
+    hour     => 23,
+    minute   => 53,
+    monthday => '01',
   }
   ###
   # nrpe for ldap, ldap-backup, and ldap-statistics
