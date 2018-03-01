@@ -4,7 +4,7 @@
 #
 class dhrep::services::fits (
   $scope                = undef,
-  $fits_version         = '1.1.0',
+  $fits_version         = '1.2.0',
   $fits_servlet_version = '1.1.3',
 ) inherits dhrep::params {
 
