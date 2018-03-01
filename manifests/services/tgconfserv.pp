@@ -29,7 +29,7 @@ class dhrep::services::tgconfserv (
     require => File['/var/www/confserv'],
   }
   file { '/var/www/confserv/1.0/getAll':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
