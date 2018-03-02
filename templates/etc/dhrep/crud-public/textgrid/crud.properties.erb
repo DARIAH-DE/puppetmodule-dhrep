@@ -117,3 +117,4 @@ MESSAGING_SECURITY_CREDENTIALS = secret
 # Settings for technical metadata extraction via FITS.
 EXTRACT_TECHMD = <%= @extract_techmd %>
 FITS_LOCATION = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_fits::http_port') %>/fits/
+FITS_CLIENT_TIMEOUT = <%= @fits_client_timeout %>

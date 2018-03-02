@@ -15,7 +15,7 @@ class dhrep::services::publish (
   $redis_database_no                    = 1,
   $fail_if_already_published_on_publish = true,
   $error_timeout                        = 3600000,
-  $super_collection_id                  = '',
+  $super_collection_id                  = undef,
   $dhpid_client_timeout                 = 60000,
   $dhcrud_client_timeout                = 60000,
   $cr_endpoint                          = 'https://colreg.de.dariah.eu/',

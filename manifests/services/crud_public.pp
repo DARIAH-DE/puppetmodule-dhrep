@@ -29,6 +29,7 @@ class dhrep::services::crud_public (
   $datacite_location            = 'https://search.datacite.org/works/',
   $extract_techmd               = false,
   $pid_secret                   = 'pid_secret',
+  $fits_client_timeout          = 300000,
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_public_name[$scope]
