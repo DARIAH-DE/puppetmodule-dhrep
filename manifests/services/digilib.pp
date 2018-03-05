@@ -28,7 +28,7 @@ class dhrep::services::digilib (
     $_aptdir = $::dhrep::params::aptdir
   }
 
-  $templates  = "dhrep/etc/dhrep/digilib/"
+  $templates  = 'dhrep/etc/dhrep/digilib/'
 
   ###
   # update apt repo and install package
@@ -37,7 +37,7 @@ class dhrep::services::digilib (
     'libvips37': ensure        => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
     'libvips-tools': ensure    => present;
     'digilib-service': ensure  => $version,
-                       require => [Exec['update_dariah_apt_repository'],Usertomcat::Instance[$_catname]],
+    require => [Exec['update_dariah_apt_repository'],Usertomcat::Instance[$_catname]],
   }
 
   ###
@@ -46,14 +46,13 @@ class dhrep::services::digilib (
   file { "/home/${_catname}/${_catname}/webapps/digilibservice":
     ensure  => 'link',
     target  => "${_aptdir}/digilibservice",
-    require => [Usertomcat::Instance[$_catname], Package["digilib-service"]],
+    require => [Usertomcat::Instance[$_catname], Package['digilib-service']],
   }
   file { "/home/${_catname}/${_catname}2/webapps/digilibservice":
     ensure  => 'link',
     target  => "${_aptdir}/digilibservice",
-    require => [Usertomcat::Instance['tomcat-digilib2'], Package["digilib-service"]],
+    require => [Usertomcat::Instance['tomcat-digilib2'], Package['digilib-service']],
   }
-
 
   ###
   # config
@@ -65,7 +64,7 @@ class dhrep::services::digilib (
     mode   => '0755',
   }
   file { "${_confdir}/digilib/digilib.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
@@ -74,7 +73,7 @@ class dhrep::services::digilib (
     notify  => Service[$_catname],
   }
   file { "${_confdir}/digilib/digilib-service.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
@@ -109,10 +108,12 @@ class dhrep::services::digilib (
       require => File["${_vardir}/digilib"],
     }
   }
-  # symlink to old data path
-  file { '/var/textgrid/digilib/':
-    ensure => link,
-    target => "${_vardir}/digilib/",
+  # symlink to old data path if scope=textgrid
+  if $scope == 'textgrid' {
+    file { '/var/textgrid/digilib/':
+      ensure => link,
+      target => "${_vardir}/digilib/",
+    }
   }
 
   ###
@@ -126,7 +127,6 @@ class dhrep::services::digilib (
     source  => "${_confdir}/digilib/digilib-service.properties",
     require => [File["/home/${_catname}/${_catname}/webapps/digilibservice"],File["${_confdir}/digilib/digilib-service.properties"]],
   }
-
   file { "/home/${_catname}/${_catname}2/webapps/digilibservice/WEB-INF/classes/digilib.properties":
     source  => "${_confdir}/digilib/digilib.properties",
     require => [File["/home/${_catname}/${_catname}2/webapps/digilibservice"],File["${_confdir}/digilib/digilib.properties"]],
@@ -140,7 +140,7 @@ class dhrep::services::digilib (
   # nginx upstream conf for digilib
   ###
   file { '/etc/nginx/conf.d/digilib.conf':
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -165,7 +165,7 @@ class dhrep::services::digilib (
   }
 
   # calculate critical and warning values from xmx for nrpe
-  $xmx_in_byte = inline_template("<%
+$xmx_in_byte = inline_template("<%
         mem,unit = @_xmx.scan(/\d+|\D+/)
         mem = mem.to_f
         case unit
@@ -180,8 +180,8 @@ class dhrep::services::digilib (
         end
         %><%= mem.to_i %>")
   # warn at 85%, crit at 95%
-  $mem_warn = inline_template("<%= (@xmx_in_byte.to_f * 0.85 ).to_i %>")
-  $mem_crit = inline_template("<%= (@xmx_in_byte.to_f * 0.95 ).to_i %>")
+  $mem_warn = inline_template('<%= (@xmx_in_byte.to_f * 0.85 ).to_i %>')
+  $mem_crit = inline_template('<%= (@xmx_in_byte.to_f * 0.95 ).to_i %>')
 
   ###
   # nrpe digilib
@@ -229,6 +229,4 @@ class dhrep::services::digilib (
     plugin => '/check_jmx',
     args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port2}/jmxrmi -O java.lang:type=OperatingSystem -A OpenFileDescriptorCount",
   }
-
-
 }
