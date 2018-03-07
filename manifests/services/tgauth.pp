@@ -112,7 +112,7 @@ class dhrep::services::tgauth (
   # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
   ###
   exec { 'git_clone_tgauth':
-    command => 'git clone git://git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
+    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
     creates => '/usr/local/src/tgauth-git',
     require => Package['git'],
   }
