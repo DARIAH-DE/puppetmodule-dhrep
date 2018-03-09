@@ -8,11 +8,11 @@ define dhrep::users_addadmin (
   $username    = $title,
   $uid         = undef,
   $groups      = [],
-  $fullname    = '',
-  $affiliation = '',
-  $mail        = '',
-  $sshkey_type = '',
-  $sshkey      = '',
+  $fullname    = undef,
+  $affiliation = undef,
+  $mail        = undef,
+  $sshkey_type = undef,
+  $sshkey      = undef,
   $shell       = '/bin/bash'
 ) {
 
