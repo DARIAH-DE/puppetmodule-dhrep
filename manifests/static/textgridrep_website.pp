@@ -2,7 +2,7 @@
 #
 # Class to install and configure the textgridrep website
 #
-class dhrep::static::textgridrep_website(
+class dhrep::static::textgridrep_website (
   $tgrep_server_name  = 'vm1rep vm1rep.textgrid.local',
   $tgrep_service_url  = 'http://vm1.textgrid.local/1.0',
 ) {

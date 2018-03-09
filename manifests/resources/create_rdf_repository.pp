@@ -13,12 +13,12 @@ define dhrep::resources::create_rdf_repository (
   $ttl_target = shellquote("http://localhost:${port}/openrdf-sesame/repositories/${name}/statements")
 
   dhrep::tools::wait_for_url_ready { "${name}_rep_ready_wait":
-    url     => "http://localhost:${port}/openrdf-sesame/repositories", 
+    url     => "http://localhost:${port}/openrdf-sesame/repositories",
     require => Tomcat::War['openrdf-sesame.war'],
   }
   ~>
   dhrep::tools::wait_for_url_ready { "${name}_workbench_ready_wait":
-    url     => "http://localhost:${port}/openrdf-workbench/", 
+    url     => "http://localhost:${port}/openrdf-workbench/",
     require => Tomcat::War['openrdf-workbench.war'],
   }
   ~>

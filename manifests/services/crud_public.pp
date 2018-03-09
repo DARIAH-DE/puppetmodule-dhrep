@@ -27,9 +27,9 @@ class dhrep::services::crud_public (
   $mail_of_contact              = 'support@de.dariah.eu',
   $oaipmh_location              = undef,
   $datacite_location            = 'https://search.datacite.org/works/',
-  $extract_techmd               = false,
+  $extract_techmd               = true,
   $pid_secret                   = 'pid_secret',
-  $fits_client_timeout          = 300000,
+  $fits_client_timeout          = 500000,
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_public_name[$scope]
