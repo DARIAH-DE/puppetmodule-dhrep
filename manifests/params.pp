@@ -2,7 +2,7 @@
 #
 # Class for textgrid and dariah scope configuration
 #
-class params {
+class dhrep::params {
 
   ###
   # some global settings
