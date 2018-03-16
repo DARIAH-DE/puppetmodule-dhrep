@@ -135,8 +135,8 @@ class dhrep::services::aggregator (
         'port' => $_http_port,
       },
       'jolokia.metrics' => {
-        'name'  => 'cxf_avg_response',
-        'mbean' => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"',
+        'name'      => 'cxf_avg_response',
+        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"',
         'attribute' => 'AvgResponseTime',
       },
     },
