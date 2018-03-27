@@ -8,6 +8,7 @@ define dhrep::resources::create_rdf_repository (
   $user = 'tomcat-sesame'
 ) {
 
+  # NOTE database creation is now done by /opt/dhrep/init_databases.sh
   $create_target = shellquote("http://localhost:${port}/openrdf-workbench/repositories/SYSTEM/create")
   $create_data = shellquote("type=native&Repository+ID=${name}&Repository+title=rdf+repo+for+${name}+data&Triple+indexes=spoc%2Cposc%2Copsc%2Csopc")
   $ttl_target = shellquote("http://localhost:${port}/openrdf-sesame/repositories/${name}/statements")

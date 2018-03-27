@@ -50,29 +50,28 @@ class dhrep::services::intern::sesame (
     require => User[$_catname]
   }
 
-  # FIXME Ubbo!
-  unless $sesame_nonpublic_repo_created {
-    dhrep::resources::create_rdf_repository{"${scope}-nonpublic":
-      port => $_http_port,
-      user => $_catname,
-    }
-    ->
-    file {'/etc/facter/facts.d/sesame_nonpublic.txt':
-      content => 'sesame_nonpublic_repo_created=true',
-    }
-  }
+  # NOTE database creation is now done by /opt/dhrep/init_databases.sh
+#  unless $sesame_nonpublic_repo_created {
+#    dhrep::resources::create_rdf_repository{"${scope}-nonpublic":
+#      port => $_http_port,
+#      user => $_catname,
+#    }
+#    ->
+#    file {'/etc/facter/facts.d/sesame_nonpublic.txt':
+#      content => 'sesame_nonpublic_repo_created=true',
+#    }
+#  }
 
-  # FIXME Ubbo!
-  unless $sesame_public_repo_created {
-    dhrep::resources::create_rdf_repository{"${scope}-public":
-      port => $_http_port,
-      user => $_catname,
-    }
-    ->
-    file {'/etc/facter/facts.d/sesame_public.txt':
-      content => 'sesame_public_repo_created=true',
-    }
-  }
+#  unless $sesame_public_repo_created {
+#    dhrep::resources::create_rdf_repository{"${scope}-public":
+#      port => $_http_port,
+#      user => $_catname,
+#    }
+#    ->
+#    file {'/etc/facter/facts.d/sesame_public.txt':
+#      content => 'sesame_public_repo_created=true',
+#    }
+#  }
 
   ###
   # sesame backup script
