@@ -29,10 +29,6 @@ class dhrep::services::publish (
 
   include dhrep::services::tomcat_publish
 
-  if $scope == 'dariah' {
-    include dhrep::services::intern::redis
-  }
-
   $_name     = $::dhrep::params::publish_name[$scope]
   $_short    = $::dhrep::params::publish_short[$scope]
   $_version  = $::dhrep::params::publish_version[$scope]
