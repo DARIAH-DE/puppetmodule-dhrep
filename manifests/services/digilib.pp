@@ -6,6 +6,8 @@ class dhrep::services::digilib (
   $scope   = undef,
   $version = 'latest',
   $prescale_location = undef,
+  $tgcrud_location = 'https://textgridlab.org/1.0/tgcrud-public/TGCrudService?wsdl',
+  $dhcrud_location = 'https://repository.de.dariah.eu/1.0/dhcrud/',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_digilib
@@ -19,16 +21,8 @@ class dhrep::services::digilib (
   $_jmx_port   = $::dhrep::services::tomcat_digilib::jmx_port
   $_http_port2 = $::dhrep::services::tomcat_digilib2::http_port
   $_jmx_port2  = $::dhrep::services::tomcat_digilib2::jmx_port
-
-  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
-  if $scope == 'textgrid' {
-    $_aptdir = '/var/textgrid/webapps'
-  }
-  else {
-    $_aptdir = $::dhrep::params::aptdir
-  }
-
-  $templates  = 'dhrep/etc/dhrep/digilib/'
+  $_aptdir     = $::dhrep::params::aptdir
+  $templates   = 'dhrep/etc/dhrep/digilib/'
 
   ###
   # update apt repo and install package
