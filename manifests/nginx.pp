@@ -16,16 +16,16 @@ class dhrep::nginx (
   include dhrep::services::tomcat_oaipmh
   include dhrep::services::tomcat_publish
   include dhrep::services::tomcat_pid
+  include dhrep::services::tomcat_digilib
+  include dhrep::services::tomcat_digilib2
+  include dhrep::services::tomcat_fits
 
   if $scope == 'textgrid' {
     include dhrep::services::tomcat_aggregator
-    include dhrep::services::tomcat_digilib
-    include dhrep::services::tomcat_digilib2
     include dhrep::services::tomcat_sesame
     include dhrep::services::tomcat_tgsearch
   }
   if $scope == 'dariah' {
-    include dhrep::services::tomcat_fits
     include dhrep::services::tomcat_publikator
   }
 

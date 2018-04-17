@@ -26,9 +26,11 @@ class dhrep::static::repository_de_dariah_eu(
   # index.html file for repository
   #
   file { '/var/www/nginx-root/index.html':
-    source  => 'puppet:///modules/dhrep/var/www/nginx-root/dariah/index.html',
+#    source  => 'puppet:///modules/dhrep/var/www/nginx-root/dariah/index.html',
+    ensure  => file,
     mode    => '0644',
     require => File['/var/www/nginx-root'],
+    content => template('dhrep/var/www/nginx-root/dariah/index.html'),
   }
 
   #
