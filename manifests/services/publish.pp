@@ -17,7 +17,7 @@ class dhrep::services::publish (
   $error_timeout                        = 3600000,
   $super_collection_id                  = undef,
   $dhpid_client_timeout                 = 60000,
-  $dhcrud_client_timeout                = 60000,
+  $dhcrud_client_timeout                = 600000,
   $cr_endpoint                          = 'https://colreg.de.dariah.eu/',
   $cr_client_timeout                    = 5000,
   $cr_submit_draft_path                 = 'colreg/collection/submitDraft',

@@ -9,7 +9,10 @@ class dhrep::tools::cli (
   if $scope == 'textgrid' {
     $_optdir = $::dhrep::params::optdir
 
-    package { 'xqilla': ensure => present }
+    package {
+      'xqilla': ensure => present;
+      'jq':     ensure => present;
+    }
 
     ###
     # shell tools for repo inspection

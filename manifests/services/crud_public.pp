@@ -16,7 +16,9 @@ class dhrep::services::crud_public (
   $storage_host                 = undef,
   $storage_host_public          = undef,
   $pid_resolver                 = 'https://hdl.handle.net/',
+  $pid_prefix                   = '21.11113',
   $doi_resolver                 = 'https://dx.doi.org/',
+  $doi_prefix                   = '10.20375',
   $orcid_resolver               = 'https://orcid.org/',
   $gnd_resolver                 = 'http://d-nb.info/gnd/',
   $publikator_location          = 'https://repository.de.dariah.eu/publikator',
@@ -27,9 +29,9 @@ class dhrep::services::crud_public (
   $mail_of_contact              = 'support@de.dariah.eu',
   $oaipmh_location              = undef,
   $datacite_location            = 'https://search.datacite.org/works/',
-  $extract_techmd               = false,
+  $extract_techmd               = true,
   $pid_secret                   = 'pid_secret',
-  $fits_client_timeout          = 300000,
+  $fits_client_timeout          = 500000,
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_public_name[$scope]

@@ -1,10 +1,10 @@
 {
      "BagIt-Profile-Info":{
-      "BagIt-Profile-Identifier":"https://<%= scope.lookupvar('::fqdn') %>/schemas/bagit/profiles/dhrep.json",
+      "BagIt-Profile-Identifier":"https://<%= scope.lookupvar('::fqdn') %>/schemas/bagit/profiles/dhrep_0.1.json",
       "Source-Organization":"DARIAH-DE",
       "Contact-Name":"Stefan E. Funk",
       "Contact-Email":"funk@sub.uni-goettingen.de",
-      "External-Description":"BagIt profile content is stored in and disseminating content from the DARIAH-DE Repository.",
+      "External-Description":"BagIt profile for DARIAH-DE Repository content bags",
       "Version":"0.1"
    },
    "Bag-Info":{
@@ -21,10 +21,7 @@
          ]
       },
       "Contact-Name":{
-         "required":true,
-         "values":[
-            "Stefan E. Funk"
-         ]
+         "required":false
       },
       "Contact-Phone":{
          "required":false
@@ -32,14 +29,12 @@
       "Contact-Email":{
          "required":true,
          "values":[
-            "funk@sub.uni-goettingen.de"
+            "funk@sub.uni-goettingen.de",
+            "support@de.dariah.eu"
          ]
        },
       "External-Description":{
-         "required":true,
-         "values":[
-           "BagIt profile content is stored in and disseminating content from the DARIAH-DE Repository."
-         ]
+         "required":false
        },
       "External-Identifier":{
          "required":false
@@ -51,7 +46,7 @@
          "required":false
       },
       "Bag-Count":{
-         "required":true
+         "required":false
       },
       "Internal-Sender-Identifier":{
          "required":false
@@ -78,9 +73,9 @@
      "md5"
    ],
    "Tag-Files-Required":[
-      "data/metadata.ttl",
-      "data/adm.ttl",
-      "data/tech.xml"
+      "data/01_metadata.ttl",
+      "data/02_adm.ttl",
+      "data/03_tech.xml"
    ],
    "Accept-BagIt-Version":[
       "0.97"

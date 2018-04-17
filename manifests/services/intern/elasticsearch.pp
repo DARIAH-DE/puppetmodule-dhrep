@@ -99,6 +99,7 @@ class dhrep::services::intern::elasticsearch (
     creates => '/usr/local/src/tgcommon-git',
     require => Package['git'],
   }
+  # NOTE database creation is now done by /opt/dhrep/init_databases.sh
 #    ->
 #    dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
 #      url     => "http://localhost:${_master_http_port}/",

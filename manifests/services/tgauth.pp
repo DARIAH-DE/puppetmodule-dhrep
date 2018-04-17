@@ -112,7 +112,7 @@ class dhrep::services::tgauth (
   # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
   ###
   exec { 'git_clone_tgauth':
-    command => 'git clone git://git.projects.gwdg.de/tg-auth.git /usr/local/src/tgauth-git',
+    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
     creates => '/usr/local/src/tgauth-git',
     require => Package['git'],
   }
@@ -267,9 +267,8 @@ class dhrep::services::tgauth (
     mode    => '0701',
     require => Service['slapd'],
   }
-  #  unless $tgauth_ldap_initialized {
 
-  # set root ldap password
+  # set root ldap password and create init ldap ldfis and init script.
   $slapd_rootpw_sha = sha1digest($slapd_rootpw)
 
   file { "${_optdir}/ldap-init/ldap-cn-config.ldif":
@@ -282,15 +281,19 @@ class dhrep::services::tgauth (
     mode    => '0744',
     require => File["${_optdir}/ldap-init"],
   }
-  #    ~> exec { 'tgldapconf.sh':
-  #      command => '/tmp/tgldapconf.sh',
-  #      require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
-  #    }
   file { "${_optdir}/ldap-init/ldap-rbac-template.ldif":
     ensure  => file,
     content => template('dhrep/ldap/rbac-data.ldif.erb'),
     require => File["${_optdir}/ldap-init"],
   }
+
+  # NOTE database creation is now done by /opt/dhrep/init_databases.sh
+  #
+  #    ~> exec { 'tgldapconf.sh':
+  #      command => '/tmp/tgldapconf.sh',
+  #      require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
+  #    }
+  #
   # should only run once! if ldap template is added (with help of notify and refreshonly)
   # FIXME use a single script for creating fresh ldap, sesame, and elasticsearch databases!
   #    ~> exec { 'ldapadd_ldap_template':
