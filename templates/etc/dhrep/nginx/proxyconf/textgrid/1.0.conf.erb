@@ -1,4 +1,12 @@
+###
+# rewrite logging
+###
+#error_log /var/log/nginx/error.log notice;
+#rewrite_log on;
+
+###
 # locations for /1.0/
+###
 
 location /1.0/confserv/ {
 #    gzip on;
@@ -110,12 +118,20 @@ location /1.0/digilib {
 }
 
 location /1.0/digilib/rest/IIIF {
-    # the cached resource has the CORS header only if the Origin-header was present in the request which went into cache
-    # so here we set the CORS header always, and ignore the upstream entry, all the other CORS related stuff (prefligt, etc) 
-    # should still be handled by upstream cxf service
+    # the cached resource has the CORS header only if the Origin-header was
+    # present in the request which went into cache so here we set the CORS
+    # header always, and ignore the upstream entry, all the other CORS related
+    # stuff (prefligt, etc) should still be handled by upstream cxf service.
     proxy_hide_header Access-Control-Allow-Origin;
     add_header Access-Control-Allow-Origin *;
-    proxy_pass http://digilib_balancer/digilibservice/rest/IIIF;
+    # Nginx MUST NOT decode the %2F in the Handle!
+    #
+    # TODO: ADD TO OTHER DIGILIB LOCATIONS!
+    #
+    rewrite  ^  $request_uri;
+    rewrite  ^/1.0/digilib/rest/IIIF(/.*)  /digilibservice/rest/IIIF$1  break;
+    return 400;
+    proxy_pass  http://digilib_balancer;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
