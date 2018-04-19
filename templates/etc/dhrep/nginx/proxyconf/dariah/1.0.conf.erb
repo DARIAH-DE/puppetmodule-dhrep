@@ -114,9 +114,9 @@ location /1.0/digilib/rest/IIIF {
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
-    proxy_cache digilib_iiif;
-    proxy_cache_valid 60d;
-    proxy_ignore_headers Cache-Control;
+#    proxy_cache digilib_iiif;
+#    proxy_cache_valid 60d;
+#    proxy_ignore_headers Cache-Control;
 }
 location /1.0/digilib/rest/digilib {
     proxy_pass http://digilib_balancer/digilibservice/rest/digilib;
