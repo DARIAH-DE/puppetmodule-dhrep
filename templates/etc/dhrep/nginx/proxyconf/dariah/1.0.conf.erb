@@ -1,8 +1,8 @@
 ###
 # rewrite logging
 ###
-error_log /var/log/nginx/error.log notice;
-rewrite_log on;
+#error_log /var/log/nginx/error.log notice;
+#rewrite_log on;
 
 ###
 # oaipmh
@@ -106,7 +106,7 @@ location /1.0/digilib/rest/IIIF {
     # stuff (prefligt, etc) should still be handled by upstream cxf service.
     proxy_hide_header Access-Control-Allow-Origin;
     add_header Access-Control-Allow-Origin *;
-    # Nginx MUST NOT decode the %2F in the Handle! This rewrite trick was taken from https://stackoverflow.com/questions/20496963/avoid-nginx-decoding-query-parameters-on-proxy-pass-equivalent-to-allowencodeds#20514632
+    # Nginx MUST NOT decode the %2F in the Handle!
     rewrite  ^  $request_uri;
     rewrite  ^/1.0/digilib/rest/IIIF(/.*)  /digilibservice/rest/IIIF$1  break;
     return 400;
