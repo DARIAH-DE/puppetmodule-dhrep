@@ -133,6 +133,9 @@ class dhrep (
   class { 'dhrep::services::fits':
     scope => $scope,
   }
+  class { 'dhrep::services::digilib':
+    scope => $scope,
+  }
 
   ###
   # services for scope textgrid configured here
@@ -183,9 +186,6 @@ class dhrep (
     }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
-    }
-    class { 'dhrep::services::digilib':
-      scope => $scope,
     }
     class { 'dhrep::services::iiifmd':
       scope => $scope,
