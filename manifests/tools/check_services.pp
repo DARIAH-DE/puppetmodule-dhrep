@@ -31,7 +31,6 @@ class dhrep::tools::check_services (
   cron { 'check_services':
     command => "${_optdir}/check-services.sh &> /dev/null",
     user    => $crud_user,
-    hour    => 1,
     minute  => 9,
     require => File["${_optdir}/crud-analyse.pl"],
   }
