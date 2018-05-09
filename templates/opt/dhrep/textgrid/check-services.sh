@@ -319,8 +319,9 @@ else
 fi
 
 #
-# TODO wildfly?
+# wildfly
 #
+# curl http://localhost:18080/jolokia/read/java.lang:type=Runtime/Uptime
 
 #
 # static metadata schema
@@ -343,8 +344,8 @@ fi
 # check for errors
 #
 if $ERRORS ; then
-    echo "...service check $FAILED with exit code 1!"
-    exit 1
+    echo "...service check $FAILED with exit code 2! Nagios --> FAILED/ERROR"
+    exit 2
 fi
 
 echo "...service check turns out to be $OK"

@@ -16,12 +16,7 @@ class dhrep::services::tomcat_crud (
   $group        = $::dhrep::params::config['tomcat_crud']['group']
   $uid          = $::dhrep::params::config['tomcat_crud']['uid']
   $gid          = $::dhrep::params::config['tomcat_crud']['gid']
-
-  if $scope == 'textgrid' {
-    $depcat = 'wildfly'
-  } else {
-    $depcat = undef
-  }
+  $depcat       = 'wildfly'
 
   ###
   # user, home-dir and user-tomcat

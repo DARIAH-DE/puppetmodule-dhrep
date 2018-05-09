@@ -32,7 +32,7 @@ class dhrep::tools::check_services (
     command => "${_optdir}/check-services.sh &> /dev/null",
     user    => $crud_user,
     minute  => 9,
-    require => File["${_optdir}/crud-analyse.pl"],
+    require => File["${_optdir}/check-services.sh"],
   }
 
   ###
