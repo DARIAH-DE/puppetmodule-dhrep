@@ -76,7 +76,7 @@ class dhrep::resources::apache (
         AllowOverride None
   </Directory>
   ",
-    order   => 010,
+    order   => '010',
   }
 
   if $scope == 'textgrid' {
@@ -98,7 +98,7 @@ class dhrep::resources::apache (
         Require all granted
     </Directory>
     ",
-      order   => 020,
+      order   => '020',
     }
   }
 

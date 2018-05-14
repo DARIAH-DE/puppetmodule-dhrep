@@ -321,7 +321,22 @@ fi
 #
 # wildfly
 #
-# curl http://localhost:18080/jolokia/read/java.lang:type=Runtime/Uptime
+FILE="wildfly"
+WILDFLY=$SERVER":18080/jolokia/read/java.lang:type=Runtime/Uptime"
+echo "checking "$CSTR"wildfly"$CNRM" (intern)"$TRN $WILDFLY
+curl -s $WILDFLY > $FILE
+URGL=`grep \"status\":200 $FILE`
+URGL=`echo ${URGL:121:12}`
+if [ -s $FILE ] && [ "$URGL" = "\"status\":200"  ] ; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
 
 #
 # static metadata schema

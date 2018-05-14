@@ -18,7 +18,7 @@ ERRORS=false
 FILE="version"
 CRUD=$SERVER":<%= @crud_port %>/dhcrud-public/"$FILE
 echo "checking "$CSTR"dhcrud"$CNRM" (intern)"$TRN $CRUD
-wget -q $CRUD
+curl -s $CRUD > $FILE
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
     cat $FILE
@@ -36,7 +36,7 @@ fi
 FILE="version"
 CRUD=$SERVER":<%= @crud_port %>/dhcrud/"$FILE
 echo "checking "$CSTR"dhcrud public"$CNRM $TRN $CRUD
-wget -q $CRUD
+curl -s $CRUD > $FILE
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
     cat $FILE
@@ -54,7 +54,7 @@ fi
 FILE="version"
 PUBLISH=$SERVER":<%= @publish_port %>/dhpublish/"$FILE
 echo "checking "$CSTR"dhpublish"$CNRM $TRN $PUBLISH
-wget -q $PUBLISH
+curl -s $PUBLISH > $FILE
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
     cat $FILE
@@ -67,22 +67,24 @@ else
 fi
 
 #
-# TODO publikator
+# publikator
 #
-#FILE="version"
-#PUBLISH=$SERVER":<%= @publikator_port %>/publikator/"$FILE
-#echo "checking "$CSTR"publikator"$CNRM $TRN $PUBLISH
-#wget -q $PUBLISH
-#if [ -s $FILE ]; then
-#    echo -n "    $OK ["$VSTR
-#    cat $FILE
-#    rm $FILE
-#    echo $CNRM"]"
-#else
-#    echo "    $FAILED"
-#    rm $FILE
-#    ERRORS=true
-#fi
+FILE="publikator"
+PUBLIKATOR=$SERVER"/"$FILE
+echo "checking "$CSTR"publikator"$CNRM $TRN $PUBLIKATOR
+curl -Lks $PUBLIKATOR > $FILE
+URGL=`grep \<span\>DARIAH-DE $FILE`
+URGL=`echo ${URGL:35:5}`
+if [ -s $FILE ]; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
 
 #
 # oaipmh
@@ -90,7 +92,7 @@ fi
 FILE="version"
 OAIPMH=$SERVER":<%= @oaipmh_port %>/oaipmh/oai/"$FILE
 echo "checking "$CSTR"oaipmh"$CNRM $TRN $OAIPMH
-wget -q $OAIPMH
+curl -s $OAIPMH > $FILE
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
     cat $FILE
@@ -108,7 +110,7 @@ fi
 FILE="version"
 PID=$SERVER":<%= @pid_port %>/dhpid/"$FILE
 echo "checking "$CSTR"dhpid"$CNRM" (intern)"$TRN $PID
-wget -q $PID
+curl -s $PID > $FILE
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
     cat $FILE
@@ -159,6 +161,27 @@ else
 fi
 
 #
+# wildfly
+#
+# curl http://localhost:18080
+FILE="wildfly"
+WILDFLY=$SERVER":18080/jolokia/read/java.lang:type=Runtime/Uptime"
+echo "checking "$CSTR"wildfly"$CNRM" (intern)"$TRN $WILDFLY
+curl -s $WILDFLY > $FILE
+URGL=`grep \"status\":200 $FILE`
+URGL=`echo ${URGL:121:12}`
+if [ -s $FILE ] && [ "$URGL" = "\"status\":200"  ] ; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
+
+#
 # fits core
 #
 FILE="/opt/dhrep/output"
@@ -187,7 +210,7 @@ fi
 FILE="version"
 FITS=$SERVER":<%= @fits_port %>/fits/"$FILE
 echo "checking "$CSTR"fits service"$CNRM" (intern)"$TRN $FITS
-wget -q $FITS
+curl -s $FITS > $FILE
 if [ -s $FILE ]; then
     echo -n "    $OK ["$VSTR
     cat $FILE | xargs echo -n
@@ -198,11 +221,6 @@ else
     rm $FILE
     ERRORS=true
 fi
-
-#
-# wildfly
-#
-# curl http://localhost:18080/jolokia/read/java.lang:type=Runtime/Uptime
 
 #
 # check for errors
