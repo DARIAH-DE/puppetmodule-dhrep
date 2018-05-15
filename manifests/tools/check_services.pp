@@ -39,7 +39,7 @@ class dhrep::tools::check_services (
   # nrpe for tgcrud
   ###
   nrpe::plugin { 'check_services':
-    plugin     => 'check-services.sh',
+    plugin     => 'check-services.sh &> /dev/null',
     libexecdir => $_optdir,
   }
 }
