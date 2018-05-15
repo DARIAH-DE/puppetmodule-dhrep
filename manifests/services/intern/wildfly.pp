@@ -7,7 +7,7 @@ class dhrep::services::intern::wildfly (
   $xmx         = $dhrep::params::wildfly_xmx,
   $xms         = $dhrep::params::wildfly_xms,
   $maxpermsize = $dhrep::params::wildfly_maxpermsize,
-  $tgcrud_pw   = 'secret',
+  $crud_pw     = 'secret',
 ) inherits dhrep::params {
 
   $message_beans_version = '1.0.1-SNAPSHOT'
@@ -18,7 +18,17 @@ class dhrep::services::intern::wildfly (
     $java_home = '/usr/lib/jvm/default-java'
   }
 
+  if ($scope == 'textgrid') {
+    $crud_name  = 'tgcrud'
+    $crud_topic = 'tgcrudTopic'
+  } else {
+    $crud_name  = 'dhcrud'
+    $crud_topic = 'dhcrudTopic'
+  }
+
+  ###
   # install wildfly
+  ###
   class { 'wildfly':
     version          => '9.0.2',
     install_source   => 'http://download.jboss.org/wildfly/9.0.2.Final/wildfly-9.0.2.Final.tar.gz',
@@ -30,11 +40,6 @@ class dhrep::services::intern::wildfly (
     java_xms         => $xms,
     java_maxpermsize => $maxpermsize,
     java_opts        => '-Djava.net.preferIPv4Stack=true',
-#    mgmt_http_port    => '19990',
-#    mgmt_https_port   => '19993',
-#    public_http_port  => '18080',
-#    public_https_port => '18443',
-#    ajp_port          => '18009',
     properties       => {
       'jboss.management.http.port'  => '19990',
       'jboss.management.https.port' => '19993',
@@ -47,14 +52,14 @@ class dhrep::services::intern::wildfly (
     # should be initialised before tomcat_crud...
     before           => Service['tomcat-crud'],
   }
-  -> wildfly::config::app_user { 'tgcrud':
-    password => $tgcrud_pw,
+  -> wildfly::config::app_user { $crud_name:
+    password => $crud_pw,
   }
-  -> wildfly::config::user_roles { 'tgcrud':
+  -> wildfly::config::user_roles { $crud_name:
     roles => 'guest',
   }
-  -> wildfly::messaging::topic { 'tgcrudTopic':
-    entries => ['topic/tgcrud','java:jboss/exported/jms/topic/tgcrud'],
+  -> wildfly::messaging::topic { $crud_topic:
+    entries => ["topic/${crud_name}","java:jboss/exported/jms/topic/${crud_name}"],
     notify  => [Service['tomcat-crud'], Service['tomcat-publish']],
   }
 
@@ -70,19 +75,9 @@ class dhrep::services::intern::wildfly (
     source => "/var/cache/dhrep/message-beans-${message_beans_version}.war",
   }
 
-  #  wildfly::deployment { 'message-beans.war':
-  #    source   => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
-  #  }
-
   ###
   # telegraf for wildfly
   ###
-
-  #  wildfly::deployment { 'jolokia.war':
-  #    source   => 'http://central.maven.org/maven2/org/jolokia/jolokia-war/1.3.2/jolokia-war-1.3.2.war
-  #  ',
-  #  }
-
   require 'usertomcat::jolokia'
   file { '/home/wildfly/wildfly/standalone/deployments/jolokia.war':
     source => '/var/cache/jolokia.war',
@@ -126,6 +121,9 @@ class dhrep::services::intern::wildfly (
     },
   }
 
+  ###
+  # logrotate
+  ###
   logrotate::rule { 'wildfly_logrotate':
     path         => '/var/log/wildfly/console.log',
     require      => Class['wildfly'],
