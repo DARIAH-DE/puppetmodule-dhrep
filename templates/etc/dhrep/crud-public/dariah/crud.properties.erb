@@ -136,9 +136,9 @@ PUBLISH_SECRET = *
 # Settings for the message producer.
 USE_MESSAGING = <%= @use_messaging %>
 INITIAL_MESSAGING_CONTEXT_FACTORY = org.jboss.naming.remote.client.InitialContextFactory
-MESSAGING_PROVIDER_URL = *
-MESSAGING_SECURITY_PRINCIPAL = *
-MESSAGING_SECURITY_CREDENTIALS = *
+MESSAGING_PROVIDER_URL = http-remoting://127.0.0.1:18080
+MESSAGING_SECURITY_PRINCIPAL = dhcrud
+MESSAGING_SECURITY_CREDENTIALS = secret
 
 # Settings for technical metadata extraction via FITS.
 EXTRACT_TECHMD = <%= @extract_techmd %>

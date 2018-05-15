@@ -26,16 +26,6 @@ class dhrep::tools::check_services (
   }
 
   ###
-  # cron for check-services script
-  ###
-#  cron { 'check_services':
-#    command => "${_optdir}/check-services.sh &> /dev/null",
-#    user    => $crud_user,
-#    minute  => 9,
-#    require => File["${_optdir}/check-services.sh"],
-#  }
-
-  ###
   # nrpe for tgcrud
   ###
   nrpe::plugin { 'check_services':
