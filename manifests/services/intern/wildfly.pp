@@ -10,7 +10,7 @@ class dhrep::services::intern::wildfly (
   $crud_pw     = 'secret',
 ) inherits dhrep::params {
 
-  $message_beans_version = '1.0.1-SNAPSHOT'
+  $message_beans_version = '1.0.2-SNAPSHOT'
 
   if($::dhrep::oracle_jdk8) {
     $java_home = '/usr/lib/jvm/java-8-oracle'
