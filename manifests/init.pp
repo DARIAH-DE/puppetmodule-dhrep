@@ -181,10 +181,9 @@ class dhrep (
       Class['dhrep::services::intern::wildfly']],
     }
     class { 'dhrep::services::crud_public':
-      scope          => $scope,
-      log_level      => $crud_public_log_level,
-      extract_techmd => true,
-      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
+      scope     => $scope,
+      log_level => $crud_public_log_level,
+      require   => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
       Class['dhrep::services::intern::wildfly'], Class['dhrep::services::fits']],
     }
     class { 'dhrep::services::tgconfserv':
@@ -213,9 +212,7 @@ class dhrep (
   if $scope == 'dariah' {
     class { 'dhrep::services::crud':
       scope               => $scope,
-      use_messaging       => false,
       location            => $dhcrud_location,
-      extract_techmd      => true,
       storage_host        => $dhcrud_storage_host,
       storage_host_public => $dhcrud_storage_host_public,
       pid_secret          => $dhcrud_pid_secret,
@@ -224,9 +221,7 @@ class dhrep (
     }
     class { 'dhrep::services::crud_public':
       scope               => $scope,
-      use_messaging       => false,
       location            => $dhcrud_public_location,
-      extract_techmd      => true,
       storage_host        => $dhcrud_public_storage_host,
       storage_host_public => $dhcrud_public_storage_host_public,
       pid_secret          => $dhcrud_pid_secret,
