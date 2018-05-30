@@ -29,15 +29,8 @@ class dhrep::services::intern::messaging (
     content => template('dhrep/etc/dhrep/messagebeans/bolrdf.properties.erb'),
   }
   # symlink to old config path
-<<<<<<< HEAD
 #  file { '/etc/textgrid/messagebeans':
 #    ensure => link,
 #    target => "${_confdir}/messagebeans/",
 #  }
-=======
-  file { '/etc/textgrid/messagebeans':
-    ensure => link,
-    target => "${_confdir}/messagebeans/",
-  }
->>>>>>> master
 }
