@@ -4,9 +4,9 @@
 #
 class dhrep::services::intern::messaging (
   $scope                     = undef,
-  $enzmeta_textgrid_user     = undef,
-  $enzmeta_textgrid_password = undef,
-  $bolrdf_textgrid_user      = undef,
+  $enzmeta_textgrid_user     = '',
+  $enzmeta_textgrid_password = '',
+  $bolrdf_textgrid_user      = '',
 ) inherits dhrep::params {
 
   $_confdir = $::dhrep::params::confdir
@@ -29,8 +29,15 @@ class dhrep::services::intern::messaging (
     content => template('dhrep/etc/dhrep/messagebeans/bolrdf.properties.erb'),
   }
   # symlink to old config path
+<<<<<<< HEAD
 #  file { '/etc/textgrid/messagebeans':
 #    ensure => link,
 #    target => "${_confdir}/messagebeans/",
 #  }
+=======
+  file { '/etc/textgrid/messagebeans':
+    ensure => link,
+    target => "${_confdir}/messagebeans/",
+  }
+>>>>>>> master
 }

@@ -32,6 +32,10 @@ class dhrep::services::crud (
   $extract_techmd               = true,
   $pid_secret                   = 'pid_secret',
   $fits_client_timeout          = 500000,
+  $imprint_url                  = 'https://de.dariah.eu/impressum',
+  $privpol_url                  = 'https://de.dariah.eu/privacy-policy',
+  $contact_url                  = 'https://de.dariah.eu/kontakt',
+
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_name[$scope]
