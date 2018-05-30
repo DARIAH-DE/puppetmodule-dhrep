@@ -15,14 +15,14 @@ class dhrep::services::intern::messaging (
     ensure => directory,
   }
   file { "${_confdir}/messagebeans/enzmeta.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
     content => template('dhrep/etc/dhrep/messagebeans/enzmeta.properties.erb'),
   }
   file { "${_confdir}/messagebeans/bolrfd.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
@@ -32,5 +32,5 @@ class dhrep::services::intern::messaging (
   file { '/etc/textgrid/messagebeans':
     ensure => link,
     target => "${_confdir}/messagebeans/",
-  }   
+  }
 }
