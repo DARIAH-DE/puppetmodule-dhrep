@@ -174,8 +174,8 @@ $xmx_in_byte = inline_template("<%
         end
         %><%= mem.to_i %>")
   # warn at 85%, crit at 95%
-  $mem_warn = inline_template("<%= (${@xmx_in_byte}.to_f * 0.85 ).to_i %>")
-  $mem_crit = inline_template("<%= (${@xmx_in_byte}.to_f * 0.95 ).to_i %>")
+  $mem_warn = inline_template('<%= (@xmx_in_byte.to_f * 0.85 ).to_i %>')
+  $mem_crit = inline_template('<%= (@xmx_in_byte.to_f * 0.95 ).to_i %>')
 
   ###
   # nrpe digilib
