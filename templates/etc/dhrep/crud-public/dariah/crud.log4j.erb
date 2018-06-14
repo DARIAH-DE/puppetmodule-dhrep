@@ -26,8 +26,8 @@ log4j.appender.stdout.layout = org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern = %d{yyyy-MM-dd'T'HH:mm:ss.SSS}\t%p\t%t\t%m%n
 
 # TG-crud file logging things declared here.
-log4j.logger.tgcrudLogger = DEBUG, rotate
-log4j.logger.rollbackLogger = INFO, rolling_daily
+log4j.logger.crudLogger = <%= scope.lookupvar('dhrep::services::crud_public::log_level') %>, rotate
+log4j.logger.rollbackLogger = <%= scope.lookupvar('dhrep::services::crud_public::log_level') %>, rolling_daily
 
 # Configure the log4j rootLogger to avoid messages to system.out.
 log4j.rootLogger = ERROR
