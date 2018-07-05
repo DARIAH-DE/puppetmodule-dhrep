@@ -20,7 +20,7 @@ class dhrep::services::tgauth (
   $ldap_host         = 'localhost',
   $ldap_port         = '389',
   $binddn_pass       = undef,
-  $user_ldap_host    = 'auth.dariah.eu',
+  $user_ldap_host    = 'auth.de.dariah.eu',
   $user_ldap_port    = '389',
   $user_binddn_pass  = undef,
   $crud_secret       = undef,
