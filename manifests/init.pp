@@ -210,7 +210,7 @@ class dhrep (
   ###
   # services for scope dariah following now (mainly due to different dependencies)
   ###
-#  if $scope == 'dariah' {
+  if $scope == 'dariah' {
 #    class { 'dhrep::services::crud':
 #      scope               => $scope,
 #      use_messaging       => false,
