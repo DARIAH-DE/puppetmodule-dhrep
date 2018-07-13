@@ -10,7 +10,6 @@ class dhrep::services::iiifmd (
   $tgrep_host = 'textgridrep.org',
 ) inherits dhrep::params {
 
-
   include dhrep::services::tomcat_digilib
 
   $_confdir = $::dhrep::params::confdir
@@ -18,12 +17,12 @@ class dhrep::services::iiifmd (
   $_catname = $dhrep::services::tomcat_digilib::catname
 
   # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
-  if $scope == 'textgrid' {
-    $_aptdir = '/var/textgrid/webapps'
-  }
-  else {
-    $_aptdir = $::dhrep::params::aptdir
-  }
+#  if $scope == 'textgrid' {
+#    $_aptdir = '/var/textgrid/webapps'
+# }
+#  else {
+#    $_aptdir = $::dhrep::params::aptdir
+#  }
 
   ###
   # update apt repo and install package
@@ -83,10 +82,10 @@ class dhrep::services::iiifmd (
     require => File["${_vardir}/iiifmd"],
   }
   # TODO remove symlink if service has been configured correctly!
-  file { '/var/textgrid/iiifmd':
-    ensure => link,
-    target => "${_vardir}/iiifmd",
-  }
+#  file { '/var/textgrid/iiifmd':
+#    ensure => link,
+#    target => "${_vardir}/iiifmd",
+#  }
 
   ###
   # install mirador
@@ -99,7 +98,6 @@ class dhrep::services::iiifmd (
   }
 
   package { 'textgrid-mirador': ensure  => present }
-
 
 #  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
 #    ensure   => present,

@@ -103,12 +103,12 @@ class dhrep::services::digilib (
     }
   }
   # symlink to old data path if scope=textgrid
-  if $scope == 'textgrid' {
-    file { '/var/textgrid/digilib/':
-      ensure => link,
-      target => "${_vardir}/digilib/",
-    }
-  }
+#  if $scope == 'textgrid' {
+#    file { '/var/textgrid/digilib/':
+#      ensure => link,
+#      target => "${_vardir}/digilib/",
+#    }
+#  }
 
   ###
   # copy config file
