@@ -44,11 +44,6 @@ class dhrep::services::intern::elasticsearch (
   ###
   # elasticsearch
   ###
-
-  $config_hash = {
-    'ES_HEAP_SIZE' => $_es_heap_size,
-  }
-
   # PLEASE NOTE read docs at <https://github.com/elasticsearch/puppet-elasticsearch/tree/master>
   # PLEASE NOTE for upgrading from 1.x to 5.x, please see <https://www.elastic.co/guide/en/elasticsearch/reference/5.6/setup-upgrade.html>
   class { 'elastic_stack::repo':
@@ -64,9 +59,7 @@ class dhrep::services::intern::elasticsearch (
       # Elasticsearch is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
       # 'network.host' => '127.0.0.1',
     },
-    init_defaults => {
-      'ES_HEAP_SIZE' => $config_hash,
-    },
+    jvm_options => [ "-Xms${_es_heap_size}", "-Xmx${_es_heap_size}" ],
   }
 
   ::elasticsearch::instance { 'masternode':
