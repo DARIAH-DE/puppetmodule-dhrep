@@ -117,10 +117,10 @@ class dhrep (
   class { 'dhrep::resources::apache':
     scope => $scope,
   }
-#  class { 'dhrep::services::intern::elasticsearch':
-#    scope        => $scope,
-#    cluster_name => $elasticsearch_cluster_name,
-#  }
+  class { 'dhrep::services::intern::elasticsearch':
+    scope        => $scope,
+    cluster_name => $elasticsearch_cluster_name,
+  }
   class { 'dhrep::tools::check_services':
     scope => $scope,
   }
@@ -167,20 +167,20 @@ class dhrep (
     class { 'dhrep::services::intern::tgwildfly':
       scope => $scope,
     }
-#    class { 'dhrep::services::crud':
-#      scope          => $scope,
-#      publish_secret => $tgcrud_publish_secret,
-#      log_level      => $crud_log_level,
-#      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
-#      Class['dhrep::services::intern::tgwildfly']],
-#    }
-#    class { 'dhrep::services::crud_public':
-#      scope          => $scope,
-#      log_level      => $crud_public_log_level,
-#      extract_techmd => true,
-#      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
-#      Class['dhrep::services::intern::tgwildfly'], Class['dhrep::services::fits']],
-#    }
+    class { 'dhrep::services::crud':
+      scope          => $scope,
+      publish_secret => $tgcrud_publish_secret,
+      log_level      => $crud_log_level,
+      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
+      Class['dhrep::services::intern::tgwildfly']],
+    }
+    class { 'dhrep::services::crud_public':
+      scope          => $scope,
+      log_level      => $crud_public_log_level,
+      extract_techmd => true,
+      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
+      Class['dhrep::services::intern::tgwildfly'], Class['dhrep::services::fits']],
+    }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
     }
@@ -195,44 +195,44 @@ class dhrep (
     }
     class { 'dhrep::static::textgridrep_website': }
     class { 'dhrep::static::textgridlab_org': }
-#    class { 'dhrep::services::tgsearch':
-#      scope   => $scope,
-#      require => [Class['dhrep::services::intern::elasticsearch'],
-#      Class['dhrep::services::intern::sesame'], Class['dhrep::services::tgauth']],
-#    }
-#    class { 'dhrep::services::tgsearch_public':
-#      scope   => $scope,
-#      require => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame']],
-#    }
+    class { 'dhrep::services::tgsearch':
+      scope   => $scope,
+      require => [Class['dhrep::services::intern::elasticsearch'],
+      Class['dhrep::services::intern::sesame'], Class['dhrep::services::tgauth']],
+    }
+    class { 'dhrep::services::tgsearch_public':
+      scope   => $scope,
+      require => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame']],
+    }
     class { 'dhrep::services::tgmarketplace': }
   }
 
   ###
   # services for scope dariah following now (mainly due to different dependencies)
   ###
-#  if $scope == 'dariah' {
-#    class { 'dhrep::services::crud':
-#      scope               => $scope,
-#      use_messaging       => false,
-#      location            => $dhcrud_location,
-#      extract_techmd      => true,
-#      storage_host        => $dhcrud_storage_host,
-#      storage_host_public => $dhcrud_storage_host_public,
-#      pid_secret          => $dhcrud_pid_secret,
-#      log_level           => $crud_log_level,
-#      require             => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::fits']],
-#    }
-#    class { 'dhrep::services::crud_public':
-#      scope               => $scope,
-#      use_messaging       => false,
-#      location            => $dhcrud_public_location,
-#      extract_techmd      => true,
-#      storage_host        => $dhcrud_public_storage_host,
-#      storage_host_public => $dhcrud_public_storage_host_public,
-#      pid_secret          => $dhcrud_pid_secret,
-#      log_level           => $crud_public_log_level,
-#      require             => Class['dhrep::services::intern::elasticsearch'],
-#    }
+  if $scope == 'dariah' {
+    class { 'dhrep::services::crud':
+      scope               => $scope,
+      use_messaging       => false,
+      location            => $dhcrud_location,
+      extract_techmd      => true,
+      storage_host        => $dhcrud_storage_host,
+      storage_host_public => $dhcrud_storage_host_public,
+      pid_secret          => $dhcrud_pid_secret,
+      log_level           => $crud_log_level,
+      require             => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::fits']],
+    }
+    class { 'dhrep::services::crud_public':
+      scope               => $scope,
+      use_messaging       => false,
+      location            => $dhcrud_public_location,
+      extract_techmd      => true,
+      storage_host        => $dhcrud_public_storage_host,
+      storage_host_public => $dhcrud_public_storage_host_public,
+      pid_secret          => $dhcrud_pid_secret,
+      log_level           => $crud_public_log_level,
+      require             => Class['dhrep::services::intern::elasticsearch'],
+    }
     class { 'dhrep::services::publikator':
       scope   => $scope,
       require => Class['dhrep::services::publish'],
@@ -250,10 +250,10 @@ class dhrep (
     prefix => $pid_prefix,
     secret => $pid_secret,
   }
-#  class { 'dhrep::services::oaipmh':
-#    scope   => $scope,
-#    require => Class['dhrep::services::intern::elasticsearch'],
-#  }
+  class { 'dhrep::services::oaipmh':
+    scope   => $scope,
+    require => Class['dhrep::services::intern::elasticsearch'],
+  }
   class { 'dhrep::services::publish':
     scope        => $scope,
     pid_secret   => $publish_pid_secret,
@@ -276,6 +276,7 @@ class dhrep (
     }
 
     apt::ppa { 'ppa:webupd8team/java': }
+    -> package { 'software-properties-common': ensure => present }
     -> package {
       'oracle-java8-installer':
         ensure       => present,
@@ -300,7 +301,9 @@ class dhrep (
     'openjdk-6-jre':          ensure => absent;
     'openjdk-6-jre-headless': ensure => absent;
     'openjdk-6-jre-lib':      ensure => absent;
-    'openjdk-7-jdk':          ensure => present;
+# no repo for jdk7 found! commented out!
+#    'openjdk-7-jdk':          ensure => present;
+    'openjdk-7-jdk':          ensure => absent;
     # Creates symlink /usr/lib/jvm/default-java.
     'default-jre-headless':   ensure => present;
     'mc':                     ensure => present;

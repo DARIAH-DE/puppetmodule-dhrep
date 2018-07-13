@@ -43,6 +43,7 @@ class dhrep::services::publikator (
   $statsd_port               = 8125,
   $skip_landing_page         = false,
   $instance_name             = 'PROD',
+  $with_shib                 = true,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
@@ -99,17 +100,26 @@ class dhrep::services::publikator (
   }
 
   ###
-  # apache config, apache should be there (e.g. by dhrep::init.pp or dariah
-  # profile::apache)
+  # apache config (for using shibboleth)
   ###
-  file { "/etc/apache2/${scope}/default_vhost_includes/publikator.conf":
-    content => template("${templates}/publikator.conf.erb"),
-    notify  => Service['apache2'],
+  if ($with_shib) {
+    file { "/etc/apache2/${scope}/default_vhost_includes/publikator.conf":
+      content => template("${templates}/publikator.conf.erb"),
+      require => Service['apache2'],
+      notify  => Service['apache2'],
+    }
+  }
+  else {
+    file { "/etc/apache2/${scope}/default_vhost_includes/publikator.conf":
+      ensure  => absent,
+      notify  => Service['apache2'],
+    }
   }
 
   ###
   # logging
   ###
+  # TODO why is logging configuration commented out?
 #  file { "${_confdir}/${_short}/crud.log4j":
 #    ensure  => file,
 #    owner   => $_user,

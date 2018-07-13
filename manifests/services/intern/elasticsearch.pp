@@ -25,10 +25,10 @@
 class dhrep::services::intern::elasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
-  $repo_version               = '1.7',
-  $elasticsearch_version      = '1.7.5',
-  $attachments_plugin_version = '2.7.0',
-  $highlighter_plugin_version = '1.7.0',
+  $repo_version               = 5,
+  $elasticsearch_version      = '5.6.4',
+#  $attachments_plugin_version = '2.7.0',
+#  $highlighter_plugin_version = '1.7.0',
 ) inherits dhrep::params {
 
   $_master_http_port    = $::dhrep::params::elasticsearch_master_http_port
@@ -41,23 +41,32 @@ class dhrep::services::intern::elasticsearch (
     'python-pip': ensure => present,
   }
 
-  # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
+  ###
+  # elasticsearch
+  ###
+
+  $config_hash = {
+    'ES_HEAP_SIZE' => $_es_heap_size,
+  }
+
+  # PLEASE NOTE read docs at <https://github.com/elasticsearch/puppet-elasticsearch/tree/master>
+  # PLEASE NOTE for upgrading from 1.x to 5.x, please see <https://www.elastic.co/guide/en/elasticsearch/reference/5.6/setup-upgrade.html>
+  class { 'elastic_stack::repo':
+    version => $repo_version,
+  }
   class { '::elasticsearch':
     manage_repo   => true,
     version       => $elasticsearch_version,
-    repo_version  => $repo_version,
-    #autoupgrade   => true,
-    #package_url   => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${version}.deb",
+    autoupgrade   => false,
     config        => {
       'cluster.name'                         => $cluster_name,
       'discovery.zen.ping.multicast.enabled' => false,
-      # es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
+      # Elasticsearch is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
       # 'network.host' => '127.0.0.1',
     },
     init_defaults => {
-      'ES_HEAP_SIZE' => $_es_heap_size,
+      'ES_HEAP_SIZE' => $config_hash,
     },
-    java_install  => false,
   }
 
   ::elasticsearch::instance { 'masternode':
@@ -80,14 +89,14 @@ class dhrep::services::intern::elasticsearch (
     },
   }
 
-  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
-    instances  => ['masternode', 'workhorse'],
-  }
-
-  ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
-    instances  => ['masternode', 'workhorse'],
-    module_dir => 'experimental-highlighter-elasticsearch-plugin',
-  }
+# PLEASE NOTE commented out due to es upgrade to version 5.6, please check versions ans comment in again then
+#  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
+#    instances  => ['masternode', 'workhorse'],
+#  }
+#  ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
+#    instances  => ['masternode', 'workhorse'],
+#    module_dir => 'experimental-highlighter-elasticsearch-plugin',
+#  }
 
   # run only once
   #  unless ($::elastic_repos_initialized) {
@@ -99,32 +108,10 @@ class dhrep::services::intern::elasticsearch (
     creates => '/usr/local/src/tgcommon-git',
     require => Package['git'],
   }
-  # NOTE database creation is now done by /opt/dhrep/init_databases.sh
-#    ->
-#    dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
-#      url     => "http://localhost:${_master_http_port}/",
-#      require => Elasticsearch::Instance['masternode'],
-#    }
-#    ~>
-# TODO if creating a new dhrep server instance, please manually create es index first before using!!
-#    exec { 'create_public_es_index':
-#      path    => ['/usr/bin','/bin','/usr/sbin'],
-#      cwd     => "/usr/local/src/tgcommon-git/esutils/tools/${scope}/createIndex/",
-#      command => "./createAllPublic.sh localhost:${_master_http_port}",
-#      require => [Package['curl']],
-#    }
-#    ~>
-#    exec { 'create_nonpublic_es_index':
-#      path    => ['/usr/bin','/bin','/usr/sbin'],
-#      cwd     => "/usr/local/src/tgcommon-git/esutils/tools/${scope}/createIndex/",
-#      command => "./createAllNonpublic.sh localhost:${_master_http_port}",
-#      require => [Package['curl']],
-#    }
-#    ~>
-#    file { '/etc/facter/facts.d/elastic_repos_initialized.txt':
-#      content => 'elastic_repos_initialized=true',
-#    }
-#  }
+
+  ###
+  # PLEASE NOTE database creation is now done by /opt/dhrep/init_databases.sh
+  ###
 
   ###
   # telegraf for elasticsearch
