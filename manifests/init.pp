@@ -301,9 +301,7 @@ class dhrep (
     'openjdk-6-jre':          ensure => absent;
     'openjdk-6-jre-headless': ensure => absent;
     'openjdk-6-jre-lib':      ensure => absent;
-# no repo for jdk7 found! commented out!
-#    'openjdk-7-jdk':          ensure => present;
-    'openjdk-7-jdk':          ensure => absent;
+    'openjdk-7-jdk':          ensure => present;
     # Creates symlink /usr/lib/jvm/default-java.
     'default-jre-headless':   ensure => present;
     'mc':                     ensure => present;
