@@ -259,11 +259,11 @@ class dhrep::params {
     }
     default: {
       $elasticsearch_es_heap_size = '512m'
-      $servicetomcat_xmx          = '1024m'
+      $servicetomcat_xmx          = '512m'
       $servicetomcat_xms          = '32m'
-      $tomcat_crud_xmx            = '1024m'
+      $tomcat_crud_xmx            = '512m'
       $tomcat_crud_xms            = '32m'
-      $tomcat_publish_xmx         = '1024m'
+      $tomcat_publish_xmx         = '512m'
       $tomcat_publish_xms         = '32m'
       $wildfly_xmx                = '384m'
       $wildfly_xms                = '32m'

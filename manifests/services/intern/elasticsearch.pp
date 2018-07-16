@@ -27,8 +27,8 @@ class dhrep::services::intern::elasticsearch (
   $cluster_name               = undef,
   $repo_version               = 5,
   $elasticsearch_version      = '5.6.4',
-#  $attachments_plugin_version = '2.7.0',
-#  $highlighter_plugin_version = '1.7.0',
+  $attachments_plugin_version = '2.7.0',
+  $highlighter_plugin_version = '1.7.0',
 ) inherits dhrep::params {
 
   $_master_http_port    = $::dhrep::params::elasticsearch_master_http_port
@@ -82,7 +82,7 @@ class dhrep::services::intern::elasticsearch (
     },
   }
 
-# PLEASE NOTE commented out due to es upgrade to version 5.6, please check versions ans comment in again then
+# PLEASE NOTE commented out due to es upgrade to version 5.6, please check versions ans comment in again then!
 #  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
 #    instances  => ['masternode', 'workhorse'],
 #  }
@@ -103,7 +103,7 @@ class dhrep::services::intern::elasticsearch (
   }
 
   ###
-  # PLEASE NOTE database creation is now done by /opt/dhrep/init_databases.sh
+  # PLEASE NOTE database creation is now done by /opt/dhrep/init_databases.sh!
   ###
 
   ###
