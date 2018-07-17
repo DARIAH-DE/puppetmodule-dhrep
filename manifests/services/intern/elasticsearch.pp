@@ -25,8 +25,8 @@
 class dhrep::services::intern::elasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
-  $repo_version               = 5,
-  $elasticsearch_version      = '5.6.4',
+#  $repo_version               = 5,
+  $elasticsearch_version      = '1.7.5',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
 ) inherits dhrep::params {
@@ -46,11 +46,28 @@ class dhrep::services::intern::elasticsearch (
   ###
   # PLEASE NOTE read docs at <https://github.com/elasticsearch/puppet-elasticsearch/tree/master>
   # PLEASE NOTE for upgrading from 1.x to 5.x, please see <https://www.elastic.co/guide/en/elasticsearch/reference/5.6/setup-upgrade.html>
-  class { 'elastic_stack::repo':
-    version => $repo_version,
+  #class { 'elastic_stack::repo':
+  #  version => $repo_version,
+  #}
+
+  # for using es 1.7 with newer es-puppet module, remove code below and use elastic_stack::repo for es update
+  apt::source { 'elasticsearch':
+    comment  => '',
+    location => 'http://packages.elastic.co/elasticsearch/1.7/debian',
+    release  => 'stable',
+    repos    => 'main',
+    key      => {
+      'server' => 'keys.gnupg.net',
+      'id'     => '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+    },
+    include  => {
+      'src' => false,
+      'deb' => true,
+    },
   }
+
   class { '::elasticsearch':
-    manage_repo   => true,
+    manage_repo   => false,
     version       => $elasticsearch_version,
     autoupgrade   => false,
     config        => {
