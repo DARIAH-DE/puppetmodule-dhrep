@@ -304,7 +304,6 @@ class dhrep (
     'openjdk-7-jdk':          ensure => present;
     # Creates symlink /usr/lib/jvm/default-java.
     'default-jre-headless':   ensure => present;
-    'mc':                     ensure => present;
     'maven':                  ensure => present;
     'make':                   ensure => present;
     'apache2-utils':          ensure => present;
