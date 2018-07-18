@@ -23,11 +23,14 @@ class dhrep::tools::scripts (
     require => File[$_optdir],
   }
 
-  file { "${_optdir}/init-databases.sh" :
-    content => template("dhrep/opt/dhrep/${scope}/init-databases.sh.erb"),
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    require => File[$_optdir],
+  # TODO create init-databases script for scope dariah, too!
+  if $scope == 'textgrid' {
+    file { "${_optdir}/init-databases.sh" :
+      content => template("dhrep/opt/dhrep/${scope}/init-databases.sh.erb"),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      require => File[$_optdir],
+    }
   }
 }
