@@ -37,7 +37,7 @@ class dhrep::services::publikator (
   $publish_secret            = undef,
   $badge_text                = undef,
   $maxuploadsize             = 4096,
-  $logout_aai                = "${::fqdn}/Shibboleth.sso/Logout",
+  $logout_aai                = "https://${::fqdn}/Shibboleth.sso/Logout",
   $statsd_enable             = true,
   $statsd_hostname           = localhost,
   $statsd_port               = 8125,
