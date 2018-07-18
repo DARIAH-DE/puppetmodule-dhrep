@@ -1,8 +1,8 @@
-# == Class: dhrep::tools::check_services
+# == Class: dhrep::tools::scripts
 #
-# checks services within vm
+# install ans configure scripts, such as check-services and init-databases within the vm
 #
-class dhrep::tools::check_services (
+class dhrep::tools::scripts (
   $scope = undef,
 ) inherits dhrep::params {
 
@@ -16,7 +16,15 @@ class dhrep::tools::check_services (
   $fits_port    = $::dhrep::params::config['tomcat_fits']['http_port'];
 
   file { "${_optdir}/check-services.sh" :
-    content => template("dhrep/opt/dhrep/${scope}/check-services.sh"),
+    content => template("dhrep/opt/dhrep/${scope}/check-services.sh.erb"),
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File[$_optdir],
+  }
+
+  file { "${_optdir}/init-databases.sh" :
+    content => template("dhrep/opt/dhrep/${scope}/init-databases.sh.erb"),
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
