@@ -121,7 +121,7 @@ class dhrep (
     scope        => $scope,
     cluster_name => $elasticsearch_cluster_name,
   }
-  class { 'dhrep::tools::check_services':
+  class { 'dhrep::tools::scripts':
     scope => $scope,
   }
   class { 'dhrep::tools::cli':
