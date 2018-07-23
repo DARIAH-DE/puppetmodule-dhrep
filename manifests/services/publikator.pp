@@ -105,7 +105,6 @@ class dhrep::services::publikator (
   if ($with_shib) {
     file { "/etc/apache2/${scope}/default_vhost_includes/publikator.conf":
       content => template("${templates}/publikator.conf.erb"),
-      require => Service['apache2'],
       notify  => Service['apache2'],
     }
   }
