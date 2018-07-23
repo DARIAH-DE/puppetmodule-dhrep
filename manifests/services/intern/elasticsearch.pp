@@ -86,6 +86,7 @@ class dhrep::services::intern::elasticsearch (
       'http.port'                        => $_master_http_port,
       'transport.tcp.port'               => $_master_tcp_port,
       'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${_workhorse_tcp_port}",
+      'path.data'                        => '/usr/share/elasticsearch/data/masternode',
     },
   }
 
@@ -96,6 +97,7 @@ class dhrep::services::intern::elasticsearch (
       'http.port'                        => $_workhorse_http_port,
       'transport.tcp.port'               => $_workhorse_tcp_port,
       'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${_master_tcp_port}",
+      'path.data'                        => '/usr/share/elasticsearch/data/workhorse',
     },
   }
 
