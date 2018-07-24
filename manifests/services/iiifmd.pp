@@ -16,7 +16,6 @@ class dhrep::services::iiifmd (
   $_vardir  = $::dhrep::params::vardir
   $_aptdir  = $::dhrep::params::aptdir
   $_catname = $dhrep::services::tomcat_digilib::catname
-  $_aptdir  = $::dhrep::params::aptdir
 
   ###
   # update apt repo and install package
