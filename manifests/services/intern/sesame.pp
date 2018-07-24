@@ -30,6 +30,8 @@ class dhrep::services::intern::sesame (
   ~>
   tomcat::war { 'openrdf-workbench.war':
     war_ensure    => present,
+    user          => $_catname,
+    group         => $_catname,
     catalina_base => "/home/${_catname}/${_catname}",
     war_source    => "/home/${_catname}/openrdf-sesame-${version}/war/openrdf-workbench.war",
     require       => Usertomcat::Instance[$_catname],
@@ -37,6 +39,8 @@ class dhrep::services::intern::sesame (
   ~>
   tomcat::war { 'openrdf-sesame.war':
     war_ensure    => present,
+    user          => $_catname,
+    group         => $_catname,
     catalina_base => "/home/${_catname}/${_catname}",
     war_source    => "/home/${_catname}/openrdf-sesame-${version}/war/openrdf-sesame.war",
     require       => [Usertomcat::Instance[$_catname],Tomcat::War['openrdf-workbench.war']],
@@ -50,28 +54,9 @@ class dhrep::services::intern::sesame (
     require => User[$_catname]
   }
 
-  # NOTE database creation is now done by /opt/dhrep/init_databases.sh
-#  unless $sesame_nonpublic_repo_created {
-#    dhrep::resources::create_rdf_repository{"${scope}-nonpublic":
-#      port => $_http_port,
-#      user => $_catname,
-#    }
-#    ->
-#    file {'/etc/facter/facts.d/sesame_nonpublic.txt':
-#      content => 'sesame_nonpublic_repo_created=true',
-#    }
-#  }
-
-#  unless $sesame_public_repo_created {
-#    dhrep::resources::create_rdf_repository{"${scope}-public":
-#      port => $_http_port,
-#      user => $_catname,
-#    }
-#    ->
-#    file {'/etc/facter/facts.d/sesame_public.txt':
-#      content => 'sesame_public_repo_created=true',
-#    }
-#  }
+  ###
+  # NOTE database creation is now done by /opt/dhrep/init_databases.sh!
+  ###
 
   ###
   # sesame backup script

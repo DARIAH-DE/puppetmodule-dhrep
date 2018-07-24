@@ -56,6 +56,9 @@ class dhrep::tools::cli (
       require => [File["${_optdir}/consistency"],File['/etc/elasticsearch/masternode/scripts/idMatchesTextgridUri.groovy']],
     }
     # the es-index consistency check needs a groovy script to be present in elasticsearch
+    file { '/etc/elasticsearch/masternode/scripts':
+      ensure => directory,
+    }
     file { '/etc/elasticsearch/masternode/scripts/idMatchesTextgridUri.groovy':
       ensure  => file,
       owner   => 'elasticsearch',

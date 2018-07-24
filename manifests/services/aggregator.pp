@@ -55,7 +55,7 @@ class dhrep::services::aggregator (
   file { '/etc/textgrid/aggregator':
     ensure  => link,
     target  => "${_confdir}/aggregator",
-    require => File['/etc/textgrid'],
+    require => File['/etc/textgrid/'],
   }
 
   ###

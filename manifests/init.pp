@@ -271,6 +271,7 @@ class dhrep (
     }
 
     apt::ppa { 'ppa:webupd8team/java': }
+    -> package { 'software-properties-common': ensure => present }
     -> package {
       'oracle-java8-installer':
         ensure       => present,
@@ -298,7 +299,6 @@ class dhrep (
     'openjdk-7-jdk':          ensure => present;
     # Creates symlink /usr/lib/jvm/default-java.
     'default-jre-headless':   ensure => present;
-    'mc':                     ensure => present;
     'maven':                  ensure => present;
     'make':                   ensure => present;
     'apache2-utils':          ensure => present;

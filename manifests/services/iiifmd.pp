@@ -14,6 +14,7 @@ class dhrep::services::iiifmd (
 
   $_confdir = $::dhrep::params::confdir
   $_vardir  = $::dhrep::params::vardir
+  $_aptdir  = $::dhrep::params::aptdir
   $_catname = $dhrep::services::tomcat_digilib::catname
   $_aptdir  = $::dhrep::params::aptdir
 
@@ -96,27 +97,5 @@ class dhrep::services::iiifmd (
     # TODO create dhrep scope "dariah" mirador
   }
 
-#  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
-#    ensure   => present,
-#    owner    => $_catname,
-#    group    => $_catname,
-#    provider => git,
-#    source   => 'https://github.com/IIIF/m1.git',
-#    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
-#  }
-#  ->
-#  file { '/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html':
-#    content => template('dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html.erb'),
-#    mode    => '0644',
-#  }
-# TODO: npm nodejs build and dhsummit.html
-#  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/m2':
-#    ensure   => present,
-#    owner    => $_catname,
-#    group    => $_catname,
-#    provider => git,
-#    source   => 'https://github.com/IIIF/mirador.git',
-#    revision => 'v2.0.0',
-#    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
-#  }
+  package { 'textgrid-mirador': ensure  => present }
 }

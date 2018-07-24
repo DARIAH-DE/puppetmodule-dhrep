@@ -25,7 +25,7 @@
 class dhrep::services::intern::elasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
-  $repo_version               = '1.7',
+#  $repo_version               = 5,
   $elasticsearch_version      = '1.7.5',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
@@ -41,27 +41,49 @@ class dhrep::services::intern::elasticsearch (
     'python-pip': ensure => present,
   }
 
-  # read docs at https://github.com/elasticsearch/puppet-elasticsearch/tree/master
+  ###
+  # elasticsearch
+  ###
+  # PLEASE NOTE read docs at <https://github.com/elasticsearch/puppet-elasticsearch/tree/master>
+  # PLEASE NOTE for upgrading from 1.x to 5.x, please see <https://www.elastic.co/guide/en/elasticsearch/reference/5.6/setup-upgrade.html>
+  #class { 'elastic_stack::repo':
+  #  version => $repo_version,
+  #}
+
+  # for using es 1.7 with newer es-puppet module, remove code below and use elastic_stack::repo for es update
+  apt::source { 'elasticsearch':
+    comment  => '',
+    location => 'http://packages.elastic.co/elasticsearch/1.7/debian',
+    release  => 'stable',
+    repos    => 'main',
+    key      => {
+      'server' => 'keys.gnupg.net',
+      'id'     => '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+    },
+    include  => {
+      'src' => false,
+      'deb' => true,
+    },
+  }
+
   class { '::elasticsearch':
-    manage_repo   => true,
+    manage_repo   => false,
     version       => $elasticsearch_version,
-    repo_version  => $repo_version,
-    #autoupgrade   => true,
-    #package_url   => "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-${version}.deb",
+    autoupgrade   => false,
     config        => {
       'cluster.name'                         => $cluster_name,
       'discovery.zen.ping.multicast.enabled' => false,
-      # es is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
+      # Elasticsearch is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
       # 'network.host' => '127.0.0.1',
     },
-    init_defaults => {
-      'ES_HEAP_SIZE' => $_es_heap_size,
-    },
-    java_install  => false,
+    jvm_options => [ "-Xms${_es_heap_size}", "-Xmx${_es_heap_size}" ],
+    # backwards compatibility to old elasticsearch puppet module
+    # TODO: remove this option if rebuilding server
+    datadir => '/usr/share/elasticsearch/data',
   }
 
   ::elasticsearch::instance { 'masternode':
-    config => {
+    config  => {
       'node.master'                      => true,
       'node.data'                        => true,
       'http.port'                        => $_master_http_port,
@@ -71,7 +93,7 @@ class dhrep::services::intern::elasticsearch (
   }
 
   ::elasticsearch::instance { 'workhorse':
-    config => {
+    config  => {
       'node.master'                      => false,
       'node.data'                        => true,
       'http.port'                        => $_workhorse_http_port,
@@ -80,14 +102,14 @@ class dhrep::services::intern::elasticsearch (
     },
   }
 
-  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
-    instances  => ['masternode', 'workhorse'],
-  }
-
-  ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
-    instances  => ['masternode', 'workhorse'],
-    module_dir => 'experimental-highlighter-elasticsearch-plugin',
-  }
+# PLEASE NOTE commented out due to es upgrade to version 5.6, please check versions ans comment in again then!
+#  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
+#    instances  => ['masternode', 'workhorse'],
+#  }
+#  ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
+#    instances  => ['masternode', 'workhorse'],
+#    module_dir => 'experimental-highlighter-elasticsearch-plugin',
+#  }
 
   # run only once
   #  unless ($::elastic_repos_initialized) {
@@ -99,32 +121,10 @@ class dhrep::services::intern::elasticsearch (
     creates => '/usr/local/src/tgcommon-git',
     require => Package['git'],
   }
-  # NOTE database creation is now done by /opt/dhrep/init_databases.sh
-#    ->
-#    dhrep::tools::wait_for_url_ready { 'wait_for_es_master':
-#      url     => "http://localhost:${_master_http_port}/",
-#      require => Elasticsearch::Instance['masternode'],
-#    }
-#    ~>
-# TODO if creating a new dhrep server instance, please manually create es index first before using!!
-#    exec { 'create_public_es_index':
-#      path    => ['/usr/bin','/bin','/usr/sbin'],
-#      cwd     => "/usr/local/src/tgcommon-git/esutils/tools/${scope}/createIndex/",
-#      command => "./createAllPublic.sh localhost:${_master_http_port}",
-#      require => [Package['curl']],
-#    }
-#    ~>
-#    exec { 'create_nonpublic_es_index':
-#      path    => ['/usr/bin','/bin','/usr/sbin'],
-#      cwd     => "/usr/local/src/tgcommon-git/esutils/tools/${scope}/createIndex/",
-#      command => "./createAllNonpublic.sh localhost:${_master_http_port}",
-#      require => [Package['curl']],
-#    }
-#    ~>
-#    file { '/etc/facter/facts.d/elastic_repos_initialized.txt':
-#      content => 'elastic_repos_initialized=true',
-#    }
-#  }
+
+  ###
+  # PLEASE NOTE database creation is now done by /opt/dhrep/init_databases.sh!
+  ###
 
   ###
   # telegraf for elasticsearch
