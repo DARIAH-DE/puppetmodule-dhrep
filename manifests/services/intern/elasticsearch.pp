@@ -80,6 +80,9 @@ class dhrep::services::intern::elasticsearch (
     # backwards compatibility to old elasticsearch puppet module
     # TODO: remove this option if rebuilding server
     datadir => '/usr/share/elasticsearch/data',
+    init_defaults => {
+      'DATA_DIR' => '$ES_HOME/data',
+    },
   }
 
   ::elasticsearch::instance { 'masternode':
