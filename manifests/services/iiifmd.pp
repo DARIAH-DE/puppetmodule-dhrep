@@ -52,11 +52,6 @@ class dhrep::services::iiifmd (
     require => File["${_confdir}/iiifmd"],
     notify  => Service[$_catname],
   }
-  # TODO remove symlink if service has been configured correctly!
-#  file { '/etc/textgrid/iiifmd':
-#    ensure => link,
-#    target => "${_confdir}/iiifmd",
-#  }
 
   ###
   # data
@@ -74,15 +69,10 @@ class dhrep::services::iiifmd (
     mode    => '0755',
     require => File["${_vardir}/iiifmd"],
   }
-  # TODO remove symlink if service has been configured correctly!
-#  file { '/var/textgrid/iiifmd':
-#    ensure => link,
-#    target => "${_vardir}/iiifmd",
-#  }
 
-###
-# install mirador
-###
+  ###
+  # install mirador
+  ###
   if $scope == 'textgrid' {
     file { '/var/www/nginx-root/textgridrep.de/iiif':
       ensure => directory,
@@ -95,6 +85,4 @@ class dhrep::services::iiifmd (
   else {
     # TODO create dhrep scope "dariah" mirador
   }
-
-  package { 'textgrid-mirador': ensure  => present }
 }
