@@ -106,9 +106,12 @@ class dhrep::services::intern::elasticsearch (
   }
 
   ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
-    instances  => ['masternode', 'workhorse'],
+    ensure    => present,
+    instances => ['masternode', 'workhorse'],
+
   }
   ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
+    ensure     => present,
     instances  => ['masternode', 'workhorse'],
     module_dir => 'experimental-highlighter-elasticsearch-plugin',
   }
