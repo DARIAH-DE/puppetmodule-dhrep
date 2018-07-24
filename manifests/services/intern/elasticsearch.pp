@@ -105,17 +105,14 @@ class dhrep::services::intern::elasticsearch (
     },
   }
 
-# PLEASE NOTE commented out due to es upgrade to version 5.6, please check versions ans comment in again then!
-#  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
-#    instances  => ['masternode', 'workhorse'],
-#  }
-#  ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
-#    instances  => ['masternode', 'workhorse'],
-#    module_dir => 'experimental-highlighter-elasticsearch-plugin',
-#  }
+  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
+    instances  => ['masternode', 'workhorse'],
+  }
+  ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
+    instances  => ['masternode', 'workhorse'],
+    module_dir => 'experimental-highlighter-elasticsearch-plugin',
+  }
 
-  # run only once
-  #  unless ($::elastic_repos_initialized) {
   # clone commons repo, which contains shell scripts to create textgrid elastic search indexes
   # FIXME use vcsrepo!
   exec { 'git_clone_tgcommon':
