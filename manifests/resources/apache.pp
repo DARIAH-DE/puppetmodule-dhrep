@@ -76,7 +76,7 @@ class dhrep::resources::apache (
         AllowOverride None
     </Directory>
   ",
-    order   => 010,
+    order   => '010',
   }
 
   if $scope == 'textgrid' {
@@ -103,7 +103,7 @@ class dhrep::resources::apache (
     RewriteCond      %{QUERY_STRING}    (.*?)&entityID=.*
     RewriteRule      /(.*)               /$1?%1         [R=302,NE,L]
     ',
-      order   => 100,
+      order   => '020',
     }
   }
 
@@ -121,6 +121,6 @@ class dhrep::resources::apache (
     CustomLog \${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
     ",
-    order   => 990,
+    order   => '990',
   }
 }
