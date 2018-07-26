@@ -1,12 +1,6 @@
 #!/bin/bash
 
-export GIT_DIR=/var/www/dariah-de-status/.git; 
+wget -N https://dariah-de.github.io/status/textgrid.html -O /var/www/nginx-root/textgridlab.org/repstatus.html
+wget -N https://dariah-de.github.io/status/textgrid.css -O /var/www/nginx-root/textgridlab.org/repstatus.css
 
-git fetch origin master
-git checkout master
-
-if [[ $(git rev-parse @) != $(git rev-parse @{u}) ]]; then 
-  git -C $GIT_DIR/.. reset --hard origin
-  git pull
-fi
 
