@@ -105,13 +105,14 @@ class dhrep::services::intern::elasticsearch (
     },
   }
 
-  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
-    instances  => ['masternode', 'workhorse'],
-  }
-  ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
-    instances  => ['masternode', 'workhorse'],
-    module_dir => 'experimental-highlighter-elasticsearch-plugin',
-  }
+# FIXME check installation if plugins are existing!
+#  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
+#    instances  => ['masternode', 'workhorse'],
+#  }
+#  ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
+#    instances  => ['masternode', 'workhorse'],
+#    module_dir => 'experimental-highlighter-elasticsearch-plugin',
+#  }
 
   # clone commons repo, which contains shell scripts to create textgrid elastic search indexes
   # FIXME use vcsrepo!
