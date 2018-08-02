@@ -169,10 +169,11 @@ class dhrep::static::textgridlab_org(
   #
   # Repstatus
   #
+  $repstatus_target='/var/www/nginx-root/textgridlab.org';
   file { '/opt/dhrep/update-textgridrep-status.sh':
-    source => 'puppet:///modules/dhrep/opt/dhrep/update-textgridrep-status.sh',
+    content => template('dhrep/opt/dhrep/update-textgridrep-status.sh.erb'),
     mode   => '0755',
-    require => File['/var/www/nginx-root/textgridlab.org'],
+    require => File[$repstatus_target],
   }
   # run every two minutes
   -> cron { 'update-textgridrep-status' :

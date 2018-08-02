@@ -74,7 +74,7 @@ class dhrep::resources::apache (
     <Directory />
         Options FollowSymLinks
         AllowOverride None
-  </Directory>
+    </Directory>
   ",
     order   => '010',
   }
@@ -82,7 +82,7 @@ class dhrep::resources::apache (
   if $scope == 'textgrid' {
     concat::fragment{'apache_textgrid':
       target  => $defaultvhost,
-      content => "
+      content => '
     DocumentRoot /var/www
 
     <Directory /var/www/>
@@ -97,7 +97,12 @@ class dhrep::resources::apache (
         Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
         Require all granted
     </Directory>
-    ",
+
+    # disable entityID forward to the SP\'s Login Handler, IdP is the proxy
+    RewriteEngine On
+    RewriteCond      %{QUERY_STRING}    (.*?)&entityID=.*
+    RewriteRule      /(.*)               /$1?%1         [R=302,NE,L]
+    ',
       order   => '020',
     }
   }
@@ -116,6 +121,6 @@ class dhrep::resources::apache (
     CustomLog \${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
     ",
-    order   => 990,
+    order   => '990',
   }
 }
