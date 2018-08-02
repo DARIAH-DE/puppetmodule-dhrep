@@ -18,12 +18,12 @@ class dhrep::services::iiifmd (
   $_catname = $dhrep::services::tomcat_digilib::catname
 
   # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
-#  if $scope == 'textgrid' {
-#    $_aptdir = '/var/textgrid/webapps'
-# }
-#  else {
-#    $_aptdir = $::dhrep::params::aptdir
-#  }
+  if $scope == 'textgrid' {
+    $_aptdir = '/var/textgrid/webapps'
+ }
+  else {
+    $_aptdir = $::dhrep::params::aptdir
+  }
 
   ###
   # update apt repo and install package
