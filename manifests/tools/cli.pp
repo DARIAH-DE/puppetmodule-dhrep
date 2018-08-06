@@ -69,7 +69,7 @@ class dhrep::tools::cli (
     }
     # the cronjob for es-index check
     cron { 'es_index_check' :
-      command => "${_optdir}/consistency/check_es_index.sh ids2file > /dev/null",
+      command => "${_optdir}/consistency/check_es_index.sh ids2file > /dev/null 2>&1",
       user    => 'root',
       hour    => 01,
       minute  => 03,
