@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 #
 # initialise
@@ -15,8 +15,7 @@ ES_MASTER_HTTP_PORT=$3
 # create initial ldap db
 #
 echo "creating initial ldap database..."
-cd /opt/dhrep/ldap-init &&
-ldapadd -x -f /ldap-rbac-template.ldif -D "cn=Manager,dc=textgrid,dc=de" -w $SLAPD_ROOTPW &&
+cd /opt/dhrep/ldap-init && ldapadd -x -f /ldap-rbac-template.ldif -D "cn=Manager,dc=textgrid,dc=de" -w $SLAPD_ROOTPW &&
 echo "...created"
 
 #
@@ -38,7 +37,6 @@ curl $TTL_TARGET_NONPUBLIC -X POST -d @/home/tomcat-sesame/mime.ttl --header 'Co
 # create initial elasticsearch public and nonpublic index
 #
 echo "creating initial elasticsearch database..."
-cd /usr/local/src/tgcommon-git/esutils/tools/$SCOPE/createIndex/ &&
-./createAllPublic.sh localhost:$ES_MASTER_HTTP_PORT &&
-./createIndex/createAllNonpublic.sh localhost:$ES_MASTER_HTTP_PORT &&
+cd /usr/local/src/tgcommon-git/esutils/tools/$SCOPE/createIndex/
+./createAllPublic.sh localhost:$ES_MASTER_HTTP_PORT && ./createAllNonpublic.sh localhost:$ES_MASTER_HTTP_PORT &&
 echo "...created"
