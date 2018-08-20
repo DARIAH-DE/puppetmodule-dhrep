@@ -3,11 +3,11 @@
 # Class to install and configure wildfly, adds also tgcrud user for jms
 #
 class dhrep::services::intern::wildfly (
-  $scope       = undef,
-  $xmx         = $dhrep::params::wildfly_xmx,
-  $xms         = $dhrep::params::wildfly_xms,
+  $scope = undef,
+  $xmx = $dhrep::params::wildfly_xmx,
+  $xms = $dhrep::params::wildfly_xms,
   $maxpermsize = $dhrep::params::wildfly_maxpermsize,
-  $crud_pw     = 'secret',
+  $crud_pw = 'secret',
   $message_beans_version = '1.2.1-SNAPSHOT',
 ) inherits dhrep::params {
 
