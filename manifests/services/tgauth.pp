@@ -361,7 +361,7 @@ class dhrep::services::tgauth (
     require => [File[$_optdir],File["${_backupdir}/ldap"]],
   }
   cron { 'ldap-backup' :
-    command => "${_optdir}/ldap-backup.sh > /dev/null",
+    command => "${_optdir}/ldap-backup.sh > /dev/null 2>&1",
     user    => 'root',
     hour    => 22,
     minute  => '03',

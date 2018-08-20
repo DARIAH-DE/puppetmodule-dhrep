@@ -177,7 +177,7 @@ class dhrep::static::textgridlab_org(
   }
   # run every two minutes
   -> cron { 'update-textgridrep-status' :
-    command => '/opt/dhrep/update-textgridrep-status.sh &> /dev/null',
+    command => '/opt/dhrep/update-textgridrep-status.sh > /dev/null 2>&1',
     user    => 'root',
     minute  => '*/2',
   }
