@@ -29,6 +29,7 @@ class dhrep::services::crud (
   $mail_of_contact              = 'support@de.dariah.eu',
   $oaipmh_location              = "https://${::fqdn}/1.0/oaipmh/oai",
   $datacite_location            = 'https://search.datacite.org/works/',
+  $digilib_location             = "https://${::fqdn}/1.0/digilib/rest/IIIF/",
   $extract_techmd               = true,
   $pid_secret                   = 'pid_secret',
   $fits_client_timeout          = 500000,
