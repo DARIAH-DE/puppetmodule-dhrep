@@ -17,6 +17,8 @@ class dhrep (
   $public_hostname = $::fqdn,
   $publish_pid_secret = undef,
   # textgrid specific refs
+  $tgcrud_location = undef,
+  $tgcrud_public_location = undef,
   $tgauth_binddn_pass = undef,
   $tgauth_user_binddn_pass = undef,
   $tgauth_crud_secret = undef,
@@ -175,6 +177,7 @@ class dhrep (
     }
     class { 'dhrep::services::crud':
       scope          => $scope,
+      location       => $tgcrud_location,
       publish_secret => $tgcrud_publish_secret,
       log_level      => $crud_log_level,
       require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
@@ -182,6 +185,7 @@ class dhrep (
     }
     class { 'dhrep::services::crud_public':
       scope     => $scope,
+      location  => $tgcrud_public_location,
       log_level => $crud_public_log_level,
       require   => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
       Class['dhrep::services::intern::wildfly'], Class['dhrep::services::fits']],
