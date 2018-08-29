@@ -122,7 +122,7 @@ class dhrep::services::crud_public (
     dateext      => true,
     dateformat   => '.%Y-%m-%d',
   }
-  logrotate::rule { $_short:
+  logrotate::rule { "${_short}_rollback":
     path         => "${_logdir}/${_short}/rollback.log",
     require      => File["${_logdir}/${_short}"],
     rotate       => 30,
