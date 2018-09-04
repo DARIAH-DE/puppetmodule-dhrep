@@ -164,7 +164,7 @@ class dhrep (
     class { 'dhrep::services::intern::messaging':
       scope => $scope,
     }
-    class { 'dhrep::services::intern::tgwildfly':
+    class { 'dhrep::services::intern::wildfly':
       scope => $scope,
     }
     class { 'dhrep::services::crud':
@@ -172,14 +172,14 @@ class dhrep (
       publish_secret => $tgcrud_publish_secret,
       log_level      => $crud_log_level,
       require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
-      Class['dhrep::services::intern::tgwildfly']],
+      Class['dhrep::services::intern::wildfly']],
     }
     class { 'dhrep::services::crud_public':
       scope          => $scope,
       log_level      => $crud_public_log_level,
       extract_techmd => true,
       require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
-      Class['dhrep::services::intern::tgwildfly'], Class['dhrep::services::fits']],
+      Class['dhrep::services::intern::wildfly'], Class['dhrep::services::fits']],
     }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
