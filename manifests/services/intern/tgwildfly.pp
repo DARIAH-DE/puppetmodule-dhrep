@@ -1,8 +1,8 @@
-# == Class: dhrep::services::intern::wildfly
+# == Class: dhrep::services::intern::tgwildfly
 #
 # Class to install and configure wildfly, adds also tgcrud user for jms
 #
-class dhrep::services::intern::wildfly (
+class dhrep::services::intern::tgwildfly (
   $scope       = undef,
   $xmx         = $dhrep::params::wildfly_xmx,
   $xms         = $dhrep::params::wildfly_xms,
@@ -28,6 +28,11 @@ class dhrep::services::intern::wildfly (
     java_xmx         => $xmx,
     java_xms         => $xms,
     java_opts        => '-Djava.net.preferIPv4Stack=true',
+#    mgmt_http_port    => '19990',
+#    mgmt_https_port   => '19993',
+#    public_http_port  => '18080',
+#    public_https_port => '18443',
+#    ajp_port          => '18009',
     properties       => {
       'jboss.management.http.port'  => '19990',
       'jboss.management.https.port' => '19993',
@@ -64,9 +69,18 @@ class dhrep::services::intern::wildfly (
     source => "/var/cache/dhrep/message-beans-${message_beans_version}.war",
   }
 
+  #  wildfly::deployment { 'message-beans.war':
+  #    source   => "/var/cache/textgrid/message-beans-${message_beans_version}.war",
+  #  }
+
   ###
   # telegraf for wildfly
   ###
+
+  #  wildfly::deployment { 'jolokia.war':
+  #    source   => 'http://central.maven.org/maven2/org/jolokia/jolokia-war/1.3.2/jolokia-war-1.3.2.war
+  #  ',
+  #  }
 
   require 'usertomcat::jolokia'
   file { '/home/wildfly/wildfly/standalone/deployments/jolokia.war':
@@ -119,7 +133,7 @@ class dhrep::services::intern::wildfly (
     path         => '/var/log/wildfly/console.log',
     require      => Class['wildfly'],
     rotate       => 30,
-    rotate_every => 'day',
+    rotate_every => 'week',
     compress     => true,
     copytruncate => true,
     missingok    => true,
@@ -132,11 +146,11 @@ class dhrep::services::intern::wildfly (
   # nrpe
   ###
 
-  nrpe::plugin { 'check_wildfly_memory':
+  nrpe::plugin { 'check_tgwildfly_memory':
     plugin => 'check_http',
     args   => '-H localhost -p 18080 -u /jolokia/read/java.lang:type=Memory -s HeapMemoryUsage -s NonHeapMemoryUsage',
   }
-  nrpe::plugin { 'check_wildfly_uptime':
+  nrpe::plugin { 'check_tgwildfly_uptime':
     plugin => 'check_http',
     args   => '-H localhost -p 18080 -u /jolokia/read/java.lang:type=Runtime/Uptime -s Uptime',
   }
