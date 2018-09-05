@@ -6,7 +6,6 @@ class dhrep::services::intern::wildfly (
   $scope = undef,
   $xmx = $dhrep::params::wildfly_xmx,
   $xms = $dhrep::params::wildfly_xms,
-  $maxpermsize = $dhrep::params::wildfly_maxpermsize,
   $crud_pw = 'secret',
   $message_beans_version = '1.2.1-SNAPSHOT',
 ) inherits dhrep::params {
@@ -37,7 +36,6 @@ class dhrep::services::intern::wildfly (
     config           => 'standalone-full.xml',
     java_xmx         => $xmx,
     java_xms         => $xms,
-    java_maxpermsize => $maxpermsize,
     java_opts        => '-Djava.net.preferIPv4Stack=true',
     properties       => {
       'jboss.management.http.port'  => '19990',
@@ -65,6 +63,7 @@ class dhrep::services::intern::wildfly (
   ###
   # stage war
   ###
+
   staging::file { 'message-beans.war':
     source  => "https://ci.de.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
     target  => "/var/cache/dhrep/message-beans-${message_beans_version}.war",
@@ -126,7 +125,7 @@ class dhrep::services::intern::wildfly (
   logrotate::rule { 'wildfly_logrotate':
     path         => '/var/log/wildfly/console.log',
     require      => Class['wildfly'],
-    rotate       => 365,
+    rotate       => 30,
     rotate_every => 'week',
     compress     => true,
     copytruncate => true,
