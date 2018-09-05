@@ -48,7 +48,7 @@ class dhrep::services::iiifmd (
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template('dhrep/etc/dhrep/iiifmd/iiifmd.properties.erb'),
+    content => template("dhrep/etc/dhrep/iiifmd/${scope}/iiifmd.properties.erb"),
     require => File["${_confdir}/iiifmd"],
     notify  => Service[$_catname],
   }

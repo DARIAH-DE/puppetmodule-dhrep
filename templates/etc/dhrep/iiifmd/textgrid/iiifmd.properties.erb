@@ -4,8 +4,8 @@ serviceBaseUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif
 # sparql endpoint of triplestore
 sparqlEndpoint=http://localhost:9091/openrdf-sesame/repositories/textgrid-public
 
-# tgcrud url
-tgcrudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/rest
+# more urls
+crudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/rest
 tgsearchUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgsearch-public
 
 # Elasticsearch config
@@ -31,9 +31,15 @@ jsonld.contextUrl=http://iiif.io/api/presentation/2/context.json
 listedProjects=<%= @iiif_enabled_projects.join(",") %>
 
 # url for textgridrep website
-textgridrepUrl=https://<%= @tgrep_host %>/
+repositoryUrl=https://<%= @tgrep_host %>/
 
 miradorUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/mirador/?uri=
 
 # uris of not incomplete textgrid publications, which cause errors
 brokenUris=<%= @iiif_blacklist_uris.join(",") %>
+
+# labels
+publishedLabel="Published data in the TextGrid Repository"
+publishedDescription="Published data in the TextGrid Repository."
+sandboxLabel="Data in the TextGrid Repository Sandbox"
+sandboxDescription="Data in the TextGrid Repository Sandbox is reviewed for final publication, but may still be removed."
