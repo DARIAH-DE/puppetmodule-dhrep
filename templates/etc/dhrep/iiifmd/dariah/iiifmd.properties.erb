@@ -1,18 +1,8 @@
 # location of this service
 serviceBaseUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/manifests
 
-# sparql endpoint of triplestore
-sparqlEndpoint=http://
-
 # more urls
-crudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dcrud/rest
-tgsearchUrl=http://
-
-# Elasticsearch config
-esCluster= <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
-esNodes=127.0.0.1:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>
-esIndex=textgrid-public
-esType=metadata
+dh.crudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dcrud/rest
 
 # location and conformance level of iiif service
 iiifService.url=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/digilib/rest/IIIF
@@ -21,9 +11,6 @@ iiifService.conformance=http://iiif.io/api/image/2/level2.json
 # cache directory, needs to be existing and writeable
 cacheDir=/var/dhrep/iiifmd/cache
 
-# xslt file for extracting ordered uris from mets file (from resources/xslt folder)
-metsXsltFile=metsExtract.xsl
-
 # jsonld output specific settings
 jsonld.contextUrl=http://iiif.io/api/presentation/2/context.json
 
@@ -31,12 +18,9 @@ jsonld.contextUrl=http://iiif.io/api/presentation/2/context.json
 listedProjects=<%= @iiif_enabled_projects.join(",") %>
 
 # url for repository website
-repositoryUrl=https://repositoryUrl/
+dh.repositoryUrl=https://repositoryUrl/
 
 miradorUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/mirador/?uri=
-
-# uris of not incomplete textgrid publications, which cause errors
-brokenUris=<%= @iiif_blacklist_uris.join(",") %>
 
 # labels
 publishedLabel="DARIAH-DE Repository Published Data"
