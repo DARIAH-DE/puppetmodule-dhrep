@@ -9,7 +9,7 @@ tg.crudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-pu
 tg.searchUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgsearch-public
 
 # Elasticsearch config
-tg.esCluster= <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
+tg.esCluster=<%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 tg.esNodes=127.0.0.1:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>
 tg.esIndex=textgrid-public
 tg.esType=metadata
