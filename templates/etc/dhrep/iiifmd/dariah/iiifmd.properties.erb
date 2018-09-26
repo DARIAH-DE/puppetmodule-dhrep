@@ -18,7 +18,8 @@ jsonld.contextUrl=http://iiif.io/api/presentation/2/context.json
 listedProjects=<%= @iiif_enabled_projects.join(",") %>
 
 # url for repository website
-dh.repositoryUrl=https://repositoryUrl/
+dh.repositoryUrl=<%= @repository_host %>
+dh.repositoryLogo=https://res.de.dariah.eu/logos/dariah-de/dariah-de_cmyk_en.svg
 
 miradorUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/mirador/?uri=
 
