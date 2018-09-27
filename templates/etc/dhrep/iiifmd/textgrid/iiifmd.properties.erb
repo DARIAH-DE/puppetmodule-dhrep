@@ -16,6 +16,7 @@ tg.esType=metadata
 
 # location and conformance level of iiif service
 tg.iiifService.url=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/digilib/rest/IIIF
+iiifService.contextUrl=http://iiif.io/api/image/2/context.json
 iiifService.conformance=http://iiif.io/api/image/2/level2.json
 
 # cache directory, needs to be existing and writeable
@@ -32,7 +33,7 @@ listedProjects=<%= @iiif_enabled_projects.join(",") %>
 
 # url for textgridrep website
 tg.repositoryUrl=<%= @repository_host %>/
-tg.repositoryLogoUrl=https://textgridrep.org/textgrid-theme/images/textgrid-repository-logo.svg
+tg.repositoryLogo=https://textgridrep.org/textgrid-theme/images/textgrid-repository-logo.svg
 
 miradorUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/mirador/?uri=
 
