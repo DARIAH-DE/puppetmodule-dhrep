@@ -1,47 +1,45 @@
-# location of this service
-tg.serviceBaseUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/manifests
+###
+# general settings
+###
 
-# sparql endpoint of triplestore
+# some service urls
+serviceBaseUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/manifests
+iiifServiceUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/digilib/rest/IIIF
+miradorUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/mirador/?uri=
+# context and conformance urls
+iiifServiceContextUrl=http://iiif.io/api/image/2/context.json
+iiifServiceConformance=http://iiif.io/api/image/2/level2.json
+# jsonld output specific settings
+jsonldContextUrl=http://iiif.io/api/presentation/2/context.json
+# cache directory, needs to be existing and writeable
+cacheDir=/var/dhrep/iiifmd/cache
+# projects which should be listed for IIIF (comma separated)
+listedProjects=<%= @iiif_enabled_projects.join(",") %>
+# uris of incomplete publications, which cause errors
+brokenUris=<%= @iiif_blacklist_uris.join(",") %>
+
+###
+# textgrid specific settings
+###
+
 tg.sparqlEndpoint=http://localhost:9091/openrdf-sesame/repositories/textgrid-public
-
-# more urls
 tg.crudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/rest
 tg.searchUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgsearch-public
-
-# Elasticsearch config
 tg.esCluster=<%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 tg.esNodes=127.0.0.1:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>
 tg.esIndex=textgrid-public
 tg.esType=metadata
-
-# location and conformance level of iiif service
-tg.iiifService.url=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/digilib/rest/IIIF
-iiifService.contextUrl=http://iiif.io/api/image/2/context.json
-iiifService.conformance=http://iiif.io/api/image/2/level2.json
-
-# cache directory, needs to be existing and writeable
-cacheDir=/var/dhrep/iiifmd/cache
-
 # xslt file for extracting ordered uris from mets file (from resources/xslt folder)
 tg.metsXsltFile=metsExtract.xsl
-
-# jsonld output specific settings
-jsonld.contextUrl=http://iiif.io/api/presentation/2/context.json
-
-# textgrid projects which should be listed for IIIF (comma separated)
-listedProjects=<%= @iiif_enabled_projects.join(",") %>
-
 # url for textgridrep website
 tg.repositoryUrl=<%= @repository_host %>/
 tg.repositoryLogo=https://textgridrep.org/textgrid-theme/images/textgrid-repository-logo.svg
-
-miradorUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/mirador/?uri=
-
-# uris of not incomplete textgrid publications, which cause errors
-brokenUris=<%= @iiif_blacklist_uris.join(",") %>
-
-# labels
 publishedLabel="Published data in the TextGrid Repository"
 publishedDescription="Published data in the TextGrid Repository."
 sandboxLabel="Data in the TextGrid Repository Sandbox"
 sandboxDescription="Data in the TextGrid Repository Sandbox is reviewed for final publication, but may still be removed."
+
+###
+# dariah-de specific settings
+###
+#dh.crudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dcrud/rest
