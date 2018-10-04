@@ -123,6 +123,58 @@ else
 fi
 
 #
+# digilib
+#
+INFO="info"
+DIGILIB=$SERVER"/1.0/digilib/rest/"$INFO
+echo "checking "$CSTR"digilib"$CNRM $TRN $DIGILIB
+wget -q $DIGILIB
+if [ -s $INFO ]; then
+    rm $INFO
+    echo "    $OK"
+else
+    echo "    $FAILED"
+    rm -f $FILE
+    ERRORS=true
+fi
+
+#
+# wildfly
+#
+FILE="wildfly"
+WILDFLY=$SERVER":18080/jolokia/read/java.lang:type=Runtime/Uptime"
+echo "checking "$CSTR"wildfly"$CNRM" (intern)"$TRN $WILDFLY
+curl -s $WILDFLY > $FILE
+URGL=`grep \"status\":200 $FILE`
+URGL=`echo ${URGL: -13:12}`
+if [ -s $FILE ] && [ "$URGL" = "\"status\":200"  ] ; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
+
+#
+# iiifmd
+#
+INFO="collection.json"
+DIGILIB=$SERVER"/1.0/iiif/manifests/"$INFO
+echo "checking "$CSTR"digilib"$CNRM $TRN $DIGILIB
+wget -q $DIGILIB
+if [ -s $INFO ]; then
+    rm $INFO
+    echo "    $OK"
+else
+    echo "    $FAILED"
+    rm -f $FILE
+    ERRORS=true
+fi
+
+#
 # elasticsearch masternode
 #
 FILE="curl"
@@ -150,26 +202,6 @@ echo "checking "$CSTR"es workhorse"$CNRM" (intern)"$TRN $WORKHORSE
 curl -s $WORKHORSE > $FILE
 URGL=`grep "200" $FILE`
 if [ -s $FILE ] && [ "$URGL" = '  "status" : 200,' ]; then
-    echo -n "    $OK ["$VSTR
-    echo -n $URGL
-    rm $FILE
-    echo $CNRM"]"
-else
-    echo "    $FAILED"
-    rm $FILE
-    ERRORS=true
-fi
-
-#
-# wildfly
-#
-FILE="wildfly"
-WILDFLY=$SERVER":18080/jolokia/read/java.lang:type=Runtime/Uptime"
-echo "checking "$CSTR"wildfly"$CNRM" (intern)"$TRN $WILDFLY
-curl -s $WILDFLY > $FILE
-URGL=`grep \"status\":200 $FILE`
-URGL=`echo ${URGL: -13:12}`
-if [ -s $FILE ] && [ "$URGL" = "\"status\":200"  ] ; then
     echo -n "    $OK ["$VSTR
     echo -n $URGL
     rm $FILE

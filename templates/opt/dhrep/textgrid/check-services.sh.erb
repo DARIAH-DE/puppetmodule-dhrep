@@ -202,6 +202,42 @@ else
 fi
 
 #
+# wildfly
+#
+FILE="wildfly"
+WILDFLY=$SERVER":18080/jolokia/read/java.lang:type=Runtime/Uptime"
+echo "checking "$CSTR"wildfly"$CNRM" (intern)"$TRN $WILDFLY
+curl -s $WILDFLY > $FILE
+URGL=`grep \"status\":200 $FILE`
+URGL=`echo ${URGL: -13:12}`
+if [ -s $FILE ] && [ "$URGL" = "\"status\":200"  ] ; then
+    echo -n "    $OK ["$VSTR
+    echo -n $URGL
+    rm $FILE
+    echo $CNRM"]"
+else
+    echo "    $FAILED"
+    rm $FILE
+    ERRORS=true
+fi
+
+#
+# iiifmd
+#
+INFO="collection.json"
+DIGILIB=$SERVER"/1.0/iiif/manifests/"$INFO
+echo "checking "$CSTR"digilib"$CNRM $TRN $DIGILIB
+wget -q $DIGILIB
+if [ -s $INFO ]; then
+    rm $INFO
+    echo "    $OK"
+else
+    echo "    $FAILED"
+    rm -f $FILE
+    ERRORS=true
+fi
+
+#
 # sesame nonpublic
 #
 FILE="curl"
@@ -315,26 +351,6 @@ if [ -s $FILE ]; then
 else
     echo "    $FAILED"
     rm -f $FILE
-    ERRORS=true
-fi
-
-#
-# wildfly
-#
-FILE="wildfly"
-WILDFLY=$SERVER":18080/jolokia/read/java.lang:type=Runtime/Uptime"
-echo "checking "$CSTR"wildfly"$CNRM" (intern)"$TRN $WILDFLY
-curl -s $WILDFLY > $FILE
-URGL=`grep \"status\":200 $FILE`
-URGL=`echo ${URGL: -13:12}`
-if [ -s $FILE ] && [ "$URGL" = "\"status\":200"  ] ; then
-    echo -n "    $OK ["$VSTR
-    echo -n $URGL
-    rm $FILE
-    echo $CNRM"]"
-else
-    echo "    $FAILED"
-    rm $FILE
     ERRORS=true
 fi
 
