@@ -225,9 +225,9 @@ fi
 # iiifmd
 #
 INFO="collection.json"
-DIGILIB=$SERVER"/1.0/iiif/manifests/"$INFO
-echo "checking "$CSTR"digilib"$CNRM $TRN $DIGILIB
-wget -q $DIGILIB
+IIIFMD=$SERVER"/1.0/iiif/manifests/"$INFO
+echo "checking "$CSTR"iiifmd"$CNRM $TRN $IIIFMD
+wget -q $IIIFMD
 if [ -s $INFO ]; then
     rm $INFO
     echo "    $OK"
