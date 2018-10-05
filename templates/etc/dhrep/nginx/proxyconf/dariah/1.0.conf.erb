@@ -138,7 +138,7 @@ location /1.0/iiif/manifests {
     # TODO: ADD TO OTHER DIGILIB LOCATIONS!
     #
     rewrite  ^  $request_uri;
-    rewrite  ^/1.0/iiif/manifests(/.*)  /1.0/iiif/manifests$1  break;
+    rewrite  ^/1.0/iiif/manifests(/.*)  /iiifmd$1  break;
     return 400;
     proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_digilib::http_port') %>/iiifmd;
     proxy_set_header        X-Real-IP $remote_addr;
