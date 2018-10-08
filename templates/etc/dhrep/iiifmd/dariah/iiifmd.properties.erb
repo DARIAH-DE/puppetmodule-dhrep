@@ -23,7 +23,7 @@ brokenUris=<%= @iiif_blacklist_uris.join(",") %>
 ###
 
 #tg.sparqlEndpoint=http://localhost:9091/openrdf-sesame/repositories/textgrid-public
-#tg.crudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public
+#tg.crudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/rest
 #tg.searchUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgsearch-public
 #tg.esCluster=<%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 #tg.esNodes=127.0.0.1:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>
@@ -38,7 +38,7 @@ brokenUris=<%= @iiif_blacklist_uris.join(",") %>
 # dariah-de specific settings
 ###
 
-dh.crudUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dcrud
+dh.crudUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
 dh.repositoryUrl=<%= @repository_host %>
 dh.repositoryLogo=https://res.de.dariah.eu/logos/dariah-de/dariah-de_cmyk_en.svg
 publishedLabel="DARIAH-DE Repository Published Data"
