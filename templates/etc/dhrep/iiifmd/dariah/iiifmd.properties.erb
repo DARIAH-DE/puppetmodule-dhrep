@@ -22,10 +22,10 @@ brokenUris=<%= @iiif_blacklist_uris.join(",") %>
 # dariah-de specific settings
 ###
 
-dh.crudUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
-dh.repositoryUrl=<%= @repository_host %>
-dh.presentationUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
-dh.repositoryLogo=https://res.de.dariah.eu/logos/dariah-de/dariah-de_cmyk_en.svg
+crudUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
+repositoryUrl=<%= @repository_host %>
+presentationUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
+repositoryLogo=https://res.de.dariah.eu/logos/dariah-de/dariah-de_cmyk_en.svg
 publishedLabel="DARIAH-DE Repository Published Data"
 publishedDescription="Published data in the DARIAH-DE Repository."
 sandboxLabel="No Sandbox in DARIAH-DE Repository"
