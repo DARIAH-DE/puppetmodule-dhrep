@@ -32,14 +32,10 @@ tg.esType=metadata
 # xslt file for extracting ordered uris from mets file (from resources/xslt folder)
 tg.metsXsltFile=metsExtract.xsl
 # url for textgridrep website
-tg.repositoryUrl=<%= @repository_host %>/
+tg.repositoryUrl=<%= @repository_host %>
+tg.presentationUrl=<%= @repository_host %>
 tg.repositoryLogo=https://textgridrep.org/textgrid-theme/images/textgrid-repository-logo.svg
 publishedLabel="Published data in the TextGrid Repository"
 publishedDescription="Published data in the TextGrid Repository."
 sandboxLabel="Data in the TextGrid Repository Sandbox"
 sandboxDescription="Data in the TextGrid Repository Sandbox is reviewed for final publication, but may still be removed."
-
-###
-# dariah-de specific settings
-###
-#dh.crudUrl=http://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
