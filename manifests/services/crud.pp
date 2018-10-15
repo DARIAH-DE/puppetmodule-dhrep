@@ -3,10 +3,6 @@
 # Class to install and configure non-public crud service.
 #
 class dhrep::services::crud (
-  $scope                        = undef,
-  $publish_secret               = undef,
-  $log_level                    = 'INFO',
-  $use_messaging                = true,
   $location,
   $id_implementation,
   $aai_implementation,
@@ -15,6 +11,10 @@ class dhrep::services::crud (
   $rdfdb_storage_implementation,
   $storage_host,
   $storage_host_public,
+  $scope                        = undef,
+  $publish_secret               = undef,
+  $log_level                    = 'INFO',
+  $use_messaging                = true,
   $pid_resolver                 = 'https://hdl.handle.net/',
   $pid_prefix                   = '21.11113',
   $doi_resolver                 = 'https://dx.doi.org/',
@@ -30,13 +30,14 @@ class dhrep::services::crud (
   $oaipmh_location              = "https://${::fqdn}/1.0/oaipmh/oai",
   $datacite_location            = 'https://search.datacite.org/works/',
   $digilib_location             = "https://${::fqdn}/1.0/digilib/rest/IIIF/",
+  $manifest_location            = "https://${::fqdn}/1.0/iiif/manifests/",
+  $mirador_location             = 'https://textgridlab.org/1.0/iiif/mirador/',
   $extract_techmd               = true,
   $pid_secret                   = 'pid_secret',
   $fits_client_timeout          = 500000,
   $imprint_url                  = 'https://de.dariah.eu/impressum',
   $privpol_url                  = 'https://de.dariah.eu/privacy-policy',
   $contact_url                  = 'https://de.dariah.eu/kontakt',
-
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_name[$scope]
