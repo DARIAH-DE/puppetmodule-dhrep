@@ -8,6 +8,7 @@ class dhrep::services::iiifmd (
   $iiif_enabled_projects = [],
   $iiif_blacklist_uris = [],
   $repository_host = 'textgridrep.org',
+  $mirador_host = 'textgridlab.org'.
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_digilib
