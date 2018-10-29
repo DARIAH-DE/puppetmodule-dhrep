@@ -148,13 +148,13 @@ class dhrep::services::digilib (
   cron { 'restart-tomcat-digilib':
     command => 'service tomcat-digilib restart &> /dev/null',
     user    => 'root',
-    hour    => ['1' ,'13'],
+    hour    => ['1-23/2'],
     minute  => '0',
   }
   cron { 'restart-tomcat-digilib2':
     command => 'service tomcat-digilib2 restart &> /dev/null',
     user    => 'root',
-    hour    => ['2','14'],
+    hour    => ['0-22/2'],
     minute  => '0',
   }
 
