@@ -42,6 +42,6 @@ class dhrep::tools {
   nrpe::plugin { 'check_tivoli_root':
     plugin => 'check_tivoli',
     args   => '-c /',
-	 command_prefix = 'sudo',
+    command_prefix => 'sudo',
   }
 }
