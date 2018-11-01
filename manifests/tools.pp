@@ -38,10 +38,9 @@ class dhrep::tools {
     group  => root,
     mode   => '0755',
   }
-
   nrpe::plugin { 'check_tivoli_root':
-    plugin => 'check_tivoli',
-    args   => '-c /',
-    command_prefix => 'sudo',
+    plugin         => 'check_tivoli',
+    args           => '-c /',
+    command_prefix => '/usr/bin/sudo',
   }
 }
