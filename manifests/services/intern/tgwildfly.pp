@@ -6,7 +6,6 @@ class dhrep::services::intern::tgwildfly (
   $scope       = undef,
   $xmx         = $dhrep::params::wildfly_xmx,
   $xms         = $dhrep::params::wildfly_xms,
-  $maxpermsize = $dhrep::params::wildfly_maxpermsize,
   $tgcrud_pw   = 'secret',
 ) inherits dhrep::params {
 
@@ -28,7 +27,6 @@ class dhrep::services::intern::tgwildfly (
     config           => 'standalone-full.xml',
     java_xmx         => $xmx,
     java_xms         => $xms,
-    java_maxpermsize => $maxpermsize,
     java_opts        => '-Djava.net.preferIPv4Stack=true',
 #    mgmt_http_port    => '19990',
 #    mgmt_https_port   => '19993',
@@ -61,6 +59,7 @@ class dhrep::services::intern::tgwildfly (
   ###
   # stage war
   ###
+
   staging::file { 'message-beans.war':
     source  => "https://ci.de.dariah.eu/nexus/service/local/artifact/maven/redirect?r=snapshots&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
     target  => "/var/cache/dhrep/message-beans-${message_beans_version}.war",
@@ -126,10 +125,14 @@ class dhrep::services::intern::tgwildfly (
     },
   }
 
+  ###
+  # logrotate
+  ###
+
   logrotate::rule { 'wildfly_logrotate':
     path         => '/var/log/wildfly/console.log',
     require      => Class['wildfly'],
-    rotate       => 365,
+    rotate       => 30,
     rotate_every => 'week',
     compress     => true,
     copytruncate => true,
@@ -142,6 +145,7 @@ class dhrep::services::intern::tgwildfly (
   ###
   # nrpe
   ###
+
   nrpe::plugin { 'check_tgwildfly_memory':
     plugin => 'check_http',
     args   => '-H localhost -p 18080 -u /jolokia/read/java.lang:type=Memory -s HeapMemoryUsage -s NonHeapMemoryUsage',

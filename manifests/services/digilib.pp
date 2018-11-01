@@ -103,12 +103,12 @@ class dhrep::services::digilib (
     }
   }
   # symlink to old data path if scope=textgrid
-  if $scope == 'textgrid' {
-    file { '/var/textgrid/digilib/':
-      ensure => link,
-      target => "${_vardir}/digilib/",
-    }
-  }
+#  if $scope == 'textgrid' {
+#    file { '/var/textgrid/digilib/':
+#      ensure => link,
+#      target => "${_vardir}/digilib/",
+#    }
+#  }
 
   ###
   # copy config file
@@ -148,19 +148,19 @@ class dhrep::services::digilib (
   cron { 'restart-tomcat-digilib':
     command => 'service tomcat-digilib restart &> /dev/null',
     user    => 'root',
-    hour    => ['1' ,'13'],
+    hour    => ['1-23/2'],
     minute  => '0',
   }
   cron { 'restart-tomcat-digilib2':
     command => 'service tomcat-digilib2 restart &> /dev/null',
     user    => 'root',
-    hour    => ['2','14'],
+    hour    => ['0-22/2'],
     minute  => '0',
   }
 
 # calculate critical and warning values from xmx for nrpe
 $xmx_in_byte = inline_template("<%
-        mem,unit = @_xmx.scan(/\d+|\D+/)
+        mem,unit = @_xmx.scan(/\\d+|\\D+/)
         mem = mem.to_f
         case unit
             when nil

@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#
+# initialise
+#
+SCOPE="textgrid"
+#SLAPD_ROOTPW=${slapd_rootpw}
+#RDFDB_PORT=${port}
+#ES_HTTP_PORT=${es_master_http_port}
+SLAPD_ROOTPW=$1
+RDF_DB_PORT=$2
+ES_MASTER_HTTP_PORT=$3
+
+#
+# create initial ldap db
+#
+echo "creating initial ldap database..."
+cd /opt/dhrep/ldap-init && ldapadd -x -f ./ldap-rbac-template.ldif -D "cn=Manager,dc=textgrid,dc=de" -w $SLAPD_ROOTPW &&
+echo "...created"
+
+#
+# create initial sesame db
+#
+echo "creating initial sesame databases..."
+CREATE_TARGET="http://localhost:$RDF_DB_PORT/openrdf-workbench/repositories/SYSTEM/create"
+
+# public
+CREATE_DATA_PUBLIC="type=native&Repository+ID=$SCOPE-public&Repository+title=rdf+repo+for+$SCOPE-public+data&Triple+indexes=spoc%2Cposc%2Copsc%2Csopc"
+curl $CREATE_TARGET --data $CREATE_DATA_PUBLIC
+TTL_TARGET_PUBLIC= "http://localhost:$RDF_DB_PORT/openrdf-sesame/repositories/$SCOPE-public/statements"
+curl $TTL_TARGET_PUBLIC -X POST -d @/home/tomcat-sesame/mime.ttl --header 'Content-Type: text/turtle;charset=UTF-8'
+
+# nonpublic
+CREATE_DATA_NONPUBLIC="type=native&Repository+ID=$SCOPE-nonpublic&Repository+title=rdf+repo+for+$SCOPE-nonpublic+data&Triple+indexes=spoc%2Cposc%2Copsc%2Csopc"
+curl $CREATE_TARGET --data $CREATE_DATA_NONPUBLIC
+TTL_TARGET_NONPUBLIC= "http://localhost:$RDF_DB_PORT/openrdf-sesame/repositories/$SCOPE-nonpublic/statements"
+curl $TTL_TARGET_NONPUBLIC -X POST -d @/home/tomcat-sesame/mime.ttl --header 'Content-Type: text/turtle;charset=UTF-8'
+
+#
+# create initial elasticsearch public and nonpublic index
+#
+echo "creating initial elasticsearch database..."
+cd /usr/local/src/tgcommon-git/esutils/tools/$SCOPE/createIndex/
+./createAllPublic.sh localhost:$ES_MASTER_HTTP_PORT && ./createAllNonpublic.sh localhost:$ES_MASTER_HTTP_PORT &&
+echo "...created"
