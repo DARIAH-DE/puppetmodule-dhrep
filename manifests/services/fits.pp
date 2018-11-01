@@ -28,6 +28,8 @@ class dhrep::services::fits (
     source  => $fits_source,
     target  => "${_vardir}/${fits_file}",
     timeout => 300000,
+    # PLEASE NOTE staging is needing java for de-jarring things, so we require java here, then! (needed fix for xenial?)
+    # require => Package['oracle-java8-installer'],
   }
   -> staging::extract { $fits_file:
     source  => "${_vardir}/${fits_file}",

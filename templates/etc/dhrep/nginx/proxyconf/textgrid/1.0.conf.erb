@@ -111,7 +111,7 @@ location /1.0/digilib {
 
 location /1.0/digilib/rest/IIIF {
     # the cached resource has the CORS header only if the Origin-header was present in the request which went into cache
-    # so here we set the CORS header always, and ignore the upstream entry, all the other CORS related stuff (prefligt, etc) 
+    # so here we set the CORS header always, and ignore the upstream entry, all the other CORS related stuff (prefligt, etc)
     # should still be handled by upstream cxf service
     proxy_hide_header Access-Control-Allow-Origin;
     add_header Access-Control-Allow-Origin *;
@@ -137,7 +137,7 @@ location /1.0/digilib/rest/digilib {
 location /1.0/iiif/manifests {
     gzip on;
     gzip_types text/plain application/json;
-    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_digilib::http_port') %>/iiifmd;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_oaipmh::http_port') %>/iiifmd;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
@@ -197,11 +197,11 @@ location /marketplace {
 }
 
 location /tgnsearch {
-    proxy_pass http://ref.dariah.eu/tgnsearch;
+    proxy_pass https://ref.de.dariah.eu/tgnsearch;
 }
 
 location /pndsearch {
-    proxy_pass http://ref.dariah.eu/pndsearch;
+    proxy_pass https://ref.de.dariah.eu/pndsearch;
 }
 
 location /voyant {
