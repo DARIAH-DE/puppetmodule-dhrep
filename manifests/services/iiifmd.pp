@@ -84,6 +84,6 @@ class dhrep::services::iiifmd (
     package { 'textgrid-mirador': ensure  => present }
   }
   else {
-    # TODO create dhrep scope "dariah" mirador
+    # TODO create dhrep scope "dariah" mirador?
   }
 }
