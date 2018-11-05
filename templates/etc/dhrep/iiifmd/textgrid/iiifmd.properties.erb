@@ -5,7 +5,7 @@
 # some service urls
 serviceBaseUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/manifests
 iiifServiceUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/digilib/rest/IIIF
-miradorUrl=https://<%= @mirador_host %>/1.0/iiif/mirador
+miradorUrl=https://<%= @mirador_host %>/1.0/iiif/mirador?uri=
 # context and conformance urls
 iiifContextUrl=http://iiif.io/api/image/2/context.json
 iiifConformanceUrl=http://iiif.io/api/image/2/level2.json
