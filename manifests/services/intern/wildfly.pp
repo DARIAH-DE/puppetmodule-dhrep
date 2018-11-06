@@ -7,7 +7,7 @@ class dhrep::services::intern::wildfly (
   $xmx = $dhrep::params::wildfly_xmx,
   $xms = $dhrep::params::wildfly_xms,
   $crud_pw = 'secret',
-  $message_beans_version = '1.3.0',
+  $message_beans_version = '1.3.2',
 ) inherits dhrep::params {
 
   if($::dhrep::oracle_jdk8) {
