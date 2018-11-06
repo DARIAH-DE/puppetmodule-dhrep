@@ -11,7 +11,7 @@ class dhrep::services::iiifmd (
   $mirador_host = 'textgridlab.org',
 ) inherits dhrep::params {
 
-  include dhrep::services::tomcat_digilib
+  include dhrep::services::tomcat_oaipmh
 
   $_confdir = $::dhrep::params::confdir
   $_vardir  = $::dhrep::params::vardir
