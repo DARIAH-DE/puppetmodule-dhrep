@@ -7,7 +7,7 @@ class dhrep::services::intern::wildfly (
   $xmx = $dhrep::params::wildfly_xmx,
   $xms = $dhrep::params::wildfly_xms,
   $crud_pw = 'secret',
-  $message_beans_version = '1.2.1-SNAPSHOT',
+  $message_beans_version = '1.3.0',
 ) inherits dhrep::params {
 
   if($::dhrep::oracle_jdk8) {
@@ -28,16 +28,16 @@ class dhrep::services::intern::wildfly (
   # install wildfly
   ###
   class { 'wildfly':
-    version          => '9.0.2',
-    install_source   => 'http://download.jboss.org/wildfly/9.0.2.Final/wildfly-9.0.2.Final.tar.gz',
-    java_home        => $java_home,
-    dirname          => '/home/wildfly/wildfly',
-    mode             => 'standalone',
-    config           => 'standalone-full.xml',
-    java_xmx         => $xmx,
-    java_xms         => $xms,
-    java_opts        => '-Djava.net.preferIPv4Stack=true',
-    properties       => {
+    version        => '9.0.2',
+    install_source => 'http://download.jboss.org/wildfly/9.0.2.Final/wildfly-9.0.2.Final.tar.gz',
+    java_home      => $java_home,
+    dirname        => '/home/wildfly/wildfly',
+    mode           => 'standalone',
+    config         => 'standalone-full.xml',
+    java_xmx       => $xmx,
+    java_xms       => $xms,
+    java_opts      => '-Djava.net.preferIPv4Stack=true',
+    properties     => {
       'jboss.management.http.port'  => '19990',
       'jboss.management.https.port' => '19993',
       'jboss.http.port'             => '18080',
@@ -45,9 +45,9 @@ class dhrep::services::intern::wildfly (
       'jboss.ajp.port'              => '18009',
     },
     # only required if not oracle jdk8...?
-    require          => Package['default-jre-headless'],
+    require        => Package['default-jre-headless'],
     # should be initialised before tomcat_crud...
-    before           => Service['tomcat-crud'],
+    before         => Service['tomcat-crud'],
   }
   -> wildfly::config::app_user { $crud_name:
     password => $crud_pw,
