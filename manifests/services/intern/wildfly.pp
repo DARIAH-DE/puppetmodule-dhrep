@@ -66,7 +66,7 @@ class dhrep::services::intern::wildfly (
   ###
 
   staging::file { 'message-beans.war':
-    source  => "https://ci.de.dariah.eu/nexus/service/local/artifact/maven/redirect?r=${message_beans_repo}&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
+    source  => "https://ci.de.dariah.eu/nexus/service/local/artifact/maven/redirect?r=${message_beans_repo_component}&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
     target  => "/var/cache/dhrep/message-beans-${message_beans_version}.war",
     require => Class['wildfly'],
   }
