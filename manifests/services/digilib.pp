@@ -28,7 +28,7 @@ class dhrep::services::digilib (
   # update apt repo and install package
   ###
   package {
-    'libvips37': ensure        => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
+    'libvips': ensure        => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
     'libvips-tools': ensure    => present;
     'digilib-service': ensure  => $version,
     require                    => [Exec['update_dariah_apt_repository'],Usertomcat::Instance[$_catname]],
