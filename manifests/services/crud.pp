@@ -173,7 +173,7 @@ class dhrep::services::crud (
       require => File["${_optdir}/crud-comment.pl"],
     }
     cron { 'crud-analyse':
-      command => "${_optdir}/crud-analyse.pl -l ${_logdir}/${_short}/rollback.log -c ${_logdir}/${_short}/logcomments.log &> /dev/null",
+      command => "${_optdir}/crud-analyse.pl -l ${_logdir}/${_short}/rollback.log -c ${_logdir}/${_short}/logcomments.log > /dev/null 2>&1",
       user    => $_user,
       minute  => '*/5',
       require => File["${_optdir}/crud-analyse.pl"],
