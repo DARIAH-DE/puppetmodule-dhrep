@@ -127,7 +127,7 @@ class dhrep::services::intern::wildfly (
     path         => '/var/log/wildfly/console.log',
     require      => Class['wildfly'],
     rotate       => 30,
-    rotate_every => 'week',
+    rotate_every => 'day',
     compress     => true,
     copytruncate => true,
     missingok    => true,
