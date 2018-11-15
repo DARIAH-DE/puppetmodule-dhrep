@@ -5,7 +5,7 @@
 class dhrep::static::textgridrep_website (
   $tgrep_server_name  = 'vm1rep vm1rep.textgrid.local',
   $tgrep_service_url  = 'http://vm1.textgrid.local/1.0',
-  $hide_site          = true,
+  $install_site       = false,
 ) {
 
   include dhrep::nginx
@@ -15,21 +15,7 @@ class dhrep::static::textgridrep_website (
   }
 
   # the old textgridrep website is hidden (and not installed) by default!
-  if ($hide_site) {
-
-    # just remove nginx config
-    file { '/etc/nginx/sites-available/textgridrep':
-      ensure  => absent,
-    }
-    -> file { '/etc/nginx/proxyconf/textgridrep.common.conf':
-      ensure  => absent,
-    }
-    -> file { '/etc/nginx/sites-enabled/textgridrep':
-      ensure => absent,
-      notify => Service['nginx'],
-    }
-
-  } else {
+  if ($install_site) {
 
     # install everything
     file { '/var/www/nginx-root/textgridrep.de':
