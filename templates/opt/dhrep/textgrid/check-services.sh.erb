@@ -28,13 +28,13 @@ TRN="  ==>  "
 #
 FILE="tgextra.wsdl"
 AUTH=$SERVER"/1.0/tgauth/wsdl/"$FILE
-if $R; echo "checking "$CSTR"tgauth"$CNRM $TRN $AUTH; fi
+if $R; then then echo "checking "$CSTR"tgauth"$CNRM $TRN $AUTH; fi
 wget -q $AUTH
 if [ -s $FILE ]; then
     rm $FILE
-    if $R; echo "    $OK"; fi
+    if $R; then echo "    $OK"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -44,13 +44,13 @@ fi
 #
 FILE="tgextra-crud.wsdl"
 AUTH=$SERVER"/1.0/tgauth/wsdl/"$FILE
-if $R; echo "checking "$CSTR"tgauth_crud"$CNRM $TRN $AUTH; fi
+if $R; then echo "checking "$CSTR"tgauth_crud"$CNRM $TRN $AUTH; fi
 wget -q $AUTH
 if [ -s $FILE ]; then
     rm $FILE
-    if $R; echo "    $OK"; fi
+    if $R; then echo "    $OK"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -60,15 +60,15 @@ fi
 #
 FILE="version"
 CRUD=$SERVER"/1.0/tgcrud/rest/"$FILE
-if $R; echo "checking "$CSTR"tgcrud"$CNRM $TRN $CRUD; fi
+if $R; then echo "checking "$CSTR"tgcrud"$CNRM $TRN $CRUD; fi
 wget -q $CRUD
 if [ -s $FILE ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; cat $FILE; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then cat $FILE; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -78,15 +78,15 @@ fi
 #
 FILE="version"
 CRUD=$SERVER"/1.0/tgcrud-public/rest/"$FILE
-if $R; echo "checking "$CSTR"tgcrud public"$CNRM $TRN $CRUD; fi
+if $R; then echo "checking "$CSTR"tgcrud public"$CNRM $TRN $CRUD; fi
 wget -q $CRUD
 if [ -s $FILE ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; cat $FILE; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then cat $FILE; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -96,13 +96,13 @@ fi
 #
 FILE="search?q=fu"
 SEARCH=$SERVER"/1.0/tgsearch/"$FILE
-if $R; echo "checking "$CSTR"tgsearch"$CNRM $TRN $SEARCH; fi
+if $R; then echo "checking "$CSTR"tgsearch"$CNRM $TRN $SEARCH; fi
 wget -q $SEARCH
 if [ -s $FILE ]; then
     rm $FILE
-    if $R; echo "    $OK"; fi
+    if $R; then echo "    $OK"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -112,13 +112,13 @@ fi
 #
 FILE="search?q=fu"
 SEARCH=$SERVER"/1.0/tgsearch-public/"$FILE
-if $R; echo "checking "$CSTR"tgsearch public"$CNRM $TRN $SEARCH; fi
+if $R; then echo "checking "$CSTR"tgsearch public"$CNRM $TRN $SEARCH; fi
 wget -q $SEARCH
 if [ -s $FILE ]; then
     rm $FILE
-    if $R; echo "    $OK"; fi
+    if $R; then echo "    $OK"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -128,16 +128,16 @@ fi
 #
 FILE="version"
 AGGREGATOR=$SERVER"/1.0/aggregator/"$FILE
-if $R; echo "checking "$CSTR"aggregator"$CNRM $TRN $AGGREGATOR; fi
+if $R; then echo "checking "$CSTR"aggregator"$CNRM $TRN $AGGREGATOR; fi
 wget -q $AGGREGATOR
 if [ -s $FILE ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
     URGL=`cat version | grep Version:`;
-    if $R; echo -n ${URGL#*<em>}; fi
+    if $R; then echo -n ${URGL#*<em>}; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -147,15 +147,15 @@ fi
 #
 FILE="version"
 PUBLISH=$SERVER"/1.0/tgpublish/"$FILE
-if $R; echo "checking "$CSTR"tgpublish"$CNRM $TRN $PUBLISH; fi
+if $R; then echo "checking "$CSTR"tgpublish"$CNRM $TRN $PUBLISH; fi
 wget -q $PUBLISH
 if [ -s $FILE ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; cat $FILE; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then cat $FILE; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -165,15 +165,15 @@ fi
 #
 FILE="version"
 OAIPMH=$SERVER"/1.0/tgoaipmh/oai/"$FILE
-if $R; echo "checking "$CSTR"tgoaipmh"$CNRM $TRN $OAIPMH; fi
+if $R; then echo "checking "$CSTR"tgoaipmh"$CNRM $TRN $OAIPMH; fi
 wget -q $OAIPMH
 if [ -s $FILE ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; cat $FILE; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then cat $FILE; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -183,15 +183,15 @@ fi
 #
 FILE="version"
 PID=$SERVER"/1.0/tgpid/"$FILE
-if $R; echo "checking "$CSTR"tgpid"$CNRM $TRN $PID; fi
+if $R; then echo "checking "$CSTR"tgpid"$CNRM $TRN $PID; fi
 wget -q $PID
 if [ -s $FILE ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; cat $FILE; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then cat $FILE; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -201,13 +201,13 @@ fi
 #
 INFO="info"
 DIGILIB=$SERVER"/1.0/digilib/rest/"$INFO
-if $R; echo "checking "$CSTR"digilib"$CNRM $TRN $DIGILIB; fi
+if $R; then echo "checking "$CSTR"digilib"$CNRM $TRN $DIGILIB; fi
 wget -q $DIGILIB
 if [ -s $INFO ]; then
     rm $INFO
-    if $R; echo "    $OK"; fi
+    if $R; then echo "    $OK"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -217,17 +217,17 @@ fi
 #
 FILE="wildfly"
 WILDFLY=$SERVER":18080/jolokia/read/java.lang:type=Runtime/Uptime"
-if $R; echo "checking "$CSTR"wildfly"$CNRM" (intern)"$TRN $WILDFLY; fi
+if $R; then echo "checking "$CSTR"wildfly"$CNRM" (intern)"$TRN $WILDFLY; fi
 curl -s $WILDFLY > $FILE
 URGL=`grep \"status\":200 $FILE`
 URGL=`echo ${URGL: -13:12}`
 if [ -s $FILE ] && [ "$URGL" = "\"status\":200"  ] ; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; echo -n $URGL; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then echo -n $URGL; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
 fi
@@ -237,13 +237,13 @@ fi
 #
 INFO="collection.json"
 IIIFMD=$SERVER"/1.0/iiif/manifests/"$INFO
-if $R; echo "checking "$CSTR"iiifmd"$CNRM $TRN $IIIFMD; fi
+if $R; then echo "checking "$CSTR"iiifmd"$CNRM $TRN $IIIFMD; fi
 wget -q $IIIFMD
 if [ -s $INFO ]; then
     rm $INFO
-    if $R; echo "    $OK"; fi
+    if $R; then echo "    $OK"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -253,16 +253,16 @@ fi
 #
 FILE="curl"
 SESAME=$SERVER"/1.0/triplestore?query=info"
-if $R; echo "checking "$CSTR"sesame nonpublic"$CNRM $TRN $SESAME; fi
+if $R; then echo "checking "$CSTR"sesame nonpublic"$CNRM $TRN $SESAME; fi
 curl -s $SESAME > $FILE
 URGL=`grep -m 1 -o "textgrid-nonpublic" curl`
 if [ -s $FILE -a "$URGL" = 'textgrid-nonpublic' ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; echo -n $URGL; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then echo -n $URGL; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -272,16 +272,16 @@ fi
 #
 FILE="curl"
 SESAME=$SERVER"/1.0/triplestore?query=info"
-if $R; echo "checking "$CSTR"sesame public"$CNRM $TRN $SESAME; fi
+if $R; then echo "checking "$CSTR"sesame public"$CNRM $TRN $SESAME; fi
 curl -s $SESAME > $FILE
 URGL=`grep -m 1 -o "textgrid-public" curl`
 if [ -s $FILE -a "$URGL" = 'textgrid-public' ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; echo -n $URGL; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then echo -n $URGL; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -291,16 +291,16 @@ fi
 #
 FILE="curl"
 MASTERNODE=$SERVER":<%= @elasticsearch_master_http_port %>"
-if $R; echo "checking "$CSTR"es masternode"$CNRM" (intern)"$TRN $MASTERNODE; fi
+if $R; then echo "checking "$CSTR"es masternode"$CNRM" (intern)"$TRN $MASTERNODE; fi
 curl -s $MASTERNODE > $FILE
 URGL=`grep "200" curl`
 if [ -s $FILE -a  "$URGL" = '  "status" : 200,' ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; echo -n $URGL; fi
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then echo -n $URGL; fi
+    if $R; then echo $CNRM"]"; fi
     rm $FILE
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -310,16 +310,16 @@ fi
 #
 FILE="curl"
 WORKHORSE=$SERVER":<%= @elasticsearch_workhorse_http_port %>"
-if $R; echo "checking "$CSTR"es workhorse"$CNRM" (intern)"$TRN $WORKHORSE; fi
+if $R; then echo "checking "$CSTR"es workhorse"$CNRM" (intern)"$TRN $WORKHORSE; fi
 curl -s $WORKHORSE > $FILE
 URGL=`grep "200" $FILE`
 if [ -s $FILE ] && [ "$URGL" = '  "status" : 200,' ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; echo -n $URGL; fi
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then echo -n $URGL; fi
+    if $R; then echo $CNRM"]"; fi
     rm $FILE
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -329,19 +329,19 @@ fi
 #
 FILE="/opt/dhrep/output"
 FITS_VERSION=1.2.0
-if $R; echo "checking "$CSTR"fits core"$CNRM" (intern)"$TRN; fi
+if $R; then echo "checking "$CSTR"fits core"$CNRM" (intern)"$TRN; fi
 cd /home/tomcat-fits/fits-$FITS_VERSION
 ./fits.sh -i License.md -o $FILE
 URGL=`grep toolname=\"FITS\" $FILE`
 URGL=`echo ${URGL:85:5}`
 if [ -s $FILE ] && [ "$URGL" = "$FITS_VERSION"  ] ; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; echo -n $URGL; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then echo -n $URGL; fi
     rm $FILE
     rm fits.log
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     rm -f fits.log
     ERRORS=true
@@ -352,15 +352,15 @@ fi
 #
 FILE="version"
 FITS=$SERVER":<%= @fits_port %>/fits/"$FILE
-if $R; echo "checking "$CSTR"fits service"$CNRM" (intern)"$TRN $FITS; fi
+if $R; then echo "checking "$CSTR"fits service"$CNRM" (intern)"$TRN $FITS; fi
 wget -q $FITS
 if [ -s $FILE ]; then
-    if $R; echo -n "    $OK ["$VSTR; fi
-    if $R; cat $FILE | xargs echo -n; fi
+    if $R; then echo -n "    $OK ["$VSTR; fi
+    if $R; then cat $FILE | xargs echo -n; fi
     rm $FILE
-    if $R; echo $CNRM"]"; fi
+    if $R; then echo $CNRM"]"; fi
 else
-    if $R; echo "    $FAILED"; fi
+    if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
 fi
@@ -371,14 +371,14 @@ fi
 FILE="textgrid-metadata_2010.xsd"
 SCHEMA=$SERVER"/schema/"$FILE
 EQSI=30757
-if $R; echo "checking "$CSTR"static metadata schema"$CNRM $TRN $SCHEMA; fi
+if $R; then echo "checking "$CSTR"static metadata schema"$CNRM $TRN $SCHEMA; fi
 wget -q $SCHEMA
 SIZE=$(stat -c%s "$FILE")
 rm $FILE
 if [ $SIZE -eq $EQSI ]; then
-    if $R; echo "    $OK [$SIZE == $EQSI]"; fi
+    if $R; then echo "    $OK [$SIZE == $EQSI]"; fi
 else
-    if $R; echo "    $FAILED [$SIZE != $EQSI]"; fi
+    if $R; then echo "    $FAILED [$SIZE != $EQSI]"; fi
     ERRORS=true
 fi
 
@@ -386,9 +386,9 @@ fi
 # check for errors
 #
 if $ERRORS; then
-    if $R; echo "...service check $FAILED with exit code 2! Nagios --> FAILED/ERROR"; fi
+    if $R; then echo "...service check $FAILED with exit code 2! Nagios --> FAILED/ERROR"; fi
     exit 2
 fi
 
-if $R; echo "...service check turns out to be $OK"; fi
+if $R; then echo "...service check turns out to be $OK"; fi
 exit 0
