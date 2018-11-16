@@ -13,6 +13,8 @@ class dhrep::services::fits (
   $_aptdir             = $::dhrep::params::aptdir
   $_vardir             = $::dhrep::params::vardir
   $_catname            = $::dhrep::services::tomcat_fits::catname
+  $_user               = $::dhrep::services::tomcat_fits::user
+  $_group              = $::dhrep::services::tomcat_fits::group
 
   $fits_folder         = "fits-${fits_version}"
   $fits_file           = "${fits_folder}.zip"
@@ -35,6 +37,7 @@ class dhrep::services::fits (
     source  => "${_vardir}/${fits_file}",
     target  => "/home/${_catname}/",
     creates => "/home/${_catname}/${fits_folder}",
+    require => Usertomcat::Instance[$_catname],
   }
 
   ###
@@ -42,10 +45,10 @@ class dhrep::services::fits (
   ###
   file { "${_aptdir}/fits":
     ensure  => directory,
-    owner   => 'root',
-    group   => 'tomcat7',
+    owner   => $_user,
+    group   => $_group,
     mode    => '0755',
-    require => File[$_aptdir],
+    require => [File[$_aptdir],Usertomcat::Instance[$_catname]],
   }
   -> staging::file { $fits_service_file:
     source => $fits_service_source,
