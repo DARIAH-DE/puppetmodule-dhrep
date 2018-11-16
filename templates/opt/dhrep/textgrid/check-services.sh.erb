@@ -28,7 +28,7 @@ TRN="  ==>  "
 #
 FILE="tgextra.wsdl"
 AUTH=$SERVER"/1.0/tgauth/wsdl/"$FILE
-if $R; then then echo "checking "$CSTR"tgauth"$CNRM $TRN $AUTH; fi
+if $R; then echo "checking "$CSTR"tgauth"$CNRM $TRN $AUTH; fi
 wget -q $AUTH
 if [ -s $FILE ]; then
     rm $FILE
