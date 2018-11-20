@@ -116,6 +116,25 @@ class dhrep::services::intern::wildfly (
     }],
   }
 
+  telegraf::input { "jolokia2_${name}":
+    plugin_type => 'jolokia2_agent',
+    options     => [{
+      'urls' => ["http://127.0.0.1:18080/jolokia/"],
+      'name_prefix' => "${name}.",
+      'metric' => [{
+        'name'     => 'process_cpu_load',
+        'mbean'    => 'java.lang:type=OperatingSystem',
+        'paths'     => [ 'ProcessCpuLoad' ],
+        'tag_keys' => ['name'],
+      },{
+        'name'     => 'heap_memory_usage',
+        'mbean'    => 'java.lang:type=Memory',
+        'paths'     => [ 'HeapMemoryUsage' ],
+        'tag_keys' => ['name'],
+      }],
+    }],
+  }
+
   ###
   # logrotate
   ###
