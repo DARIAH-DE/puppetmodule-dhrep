@@ -84,40 +84,55 @@ class dhrep::services::intern::wildfly (
 
   telegraf::input { 'jolokia_wildfly_mem':
     plugin_type => 'jolokia',
-    options     => {
+    options     => [{
       'context' => '/jolokia/',
-    },
-    sections    => {
-      'jolokia.servers' => {
+      'servers' => [{
         'name' => 'wildfly',
         'host' => '127.0.0.1',
         'port' => '18080',
-      },
-      'jolokia.metrics' => {
+      }],
+      'metrics' => [{
         'name'      => 'heap_memory_usage',
         'mbean'     => 'java.lang:type=Memory',
         'attribute' => 'HeapMemoryUsage',
-      },
-    },
+      }],
+    }],
   }
 
   telegraf::input { 'jolokia_wildfly_cpu':
     plugin_type => 'jolokia',
-    options     => {
+    options     => [{
       'context' => '/jolokia/',
-    },
-    sections    => {
-      'jolokia.servers' => {
+      'servers' => [{
         'name' => 'wildfly',
         'host' => '127.0.0.1',
         'port' => '18080',
-      },
-      'jolokia.metrics' => {
+      }],
+      'metrics' => [{
         'name'      => 'process_cpu_load',
         'mbean'     => 'java.lang:type=OperatingSystem',
         'attribute' => 'ProcessCpuLoad',
-      },
-    },
+      }],
+    }],
+  }
+
+  telegraf::input { "jolokia2_wildfly":
+    plugin_type => 'jolokia2_agent',
+    options     => [{
+      'urls' => ["http://127.0.0.1:18080/jolokia/"],
+      'name_prefix' => "wildfly.",
+      'metric' => [{
+        'name'     => 'process_cpu_load',
+        'mbean'    => 'java.lang:type=OperatingSystem',
+        'paths'     => [ 'ProcessCpuLoad' ],
+        'tag_keys' => ['name'],
+      },{
+        'name'     => 'heap_memory_usage',
+        'mbean'    => 'java.lang:type=Memory',
+        'paths'     => [ 'HeapMemoryUsage' ],
+        'tag_keys' => ['name'],
+      }],
+    }],
   }
 
   ###

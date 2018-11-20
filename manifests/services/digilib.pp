@@ -28,10 +28,18 @@ class dhrep::services::digilib (
   # update apt repo and install package
   ###
   package {
-    'libvips': ensure        => present; # this is needed by the prescaler, see dhrep::services::intern::messaging
     'libvips-tools': ensure    => present;
     'digilib-service': ensure  => $version,
     require                    => [Exec['update_dariah_apt_repository'],Usertomcat::Instance[$_catname]],
+  }
+
+  # libvips needed by the prescaler, see dhrep::services::intern::messaging
+  if ($::lsbdistcodename == 'trusty') {
+    ensure_packages(['libvips37'])
+  } elsif ($::lsbdistcodename == 'xenial') {
+    ensure_packages(['libvips42'])
+  } else {
+    ensure_packages(['libvips']) # this is a meta package, showing up as changed on every puppet run, better specify like above
   }
 
   ###

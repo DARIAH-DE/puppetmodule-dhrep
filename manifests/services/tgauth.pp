@@ -427,8 +427,8 @@ class dhrep::services::tgauth (
   ###
   telegraf::input { 'slapd_procstat':
     plugin_type => 'procstat',
-    options     => {
+    options     => [{
       'pid_file' => '/var/run/slapd/slapd.pid',
-    },
+    }],
   }
 }

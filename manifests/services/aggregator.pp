@@ -125,56 +125,50 @@ class dhrep::services::aggregator (
   ###
   telegraf::input { "jolokia_${_catname}_avg-response":
     plugin_type => 'jolokia',
-    options     => {
+    options     => [{
       'context' => '/jolokia/',
-    },
-    sections    => {
-      'jolokia.servers' => {
+      'servers' => [{
         'name' => $_catname,
         'host' => '127.0.0.1',
         'port' => $_http_port,
-      },
-      'jolokia.metrics' => {
+      }],
+      'metrics' => [{
         'name'      => 'cxf_avg_response',
         'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"',
         'attribute' => 'AvgResponseTime',
-      },
-    },
+      }],
+    }],
   }
   telegraf::input { "jolokia_${_catname}_min-response":
     plugin_type => 'jolokia',
-    options     => {
+    options     => [{
       'context' => '/jolokia/',
-    },
-    sections    => {
-      'jolokia.servers' => {
+      'servers' => [{
         'name' => $_catname,
         'host' => '127.0.0.1',
         'port' => $_http_port,
-      },
-      'jolokia.metrics' => {
+      }],
+      'metrics' => [{
         'name'      => 'cxf_min_response',
         'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"',
         'attribute' => 'MinResponseTime',
-      },
-    },
+      }],
+    }],
   }
   telegraf::input { "jolokia_${_catname}_max-response":
     plugin_type => 'jolokia',
-    options     => {
+    options     => [{
       'context' => '/jolokia/',
-    },
-    sections    => {
-      'jolokia.servers' => {
+      'servers' => [{
         'name' => $_catname,
         'host' => '127.0.0.1',
         'port' => $_http_port,
-      },
-      'jolokia.metrics' => {
+      }],
+      'metrics' => [{
         'name'      => 'cxf_max_response',
         'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"',
         'attribute' => 'MaxResponseTime',
-      },
-    },
+      }],
+    }],
   }
 }
