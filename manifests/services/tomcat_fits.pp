@@ -8,6 +8,8 @@ class dhrep::services::tomcat_fits (
   $xms   = $::dhrep::params::tomcat_fits_xms,
 ) inherits dhrep::params {
 
+  $_logdir      = $::dhrep::params::logdir
+
   $catname      = $::dhrep::params::config['tomcat_fits']['catname']
   $http_port    = $::dhrep::params::config['tomcat_fits']['http_port']
   $control_port = $::dhrep::params::config['tomcat_fits']['control_port']
@@ -31,5 +33,6 @@ class dhrep::services::tomcat_fits (
     xmx              => $xmx,
     xms              => $xms,
     telegraf_enabled => true,
+    logdir           => "${_logdir}/${catname}",
   }
 }

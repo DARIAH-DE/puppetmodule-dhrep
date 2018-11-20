@@ -7,9 +7,11 @@ class dhrep::services::intern::wildfly (
   $xmx = $dhrep::params::wildfly_xmx,
   $xms = $dhrep::params::wildfly_xms,
   $crud_pw = 'secret',
-  $message_beans_version = '1.3.2',
+  $message_beans_version = '1.3.3',
   $message_beans_repo_component = 'releases',
 ) inherits dhrep::params {
+
+  $_vardir = $::dhrep::params::vardir
 
   if($::dhrep::oracle_jdk8) {
     $java_home = '/usr/lib/jvm/java-8-oracle'
@@ -17,6 +19,9 @@ class dhrep::services::intern::wildfly (
     $java_home = '/usr/lib/jvm/default-java'
   }
 
+  ###
+  # set messaging topic to dh or tg crud
+  ###
   if ($scope == 'textgrid') {
     $crud_name  = 'tgcrud'
     $crud_topic = 'tgcrudTopic'
@@ -64,14 +69,13 @@ class dhrep::services::intern::wildfly (
   ###
   # stage war
   ###
-
   staging::file { 'message-beans.war':
     source  => "https://ci.de.dariah.eu/nexus/service/local/artifact/maven/redirect?r=${message_beans_repo_component}&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
-    target  => "/var/cache/dhrep/message-beans-${message_beans_version}.war",
+    target  => "${_vardir}/message-beans-${message_beans_version}.war",
     require => Class['wildfly'],
   }
   ~> file { '/home/wildfly/wildfly/standalone/deployments/message-beans.war':
-    source => "/var/cache/dhrep/message-beans-${message_beans_version}.war",
+    source => "${_vardir}/message-beans-${message_beans_version}.war",
   }
 
   ###
@@ -85,53 +89,53 @@ class dhrep::services::intern::wildfly (
   telegraf::input { 'jolokia_wildfly_mem':
     plugin_type => 'jolokia',
     options     => [{
-      'context' => '/jolokia/',
-      'servers' => [{
-        'name' => 'wildfly',
-        'host' => '127.0.0.1',
-        'port' => '18080',
-      }],
-      'metrics' => [{
-        'name'      => 'heap_memory_usage',
-        'mbean'     => 'java.lang:type=Memory',
-        'attribute' => 'HeapMemoryUsage',
-      }],
+        'context' => '/jolokia/',
+        'servers' => [{
+            'name' => 'wildfly',
+            'host' => '127.0.0.1',
+            'port' => '18080',
+        }],
+        'metrics' => [{
+            'name'      => 'heap_memory_usage',
+            'mbean'     => 'java.lang:type=Memory',
+            'attribute' => 'HeapMemoryUsage',
+        }],
     }],
   }
 
   telegraf::input { 'jolokia_wildfly_cpu':
     plugin_type => 'jolokia',
     options     => [{
-      'context' => '/jolokia/',
-      'servers' => [{
-        'name' => 'wildfly',
-        'host' => '127.0.0.1',
-        'port' => '18080',
-      }],
-      'metrics' => [{
-        'name'      => 'process_cpu_load',
-        'mbean'     => 'java.lang:type=OperatingSystem',
-        'attribute' => 'ProcessCpuLoad',
-      }],
+        'context' => '/jolokia/',
+        'servers' => [{
+            'name' => 'wildfly',
+            'host' => '127.0.0.1',
+            'port' => '18080',
+        }],
+        'metrics' => [{
+            'name'      => 'process_cpu_load',
+            'mbean'     => 'java.lang:type=OperatingSystem',
+            'attribute' => 'ProcessCpuLoad',
+        }],
     }],
   }
 
-  telegraf::input { "jolokia2_wildfly":
+  telegraf::input { 'jolokia2_wildfly':
     plugin_type => 'jolokia2_agent',
     options     => [{
-      'urls' => ["http://127.0.0.1:18080/jolokia/"],
-      'name_prefix' => "wildfly.",
-      'metric' => [{
-        'name'     => 'process_cpu_load',
-        'mbean'    => 'java.lang:type=OperatingSystem',
-        'paths'     => [ 'ProcessCpuLoad' ],
-        'tag_keys' => ['name'],
-      },{
-        'name'     => 'heap_memory_usage',
-        'mbean'    => 'java.lang:type=Memory',
-        'paths'     => [ 'HeapMemoryUsage' ],
-        'tag_keys' => ['name'],
-      }],
+        'urls'        => [ 'http://127.0.0.1:18080/jolokia/' ],
+        'name_prefix' => 'wildfly.',
+        'metric'      => [{
+            'name'     => 'process_cpu_load',
+            'mbean'    => 'java.lang:type=OperatingSystem',
+            'paths'    => [ 'ProcessCpuLoad' ],
+            'tag_keys' => ['name'],
+          },{
+            'name'     => 'heap_memory_usage',
+            'mbean'    => 'java.lang:type=Memory',
+            'paths'    => [ 'HeapMemoryUsage' ],
+            'tag_keys' => ['name'],
+        }],
     }],
   }
 
