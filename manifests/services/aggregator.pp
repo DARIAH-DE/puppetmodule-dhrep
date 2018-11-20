@@ -134,7 +134,7 @@ class dhrep::services::aggregator (
       }],
       'metrics' => [{
         'name'      => 'cxf_avg_response',
-        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"',
+        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service="{http://aggregator.services.textgrid.info/}REST",port="REST"',
         'attribute' => 'AvgResponseTime',
       }],
     }],
@@ -150,7 +150,7 @@ class dhrep::services::aggregator (
       }],
       'metrics' => [{
         'name'      => 'cxf_min_response',
-        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"',
+        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service="{http://aggregator.services.textgrid.info/}REST",port="REST"',
         'attribute' => 'MinResponseTime',
       }],
     }],
@@ -166,7 +166,7 @@ class dhrep::services::aggregator (
       }],
       'metrics' => [{
         'name'      => 'cxf_max_response',
-        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\"',
+        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service="{http://aggregator.services.textgrid.info/}REST",port="REST"',
         'attribute' => 'MaxResponseTime',
       }],
     }],
