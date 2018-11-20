@@ -123,52 +123,18 @@ class dhrep::services::aggregator (
   ###
   # metrics
   ###
-  telegraf::input { "jolokia_${_catname}_avg-response":
-    plugin_type => 'jolokia',
+  telegraf::input { "jolokia2_${_catname}_cxf":
+    plugin_type => 'jolokia2_agent',
     options     => [{
-      'context' => '/jolokia/',
-      'servers' => [{
-        'name' => $_catname,
-        'host' => '127.0.0.1',
-        'port' => $_http_port,
-      }],
-      'metrics' => [{
-        'name'      => 'cxf_avg_response',
-        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service="{http://aggregator.services.textgrid.info/}REST",port="REST"',
-        'attribute' => 'AvgResponseTime',
-      }],
-    }],
-  }
-  telegraf::input { "jolokia_${_catname}_min-response":
-    plugin_type => 'jolokia',
-    options     => [{
-      'context' => '/jolokia/',
-      'servers' => [{
-        'name' => $_catname,
-        'host' => '127.0.0.1',
-        'port' => $_http_port,
-      }],
+      'urls' => ["http://127.0.0.1:${_http_port}/jolokia/"],
+      'name_prefix' => "${_catname}.",
       'metrics' => [{
         'name'      => 'cxf_min_response',
         'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service="{http://aggregator.services.textgrid.info/}REST",port="REST"',
-        'attribute' => 'MinResponseTime',
-      }],
+        'paths' => ['MinResponseTime','MaxResponseTime', 'AvgResponseTime'],
+        'tag_keys' => ['name'],
+        }],
     }],
   }
-  telegraf::input { "jolokia_${_catname}_max-response":
-    plugin_type => 'jolokia',
-    options     => [{
-      'context' => '/jolokia/',
-      'servers' => [{
-        'name' => $_catname,
-        'host' => '127.0.0.1',
-        'port' => $_http_port,
-      }],
-      'metrics' => [{
-        'name'      => 'cxf_max_response',
-        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service="{http://aggregator.services.textgrid.info/}REST",port="REST"',
-        'attribute' => 'MaxResponseTime',
-      }],
-    }],
-  }
+
 }
