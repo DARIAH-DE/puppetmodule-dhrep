@@ -7,7 +7,7 @@ class dhrep::services::intern::wildfly (
   $xmx = $dhrep::params::wildfly_xmx,
   $xms = $dhrep::params::wildfly_xms,
   $crud_pw = 'secret',
-  $message_beans_version = '1.3.2',
+  $message_beans_version = '1.3.3',
   $message_beans_repo_component = 'releases',
 ) inherits dhrep::params {
 
