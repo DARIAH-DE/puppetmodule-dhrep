@@ -91,7 +91,7 @@ class dhrep::services::intern::wildfly (
         'host' => '127.0.0.1',
         'port' => '18080',
       }],
-      'jolokia.metrics' => [{
+      'metrics' => [{
         'name'      => 'heap_memory_usage',
         'mbean'     => 'java.lang:type=Memory',
         'attribute' => 'HeapMemoryUsage',
