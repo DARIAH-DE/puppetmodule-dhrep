@@ -116,11 +116,11 @@ class dhrep::services::intern::wildfly (
     }],
   }
 
-  telegraf::input { "jolokia2_${name}":
+  telegraf::input { "jolokia2_wildfly":
     plugin_type => 'jolokia2_agent',
     options     => [{
       'urls' => ["http://127.0.0.1:18080/jolokia/"],
-      'name_prefix' => "${name}.",
+      'name_prefix' => "wildfly.",
       'metric' => [{
         'name'     => 'process_cpu_load',
         'mbean'    => 'java.lang:type=OperatingSystem',
