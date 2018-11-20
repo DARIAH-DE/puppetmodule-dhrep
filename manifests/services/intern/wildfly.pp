@@ -84,40 +84,36 @@ class dhrep::services::intern::wildfly (
 
   telegraf::input { 'jolokia_wildfly_mem':
     plugin_type => 'jolokia',
-    options     => {
+    options     => [{
       'context' => '/jolokia/',
-    },
-    sections    => {
-      'jolokia.servers' => {
+      'servers' => [{
         'name' => 'wildfly',
         'host' => '127.0.0.1',
         'port' => '18080',
-      },
-      'jolokia.metrics' => {
+      }],
+      'jolokia.metrics' => [{
         'name'      => 'heap_memory_usage',
         'mbean'     => 'java.lang:type=Memory',
         'attribute' => 'HeapMemoryUsage',
-      },
-    },
+      }],
+    }],
   }
 
   telegraf::input { 'jolokia_wildfly_cpu':
     plugin_type => 'jolokia',
-    options     => {
+    options     => [{
       'context' => '/jolokia/',
-    },
-    sections    => {
-      'jolokia.servers' => {
+      'servers' => [{
         'name' => 'wildfly',
         'host' => '127.0.0.1',
         'port' => '18080',
-      },
-      'jolokia.metrics' => {
+      }],
+      'metrics' => [{
         'name'      => 'process_cpu_load',
         'mbean'     => 'java.lang:type=OperatingSystem',
         'attribute' => 'ProcessCpuLoad',
-      },
-    },
+      }],
+    }],
   }
 
   ###
