@@ -26,7 +26,6 @@ class dhrep::static::repository_de_dariah_eu(
   # index.html file for repository
   #
   file { '/var/www/nginx-root/index.html':
-#    source  => 'puppet:///modules/dhrep/var/www/nginx-root/dariah/index.html',
     ensure  => file,
     mode    => '0644',
     require => File['/var/www/nginx-root'],
@@ -45,6 +44,12 @@ class dhrep::static::repository_de_dariah_eu(
     target  => '/var/www/doc/services',
     require => File['/var/www/nginx-root/doc'],
   }
+  file { '/var/www/nginx-root/dariah/doc/index.html':
+    source  => 'puppet:///modules/dhrep/var/www/nginx-root/dariah/doc/index.html',
+    mode    => '0644',
+    require => File['/var/www/nginx-root/doc'],
+  }
+
 
   #
   # BagIt Profile folders and profile itself
