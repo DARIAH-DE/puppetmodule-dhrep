@@ -44,7 +44,7 @@ class dhrep::static::repository_de_dariah_eu(
     target  => '/var/www/doc/services',
     require => File['/var/www/nginx-root/doc'],
   }
-  file { '/var/www/nginx-root/dariah/doc/index.html':
+  file { '/var/www/nginx-root/doc/index.html':
     source  => 'puppet:///modules/dhrep/var/www/nginx-root/dariah/doc/index.html',
     mode    => '0644',
     require => File['/var/www/nginx-root/doc'],
