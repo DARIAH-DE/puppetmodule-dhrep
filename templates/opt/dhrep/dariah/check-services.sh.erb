@@ -15,6 +15,7 @@ done
 # generics
 #
 ERRORS=false
+ERRSTR="Failed service(s):"
 SERVER="http://localhost"
 CNRM="$(tput sgr0)"
 OK="$(tput setaf 2)OK$CNRM"
@@ -39,6 +40,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" dhcrud"
 fi
 
 #
@@ -57,6 +59,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" dhcrud-public"
 fi
 
 #
@@ -75,6 +78,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" dhpublish"
 fi
 
 #
@@ -95,6 +99,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" publikator"
 fi
 
 #
@@ -113,6 +118,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" dhoaipmh"
 fi
 
 #
@@ -131,6 +137,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" dhpid"
 fi
 
 #
@@ -147,6 +154,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" dhdigilib"
 fi
 
 #
@@ -167,6 +175,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" dhwildfly"
 fi
 
 #
@@ -183,6 +192,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" dhiiifmd"
 fi
 
 #
@@ -202,6 +212,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" es-masternode"
 fi
 
 #
@@ -221,6 +232,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" es-workhorse"
 fi
 
 #
@@ -244,6 +256,7 @@ else
     rm $FILE
     rm fits.log
     ERRORS=true
+    ERRSTR=$ERRSTR" fits-core"
 fi
 
 #
@@ -262,6 +275,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" fits-service"
 fi
 
 #
@@ -269,7 +283,7 @@ fi
 #
 if $ERRORS; then
     # Nagios ERROR
-    echo "Service check $FAILED"
+    echo "Service check $FAILED! "$ERRSTR
     exit 2
 fi
 

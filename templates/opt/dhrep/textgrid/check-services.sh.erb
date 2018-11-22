@@ -15,6 +15,7 @@ done
 # generics
 #
 ERRORS=false
+ERRSTR="Failed service(s):"
 SERVER="http://localhost"
 CNRM="$(tput sgr0)"
 OK="$(tput setaf 2)OK$CNRM"
@@ -37,6 +38,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgauth"
 fi
 
 #
@@ -53,6 +55,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgauth-crud"
 fi
 
 #
@@ -71,6 +74,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgcrud"
 fi
 
 #
@@ -89,6 +93,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgcrud-public"
 fi
 
 #
@@ -105,6 +110,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgsearch"
 fi
 
 #
@@ -121,6 +127,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgsearch-public"
 fi
 
 #
@@ -140,6 +147,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" aggreagtor"
 fi
 
 #
@@ -158,6 +166,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgpublish"
 fi
 
 #
@@ -176,6 +185,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgoaipmh"
 fi
 
 #
@@ -194,6 +204,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgpid"
 fi
 
 #
@@ -210,6 +221,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgdigilib"
 fi
 
 #
@@ -230,6 +242,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgwildfly"
 fi
 
 #
@@ -246,6 +259,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" tgiiifmd"
 fi
 
 #
@@ -265,6 +279,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" sesame"
 fi
 
 #
@@ -284,6 +299,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" sesame-public"
 fi
 
 #
@@ -303,6 +319,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" es-masternode"
 fi
 
 #
@@ -322,6 +339,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" es-workhorse"
 fi
 
 #
@@ -345,6 +363,7 @@ else
     rm -f $FILE
     rm -f fits.log
     ERRORS=true
+    ERRSTR=$ERRSTR" fits-core"
 fi
 
 #
@@ -363,6 +382,7 @@ else
     if $R; then echo "    $FAILED"; fi
     rm -f $FILE
     ERRORS=true
+    ERRSTR=$ERRSTR" fits-service"
 fi
 
 #
@@ -380,6 +400,7 @@ if [ $SIZE -eq $EQSI ]; then
 else
     if $R; then echo "    $FAILED [$SIZE != $EQSI]"; fi
     ERRORS=true
+    ERRSTR=$ERRSTR" metadata-schema"
 fi
 
 #
@@ -387,7 +408,7 @@ fi
 #
 if $ERRORS; then
     # Nagios ERROR
-    echo "Service check $FAILED"
+    echo "Service check $FAILED! "$ERRSTR
     exit 2
 fi
 
