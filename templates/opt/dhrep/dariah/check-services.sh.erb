@@ -283,9 +283,9 @@ fi
 #
 if $ERRORS; then
     # Nagios ERROR
-    echo "Service check $FAILED! "$ERRSTR
+    echo "Service checks $FAILED! "$ERRSTR
     exit 2
 fi
 
-echo "Service check turns out to be $OK"
+echo "Service checks turn out to be $OK"
 exit 0
