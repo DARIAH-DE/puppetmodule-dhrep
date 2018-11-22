@@ -386,9 +386,10 @@ fi
 # check for errors
 #
 if $ERRORS; then
-    if $R; then echo "...service check $FAILED with exit code 2! Nagios --> FAILED/ERROR"; fi
+    # Nagios ERROR
+    echo "Service check $FAILED"
     exit 2
 fi
 
-if $R; then echo "...service check turns out to be $OK"; fi
+echo "Service check turns out to be $OK"
 exit 0
