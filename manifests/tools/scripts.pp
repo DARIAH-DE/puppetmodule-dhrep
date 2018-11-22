@@ -38,7 +38,9 @@ class dhrep::tools::scripts (
   # nrpe for check_services.sh
   ###
   nrpe::plugin { 'check_services':
-    plugin     => '/usr/bin/sudo check-services.sh -s',
-    libexecdir => $_optdir,
+    plugin         => 'check-services.sh',
+    args           => '-s',
+    libexecdir     => $_optdir,
+    command_prefix => '/usr/bin/sudo',
   }
 }
