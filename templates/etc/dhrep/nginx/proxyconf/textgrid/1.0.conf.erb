@@ -5,35 +5,40 @@
 #rewrite_log on;
 
 ###
-# locations for /1.0/
+# confserv
 ###
-
 location /1.0/confserv/ {
 #    gzip on;
     alias /var/www/confserv/1.0/;
     autoindex on;
 }
 
+###
+# old tg website (disabled)
+###
 #location /1.0/tgrep {
 #    alias /var/www/nginx-root/textgridrep.de/textgridrep-webseite;
 #}
 
+###
+# tgauth und shibboleth
+###
 location /1.0/tgauth {
     proxy_pass http://127.0.0.1:8080/tgauth;
 }
-
 location /1.0/WebAuthN {
     proxy_pass http://127.0.0.1:8080/WebAuthN;
 }
-
 location /1.0/Shibboleth.sso {
     proxy_pass http://127.0.0.1:8080/1.0/Shibboleth.sso;
 }
-
 location /1.0/secure {
     proxy_pass http://127.0.0.1:8080/1.0/secure;
 }
 
+###
+# sesame
+###
 location /1.0/triplestore {
     proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_sesame::http_port') %>/openrdf-sesame/repositories;
     limit_except GET {
@@ -44,6 +49,9 @@ location /1.0/triplestore {
     proxy_set_header        Host $http_host;
 }
 
+###
+# oaipmh
+###
 location /1.0/tgoaipmh {
     proxy_pass		http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_oaipmh::http_port') %>/oaipmh;
     proxy_set_header	X-Real-IP $remote_addr;
@@ -51,6 +59,9 @@ location /1.0/tgoaipmh {
     proxy_set_header	Host $http_host;
 }
 
+###
+# tgsearch
+###
 location /1.0/tgsearch {
     gzip on;
     gzip_types text/plain application/xml;
@@ -59,7 +70,6 @@ location /1.0/tgsearch {
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
-
 location /1.0/tgsearch-public {
     gzip on;
     gzip_types text/plain application/xml;
@@ -68,7 +78,21 @@ location /1.0/tgsearch-public {
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
+location /1.0/tgsearch-public/navigation/toplevel  {
+    expires <%= scope.lookupvar('dhrep::nginx::tgsearch_toplevel_cache_expiration') %>;
+    gzip on;
+    gzip_types text/plain application/xml;
+    proxy_cache tgsearch;
+    proxy_cache_valid 24h;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch-public/navigation/toplevel;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
 
+###
+# tgcrud
+###
 location /1.0/tgcrud {
 #    gzip on;
 #    gzip_types multipart/related application/xop+xml text/xml;
@@ -81,7 +105,6 @@ location /1.0/tgcrud {
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
-
 location /1.0/tgcrud-public {
 #    gzip on;
 #    gzip_types multipart/related application/xop+xml text/xml;
@@ -95,6 +118,9 @@ location /1.0/tgcrud-public {
     proxy_set_header        Host $http_host;
 }
 
+###
+# tgpublish
+###
 location /1.0/tgpublish {
     proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_publish::http_port') %>/tgpublish;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -103,6 +129,9 @@ location /1.0/tgpublish {
 #    add_header              Access-Control-Allow-Origin *;
 }
 
+###
+# tgpid
+###
 location /1.0/tgpid {
     proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_pid::http_port') %>/tgpid;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -110,13 +139,15 @@ location /1.0/tgpid {
     proxy_set_header        Host $http_host;
 }
 
+###
+# digilib und co
+###
 location /1.0/digilib {
     proxy_pass http://digilib_balancer/digilibservice;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
-
 location /1.0/digilib/rest/IIIF {
     # the cached resource has the CORS header only if the Origin-header was
     # present in the request which went into cache so here we set the CORS
@@ -125,9 +156,6 @@ location /1.0/digilib/rest/IIIF {
     proxy_hide_header Access-Control-Allow-Origin;
     add_header Access-Control-Allow-Origin *;
     # Nginx MUST NOT decode the %2F in the Handle!
-    #
-    # TODO: ADD TO OTHER DIGILIB LOCATIONS!
-    #
     rewrite  ^  $request_uri;
     rewrite  ^/1.0/digilib/rest/IIIF(/.*)  /digilibservice/rest/IIIF$1  break;
     return 400;
@@ -139,12 +167,8 @@ location /1.0/digilib/rest/IIIF {
     proxy_cache_valid 60d;
     proxy_ignore_headers Cache-Control;
 }
-
 location /1.0/digilib/rest/digilib {
     # Nginx MUST NOT decode the %2F in the Handle!
-    #
-    # TODO: ADD TO OTHER DIGILIB LOCATIONS!
-    #
     rewrite  ^  $request_uri;
     rewrite  ^/1.0/digilib/rest/digilib(/.*)  /digilibservice/rest/digilib$1  break;
     return 400;
@@ -156,7 +180,6 @@ location /1.0/digilib/rest/digilib {
     proxy_cache_valid 60d;
     proxy_ignore_headers Cache-Control;
 }
-
 location /1.0/iiif/manifests {
     gzip on;
     gzip_types text/plain application/json;
@@ -165,14 +188,12 @@ location /1.0/iiif/manifests {
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
-
 location /1.0/iiif/mirador {
     alias /var/www/nginx-root/textgridrep.de/iiif/mirador;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
-
 location /1.0/iiif/m2 {
     alias /var/www/nginx-root/textgridrep.de/iiif/m2;
     proxy_set_header        X-Real-IP $remote_addr;
@@ -180,6 +201,9 @@ location /1.0/iiif/m2 {
     proxy_set_header        Host $http_host;
 }
 
+###
+# aggregator
+###
 location /1.0/aggregator {
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
@@ -189,7 +213,6 @@ location /1.0/aggregator {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host localhost:<%= scope.lookupvar('dhrep::services::tomcat_aggregator::http_port') %>;
 }
-
 location /1.0/aggregator/html {
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
@@ -203,34 +226,29 @@ location /1.0/aggregator/html {
     proxy_set_header Host localhost:<%= scope.lookupvar('dhrep::services::tomcat_aggregator::http_port') %>;
 }
 
-location /1.0/tgsearch-public/navigation/toplevel  {
-    expires <%= scope.lookupvar('dhrep::nginx::tgsearch_toplevel_cache_expiration') %>;
-    gzip on;
-    gzip_types text/plain application/xml;
-    proxy_cache tgsearch;
-    proxy_cache_valid 24h;
-    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch-public/navigation/toplevel;
-    proxy_set_header        X-Real-IP $remote_addr;
-    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header        Host $http_host;
-}
-
+###
+# eclipse tg marketplace
+###
 location /marketplace {
     proxy_pass http://127.0.0.1:8080/marketplace;
 }
 
+###
+# normdata
+###
 location /tgnsearch {
     proxy_pass https://ref.de.dariah.eu/tgnsearch;
 }
-
 location /pndsearch {
     proxy_pass https://ref.de.dariah.eu/pndsearch;
 }
 
+###
+# voyant
+###
 location /voyant {
     proxy_pass http://voyant.de.dariah.eu/voyant;
 }
-
 location /voyant2 {
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -238,11 +256,13 @@ location /voyant2 {
     proxy_pass http://voyant.de.dariah.eu/voyant2;
 }
 
+###
+# rewriting textgrid pids
+###
 # rewrite /textgrid: and /hdl: uris, so they are served by tgcrud
 rewrite ^/(textgrid:[a-z0-9\.]+)$ /1.0/tgcrud-public/rest/$1/data last;
 rewrite ^/(textgrid:[a-z0-9\.]+)/data$ /1.0/tgcrud-public/rest/$1/data last;
 rewrite ^/(textgrid:[a-z0-9\.]+)/metadata$ /1.0/tgcrud-public/rest/$1/metadata last;
-rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)$ /1.0/tgcrud/rest/$1/data last;
-rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)/data$ /1.0/tgcrud/rest/$1/data last;
-rewrite ^/(hdl:(11858|11378|11022)/[a-z0-9A-Z\-]+)/metadata$ /1.0/tgcrud/rest/$1/metadata last;
-rewrite_log on;
+rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)$ /1.0/tgcrud/rest/$1/data last;
+rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/data$ /1.0/tgcrud/rest/$1/data last;
+rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/metadata$ /1.0/tgcrud/rest/$1/metadata last;

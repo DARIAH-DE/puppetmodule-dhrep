@@ -91,7 +91,7 @@ location /Shibboleth.sso {
 #}
 
 ###
-# digilib
+# digilib und co
 ###
 location /1.0/digilib {
     proxy_pass http://digilib_balancer/digilibservice;
@@ -107,9 +107,6 @@ location /1.0/digilib/rest/IIIF {
     proxy_hide_header Access-Control-Allow-Origin;
     add_header Access-Control-Allow-Origin *;
     # Nginx MUST NOT decode the %2F in the Handle!
-    #
-    # TODO: ADD TO OTHER DIGILIB LOCATIONS!
-    #
     rewrite  ^  $request_uri;
     rewrite  ^/1.0/digilib/rest/IIIF(/.*)  /digilibservice/rest/IIIF$1  break;
     return 400;
@@ -122,6 +119,10 @@ location /1.0/digilib/rest/IIIF {
     proxy_ignore_headers Cache-Control;
 }
 location /1.0/digilib/rest/digilib {
+    # Nginx MUST NOT decode the %2F in the Handle!
+    rewrite  ^  $request_uri;
+    rewrite  ^/1.0/digilib/rest/IIIF(/.*)  /digilibservice/rest/IIIF$1  break;
+    return 400;
     proxy_pass http://digilib_balancer/digilibservice/rest/digilib;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
