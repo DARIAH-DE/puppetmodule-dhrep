@@ -121,7 +121,7 @@ location /1.0/digilib/rest/IIIF {
 location /1.0/digilib/rest/digilib {
     # Nginx MUST NOT decode the %2F in the Handle!
     rewrite  ^  $request_uri;
-    rewrite  ^/1.0/digilib/rest/IIIF(/.*)  /digilibservice/rest/IIIF$1  break;
+    rewrite  ^/1.0/digilib/rest/digilib(/.*)  /digilibservice/rest/digilib$1  break;
     return 400;
     proxy_pass http://digilib_balancer/digilibservice/rest/digilib;
     proxy_set_header        X-Real-IP $remote_addr;
