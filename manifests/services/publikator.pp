@@ -13,7 +13,7 @@ class dhrep::services::publikator (
   $generic_search_url        = 'https://search.de.dariah.eu/search/',
   $pid_service_url           = 'https://hdl.handle.net/',
   $pdp_token_server_url      = 'https://pdp.de.dariah.eu/oauth2/oauth2/authorize?response_type=token&amp;client_id=dariah-de-publikator&amp;scope=read,write&amp;redirect_uri=',
-  $pdp_token_manager_url     = 'https://auth.de.dariah.eu/cgi-bin/selfservice/ldapportal.pl?mode=authenticate&shibboleth=1&nextpage=accesstokenmanagement',
+  $pdp_token_manager_url     = 'https://auth.de.dariah.eu/cgi-bin/selfservice/ldapportal.pl?mode=authenticate&amp;shibboleth=1&amp;nextpage=accesstokenmanagement',
   $refresh                   = 2850,
   $service_timeout           = 10000,
   $seafile_enabled           = false,
