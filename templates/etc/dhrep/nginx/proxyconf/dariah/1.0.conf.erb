@@ -52,8 +52,7 @@ location /publikator {
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
-    # Nginx must relay to Apache because of Shibboleth authentication!
-    proxy_pass http://localhost:8080/publikator;
+    proxy_pass http://localhost:<%= @tomcat_publikator_http_port %>/publikator;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;

@@ -24,7 +24,7 @@ class dhrep::services::publikator (
   $dryrun                    = false,
   $debug                     = false,
   $override_eppn             = false,
-  $eppn                      = undef,
+  $eppn                      = 'publikator',
   $link_to_documentation     = 'https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository',
   $link_to_faq               = 'https://wiki.de.dariah.eu/display/publicde/FAQs+zum+Publikator',
   $link_to_apidoc            = "https://${::fqdn}/doc/services/",
@@ -44,10 +44,10 @@ class dhrep::services::publikator (
   $statsd_port               = 8125,
   $skip_landing_page         = false,
   $instance_name             = 'PROD',
-  $with_shib                 = true,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
+  include roles::dariahrepository
 
   $_name     = $::dhrep::params::publikator_name[$scope]
   $_version  = $::dhrep::params::publikator_version[$scope]
@@ -103,7 +103,7 @@ class dhrep::services::publikator (
   ###
   # apache config (for using shibboleth)
   ###
-  if ($with_shib) {
+  if ($::roles::dariahrepository::with_shib) {
     file { "/etc/apache2/${scope}/default_vhost_includes/publikator.conf":
       content => template("${templates}/publikator.conf.erb"),
       notify  => Service['apache2'],

@@ -27,6 +27,13 @@ class dhrep::nginx (
   }
   if $scope == 'dariah' {
     include dhrep::services::tomcat_publikator
+    include roles::dariahrepository
+    if ($::roles::dariahrepository::with_shib) {
+      $tomcat_publikator_http_port = '8080'
+    }
+    else {
+      $tomcat_publikator_http_port = $::dhrep::params::config['tomcat_publikator']['http_port']
+    }
   }
 
   $_confdir  = $::dhrep::params::confdir
