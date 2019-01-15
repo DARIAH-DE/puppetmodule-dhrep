@@ -132,6 +132,7 @@ class dhrep::resources::apache (
     plugin_type => 'procstat',
     options     => [{
       'exe' => 'apache2',
+      'pid' => true,
     }],
   }
 
