@@ -25,7 +25,7 @@ class dhrep::services::publikator (
   $debug                     = false,
   $override_eppn             = false,
   $eppn                      = 'publikator',
-  $link_to_documentation     = 'https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository',
+  $link_to_documentation     = "https://${::fqdn}/doc/services/submodules/publikator/docs/index.html",
   $link_to_faq               = 'https://wiki.de.dariah.eu/display/publicde/FAQs+zum+Publikator',
   $link_to_apidoc            = "https://${::fqdn}/doc/services/",
   $link_to_privpol           = 'https://de.dariah.eu/privacy-policy',
