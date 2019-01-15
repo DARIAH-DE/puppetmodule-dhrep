@@ -123,4 +123,16 @@ class dhrep::resources::apache (
     ",
     order   => '990',
   }
+
+  ###
+  # monitor apache processes with telegraf
+  # exe: executable name (ie, pgrep <exe>)
+  ###
+  telegraf::input { 'apache2_procstat':
+    plugin_type => 'procstat',
+    options     => [{
+      'exe' => 'apache2',
+    }],
+  }
+
 }
