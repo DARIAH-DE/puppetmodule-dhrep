@@ -76,10 +76,10 @@ class dhrep::services::intern::elasticsearch (
       # Elasticsearch is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
       # 'network.host' => '127.0.0.1',
     },
-    jvm_options => [ "-Xms${_es_heap_size}", "-Xmx${_es_heap_size}" ],
+    jvm_options   => [ "-Xms${_es_heap_size}", "-Xmx${_es_heap_size}" ],
     # backwards compatibility to old elasticsearch puppet module
     # TODO: remove this option if rebuilding server
-    datadir => '/usr/share/elasticsearch/data',
+    datadir       => '/usr/share/elasticsearch/data',
     init_defaults => {
       'DATA_DIR' => '$ES_HOME/data',
     },
@@ -133,11 +133,11 @@ class dhrep::services::intern::elasticsearch (
   telegraf::input { 'elasticsearch_workhorse':
     plugin_type => 'elasticsearch',
     options     => [{
-      'servers'        => ["http://localhost:${_master_http_port}", "http://localhost:${_workhorse_http_port}"],
-      'http_timeout'   => '5s',
-      'local'          => true,
-      'cluster_health' => false,
-      'cluster_stats'  => false,
+        'servers'        => ["http://localhost:${_master_http_port}", "http://localhost:${_workhorse_http_port}"],
+        'http_timeout'   => '5s',
+        'local'          => true,
+        'cluster_health' => false,
+        'cluster_stats'  => false,
     }],
   }
 
