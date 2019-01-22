@@ -48,7 +48,7 @@ class dhrep::services::tgsearch_public (
     require => File["${_confdir}/tgsearch"],
     notify  => Service[$_catname],
   }
-  file { "${_confdir}/tgsearch/log4.public.properties":
+  file { "${_confdir}/tgsearch/log4j.public.properties":
     ensure  => file,
     owner   => 'root',
     group   => 'root',
