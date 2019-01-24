@@ -17,7 +17,7 @@ class dhrep::services::crud (
   $use_messaging                = true,
   $pid_resolver                 = 'https://hdl.handle.net/',
   $pid_prefix                   = '21.11113',
-  $doi_resolver                 = 'https://dx.doi.org/',
+  $doi_resolver                 = 'https://doi.org/',
   $doi_prefix                   = '10.20375',
   $orcid_resolver               = 'https://orcid.org/',
   $gnd_resolver                 = 'http://d-nb.info/gnd/',
