@@ -72,10 +72,10 @@ class dhrep::services::fits (
 
   ###
   # add things to fits tomcat configuration
-  # FIXME may still not be working at first vagrant run!
   ###
   file { "/home/${_catname}/${_catname}/conf/catalina.properties":
-    ensure => file,
+    ensure  => file,
+    require => Exec["create_${_catname}"],
   }
   ~> file_line { 'configure_fits_libs_line_1':
     ensure => present,
