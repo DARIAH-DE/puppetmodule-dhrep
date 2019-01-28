@@ -101,9 +101,17 @@ class dhrep::services::tgauth (
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/config_tgwebauth.xml.erb"),
   }
+  file { '/var/www/tgauth':
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    require => File['/var/www'],
+  }
   file { '/var/www/tgauth/conf':
-    ensure => link,
-    target => "${_confdir}/tgauth/conf",
+    ensure  => link,
+    target  => "${_confdir}/tgauth/conf",
+    require => File['/var/www/tgauth'],
   }
 
   ###
@@ -112,13 +120,6 @@ class dhrep::services::tgauth (
   package { 'tgauth':
     ensure  => latest,
     require => Exec['update_dariah_apt_repository'], File['/var/www/tgauth'],
-  }
-  file { '/var/www/tgauth':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    require => File['/var/www'],
   }
 
   ###
