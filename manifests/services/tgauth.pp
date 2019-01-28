@@ -111,7 +111,14 @@ class dhrep::services::tgauth (
   ###
   package { 'tgauth':
     ensure  => latest,
-    require => Exec['update_dariah_apt_repository'],
+    require => Exec['update_dariah_apt_repository'], File['/var/www/tgauth'],
+  }
+  file { '/var/www/tgauth':
+    ensure  => directory,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    require => File['/var/www'],
   }
 
   ###
