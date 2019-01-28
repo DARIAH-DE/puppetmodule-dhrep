@@ -101,25 +101,9 @@ class dhrep::services::tgauth (
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/config_tgwebauth.xml.erb"),
   }
-  file { '/var/www/tgauth':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    require => File['/var/www'],
-  }
   file { '/var/www/tgauth/conf':
-    ensure  => link,
-    target  => "${_confdir}/tgauth/conf",
-    require => File['/var/www/tgauth'],
-  }
-
-  ###
-  # install tgauch deb package
-  ###
-  package { 'tgauth':
-    ensure  => latest,
-    require => [Exec['update_dariah_apt_repository'], File['/var/www/tgauth']],
+    ensure => link,
+    target => "${_confdir}/tgauth/conf",
   }
 
   ###
@@ -127,17 +111,17 @@ class dhrep::services::tgauth (
   #
   # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
   ###
-#  exec { 'git_clone_tgauth':
-#    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
-#    creates => '/usr/local/src/tgauth-git',
-#    require => Package['git'],
-#  }
-#  -> file { '/var/www/tgauth':
-#    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
-#    recurse => true,
-#    mode    => '0644',
-#    require => File['/var/www'],
-#  }
+  exec { 'git_clone_tgauth':
+    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
+    creates => '/usr/local/src/tgauth-git',
+    require => Package['git'],
+  }
+  -> file { '/var/www/tgauth':
+    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
+    recurse => true,
+    mode    => '0644',
+    require => File['/var/www'],
+  }
   file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure  => directory,
     owner   => root,
