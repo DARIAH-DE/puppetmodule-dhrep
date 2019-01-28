@@ -107,21 +107,29 @@ class dhrep::services::tgauth (
   }
 
   ###
+  # install tgauch deb package
+  ###
+  package { 'tgauth':
+    ensure  => latest,
+    require => Exec['update_dariah_apt_repository'],
+  }
+
+  ###
   # /var/www/tgauth
   #
   # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
   ###
-  exec { 'git_clone_tgauth':
-    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
-    creates => '/usr/local/src/tgauth-git',
-    require => Package['git'],
-  }
-  -> file { '/var/www/tgauth':
-    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
-    recurse => true,
-    mode    => '0644',
-    require => File['/var/www'],
-  }
+#  exec { 'git_clone_tgauth':
+#    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
+#    creates => '/usr/local/src/tgauth-git',
+#    require => Package['git'],
+#  }
+#  -> file { '/var/www/tgauth':
+#    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
+#    recurse => true,
+#    mode    => '0644',
+#    require => File['/var/www'],
+#  }
   file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure  => directory,
     owner   => root,
@@ -250,7 +258,7 @@ class dhrep::services::tgauth (
   #    notify  => Service['slapd'],
   #  }
 
-  # todo: changes group of /etc/ldap/schemas from root to staff, ok?
+  # TODO changes group of /etc/ldap/schemas from root to staff, ok?
   #  file { '/etc/ldap/schema/':
   #    source  => '/usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac/ldap-schemas/',
   #    recurse => true,
@@ -288,24 +296,6 @@ class dhrep::services::tgauth (
   }
 
   # NOTE database creation is now done by /opt/dhrep/init_databases.sh
-  #
-  #    ~> exec { 'tgldapconf.sh':
-  #      command => '/tmp/tgldapconf.sh',
-  #      require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
-  #    }
-  #
-  # should only run once! if ldap template is added (with help of notify and refreshonly)
-  # FIXME use a single script for creating fresh ldap, sesame, and elasticsearch databases!
-  #    ~> exec { 'ldapadd_ldap_template':
-  #      command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
-  #      refreshonly => true,
-  #      require     => [Package['ldap-utils'], Service['slapd']],
-  #      logoutput   => true,
-  #    }
-  #    -> file {'/etc/facter/facts.d/tgauth_ldap_initialized.txt':
-  #      content => 'tgauth_ldap_initialized=true',
-  #    }
-  #  }
   service{ 'slapd':
     ensure  => running,
     enable  => true,
@@ -428,7 +418,7 @@ class dhrep::services::tgauth (
   telegraf::input { 'slapd_procstat':
     plugin_type => 'procstat',
     options     => [{
-      'pid_file' => '/var/run/slapd/slapd.pid',
+        'pid_file' => '/var/run/slapd/slapd.pid',
     }],
   }
 }
