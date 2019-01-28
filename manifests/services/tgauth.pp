@@ -119,7 +119,7 @@ class dhrep::services::tgauth (
   ###
   package { 'tgauth':
     ensure  => latest,
-    require => Exec['update_dariah_apt_repository'], File['/var/www/tgauth'],
+    require => [Exec['update_dariah_apt_repository'], File['/var/www/tgauth']],
   }
 
   ###
