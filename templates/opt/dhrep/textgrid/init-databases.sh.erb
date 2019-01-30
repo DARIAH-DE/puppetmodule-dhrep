@@ -21,7 +21,7 @@ ES_MASTER_HTTP_PORT=<%= scope.lookupvar('dhrep::params::elasticsearch_master_htt
 # create initial ldap db
 #
 echo "creating initial ldap database..."
-cd /opt/dhrep/ldap-init && ldapadd -x -f ./ldap-rbac-template.ldif -D "cn=Manager,dc=textgrid,dc=de" -w "${SLAPD_ROOTPW}" &&
+cd /opt/dhrep/ldap-init && ./tgldapconf.sh && ldapadd -x -f ./ldap-rbac-template.ldif -D "cn=Manager,dc=textgrid,dc=de" -w "${SLAPD_ROOTPW}" &&
 echo "...created"
 
 #
