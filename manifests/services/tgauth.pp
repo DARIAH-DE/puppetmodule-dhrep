@@ -117,22 +117,6 @@ class dhrep::services::tgauth (
   }
 
   ###
-  # /var/www/tgauth and co.
-  ###
-  file { '/var/www/tgauth':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    require => File['/var/www'],
-  }
-  file { '/var/www/tgauth/conf':
-    ensure  => link,
-    target  => "${_confdir}/tgauth/conf",
-    require => File['/var/www/tgauth'],
-  }
-
-  ###
   # installing tgauth deb package
   # -- installs
   #      info.textgrid.middleware.tgauth.rbac
@@ -153,6 +137,11 @@ class dhrep::services::tgauth (
     target  => '/var/www/info.textgrid.middleware.tgauth.rbac',
     mode    => '0755',
     require => File['/var/www'],
+  }
+  file { '/var/www/tgauth/conf':
+    ensure  => link,
+    target  => "${_confdir}/tgauth/conf",
+    require => File['/var/www/tgauth'],
   }
 
   ###
@@ -272,7 +261,8 @@ class dhrep::services::tgauth (
     mode    => '0644',
     content => template('dhrep/etc/ldap/ldap.conf.erb'),
   }
-  # ldap needs to know its own id for multi-master replikation
+
+  # TODO ldap needs to know its own id for multi-master replikation
   #  augeas { 'slapd_default':
   #    changes => [
   #      "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
