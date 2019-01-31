@@ -104,10 +104,18 @@ class dhrep (
   ###
   # tomcat
   ###
-  service { 'tomcat7':
-    ensure  => stopped,
-    enable  => false,
-    require => Package['tomcat7'],
+  if ($::lsbdistcodename == 'trusty') {
+    service { 'tomcat7':
+      ensure  => stopped,
+      enable  => false,
+      require => Package['tomcat7'],
+    }
+  } else {
+    service { 'tomcat8':
+      ensure  => stopped,
+      enable  => false,
+      require => Package['tomcat8'],
+    }
   }
 
   ###

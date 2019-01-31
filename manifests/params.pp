@@ -110,6 +110,12 @@ class dhrep::params {
   $elasticsearch_workhorse_http_port = '9203'
   $elasticsearch_workhorse_tcp_port  = '9303'
 
+  if ($::lsbdistcodename == 'trusty') {
+    $tomcat_version = '7'
+  } else {
+    $tomcat_version = '8'
+  }
+
   ###
   # more specific config settings
   ###

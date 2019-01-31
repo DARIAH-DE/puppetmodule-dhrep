@@ -34,5 +34,6 @@ class dhrep::services::tomcat_fits (
     xms              => $xms,
     telegraf_enabled => true,
     logdir           => "${_logdir}/${catname}",
+    tomcat_version   => $dhrep::params::tomcat_version,
   }
 }

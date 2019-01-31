@@ -28,5 +28,6 @@ class dhrep::services::tomcat_tgsearch (
     xms              => $xms,
     telegraf_enabled => true,
     keep_logs        => 2,
+    tomcat_version   => $dhrep::params::tomcat_version,
   }
 }
