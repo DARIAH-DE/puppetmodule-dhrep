@@ -130,13 +130,13 @@ class dhrep::services::tgauth (
   ###
   package { 'tgauth':
     ensure  => latest,
-    require => [Exec['update_dariah_apt_repository'], File['/var/www/tgauth']],
+    require => [Exec['update_dariah_apt_repository'], File['/var/www']],
   }
   file { '/var/www/tgauth':
     ensure  => link,
     target  => '/var/www/info.textgrid.middleware.tgauth.rbac',
     mode    => '0755',
-    require => File['/var/www'],
+    require => Package['tgauth'],
   }
   file { '/var/www/tgauth/conf':
     ensure  => link,
@@ -203,29 +203,29 @@ class dhrep::services::tgauth (
     owner   => 'www-data',
     group   => 'www-data',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/WebAuthN':
     ensure  => link,
     target  => '/var/www/info.textgrid.middleware.tgauth.webauth/WebAuthN/',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/secure':
     ensure  => link,
     target  => '/var/www/info.textgrid.middleware.tgauth.webauth/secure/',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/1.0':
     ensure  => directory,
     owner   => 'www-data',
     group   => 'www-data',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/1.0/secure':
-    ensure  => 'link',
+    ensure  => link,
     target  => '/var/www/secure/',
     mode    => '0755',
     require => File['/var/www/1.0'],
