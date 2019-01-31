@@ -101,27 +101,49 @@ class dhrep::services::tgauth (
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/config_tgwebauth.xml.erb"),
   }
-  file { '/var/www/tgauth/conf':
-    ensure => link,
-    target => "${_confdir}/tgauth/conf",
-  }
 
   ###
-  # /var/www/tgauth
-  #
-  # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
+  # /var/www/tgauth and co.
   ###
-  exec { 'git_clone_tgauth':
-    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
-    creates => '/usr/local/src/tgauth-git',
-    require => Package['git'],
-  }
-  -> file { '/var/www/tgauth':
-    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
-    recurse => true,
+  file { '/var/www/tgauth':
+    ensure  => directory,
+    owner   => root,
+    group   => root,
     mode    => '0644',
     require => File['/var/www'],
   }
+  file { '/var/www/tgauth/conf':
+    ensure  => link,
+    target  => "${_confdir}/tgauth/conf",
+    require => File['/var/www/tgauth'],
+  }
+
+  ###
+  # installing tgauth deb package
+  # -- installs
+  #      info.textgrid.middleware.tgauth.rbac
+  #    and
+  #      info.textgrid.middleware.tgauth.webauth
+  #    to /var/www/
+  # -- create symlinks to
+  #      ~WebAuthN --> info.textgrid.middleware.tgauth.webauth/WebAuthN
+  #      ~secure   --> info.textgrid.middleware.tgauth.webauth/secure
+  #      ~tgauth   --> info.textgrid.middleware.tgauth.rbac
+  ###
+  package { 'tgauth':
+    ensure  => latest,
+    require => [Exec['update_dariah_apt_repository'], File['/var/www/tgauth']],
+  }
+  file { '/var/www/tgauth':
+    ensure  => link,
+    target  => '/var/www/info.textgrid.middleware.tgauth.rbac',
+    mode    => '0755',
+    require => File['/var/www'],
+  }
+
+  ###
+  # installing ocnfig files
+  ###
   file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure  => directory,
     owner   => root,
@@ -173,12 +195,6 @@ class dhrep::services::tgauth (
   ###
   # /var/www/info.textgrid.middleware.tgauth.webauth
   ###
-  file { '/var/www/info.textgrid.middleware.tgauth.webauth':
-    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.webauth',
-    recurse => true,
-    mode    => '0644',
-    require => File[$_vardir],
-  }
   file { '/var/www/info.textgrid.middleware.tgauth.webauth/i18n_cache':
     ensure  => directory,
     owner   => 'www-data',
@@ -295,8 +311,8 @@ class dhrep::services::tgauth (
   }
 
   ###
-  # apache config, apache should be there (e.g. by dhrep::init.pp or dariah
-  # profile::apache)
+  # apache config, apache should be set up already (e.g. by dhrep::init.pp or
+  # dariah profile::apache)
   ###
   file { "/etc/apache2/${scope}/default_vhost_includes/tgauth.conf":
     content => "
