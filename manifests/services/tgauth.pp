@@ -115,27 +115,38 @@ class dhrep::services::tgauth (
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/config_tgwebauth.xml.erb"),
   }
+
+  ###
+  # installing tgauth deb package
+  # -- installs
+  #      info.textgrid.middleware.tgauth.rbac
+  #    and
+  #      info.textgrid.middleware.tgauth.webauth
+  #    to /var/www/
+  # -- create symlinks to
+  #      ~WebAuthN --> info.textgrid.middleware.tgauth.webauth/WebAuthN
+  #      ~secure   --> info.textgrid.middleware.tgauth.webauth/secure
+  #      ~tgauth   --> info.textgrid.middleware.tgauth.rbac
+  ###
+  package { 'tgauth':
+    ensure  => latest,
+    require => [Exec['update_dariah_apt_repository'], File['/var/www']],
+  }
+  file { '/var/www/tgauth':
+    ensure  => link,
+    target  => '/var/www/info.textgrid.middleware.tgauth.rbac',
+    mode    => '0755',
+    require => Package['tgauth'],
+  }
   file { '/var/www/tgauth/conf':
-    ensure => link,
-    target => "${_confdir}/tgauth/conf",
+    ensure  => link,
+    target  => "${_confdir}/tgauth/conf",
+    require => File['/var/www/tgauth'],
   }
 
   ###
-  # /var/www/tgauth
-  #
-  # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
+  # installing ocnfig files
   ###
-  exec { 'git_clone_tgauth':
-    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
-    creates => '/usr/local/src/tgauth-git',
-    require => Package['git'],
-  }
-  -> file { '/var/www/tgauth':
-    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
-    recurse => true,
-    mode    => '0644',
-    require => File['/var/www'],
-  }
   file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure  => directory,
     owner   => root,
@@ -187,40 +198,34 @@ class dhrep::services::tgauth (
   ###
   # /var/www/info.textgrid.middleware.tgauth.webauth
   ###
-  file { '/var/www/info.textgrid.middleware.tgauth.webauth':
-    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.webauth',
-    recurse => true,
-    mode    => '0644',
-    require => File[$_vardir],
-  }
   file { '/var/www/info.textgrid.middleware.tgauth.webauth/i18n_cache':
     ensure  => directory,
     owner   => 'www-data',
     group   => 'www-data',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/WebAuthN':
     ensure  => link,
     target  => '/var/www/info.textgrid.middleware.tgauth.webauth/WebAuthN/',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/secure':
     ensure  => link,
     target  => '/var/www/info.textgrid.middleware.tgauth.webauth/secure/',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/1.0':
     ensure  => directory,
     owner   => 'www-data',
     group   => 'www-data',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/1.0/secure':
-    ensure  => 'link',
+    ensure  => link,
     target  => '/var/www/secure/',
     mode    => '0755',
     require => File['/var/www/1.0'],
@@ -256,7 +261,8 @@ class dhrep::services::tgauth (
     mode    => '0644',
     content => template('dhrep/etc/ldap/ldap.conf.erb'),
   }
-  # ldap needs to know its own id for multi-master replikation
+
+  # TODO ldap needs to know its own id for multi-master replikation
   #  augeas { 'slapd_default':
   #    changes => [
   #      "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
@@ -309,8 +315,8 @@ class dhrep::services::tgauth (
   }
 
   ###
-  # apache config, apache should be there (e.g. by dhrep::init.pp or dariah
-  # profile::apache)
+  # apache config, apache should be set up already (e.g. by dhrep::init.pp or
+  # dariah profile::apache)
   ###
   file { "/etc/apache2/${scope}/default_vhost_includes/tgauth.conf":
     content => "
