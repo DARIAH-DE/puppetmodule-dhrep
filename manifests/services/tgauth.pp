@@ -525,12 +525,12 @@ class dhrep::services::tgauth (
     require => File["${_daasidir}/cleanRbacSIDs"],
   }
   # add cron for ldapcleaner
-  cron { 'ldap-cleaner' :
-    command => "${_daasidir}/ldapcleaner/ldapcleaner.pl -c ${_daasidir}/cleanRbacSIDs/cleanRbacSIDs.conf ",
-    user    => 'root',
-    hour    => 2,
-    minute  => 31,
-  }
+#  cron { 'ldap-cleaner' :
+#    command => "${_daasidir}/ldapcleaner/ldapcleaner.pl -c ${_daasidir}/cleanRbacSIDs/cleanRbacSIDs.conf ",
+#    user    => 'root',
+#    hour    => 2,
+#    minute  => 31,
+#  }
 
   ###
   # monitor slapd with telegraf
