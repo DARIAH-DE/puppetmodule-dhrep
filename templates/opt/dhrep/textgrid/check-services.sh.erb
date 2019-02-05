@@ -265,19 +265,16 @@ fi
 #
 # sesame nonpublic
 #
-FILE="curl"
+HEADER="Accept: application/sparql-results+xml"
 SESAME=$SERVER"/1.0/triplestore?query=info"
 if $R; then echo "checking "$CSTR"sesame nonpublic"$CNRM $TRN $SESAME; fi
-curl -s $SESAME > $FILE
-URGL=`grep -m 1 -o "textgrid-nonpublic" curl`
-if [ -s $FILE -a "$URGL" = 'textgrid-nonpublic' ]; then
+URGL=`curl -H "${HEADER}" -s "${SESAME}" | grep -m 1 -o "textgrid-nonpublic"`
+if [ "$URGL" = 'textgrid-nonpublic' ]; then
     if $R; then echo -n "    $OK ["$VSTR; fi
     if $R; then echo -n $URGL; fi
-    rm $FILE
     if $R; then echo $CNRM"]"; fi
 else
     if $R; then echo "    $FAILED"; fi
-    rm -f $FILE
     ERRORS=true
     ERRSTR=$ERRSTR" sesame"
 fi
@@ -285,19 +282,16 @@ fi
 #
 # sesame public
 #
-FILE="curl"
+HEADER="Accept: application/sparql-results+xml"
 SESAME=$SERVER"/1.0/triplestore?query=info"
 if $R; then echo "checking "$CSTR"sesame public"$CNRM $TRN $SESAME; fi
-curl -s $SESAME > $FILE
-URGL=`grep -m 1 -o "textgrid-public" curl`
-if [ -s $FILE -a "$URGL" = 'textgrid-public' ]; then
+URGL=`curl -H "${HEADER}" -s "${SESAME}" | grep -m 1 -o "textgrid-public"`
+if [ "$URGL" = 'textgrid-public' ]; then
     if $R; then echo -n "    $OK ["$VSTR; fi
     if $R; then echo -n $URGL; fi
-    rm $FILE
     if $R; then echo $CNRM"]"; fi
 else
     if $R; then echo "    $FAILED"; fi
-    rm -f $FILE
     ERRORS=true
     ERRSTR=$ERRSTR" sesame-public"
 fi
