@@ -300,20 +300,28 @@ class dhrep (
     }
   }
 
-  ###
-  # java8
-  ###
-  package {
-    'openjdk-6-jdk':          ensure => absent;
-    'openjdk-6-jre':          ensure => absent;
-    'openjdk-6-jre-headless': ensure => absent;
-    'openjdk-6-jre-lib':      ensure => absent;
-    'openjdk-7-jdk':          ensure => present;
-    # Creates symlink /usr/lib/jvm/default-java.
-    'default-jre-headless':   ensure => present;
-    'maven':                  ensure => present;
-    'make':                   ensure => present;
-    'apache2-utils':          ensure => present;
+  # TODO: conditional just for migration from trusty to bionic, cleanup afterwards
+  if ($::lsbdistcodename == 'trusty') {
+    ###
+    # java8
+    ###
+    package {
+      'openjdk-6-jdk':          ensure => absent;
+      'openjdk-6-jre':          ensure => absent;
+      'openjdk-6-jre-headless': ensure => absent;
+      'openjdk-6-jre-lib':      ensure => absent;
+      'openjdk-7-jdk':          ensure => present;
+      # Creates symlink /usr/lib/jvm/default-java.
+      'default-jre-headless':   ensure => present;
+      'maven':                  ensure => present;
+      'make':                   ensure => present;
+      'apache2-utils':          ensure => present;
+    }
+  } else {
+    package {
+      'openjdk-8-jdk-headless': ensure => present;
+      'default-jre-headless':   ensure => present;  # wildfly?
+    }
   }
 
   ###

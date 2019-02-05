@@ -16,7 +16,11 @@ class dhrep::services::intern::wildfly (
   if($::dhrep::oracle_jdk8) {
     $java_home = '/usr/lib/jvm/java-8-oracle'
   } else {
-    $java_home = '/usr/lib/jvm/default-java'
+    if ($::lsbdistcodename == 'trusty') {
+      $java_home = '/usr/lib/jvm/default-java'
+    } else {
+      $java_home = '/usr/lib/jvm/java-8-openjdk-amd64'
+    }
   }
 
   ###
