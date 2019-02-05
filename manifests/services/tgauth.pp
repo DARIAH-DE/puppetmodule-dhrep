@@ -44,6 +44,8 @@ class dhrep::services::tgauth (
   $_statdir   = $::dhrep::params::statdir
   $_vardir    = $::dhrep::params::vardir
 
+  $_daasidir  = '/opt/daasi'
+
   # TODO: conditional just for migration from trusty to bionic, cleanup afterwards
   if ($::lsbdistcodename == 'trusty') {
     apt::ppa { 'ppa:rtandy/openldap-backports': }
@@ -429,103 +431,102 @@ class dhrep::services::tgauth (
   # ldapcleaner
   ###
   # install perl-DAASIlib from ci.de.dariah.eu/packages/
-  package { 'perl-daasilib':
-    ensure  => latest,
-    require => Package['tgauth'],
-  }
-  package { 'libapache-dbi-perl':
-    ensure  => latest,
-    require => Package['tgauth'],
-  }
-  package { 'libfile-flock-perl':
-    ensure  => latest,
-    require => Package['tgauth'],
+  package {
+    'libapache-dbi-perl': ensure => present;
+    'libfile-flock-perl': ensure => present;
+    'perl-daasilib':      ensure => present;
   }
   # install needed dirs
-  file { "${_optdir}/ldapcleaner" :
-    ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    require => File[$_optdir],
+  file { $_daasidir :
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
   }
-  file { "${_optdir}/ldapcleaner/etc" :
+  file { "${_daasidir}/ldapcleaner" :
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File["${_optdir}/ldapcleaner"],
+    require => File[$_daasidir],
   }
-  file { "${_optdir}/ldapcleaner/man" :
+  file { "${_daasidir}/ldapcleaner/etc" :
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File["${_optdir}/ldapcleaner"],
+    require => File["${_daasidir}/ldapcleaner"],
   }
-  file { "${_optdir}/ldapcleaner/lib" :
+  file { "${_daasidir}/ldapcleaner/man" :
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File["${_optdir}/ldapcleaner"],
+    require => File["${_daasidir}/ldapcleaner"],
+  }
+  file { "${_daasidir}/ldapcleaner/lib" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File["${_daasidir}/ldapcleaner"],
   }
   # create needed files
-  file { "${_optdir}/ldapcleaner/ldapcleaner.pl" :
-    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/ldapcleaner/ldapcleaner.pl",
+  file { "${_daasidir}/ldapcleaner/ldapcleaner.pl" :
+    source  => "puppet:///modules/dhrep/opt/daasi/${scope}/ldapcleaner/ldapcleaner.pl",
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File["${_optdir}/ldapcleaner"],
+    require => File["${_daasidir}/ldapcleaner"],
   }
-  file { "${_optdir}/ldapcleaner/etc/ldapcleaner.sys" :
-    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/ldapcleaner/ldapcleaner.sys",
+  file { "${_daasidir}/ldapcleaner/etc/ldapcleaner.sys" :
+    source  => "puppet:///modules/dhrep/opt/daasi/${scope}/ldapcleaner/ldapcleaner.sys",
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => File["${_optdir}/ldapcleaner/etc"],
+    require => File["${_daasidir}/ldapcleaner/etc"],
   }
-  file { "${_optdir}/ldapcleaner/man/ldapcleaner.man" :
-    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/ldapcleaner/ldapcleaner.man",
+  file { "${_daasidir}/ldapcleaner/man/ldapcleaner.man" :
+    source  => "puppet:///modules/dhrep/opt/daasi/${scope}/ldapcleaner/ldapcleaner.man",
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => File["${_optdir}/ldapcleaner/man"],
+    require => File["${_daasidir}/ldapcleaner/man"],
   }
-  file { "${_optdir}/ldapcleaner/lib/DARIAHlib.pm" :
-    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/ldapcleaner/DARIAHlib.pm",
+  file { "${_daasidir}/ldapcleaner/lib/DARIAHlib.pm" :
+    source  => "puppet:///modules/dhrep/opt/daasi/${scope}/ldapcleaner/DARIAHlib.pm",
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => File["${_optdir}/ldapcleaner/lib"],
+    require => File["${_daasidir}/ldapcleaner/lib"],
   }
   # create more needed folders and files: cleanRbacSIDs.conf, and localldap.secret
-  file { "${_optdir}/cleanRbacSIDs" :
+  file { "${_daasidir}/cleanRbacSIDs" :
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    require => File[$_optdir],
+    require => File[$_daasidir],
   }
-  file { "${_optdir}/cleanRbacSIDs/cleanRbacSIDs.conf":
+  file { "${_daasidir}/cleanRbacSIDs/cleanRbacSIDs.conf":
     ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template("dhrep/${_optdir}/${scope}/ldapcleaner/cleanRbacSIDs.conf.erb"),
-    require => File["${_optdir}/cleanRbacSIDs"],
+    content => template("dhrep/opt/daasi/${scope}/ldapcleaner/cleanRbacSIDs.conf.erb"),
+    require => File["${_daasidir}/cleanRbacSIDs"],
   }
-  file { "${_optdir}/cleanRbacSIDs/localldap.secret":
+  file { "${_daasidir}/cleanRbacSIDs/localldap.secret":
     ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0600',
-    content => template("dhrep/${_optdir}/${scope}/ldapcleaner/localldap.secret.erb"),
-    require => File["${_optdir}/cleanRbacSIDs"],
+    content => template("dhrep/opt/daasi/${scope}/ldapcleaner/localldap.secret.erb"),
+    require => File["${_daasidir}/cleanRbacSIDs"],
   }
   # add cron for ldapcleaner
   cron { 'ldap-cleaner' :
-    command => "${_optdir}/ldapcleaner/ldapcleaner.pl -c ${_optdir}/cleanRbacSIDs/cleanRbacSIDs.conf ",
+    command => "${_daasidir}/ldapcleaner/ldapcleaner.pl -c ${_daasidir}/cleanRbacSIDs/cleanRbacSIDs.conf ",
     user    => 'root',
     hour    => 2,
     minute  => 31,
