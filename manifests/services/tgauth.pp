@@ -16,24 +16,25 @@
 #   https://forge.puppetlabs.com/camptocamp/openldap
 #
 class dhrep::services::tgauth (
-  $scope             = undef,
-  $ldap_host         = 'localhost',
-  $ldap_port         = '389',
-  $binddn_pass       = undef,
-  $user_ldap_host    = 'auth.de.dariah.eu',
-  $user_ldap_port    = '389',
-  $user_binddn_pass  = undef,
-  $crud_secret       = undef,
-  $webauth_secret    = undef,
-  $sidcheck_secret   = undef,
-  $rbac_base         = "http://${::fqdn}/1.0/tgauth/",
-  $authz_shib_pw     = undef,
-  $authz_instance    = undef,
-  $slapd_rootpw      = undef,
-  $ldap_replication  = false,
+  $scope = undef,
+  $ldap_host = 'localhost',
+  $ldap_port = '389',
+  $binddn_pass = undef,
+  $user_ldap_host = 'auth.de.dariah.eu',
+  $user_ldap_port = '389',
+  $user_binddn_pass = undef,
+  $crud_secret = undef,
+  $webauth_secret = undef,
+  $sidcheck_secret = undef,
+  $rbac_base = "http://${::fqdn}/1.0/tgauth/",
+  $authz_shib_pw = undef,
+  $authz_instance = undef,
+  $slapd_rootpw = undef,
+  $ldap_replication = false,
   $ldap_clusternodes = [],
-  $no_shib_login     = false,
-  $ldap_dbmaxsize    = 10485760, # default value 10485760 bytes = 10mb
+  $no_shib_login = false,
+  $ldap_dbmaxsize = 10485760, # default value 10485760 bytes = 10mb
+  $ldapcleaner_older_than = 'OLDER_THAN8D'
 ) inherits dhrep::params {
 
   $_backupdir = $::dhrep::params::backupdir
@@ -75,43 +76,43 @@ class dhrep::services::tgauth (
   ###
   file { "${_confdir}/tgauth":
     ensure  => directory,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0755',
     require => File[$_confdir],
   }
   file { "${_confdir}/tgauth/conf":
     ensure  => directory,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0755',
     require => File["${_confdir}/tgauth"],
   }
   file { "${_confdir}/tgauth/conf/rbac.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/rbac.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/rbacSoap.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/rbacSoap.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/system.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/system.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/config_tgwebauth.xml":
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/config_tgwebauth.xml.erb"),
   }
@@ -149,47 +150,47 @@ class dhrep::services::tgauth (
   ###
   file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure  => directory,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl.erb'),
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl.erb'),
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl.erb'),
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl.erb'),
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
     require => File['/var/www/tgauth'],
@@ -236,8 +237,8 @@ class dhrep::services::tgauth (
   ###
   file { '/var/www/WebAuthN/js/dariah.js':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/WebAuthN/js/dariah.js.erb'),
     require => File['/var/www/WebAuthN'],
@@ -256,8 +257,8 @@ class dhrep::services::tgauth (
   ###
   file { '/etc/ldap/ldap.conf':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/etc/ldap/ldap.conf.erb'),
   }
@@ -379,7 +380,6 @@ class dhrep::services::tgauth (
     mode    => '0755',
     require => File[$_vardir],
   }
-
   file { "${_optdir}/ldap-statistic.pl" :
     owner   => 'root',
     group   => 'root',
@@ -394,6 +394,7 @@ class dhrep::services::tgauth (
     minute   => 53,
     monthday => '01',
   }
+
   ###
   # nrpe for ldap, ldap-backup, and ldap-statistics
   ###
@@ -422,6 +423,112 @@ class dhrep::services::tgauth (
   nrpe::plugin { 'check_ldap_backups':
     plugin     => 'check_ldap_backups.sh',
     libexecdir => $_optdir,
+  }
+
+  ###
+  # ldapcleaner
+  ###
+  # install perl-DAASIlib from ci.de.dariah.eu/packages/
+  package { 'perl-daasilib':
+    ensure  => latest,
+    require => Package['tgauth'],
+  }
+  package { 'libapache-dbi-perl':
+    ensure  => latest,
+    require => Package['tgauth'],
+  }
+  package { 'libfile-flock-perl':
+    ensure  => latest,
+    require => Package['tgauth'],
+  }
+  # install needed dirs
+  file { "${_optdir}/ldapcleaner" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File[$_optdir],
+  }
+  file { "${_optdir}/ldapcleaner/etc" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File["${_optdir}/ldapcleaner"],
+  }
+  file { "${_optdir}/ldapcleaner/man" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File["${_optdir}/ldapcleaner"],
+  }
+  file { "${_optdir}/ldapcleaner/lib" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File["${_optdir}/ldapcleaner"],
+  }
+  # create needed files
+  file { "${_optdir}/ldapcleaner/ldapcleaner.pl" :
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/ldapcleaner/ldapcleaner.pl",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File["${_optdir}/ldapcleaner"],
+  }
+  file { "${_optdir}/ldapcleaner/etc/ldapcleaner.sys" :
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/ldapcleaner/ldapcleaner.sys",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => File["${_optdir}/ldapcleaner/etc"],
+  }
+  file { "${_optdir}/ldapcleaner/man/ldapcleaner.man" :
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/ldapcleaner/ldapcleaner.man",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => File["${_optdir}/ldapcleaner/man"],
+  }
+  file { "${_optdir}/ldapcleaner/lib/DARIAHlib.pm" :
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/ldapcleaner/DARIAHlib.pm",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => File["${_optdir}/ldapcleaner/lib"],
+  }
+  # create more needed folders and files: cleanRbacSIDs.conf, and localldap.secret
+  file { "${_optdir}/cleanRbacSIDs" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File[$_optdir],
+  }
+  file { "${_optdir}/cleanRbacSIDs/cleanRbacSIDs.conf":
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template("dhrep/${_optdir}/${scope}/ldapcleaner/cleanRbacSIDs.conf.erb"),
+    require => File["${_optdir}/cleanRbacSIDs"],
+  }
+  file { "${_optdir}/cleanRbacSIDs/localldap.secret":
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
+    content => template("dhrep/${_optdir}/${scope}/ldapcleaner/localldap.secret.erb"),
+    require => File["${_optdir}/cleanRbacSIDs"],
+  }
+  # add cron for ldapcleaner
+  cron { 'ldap-cleaner' :
+    command => "${_optdir}/ldapcleaner/ldapcleaner.pl -c ${_optdir}/cleanRbacSIDs/cleanRbacSIDs.conf ",
+    user    => 'root',
+    hour    => 2,
+    minute  => 31,
   }
 
   ###

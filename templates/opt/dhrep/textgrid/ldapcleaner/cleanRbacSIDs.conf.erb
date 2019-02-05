@@ -1,0 +1,15 @@
+# CRON Entry:
+# 31 2 * * * /opt/dhrep/ldapcleaner/ldapcleaner.pl -c /opt/dhrep/cleanRbacSIDs/cleanRbacSIDs.conf
+
+#testmode = 1
+loglevel = "info"
+
+ldapuri = "ldap://:389/ou=sessions,ou=rbac,dc=textgrid,dc=de????bindname=cn=rbac,ou=bindaccounts,dc=textgrid,dc=de"
+passwordfile = "/opt/dhrep/cleanRbacSIDs/localldap.secret"
+
+logfile = "/opt/dhrep/cleanRbacSIDs/cleanRbacSIDs.log"
+pidfile = "/opt/dhrep/cleanRbacSIDs/cleanRbacSIDs.pid"
+
+needoperational = 1
+
+deletefilter = "(&(objectClass=rbacSession)(createTimestamp<%= scope.lookupvar('dhrep::services::tgauth::ldapcleaner_older_than') %>))"
