@@ -244,19 +244,6 @@ location /pndsearch {
 }
 
 ###
-# voyant
-###
-location /voyant {
-    proxy_pass http://voyant.de.dariah.eu/voyant;
-}
-location /voyant2 {
-    proxy_set_header        X-Real-IP $remote_addr;
-    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header        Host $http_host;
-    proxy_pass http://voyant.de.dariah.eu/voyant2;
-}
-
-###
 # rewriting textgrid pids
 ###
 # rewrite /textgrid: and /hdl: uris, so they are served by tgcrud
