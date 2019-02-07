@@ -202,6 +202,10 @@ location /1.0/iiif/m2 {
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
 }
+# (old) link to digilib tool (only on esx2 - TODO install via puppet on all machines)
+location /1.0/tgrep/digilib {
+    alias /var/www/nginx-root/textgridrep.de/textgridrep-webseite/digilib;
+}
 
 ###
 # aggregator
