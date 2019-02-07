@@ -1,6 +1,9 @@
 user www-data;
-# TODO: worker_processes auto; may be better
+<% if @lsbdistcodename == "trusty" -%>
 worker_processes 4;
+<% else -%>
+worker_processes auto;
+<% end -%>
 pid /run/nginx.pid;
 include /etc/nginx/modules-enabled/*.conf;
 
@@ -71,11 +74,16 @@ http {
   ssl_session_cache shared:SSL:32m;
   ssl_session_timeout 15m;
 
-	##
-	# Virtual Host Configs
-	##
-	include /etc/nginx/conf.d/*.conf;
-	include /etc/nginx/sites-enabled/*;
+<% if @lsbdistcodename != "trusty" -%>
+  # prevent "host not found in upstream..." errors on first nginx startup when network not fully ready
+  # resolver 127.0.0.53 valid=30s;
+<% end -%>
+
+  ##
+  # Virtual Host Configs
+  ##
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
 
 }
 

@@ -196,6 +196,12 @@ class dhrep::nginx (
     minute  => '07',
   }
 
+  host { 'ref.de.dariah.eu':
+    comment => 'prevent "host not found in upstream..." errors on first nginx startup when network not fully ready',
+    ip      => '141.5.101.74',
+    ensure  => present,
+  }
+
   telegraf::input { 'nginx':
     plugin_type => 'nginx',
     options     => [{
