@@ -54,7 +54,9 @@ class dhrep::services::intern::elasticsearch (
   # for using es 1.7 with newer es-puppet module, remove code below and use elastic_stack::repo for es update
   apt::source { 'elasticsearch':
     comment  => '',
-    location => 'http://packages.elastic.co/elasticsearch/1.7/debian',
+# FIXME gpg keys could not be verified on bionic
+    location => '[allow-insecure=yes] http://packages.elastic.co/elasticsearch/1.7/debian',
+#    location => 'http://packages.elastic.co/elasticsearch/1.7/debian',
     release  => 'stable',
     repos    => 'main',
     key      => {
