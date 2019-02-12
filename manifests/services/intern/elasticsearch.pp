@@ -29,6 +29,7 @@ class dhrep::services::intern::elasticsearch (
   $elasticsearch_version      = '1.7.5',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
+  $module_update_hack         = false,
 ) inherits dhrep::params {
 
   $_master_http_port    = $::dhrep::params::elasticsearch_master_http_port
@@ -106,13 +107,15 @@ class dhrep::services::intern::elasticsearch (
   }
 
 # FIXME check installation if plugins are existing!
-#  ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
-#    instances  => ['masternode', 'workhorse'],
-#  }
-#  ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
-#    instances  => ['masternode', 'workhorse'],
-#    module_dir => 'experimental-highlighter-elasticsearch-plugin',
-#  }
+  if ($module_update_hack) {
+    ::elasticsearch::plugin{"elasticsearch/elasticsearch-mapper-attachments/${attachments_plugin_version}":
+      instances  => ['masternode', 'workhorse'],
+    }
+    ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
+      instances  => ['masternode', 'workhorse'],
+      module_dir => 'experimental-highlighter-elasticsearch-plugin',
+    }
+  }
 
   # clone commons repo, which contains shell scripts to create textgrid elastic search indexes
   # FIXME use vcsrepo!
