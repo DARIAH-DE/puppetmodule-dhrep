@@ -22,18 +22,19 @@ class dhrep::services::tomcat_crud (
   # user, home-dir and user-tomcat
   ###
   usertomcat::instance { $catname:
-    user                 => $user,
-    group                => $group,
-    uid                  => $uid,
-    gid                  => $gid,
-    http_port            => $http_port,
-    control_port         => $control_port,
-    jmx_port             => $jmx_port,
-    additional_java_opts => '-Dfile.encoding=UTF-8',
-    init_dependencies    => $depcat,
-    xmx                  => $xmx,
-    xms                  => $xms,
-    telegraf_enabled     => true,
-    tomcat_version       => $dhrep::params::tomcat_version,
+    user                     => $user,
+    group                    => $group,
+    uid                      => $uid,
+    gid                      => $gid,
+    http_port                => $http_port,
+    control_port             => $control_port,
+    jmx_port                 => $jmx_port,
+    additional_java_opts     => '-Dfile.encoding=UTF-8',
+    init_dependencies        => $depcat,
+    xmx                      => $xmx,
+    xms                      => $xms,
+    telegraf_enabled         => true,
+    tomcat_version           => $dhrep::params::tomcat_version,
+    additional_default_lines => ['UMASK=0022'],
   }
 }
