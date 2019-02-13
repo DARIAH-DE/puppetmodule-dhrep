@@ -65,7 +65,7 @@ class dhrep::services::fits (
   # symlink war from extracted war file to tomcat webapps dir
   ###
   file { "/home/${_catname}/${_catname}/webapps/fits":
-    ensure  => 'link',
+    ensure  => link,
     target  => "${_aptdir}/fits",
     require => [File["${_aptdir}/fits"],Usertomcat::Instance[$_catname]],
   }
