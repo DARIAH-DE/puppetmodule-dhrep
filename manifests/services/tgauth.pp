@@ -526,7 +526,7 @@ class dhrep::services::tgauth (
   }
   # add cron for ldapcleaner
   cron { 'ldap-cleaner' :
-    command => "${_daasidir}/ldapcleaner/ldapcleaner.pl -c ${_daasidir}/cleanRbacSIDs/cleanRbacSIDs.conf ",
+    command => "${_daasidir}/ldapcleaner/ldapcleaner.pl -c ${_daasidir}/cleanRbacSIDs/cleanRbacSIDs.conf > /dev/null 2>&1",
     user    => 'root',
     hour    => 2,
     minute  => 31,
