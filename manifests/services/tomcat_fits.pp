@@ -34,7 +34,8 @@ class dhrep::services::tomcat_fits (
     xms              => $xms,
     telegraf_enabled => true,
     # tomcat's logging now goes directly to /var/log/dhrep, for not having that one backupped (/var/log is currently not being stored by tsm client)
-    logdir           => "${_logdir}/${catname}",
+    # FIXME do check!
+    #logdir           => "${_logdir}/${catname}",
     tomcat_version   => $dhrep::params::tomcat_version,
   }
 }
