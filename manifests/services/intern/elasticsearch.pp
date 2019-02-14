@@ -26,7 +26,7 @@ class dhrep::services::intern::elasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
 #  $repo_version               = 5,
-  $elasticsearch_version      = '1.7.6',
+  $elasticsearch_version      = '1.7.5',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
   $module_update_hack         = false,
