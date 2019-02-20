@@ -1,0 +1,469 @@
+# Version $Revision: 5851 $
+# Last revision $Date: 2017-12-07 12:14:10 +0100 (Thu, 07 Dec 2017) $
+progname = "ldapcleaner"
+
+version = "1.3.0"
+
+date = "2015-05-28"
+
+<author>
+   name  = "Peter Gietz, Martin Haase"
+   org= "DAASI International GmbH"
+   mail = "info@daasi.de"
+</author>
+
+<copyright>
+text1 = Copyright (c) 2009-2015 DAASI International GmbH
+text2 = This library is free software; you can redistribute it and/or \
+modify it under the same terms as Perl itself.
+</copyright>
+
+progshortdescr = "Updates LDAP server data"
+
+<progdescription>
+text = ldapcleaner is a software to search and replace ldapdata or to delete
+ldap entries
+</progdescription>
+
+<bugs>
+text = Please report bugs to peter.gietz@daasi.de
+</bugs>
+
+<additions example>
+text1 = "For getting this manpage: "
+text2 = "   ldapcleaner.pl -h"
+</additions>
+
+<options debugmode>
+        key = "d"
+        must = 0
+        description = "sets debug mode to on; this feature is unused, and should be enabled in the \
+log4perl config file"
+        arg = 0
+</options>
+
+<options verbose>
+        key = "v"
+        must = 0
+        description = "Sets verbose mode which makes the program quite chatty."
+        description_de = "Stellt den Verbose-Modus an, womit das Programm \
+        gespraechiger wird."
+        arg = 0
+</options>
+
+<options printhelp>
+        key = "h"
+        must = 0
+        description = "prints out the manpage"
+        arg = 0
+</options>
+
+<options helpfeature>
+        key = "H"
+        must = 0
+        description = "prints out description of the feature referenced by commandline flag or config file token"
+        arg = 1
+</options>
+
+<options language>
+        key = "G"
+        must = 0
+        description = "Sets the language for output like this one"
+        description_de = "Setzt die Sprache fuer Ausgaben wie diese. "
+        arg = 1
+	default = en
+	values = en, de
+</options>
+
+
+<options configfile>
+        key = "c"
+        must = 0
+        description = "Name of the user config file with absolute or \
+relative path. Default: etc/ldapcleaner.conf."
+        arg = 1
+        argtype = "filename_exist"
+        default = "etc/ldapcleaner.conf"
+</options>
+
+<options attributefile>
+        key = "A"
+        must = 0
+        description = "Name of the user config attributes file which contains \
+	a list of attributenames (one in each line) that are to be used in \
+	the \"ALL\"-mode of parameter searchattribute (see -s)."
+        arg = 1
+        argtype = "filename_exist"
+</options>
+
+<options pidfile>
+        key = "P"
+        must = 0
+        description = "Name of the file where current process id is stored. \
+        If you specify the value \"NONE\" no pidfile will be created and no \
+        pidfile will be searched for. BEWARE: this means that two instances \
+	of ldapcleaner are allowed to run in parallel."
+        arg = 1
+        argtype = "filename"
+        default = "/tmp/ldapcleaner.pid"
+</options>
+
+<options passwordfile>
+        key = "p"
+        description = "Name of the password file which contains the secrets \
+		    the programm must know to connect to data bases etc. \
+		    The format for all lines of this file must be: \
+		    <token><blank><password> where <token> has to be the \
+		    option label which defines the database such as e.g. \
+                    \"ldapuri\". "
+        description_de = "Name einer Datei, welche die Passworte enthaelt, \
+		    die das Programm wissen muss um Datenbanken zu \
+		    kontaktieren etc. Das Format dieser Datei ist: \
+		    <Token><Leerzeichen><Passwort> wobei <Token> ein \
+		    Optionsname sein muss, welcher die Datenbank \
+		    definiert wie z.B. \"ldapuri\". "
+        arg = 1
+	default = "ldapcleaner.secret"
+        argtype = "filename_exist"
+</options>
+
+
+<options inputfile>
+        key = "i"
+        must = "OR ldapuri"
+	requires = "NOT = ldapuri"
+        description = "Name of the LDIF input file."
+        description_de = "Name der LDIF-Eingabedatei."
+        arg = 1
+        argtype = "filename_exist"
+</options>
+
+
+
+<options ldapuri>
+        key = "u"
+        must = "OR inputfile"
+	requires = "NOT = inputfile;inform = _LDAP"
+        description = "URI for LDAP server. \n\
+		    The format for the LDAP URI is (see RFC 4516): \
+		    ldap://<host>[:<port>]/<basedn>?<attributes>?<scope>?\n\
+		    <filter>?<extension> where <extension> can by now only \
+		    be either bindname=<bindname> for authenticating to the \
+		    server. In this case the corresponding password has to \
+		    be stored in the passwordfile (-p, default is \
+		    ldapcleaner.secret) behind the token ldapuri."
+        description_de = "URI fuer den LDAP-Server.\n\
+		    Das Format fuer die LDAP-URI (siehe RFC 4516) ist: \
+		    ldap://<host>[:<port>]/<basedn>?<attributes>?<scope>?\n\
+		    <filter>?<extension> wobei als <extension> gegenwaertig \
+		    folgende Erweiterungen unterstuetzt werden:\n\
+		    bindname=<bindname> zur Authentifizierung am Server, \
+		    wobei das korrespondierende Passwort in der mit \
+		    passwordfile spezifizierten Datei (-p, Voreinstellung \
+		    ist ldapcleaner.secret) hinter dem Stichwort inputuri \
+		    eingetragen sein muss."
+        arg = 1
+        argtype = "uri"
+</options>
+
+
+<options inform>
+        key = "I"
+        must = 0
+        description = "specifies the format of the input. \
+		    Possible values are listed below with following syntax: \
+		    [<headerinfo>]_<format> where: \
+		    <headerinfo> is not yet fully supported, \
+		    <format> can be either LDAP or LDIF;"
+        description_de = "Spezifiziert das Format der Eingabe. \
+		    Die moeglichen Werte folgen der folgenden Syntax:\n\
+		    [<headerinfo>]_<format> \n\
+		    * <headerinfo> wird noch nicht unterstuetzt (das \
+		    folgende \"_\" muss aber geschrieben werden). \n\
+		    * <format> kann eines von den Folgenden sein: \
+		    LDAP oder LDIF;"
+        values = "_LDIF, H_LDIF, _LDAP"
+        arg = 1
+        argtype = "skalar"
+        default = "_LDAP"
+</options>
+
+<options searchattribute>
+        key = "s"
+        must = OR deletefilter OR addstring OR createnewentry OR searchfilter OR dynamiccleanerinvocation OR csvoutputfile
+        description = "Name of the attribute for replacing or for the delete \
+		    condition. If you specify \"ALL\" or \"*\", all \
+		    attributes will used, which only makes sense in the \
+		    replace mode. All attributes means all attributes \
+		    specified in the Attributefile (see -A)."
+        description_de = "Name des Attributs in welchem ersetzt werden soll \
+		    oder dessen Wert in der Bedingung fürs Löschen enthalten \
+		    ist. Wenn Sie \"ALL\" oder \"*\" angeben, werden alle \
+		    Attribute genommen, was nur im Esetzungsmodus Sinn \
+		    macht. Mit alle Attribute ist hierbei alle in der Datei \
+		    attributefile (siehe -A) angegebenen."
+        arg = 1
+        argtype = "skalar"
+</options>
+
+<options csvoutputfile>
+        key = "V"
+        must = 0
+        description = "Name of the CSV output file. \
+		    You NEED to set a config file option 'csvfields' with syntax: \
+		    ;-separated list of attributes for output into the \
+		    CSV file specified by command line option -V / config \
+		    option 'csvoutputfile'. Each attribute can have an optional \
+		    heading prepended with colon. The special attributes entrydn, \
+		    parentdn, grandparentdn, grandgrandparentdn, \
+		    grandgrandgrandparentdn exist. \
+		    The entries are specified by option searchfilter.\
+		    Example: 'Loginname:uid;Lastname:sn;Path:grandparentdn'"
+        arg = 1
+        argtype = "skalar"
+</options>
+
+<options findstring>
+        key = "f"
+        must = OR deletefilter OR cleanerstring OR addstring OR searchfilter OR dynamiccleanerinvocation OR csvoutputfile
+        description = "specifies the search string"
+        description_de = "Spezifiziert die Suchzeichenfolge"
+        arg = 1
+        argtype = "skalar"
+</options>
+
+<options functionlib>
+        key = "F"
+        must = 0
+        description = "Name of the module containing customerfunctions."
+        description_de = "Name des Moduls, das Kundenfunktionen enthält."
+        arg = 1
+</options>
+
+<options addstring>
+        key = "a"
+        must = OR deletefilter OR cleanerstring OR createnewentry OR transfertonewparent OR searchattribute OR searchfilter OR csvoutputfile
+        description = "specifies the attributes to add/replace/delete.\
+	 Format is \
+        <attributename>=<attributevalue> for adding values or \
+	<attributename>==<attributevalue> for replacing values or \
+	<attributename>=- for deleting an attribute. \
+	Objectclass is treated as normal \
+        attribute here. More than one such specification can \
+        be specified separated with a semicolon. \
+	add <BACKSLASH>\#attributename2 to to copy the value(s) of another attribute \
+	into the attribute. <BACKSLASH>\#entrydn copies the dn of the entry."
+        arg = 1
+        argtype = "skalar"
+</options>
+
+<options replacestring>
+        key = "r"
+        must = OR deletefilter OR cleanerstring OR addstring OR createnewentry OR transfertonewparent OR dynamiccleanerinvocation OR csvoutputfile
+        description = "specifies the replacement for the search string"
+        description_de = "Spezifiziert die Ersetzungszeichenfolge"
+        arg = 1
+        argtype = "skalar"
+</options>
+
+<options deletefilter>
+        key = "D"
+        must = OR findstring OR cleanerstring OR addstring OR searchfilter OR dynamiccleanerinvocation OR csvoutputfile
+        description_de = "Spezifiziert einen LDAP-Filter für Einträge die \
+        gelöscht werden sollen. Vorsicht wenn nicht testmode (-T) gesetzt \
+	werden die Einträge wirklich gelöscht."
+        description = "Specifies an LDAP-Filter for entries to be deleted \
+	please handle with care and use testmode (-T) first. Instead of a \
+        proper LDAP-Filter you can for timestamps also use the format: \
+	(Attribute OLDER_THAN \<timestatement\>) where \<timestatement\> \
+	is a number followed by s m h D M or Y for seconds, \
+	minutes, hours, days, months or years: Beware the algorithm for \
+	creating an ldap generalizedTime value is based on seconds and thus \
+	takes into account leap years and counts every month to have 30 days."
+	arg = 1
+        argtype = "skalar"
+</options>
+
+<options searchfilter>
+        key = "S"
+        description_de = "Spezifiziert einen LDAP-Filter für Einträge die \
+        verändert werden sollen."
+        description = "Specifies an LDAP-Filter for entries to be modified."
+	arg = 1
+        argtype = "skalar"
+</options>
+
+<options createdeletedentry>
+        key = "e"
+	requires = "EXIST = deletefilter"
+        description_de = "Spezifiziert dass anstelle des gelöschten Eintrags \
+	ein Rumpfeintrag erzeugt wird. Hierbei wird folgendes spezifiziert: \
+	<Objektklassen>;<Attribute>;<neue Atttribute>;<RDN-Attribut>;<Base-DN>\
+	, die ersten drei teile sind Komma-separierte Listen, wobei bei \
+	<neue Attribute> die Listeneinträge im Format XX=YY haben, wodurch \
+	das neue Attribut XX den WErt des Attributs YY zugewiesen bekommt."
+        description = "Specifies that a torso-entry shall replace the deleted \
+	entry. Format: 	\
+	<Objectclasses>;<Attributes>;<new Atttributes>;<RDN-Attribut>;<Base-DN>\
+	, the first three parts being comma separated lists, where the <new \
+	Attributes> consist of entries like XX=YY, by which a new attribute XX \
+	gets the value of YY as its value."
+	arg = 1
+        argtype = "skalar"
+</options>
+
+<options createnewentry>
+        key = "N"
+	requires = "EXIST = searchfilter"
+        description_de = "Spezifiziert einen neuen Rumpfeintrag unterhalb der von searchfilter gefundenen Basen, so zu spezifizieren: \
+	<Objektklassen>;<RDN-Attribut>;<neue Atttribute>\
+	, Objektklassen und neue Attr. sind Komma-separierte Listen, wobei bei \
+	<neue Attribute> die Listeneinträge im Format XX=YY haben, wodurch \
+	das neue Attribut XX den WErt des Attributs YY zugewiesen bekommt."
+        description =  "Spezifiziert einen neuen Rumpfeintrag unterhalb der von searchfilter gefundenen Basen, so zu spezifizieren: \
+	<Objektklassen>;<RDN-Attribut>;<neue Atttribute>\
+	, Objektklassen und neue Attr. sind Komma-separierte Listen, wobei bei \
+	<neue Attribute> die Listeneinträge im Format XX=YY bzw. XX:=ZZ haben, wodurch \
+	das neue Attribut XX den Wert YY bzw. base64_decode(ZZ) zugewiesen bekommt."
+	arg = 1
+        argtype = "skalar"
+</options>
+
+<options regexp>
+        key = "R"
+        must = 0
+        description = "specifies whether find and replace strings are to \
+	be interpreted as a regularexpression"
+        description_de = "Spezifiziert ob Such und Ersetzungszeichenfolgen \
+        als regular expression interpretiert werden sollen"
+        arg = 0
+</options>
+
+<options modifier>
+        key = "M"
+        must = 0
+        description = "specifies modifier (i and/or g)für regularexpressions"
+        description_de = "spezifiziert modifier (i und/oder g) für regularexpressions"
+        arg = 1
+        argtype = "skalar"
+	default = " "
+</options>
+
+<options match>
+        key = "m"
+        must = 0
+        values = "eq, sub"
+        description = "specifies for which matchingrule the filter should be \
+        created: eq for equality and sub for substring"
+        description_de = "spezifiziert für welche Matchingregel der Filter \
+        erzeugt werden soll (eq für equality, sub für substring)."
+        arg = 1
+        argtype = "skalar"
+        default = "sub"
+</options>
+
+<options cleanerstring>
+        key = "C"
+        must = 0
+	requires = "NOT = findstring;EXISTS = searchattribute"	
+        description = "specifies a regexp that defines a string to be deleted \
+        in an attribute. If this action leads to two identical values, one \
+        value will be deleted. If the cleanerstring starts with a + the value \
+	without that string will be deleted."
+        description_de = "spezifiziert eine regularexpressions welche einen \
+	substring definiert, die im search attribten gelöscht werden. \
+	Falls es dadurch dazu führt, dass zwei Werte gleich werden, wird \
+	ein Wert gelöscht. Wenn der cleanerstring mit + anfängt, wird der \
+	Wert ohne den cleanerstring gelöscht."
+        arg = 1
+        argtype = "skalar"
+</options>
+
+
+<options maxentries>
+        key = "n"
+        must = 0
+        description = "specifies how many entries shall be processed. Default: 0 = all entries will be processed"
+        description_de = "Spezifiziert wieviele Eintraege der Eingabe \
+		       verarbeitet werden sollen. Dient nur zu Test- und \
+		       Debugging-Zwecken."
+        arg = 1
+        argtype = "int"
+        default = 0
+</options>
+
+<options testmode>
+        key = "T"
+        must = 0
+        description = "Sets test mone on, thus no changes in LDAP server \
+	will be made."
+        description_de = "Schaltet den Testmodus ein, sodass keine Änderungen \
+        im LDAP-Server gemacht werden"
+        arg = 0
+</options>
+
+
+<options loglevel>
+        key = "l"
+        must = 0
+        description = "Loglevel for controlling logmessages."
+        arg = 1
+        argtype = "skalar"
+	values = "no, all, debug, info, warn, error, fatal" 
+        default = "error"
+</options>
+
+<options logfile>
+        key = "L"
+        must = 0
+        description = "Name of the logfile with absolute or relative path. \
+Default: ./log/ldapcleaner.log"
+        arg = 1
+        argtype = "filename_add_subdir_log"
+        default = "ldapcleaner.log"
+</options>
+
+<options transfertonewparent>
+        key = "t"
+        description = "New Parent DN for the entry/-ies found by -S, will be moved there"
+	arg = 1
+        argtype = "skalar"
+</options>
+
+<options postfilterfunction>
+        key = "z"
+        description = "Function from functionlib (see -F) that runs after entries have been fetched by the normal filtering process. Is being called for each entry, and must return 1 if the entry is to be kept in the result set, or 0 if not."
+	arg = 1
+        argtype = "skalar"
+</options>
+
+<options needoperational>
+        key = "o"
+        must = 0
+        description = "Provides operational attributes (entryCSN, createTimestamp, modifiersName, etc.) from LDAP entries"
+        arg = 0
+</options>
+
+<options casesensitivecomparisonattributes>
+        key = "b"
+        description = "Semicolon separated list of attribute names which should be compared case sensitive with respect to new and to-be-replaced values"
+	arg = 1
+        argtype = "skalar"
+</options>
+
+<options basedn>
+        key = "B"
+        description = "Use this BaseDN instead of the BaseDN in ldapuri (-u) for any search"
+	arg = 1
+        argtype = "skalar"
+</options>
+
+<options dynamiccleanerinvocation>
+	key = "X"
+        description = "eXecute 1..n ldapcleaner skripts (i.e. configfiles) to be called from this ldapcleaner instance. Example option syntax: \n\
+	\"-B /path/config1.conf;-B /path/config2.conf\" \n\
+	currently only -B is implemented (i.e. the entries found by the master script will be used as basedns for the children scripts). The option -T (testmode) will be inherited from the parent script. So specifying 'basedn' or 'testmode' in the child configs is useless. Be sure to specify a different PID file in the parent and in the children."
+	arg = 1
+        argtype = "skalar"
+</options>
+

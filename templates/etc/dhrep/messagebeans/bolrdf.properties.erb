@@ -1,5 +1,7 @@
+crudUrl = https://<%= scope.lookupvar('::fqdn') %>/1.0/tgcrud/TGCrudService
+
+authzinstance = <%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>
+webauthUrl = https://<%= scope.lookupvar('::fqdn') %>/1.0/WebAuthN/TextGrid-WebAuth.php
+
 textgrid.login =
 textgrid.password =
-authzinstance = <%= scope.lookupvar('dhrep::services::tgauth::authz_instance') %>
-tgcudUrl = http://<%= scope.lookupvar('::fqdn') %>/1.0/tgcrud/TGCrudService
-webauthUrl = http://<%= scope.lookupvar('::fqdn') %>/1.0/WebAuthN/TextGrid-WebAuth.php

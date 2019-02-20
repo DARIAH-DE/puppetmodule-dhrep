@@ -5,8 +5,8 @@
 class dhrep::services::intern::tgdatadirs (
   $scope                   = undef,
   $create_local_datadirs   = undef,
-  $data_public_location    = '',
-  $data_nonpublic_location = '',
+  $data_public_location    = undef,
+  $data_nonpublic_location = undef,
 ){
 
   ###
@@ -80,12 +80,12 @@ class dhrep::services::intern::tgdatadirs (
 
     file { '/data/public':
       ensure => 'link',
-      target => $data_public_location
+      target => $data_public_location,
     }
 
     file { '/data/nonpublic':
       ensure => 'link',
-      target => $data_nonpublic_location
+      target => $data_nonpublic_location,
     }
 
     ###

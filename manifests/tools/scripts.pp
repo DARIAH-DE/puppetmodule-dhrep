@@ -9,13 +9,12 @@ class dhrep::tools::scripts (
   $_optdir = $::dhrep::params::optdir
 
   # TODO Find a better solution to put service ports into check-services file!
-  $crud_port    = $::dhrep::params::config['tomcat_crud']['http_port'];
-  $publish_port = $::dhrep::params::config['tomcat_publish']['http_port'];
-  $pid_port     = $::dhrep::params::config['tomcat_pid']['http_port'];
-  $oaipmh_port  = $::dhrep::params::config['tomcat_oaipmh']['http_port'];
-  $fits_port    = $::dhrep::params::config['tomcat_fits']['http_port'];
-  # using crud user for checking services, not user root
-  $crud_user    = $::dhrep::params::config['tomcat_crud']['user'];
+  $crud_port    = $::dhrep::params::config['tomcat_crud']['http_port']
+  $publish_port = $::dhrep::params::config['tomcat_publish']['http_port']
+  $pid_port     = $::dhrep::params::config['tomcat_pid']['http_port']
+  $oaipmh_port  = $::dhrep::params::config['tomcat_oaipmh']['http_port']
+  $fits_port    = $::dhrep::params::config['tomcat_fits']['http_port']
+  $sesame_port  = $::dhrep::params::config['tomcat_sesame']['http_port']
 
   file { "${_optdir}/check-services.sh" :
     content => template("dhrep/opt/dhrep/${scope}/check-services.sh.erb"),
@@ -31,16 +30,18 @@ class dhrep::tools::scripts (
       content => template("dhrep/opt/dhrep/${scope}/init-databases.sh.erb"),
       owner   => 'root',
       group   => 'root',
-      mode    => '0755',
+      mode    => '0700',
       require => File[$_optdir],
     }
   }
 
   ###
-  # nrpe for tgcrud
+  # nrpe for check_services.sh
   ###
   nrpe::plugin { 'check_services':
-    plugin     => 'check-services.sh &> /dev/null',
-    libexecdir => $_optdir,
+    plugin         => 'check-services.sh',
+    args           => '-s',
+    libexecdir     => $_optdir,
+    command_prefix => '/usr/bin/sudo',
   }
 }

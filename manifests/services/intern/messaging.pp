@@ -28,9 +28,11 @@ class dhrep::services::intern::messaging (
     mode    => '0644',
     content => template('dhrep/etc/dhrep/messagebeans/bolrdf.properties.erb'),
   }
-  # symlink to old config path
-  file { '/etc/textgrid/messagebeans':
-    ensure => link,
-    target => "${_confdir}/messagebeans/",
+  file { "${_confdir}/messagebeans/dhmb.properties":
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    content => template('dhrep/etc/dhrep/messagebeans/dhmb.properties.erb'),
   }
 }

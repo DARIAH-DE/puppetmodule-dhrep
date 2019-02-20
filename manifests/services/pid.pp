@@ -9,15 +9,15 @@ class dhrep::services::pid (
   $prefix         = undef,
   $user           = undef,
   $passwd         = undef,
-  $responsible    = '',
-  $creator        = '',
+  $responsible    = undef,
+  $creator        = undef,
   $secret         = undef,
-  $doi_prefix     = '',
-  $doi_endpoint   = '',
-  $doi_user       = '',
-  $doi_passwd     = '',
-  $doi_target_url = '',
-  $doi_publisher  = '',
+  $doi_endpoint   = 'https://mds.datacite.org',
+  $doi_prefix     = '10.20375',
+  $doi_user       = undef,
+  $doi_passwd     = undef,
+  $doi_target_url = 'https://hdl.handle.net/#ID',
+  $doi_publisher  = 'DARIAH-DE',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_pid

@@ -6,47 +6,48 @@ class dhrep::services::publikator (
   $scope                     = undef,
   $enable_aai                = true,
   $subcollections_enabled    = true,
-  $dariah_storage_url        = undef,
-  $dhpublish_url             = undef,
-  $dhcrud_url                = undef,
-  $collection_registry_url   = undef,
-  $generic_search_url        = undef,
+  $dariah_storage_url        = 'https://cdstar.de.dariah.eu/dariah/',
+  $dhpublish_url             = "https://${::fqdn}/1.0/dhpublish/",
+  $dhcrud_url                = "https://${::fqdn}/1.0/dhcrud/",
+  $collection_registry_url   = 'https://colreg.de.dariah.eu/colreg-ui/',
+  $generic_search_url        = 'https://search.de.dariah.eu/search/',
   $pid_service_url           = 'https://hdl.handle.net/',
-  $pdp_token_server_url      = undef,
-  $refresh                   = 2000,
+  $pdp_token_server_url      = 'https://pdp.de.dariah.eu/oauth2/oauth2/authorize?response_type=token&amp;client_id=dariah-de-publikator&amp;scope=read,write&amp;redirect_uri=',
+  $pdp_token_manager_url     = 'https://auth.de.dariah.eu/cgi-bin/selfservice/ldapportal.pl?mode=authenticate&amp;shibboleth=1&amp;nextpage=accesstokenmanagement',
+  $refresh                   = 2850,
   $service_timeout           = 10000,
   $seafile_enabled           = false,
-  $seafile_url               = '',
-  $seafile_token_secret      = '',
+  $seafile_url               = undef,
+  $seafile_token_secret      = undef,
   $ssl_cert_verification     = true,
   $skip_publish_status_check = false,
   $dryrun                    = false,
   $debug                     = false,
   $override_eppn             = false,
-  $eppn                      = '',
-  $link_to_documentation     = 'https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository',
+  $eppn                      = 'publikator',
+  $link_to_documentation     = "https://${::fqdn}/doc/services/submodules/publikator/docs/index.html",
   $link_to_faq               = 'https://wiki.de.dariah.eu/display/publicde/FAQs+zum+Publikator',
-  $link_to_apidoc            = 'https://repository.de.dariah.eu/doc/services/',
+  $link_to_apidoc            = "https://${::fqdn}/doc/services/",
   $link_to_privpol           = 'https://de.dariah.eu/privacy-policy',
   $link_to_bugtracker        = 'https://projects.gwdg.de/projects/dariah-de-repository/work_packages',
-  $name_of_contact           = undef,
-  $mail_of_contact           = undef,
+  $name_of_contact           = 'DARIAH-DE Support',
+  $mail_of_contact           = 'support@de.dariah.eu',
   $redis_hostname            = 'localhost',
   $redis_port                = 6379,
-  $redis_max_parallel        = 40,
+  $redis_max_parallel        = 100,
   $publish_secret            = undef,
-  $badge_text                = '',
+  $badge_text                = undef,
   $maxuploadsize             = 4096,
-  $logout_aai                = "${::fqdn}/Shibboleth.sso/Logout",
-  $statsd_enable             = false,
+  $logout_aai                = "https://${::fqdn}/Shibboleth.sso/Logout",
+  $statsd_enable             = true,
   $statsd_hostname           = localhost,
   $statsd_port               = 8125,
   $skip_landing_page         = false,
   $instance_name             = 'PROD',
-  $with_shib                 = true,
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
+  include roles::dariahrepository
 
   $_name     = $::dhrep::params::publikator_name[$scope]
   $_version  = $::dhrep::params::publikator_version[$scope]
@@ -102,7 +103,7 @@ class dhrep::services::publikator (
   ###
   # apache config (for using shibboleth)
   ###
-  if ($with_shib) {
+  if ($::roles::dariahrepository::with_shib) {
     file { "/etc/apache2/${scope}/default_vhost_includes/publikator.conf":
       content => template("${templates}/publikator.conf.erb"),
       notify  => Service['apache2'],
@@ -110,8 +111,8 @@ class dhrep::services::publikator (
   }
   else {
     file { "/etc/apache2/${scope}/default_vhost_includes/publikator.conf":
-      ensure  => absent,
-      notify  => Service['apache2'],
+      ensure => absent,
+      notify => Service['apache2'],
     }
   }
 

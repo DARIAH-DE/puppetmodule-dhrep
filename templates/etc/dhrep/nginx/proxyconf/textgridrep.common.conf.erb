@@ -33,13 +33,13 @@ location /services/aggregator {
         proxy_set_header Host $http_host;
 }
 
-location /services/repstatus {
-        proxy_pass http://textgrid.de/repstatus;
-}
+#location /services/repstatus {
+#        proxy_pass http://textgrid.de/repstatus;
+#}
 
-location /voyant {
-        proxy_pass https://voyant.de.dariah.eu/voyant;
-}
+#location /voyant {
+#        proxy_pass https://voyant.de.dariah.eu/voyant;
+#}
 
 location /sparql {
         proxy_pass http://localhost:9091/openrdf-sesame/repositories/textgrid-public;

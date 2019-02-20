@@ -45,12 +45,12 @@
   <Environment name="genericSearchUrl" value="<%= @generic_search_url %>" type="java.lang.String" override="false" description="Generic Search URL"/>
   <Environment name="pidServiceUrl" value="<%= @pid_service_url %>" type="java.lang.String" override="false" description="PID Service URL"/>
   <Environment name="pdpTokenServerUrl" value="<%= @pdp_token_server_url %>" type="java.lang.String" override="false" description="PDP Token Server URL"/>
+  <Environment name="pdpTokenManagerUrl" value="<%= @pdp_token_manager_url %>" type="java.lang.String" override="false" description="PDP Token Manager URL"/>
   <Environment name="refresh" value="<%= @refresh %>" type="java.lang.Integer" override="false" description="Offset to refresh status info in publishing process"/>
   <Environment name="serviceTimeout" value="<%= @service_timeout %>" type="java.lang.Integer" override="false" description="Default timeout for service calls"/>
   <Environment name="publishSecret" value="<%= @publish_secret %>" type="java.lang.String" override="false" description="Secret for using the DH-publish service"/>
   <Environment name="badgeText" value="<%= @badge_text %>" type="java.lang.String" override="false" description="Text for badge after Publikator's Title"/>
   <Environment name="maxUploadSize" value="<%= @maxuploadsize %>" type="java.lang.Integer" override="false" description="Maximum allowed size in MB for one file for the file upload. Note that nginx conf on cdstar needs to be changed, too."/>
-
 
   <!-- SEAFILE SETTINGS -->
   <Environment name="seafileEnabled" value="<%= @seafile_enabled %>" type="java.lang.Boolean" override="false" description="Enable Seafile collections"/>

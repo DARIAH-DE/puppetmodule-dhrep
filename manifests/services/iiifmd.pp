@@ -3,27 +3,20 @@
 # Class to install and configure iiifmd service.
 #
 class dhrep::services::iiifmd (
-  $scope            = undef,
-  $version          = 'latest',
+  $scope = undef,
+  $version = 'latest',
   $iiif_enabled_projects = [],
   $iiif_blacklist_uris = [],
-  $tgrep_host = 'textgridrep.org',
+  $repository_host = 'textgridrep.org',
+  $mirador_host = 'textgridlab.org',
 ) inherits dhrep::params {
 
-  include dhrep::services::tomcat_digilib
+  include dhrep::services::tomcat_oaipmh
 
   $_confdir = $::dhrep::params::confdir
   $_vardir  = $::dhrep::params::vardir
-#  $_aptdir  = $::dhrep::params::aptdir
+  $_aptdir  = $::dhrep::params::aptdir
   $_catname = $dhrep::services::tomcat_oaipmh::catname
-
-  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
-  if $scope == 'textgrid' {
-    $_aptdir = '/var/textgrid/webapps'
- }
-  else {
-    $_aptdir = $::dhrep::params::aptdir
-  }
 
   ###
   # update apt repo and install package
@@ -52,18 +45,13 @@ class dhrep::services::iiifmd (
     mode   => '0755',
   }
   file { "${_confdir}/iiifmd/iiifmd.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template('dhrep/etc/dhrep/iiifmd/iiifmd.properties.erb'),
+    content => template("dhrep/etc/dhrep/iiifmd/${scope}/iiifmd.properties.erb"),
     require => File["${_confdir}/iiifmd"],
-    notify  => Service[$_catname]
-  }
-  # TODO remove symlink if service has been configured correctly!
-  file { '/etc/textgrid/iiifmd':
-    ensure => link,
-    target => "${_confdir}/iiifmd",
+    notify  => Service[$_catname],
   }
 
   ###
@@ -82,45 +70,20 @@ class dhrep::services::iiifmd (
     mode    => '0755',
     require => File["${_vardir}/iiifmd"],
   }
-  # TODO remove symlink if service has been configured correctly!
-#  file { '/var/textgrid/iiifmd':
-#    ensure => link,
-#    target => "${_vardir}/iiifmd",
-#  }
 
   ###
   # install mirador
   ###
-  file { '/var/www/nginx-root/textgridrep.de/iiif':
-    ensure => directory,
-    owner  => $_catname,
-    group  => $_catname,
-    mode   => '0755',
+  if $scope == 'textgrid' {
+    file { '/var/www/nginx-root/textgridrep.de/iiif':
+      ensure => directory,
+      owner  => $_catname,
+      group  => $_catname,
+      mode   => '0755',
+    }
+    package { 'textgrid-mirador': ensure  => present }
   }
-
-  package { 'textgrid-mirador': ensure  => present }
-
-#  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/mirador':
-#    ensure   => present,
-#    owner    => $_catname,
-#    group    => $_catname,
-#    provider => git,
-#    source   => 'https://github.com/IIIF/m1.git',
-#    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
-#  }
-#  ->
-#  file { '/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html':
-#    content => template('dhrep/var/www/nginx-root/textgridrep.de/iiif/mirador/view.html.erb'),
-#    mode    => '0644',
-#  }
-  # TODO: npm nodejs build and dhsummit.html
-#  vcsrepo { '/var/www/nginx-root/textgridrep.de/iiif/m2':
-#    ensure   => present,
-#    owner    => $_catname,
-#    group    => $_catname,
-#    provider => git,
-#    source   => 'https://github.com/IIIF/mirador.git',
-#    revision => 'v2.0.0',
-#    require  => File['/var/www/nginx-root/textgridrep.de/iiif'],
-#  }
+  else {
+    # TODO create dhrep scope "dariah" mirador?
+  }
 }

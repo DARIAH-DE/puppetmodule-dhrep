@@ -28,5 +28,6 @@ class dhrep::services::tomcat_pid (
     xmx                  => $xmx,
     xms                  => $xms,
     telegraf_enabled     => true,
+    tomcat_version       => $dhrep::params::tomcat_version,
   }
 }

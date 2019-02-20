@@ -16,24 +16,25 @@
 #   https://forge.puppetlabs.com/camptocamp/openldap
 #
 class dhrep::services::tgauth (
-  $scope             = undef,
-  $ldap_host         = 'localhost',
-  $ldap_port         = '389',
-  $binddn_pass       = undef,
-  $user_ldap_host    = 'auth.de.dariah.eu',
-  $user_ldap_port    = '389',
-  $user_binddn_pass  = undef,
-  $crud_secret       = undef,
-  $webauth_secret    = undef,
-  $sidcheck_secret   = undef,
-  $rbac_base         = "http://${::fqdn}/1.0/tgauth/",
-  $authz_shib_pw     = undef,
-  $authz_instance    = undef,
-  $slapd_rootpw      = undef,
-  $ldap_replication  = false,
+  $scope = undef,
+  $ldap_host = 'localhost',
+  $ldap_port = '389',
+  $binddn_pass = undef,
+  $user_ldap_host = 'auth.de.dariah.eu',
+  $user_ldap_port = '389',
+  $user_binddn_pass = undef,
+  $crud_secret = undef,
+  $webauth_secret = undef,
+  $sidcheck_secret = undef,
+  $rbac_base = "http://${::fqdn}/1.0/tgauth/",
+  $authz_shib_pw = undef,
+  $authz_instance = undef,
+  $slapd_rootpw = undef,
+  $ldap_replication = false,
   $ldap_clusternodes = [],
-  $no_shib_login     = false,
-  $ldap_dbmaxsize    = 10485760, # default value 10485760 bytes = 10mb
+  $no_shib_login = false,
+  $ldap_dbmaxsize = 10485760, # default value 10485760 bytes = 10mb
+  $ldapcleaner_older_than = 'OLDER_THAN8D'
 ) inherits dhrep::params {
 
   $_backupdir = $::dhrep::params::backupdir
@@ -43,13 +44,29 @@ class dhrep::services::tgauth (
   $_statdir   = $::dhrep::params::statdir
   $_vardir    = $::dhrep::params::vardir
 
-  apt::ppa { 'ppa:rtandy/openldap-backports': }
-  -> package {
-    'slapd':      ensure => present;
-    'ldap-utils': ensure => present;
-    'db5.3-util': ensure => present;
-    'mailutils':  ensure => present;
-    'php5-ldap':  ensure => present;
+  $_daasidir  = '/opt/daasi'
+
+  # TODO: conditional just for migration from trusty to bionic, cleanup afterwards
+  if ($::lsbdistcodename == 'trusty') {
+    apt::ppa { 'ppa:rtandy/openldap-backports': }
+    -> package {
+      'slapd':      ensure => present;
+      'ldap-utils': ensure => present;
+      'db5.3-util': ensure => present;
+      'mailutils':  ensure => present;
+      'php5-ldap':  ensure => present;
+    }
+  } else {
+    package {
+      'slapd':        ensure => present;
+      'ldap-utils':   ensure => present;
+      'db5.3-util':   ensure => present;
+      'mailutils':    ensure => present;
+      'php-ldap':     ensure => present;
+      'php-mbstring': ensure => present;
+      'php-xml':      ensure => present;
+      'php-soap':     ensure => present;
+    }
   }
 
   Exec {
@@ -61,110 +78,121 @@ class dhrep::services::tgauth (
   ###
   file { "${_confdir}/tgauth":
     ensure  => directory,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0755',
     require => File[$_confdir],
   }
   file { "${_confdir}/tgauth/conf":
     ensure  => directory,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0755',
     require => File["${_confdir}/tgauth"],
   }
   file { "${_confdir}/tgauth/conf/rbac.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/rbac.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/rbacSoap.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/rbacSoap.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/system.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/system.conf.erb"),
   }
   file { "${_confdir}/tgauth/conf/config_tgwebauth.xml":
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/config_tgwebauth.xml.erb"),
   }
+
+  ###
+  # installing tgauth deb package
+  # -- installs
+  #      info.textgrid.middleware.tgauth.rbac
+  #    and
+  #      info.textgrid.middleware.tgauth.webauth
+  #    to /var/www/
+  # -- create symlinks to
+  #      ~WebAuthN --> info.textgrid.middleware.tgauth.webauth/WebAuthN
+  #      ~secure   --> info.textgrid.middleware.tgauth.webauth/secure
+  #      ~tgauth   --> info.textgrid.middleware.tgauth.rbac
+  ###
+  package { 'tgauth':
+    ensure  => latest,
+    require => [Exec['update_dariah_apt_repository'], File['/var/www']],
+  }
+  file { '/var/www/tgauth':
+    ensure  => link,
+    target  => '/var/www/info.textgrid.middleware.tgauth.rbac',
+    mode    => '0755',
+    require => Package['tgauth'],
+  }
   file { '/var/www/tgauth/conf':
-    ensure => link,
-    target => "${_confdir}/tgauth/conf",
+    ensure  => link,
+    target  => "${_confdir}/tgauth/conf",
+    require => File['/var/www/tgauth'],
   }
 
   ###
-  # /var/www/tgauth
-  #
-  # TODO Use GIT module for always getting a certain branch/tag, not clone via Exec!!
+  # installing ocnfig files
   ###
-  exec { 'git_clone_tgauth':
-    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/tg-auth.git /usr/local/src/tgauth-git',
-    creates => '/usr/local/src/tgauth-git',
-    require => Package['git'],
-  }
-  -> file { '/var/www/tgauth':
-    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac',
-    recurse => true,
-    mode    => '0644',
-    require => File['/var/www'],
-  }
   file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure  => directory,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgadministration.wsdl.erb'),
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra-crud.wsdl.erb'),
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgextra.wsdl.erb'),
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgreview.wsdl.erb'),
     require => File['/var/www/tgauth'],
   }
   file { '/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/tgauth/rbacSoap/wsdl/tgsystem.wsdl.erb'),
     require => File['/var/www/tgauth'],
@@ -173,40 +201,34 @@ class dhrep::services::tgauth (
   ###
   # /var/www/info.textgrid.middleware.tgauth.webauth
   ###
-  file { '/var/www/info.textgrid.middleware.tgauth.webauth':
-    source  => 'file:///usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.webauth',
-    recurse => true,
-    mode    => '0644',
-    require => File[$_vardir],
-  }
   file { '/var/www/info.textgrid.middleware.tgauth.webauth/i18n_cache':
     ensure  => directory,
     owner   => 'www-data',
     group   => 'www-data',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/WebAuthN':
     ensure  => link,
     target  => '/var/www/info.textgrid.middleware.tgauth.webauth/WebAuthN/',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/secure':
     ensure  => link,
     target  => '/var/www/info.textgrid.middleware.tgauth.webauth/secure/',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/1.0':
     ensure  => directory,
     owner   => 'www-data',
     group   => 'www-data',
     mode    => '0755',
-    require => File['/var/www/info.textgrid.middleware.tgauth.webauth'],
+    require => Package['tgauth'],
   }
   file { '/var/www/1.0/secure':
-    ensure  => 'link',
+    ensure  => link,
     target  => '/var/www/secure/',
     mode    => '0755',
     require => File['/var/www/1.0'],
@@ -217,8 +239,8 @@ class dhrep::services::tgauth (
   ###
   file { '/var/www/WebAuthN/js/dariah.js':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/var/www/WebAuthN/js/dariah.js.erb'),
     require => File['/var/www/WebAuthN'],
@@ -237,12 +259,13 @@ class dhrep::services::tgauth (
   ###
   file { '/etc/ldap/ldap.conf':
     ensure  => file,
-    owner   => root,
-    group   => root,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     content => template('dhrep/etc/ldap/ldap.conf.erb'),
   }
-  # ldap needs to know its own id for multi-master replikation
+
+  # TODO ldap needs to know its own id for multi-master replikation
   #  augeas { 'slapd_default':
   #    changes => [
   #      "set /files/etc/default/slapd/SLAPD_SERVICES '\"ldap://localhost:389 ldap://${::fqdn}:389 ldapi:///\"'",
@@ -250,7 +273,7 @@ class dhrep::services::tgauth (
   #    notify  => Service['slapd'],
   #  }
 
-  # todo: changes group of /etc/ldap/schemas from root to staff, ok?
+  # TODO changes group of /etc/ldap/schemas from root to staff, ok?
   #  file { '/etc/ldap/schema/':
   #    source  => '/usr/local/src/tgauth-git/info.textgrid.middleware.tgauth.rbac/ldap-schemas/',
   #    recurse => true,
@@ -288,24 +311,6 @@ class dhrep::services::tgauth (
   }
 
   # NOTE database creation is now done by /opt/dhrep/init_databases.sh
-  #
-  #    ~> exec { 'tgldapconf.sh':
-  #      command => '/tmp/tgldapconf.sh',
-  #      require => [Package['slapd'],File['/tmp/ldap-cn-config.ldif']],
-  #    }
-  #
-  # should only run once! if ldap template is added (with help of notify and refreshonly)
-  # FIXME use a single script for creating fresh ldap, sesame, and elasticsearch databases!
-  #    ~> exec { 'ldapadd_ldap_template':
-  #      command     => "ldapadd -x -f /tmp/ldap-rbac-template.ldif -D \"cn=Manager,dc=textgrid,dc=de\" -w ${slapd_rootpw}",
-  #      refreshonly => true,
-  #      require     => [Package['ldap-utils'], Service['slapd']],
-  #      logoutput   => true,
-  #    }
-  #    -> file {'/etc/facter/facts.d/tgauth_ldap_initialized.txt':
-  #      content => 'tgauth_ldap_initialized=true',
-  #    }
-  #  }
   service{ 'slapd':
     ensure  => running,
     enable  => true,
@@ -313,8 +318,8 @@ class dhrep::services::tgauth (
   }
 
   ###
-  # apache config, apache should be there (e.g. by dhrep::init.pp or dariah
-  # profile::apache)
+  # apache config, apache should be set up already (e.g. by dhrep::init.pp or
+  # dariah profile::apache)
   ###
   file { "/etc/apache2/${scope}/default_vhost_includes/tgauth.conf":
     content => "
@@ -377,7 +382,6 @@ class dhrep::services::tgauth (
     mode    => '0755',
     require => File[$_vardir],
   }
-
   file { "${_optdir}/ldap-statistic.pl" :
     owner   => 'root',
     group   => 'root',
@@ -392,6 +396,7 @@ class dhrep::services::tgauth (
     minute   => 53,
     monthday => '01',
   }
+
   ###
   # nrpe for ldap, ldap-backup, and ldap-statistics
   ###
@@ -423,12 +428,117 @@ class dhrep::services::tgauth (
   }
 
   ###
+  # ldapcleaner
+  ###
+  # install perl-DAASIlib from ci.de.dariah.eu/packages/
+  package {
+    'libapache-dbi-perl': ensure => present;
+    'libfile-flock-perl': ensure => present;
+    'perl-daasilib':      ensure => present;
+  }
+  # install needed dirs
+  file { $_daasidir :
+    ensure => directory,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
+  }
+  file { "${_daasidir}/ldapcleaner" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File[$_daasidir],
+  }
+  file { "${_daasidir}/ldapcleaner/etc" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File["${_daasidir}/ldapcleaner"],
+  }
+  file { "${_daasidir}/ldapcleaner/man" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File["${_daasidir}/ldapcleaner"],
+  }
+  file { "${_daasidir}/ldapcleaner/lib" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File["${_daasidir}/ldapcleaner"],
+  }
+  # create needed files
+  file { "${_daasidir}/ldapcleaner/ldapcleaner.pl" :
+    source  => "puppet:///modules/dhrep/opt/daasi/${scope}/ldapcleaner/ldapcleaner.pl",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File["${_daasidir}/ldapcleaner"],
+  }
+  file { "${_daasidir}/ldapcleaner/etc/ldapcleaner.sys" :
+    source  => "puppet:///modules/dhrep/opt/daasi/${scope}/ldapcleaner/ldapcleaner.sys",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => File["${_daasidir}/ldapcleaner/etc"],
+  }
+  file { "${_daasidir}/ldapcleaner/man/ldapcleaner.man" :
+    source  => "puppet:///modules/dhrep/opt/daasi/${scope}/ldapcleaner/ldapcleaner.man",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => File["${_daasidir}/ldapcleaner/man"],
+  }
+  file { "${_daasidir}/ldapcleaner/lib/DARIAHlib.pm" :
+    source  => "puppet:///modules/dhrep/opt/daasi/${scope}/ldapcleaner/DARIAHlib.pm",
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    require => File["${_daasidir}/ldapcleaner/lib"],
+  }
+  # create more needed folders and files: cleanRbacSIDs.conf, and localldap.secret
+  file { "${_daasidir}/cleanRbacSIDs" :
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    require => File[$_daasidir],
+  }
+  file { "${_daasidir}/cleanRbacSIDs/cleanRbacSIDs.conf":
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template("dhrep/opt/daasi/${scope}/ldapcleaner/cleanRbacSIDs.conf.erb"),
+    require => File["${_daasidir}/cleanRbacSIDs"],
+  }
+  file { "${_daasidir}/cleanRbacSIDs/localldap.secret":
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
+    content => template("dhrep/opt/daasi/${scope}/ldapcleaner/localldap.secret.erb"),
+    require => File["${_daasidir}/cleanRbacSIDs"],
+  }
+  # add cron for ldapcleaner
+  cron { 'ldap-cleaner' :
+    command => "${_daasidir}/ldapcleaner/ldapcleaner.pl -c ${_daasidir}/cleanRbacSIDs/cleanRbacSIDs.conf > /dev/null 2>&1",
+    user    => 'root',
+    hour    => 2,
+    minute  => 31,
+  }
+
+  ###
   # monitor slapd with telegraf
   ###
   telegraf::input { 'slapd_procstat':
     plugin_type => 'procstat',
-    options     => {
-      'pid_file' => '/var/run/slapd/slapd.pid',
-    },
+    options     => [{
+        'pid_file' => '/var/run/slapd/slapd.pid',
+    }],
   }
 }

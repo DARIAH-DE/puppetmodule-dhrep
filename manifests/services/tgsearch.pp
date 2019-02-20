@@ -13,7 +13,7 @@ class dhrep::services::tgsearch (
   $_catname   = $::dhrep::services::tomcat_tgsearch::catname
   $_http_port = $::dhrep::services::tomcat_tgsearch::http_port
 
-  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
+  # FIXME remove if tgsearch services finally are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {
     $_aptdir = '/var/textgrid/webapps'
   }
@@ -48,20 +48,20 @@ class dhrep::services::tgsearch (
     mode   => '0755',
   }
   file { "${_confdir}/tgsearch/tgsearch-nonpublic.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template("dhrep/etc/dhrep/tgsearch/tgsearch.properties.erb"),
+    content => template('dhrep/etc/dhrep/tgsearch/tgsearch.properties.erb'),
     require => File["${_confdir}/tgsearch"],
     notify  => Service[$_catname],
   }
   file { "${_confdir}/tgsearch/log4j.nonpublic.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template("dhrep/etc/dhrep/tgsearch/log4j.properties.erb"),
+    content => template('dhrep/etc/dhrep/tgsearch/log4j.properties.erb'),
     require => File["${_confdir}/tgsearch"],
   }
 

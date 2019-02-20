@@ -1,4 +1,10 @@
 ###
+# rewrite logging
+###
+#error_log /var/log/nginx/error.log notice;
+#rewrite_log on;
+
+###
 # oaipmh
 ###
 location /1.0/oaipmh {
@@ -46,8 +52,7 @@ location /publikator {
     proxy_read_timeout 900s;
     proxy_send_timeout 900s;
     proxy_connect_timeout 120s;
-    # Nginx must relay to Apache because of Shibboleth authentication!
-    proxy_pass http://localhost:8080/publikator;
+    proxy_pass http://localhost:<%= @tomcat_publikator_http_port %>/publikator;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        Host $http_host;
@@ -83,3 +88,60 @@ location /Shibboleth.sso {
 #    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
 #    proxy_set_header        Host $http_host;
 #}
+
+###
+# digilib und co
+###
+location /1.0/digilib {
+    proxy_pass http://digilib_balancer/digilibservice;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
+location /1.0/digilib/rest/IIIF {
+    # the cached resource has the CORS header only if the Origin-header was
+    # present in the request which went into cache so here we set the CORS
+    # header always, and ignore the upstream entry, all the other CORS related
+    # stuff (prefligt, etc) should still be handled by upstream cxf service.
+    proxy_hide_header Access-Control-Allow-Origin;
+    add_header Access-Control-Allow-Origin *;
+    # Nginx MUST NOT decode the %2F in the Handle!
+    rewrite  ^  $request_uri;
+    rewrite  ^/1.0/digilib/rest/IIIF(/.*)  /digilibservice/rest/IIIF$1  break;
+    return 400;
+    proxy_pass  http://digilib_balancer;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+    proxy_cache digilib_iiif;
+    proxy_cache_valid 60d;
+    proxy_ignore_headers Cache-Control;
+}
+location /1.0/digilib/rest/digilib {
+    # Nginx MUST NOT decode the %2F in the Handle!
+    rewrite  ^  $request_uri;
+    rewrite  ^/1.0/digilib/rest/digilib(/.*)  /digilibservice/rest/digilib$1  break;
+    return 400;
+    proxy_pass http://digilib_balancer/digilibservice/rest/digilib;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+    proxy_cache digilib_digilib;
+    proxy_cache_valid 60d;
+    proxy_ignore_headers Cache-Control;
+}
+location /1.0/iiif/manifests {
+    gzip on;
+    gzip_types text/plain application/json;
+    # Nginx MUST NOT decode the %2F in the Handle!
+    #
+    # TODO: ADD TO OTHER DIGILIB LOCATIONS!
+    #
+    rewrite  ^  $request_uri;
+    rewrite  ^/1.0/iiif/manifests(/.*)  /iiifmd$1  break;
+    return 400;
+    proxy_pass http://127.0.0.1:<%= scope.lookupvar('dhrep::services::tomcat_oaipmh::http_port') %>/iiifmd;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}

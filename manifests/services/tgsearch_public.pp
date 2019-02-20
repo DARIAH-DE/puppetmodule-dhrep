@@ -9,10 +9,10 @@ class dhrep::services::tgsearch_public (
 
   include dhrep::services::tomcat_tgsearch
 
-  $_confdir   = $::dhrep::params::confdir
-  $_catname   = $::dhrep::services::tomcat_tgsearch::catname
+  $_confdir = $::dhrep::params::confdir
+  $_catname = $::dhrep::services::tomcat_tgsearch::catname
 
-  # FIXME remove if textgrid services finally are deployed to /var/dhrep/webapps!
+  # FIXME remove if tgsearch services finally are deployed to /var/dhrep/webapps!
   if $scope == 'textgrid' {
     $_aptdir = '/var/textgrid/webapps'
   }
@@ -40,20 +40,20 @@ class dhrep::services::tgsearch_public (
   # config
   ###
   file { "${_confdir}/tgsearch/tgsearch-public.properties":
-    ensure  => present,
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template("dhrep/etc/dhrep/tgsearch-public/tgsearch.properties.erb"),
+    content => template('dhrep/etc/dhrep/tgsearch-public/tgsearch.properties.erb'),
     require => File["${_confdir}/tgsearch"],
     notify  => Service[$_catname],
   }
-  file { "${_confdir}/tgsearch/log4.public.properties":
-    ensure  => present,
+  file { "${_confdir}/tgsearch/log4j.public.properties":
+    ensure  => file,
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    content => template("dhrep/etc/dhrep/tgsearch-public/log4j.properties.erb"),
+    content => template('dhrep/etc/dhrep/tgsearch-public/log4j.properties.erb'),
     require => File["${_confdir}/tgsearch"],
   }
 }

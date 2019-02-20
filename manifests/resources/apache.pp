@@ -53,9 +53,15 @@ class dhrep::resources::apache (
       before => Package['shibboleth'],
     }
 
+    if ($::lsbdistcodename == 'bionic') {
+      $mod_shibd_so = 'mod_shib.so'
+    } else {
+      $mod_shibd_so = 'mod_shib2.so'
+    }
+
     ::apache::mod { 'shib2':
       id  => 'mod_shib',
-      lib => 'mod_shib2.so',
+      lib => $mod_shibd_so,
     }
   }
 
@@ -123,4 +129,17 @@ class dhrep::resources::apache (
     ",
     order   => '990',
   }
+
+  ###
+  # monitor apache processes with telegraf
+  # exe: executable name (ie, pgrep <exe>)
+  ###
+  telegraf::input { 'apache2_procstat':
+    plugin_type => 'procstat',
+    options     => [{
+      'exe' => 'apache2',
+      'pid_tag' => true,
+    }],
+  }
+
 }

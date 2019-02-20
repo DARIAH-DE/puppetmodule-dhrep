@@ -17,6 +17,8 @@ class dhrep (
   $public_hostname = $::fqdn,
   $publish_pid_secret = undef,
   # textgrid specific refs
+  $tgcrud_location = undef,
+  $tgcrud_public_location = undef,
   $tgauth_binddn_pass = undef,
   $tgauth_user_binddn_pass = undef,
   $tgauth_crud_secret = undef,
@@ -102,10 +104,18 @@ class dhrep (
   ###
   # tomcat
   ###
-  service { 'tomcat7':
-    ensure  => stopped,
-    enable  => false,
-    require => Package['tomcat7'],
+  if ($::lsbdistcodename == 'trusty') {
+    service { 'tomcat7':
+      ensure  => stopped,
+      enable  => false,
+      require => Package['tomcat7'],
+    }
+  } else {
+    service { 'tomcat8':
+      ensure  => stopped,
+      enable  => false,
+      require => Package['tomcat8'],
+    }
   }
 
   ###
@@ -131,6 +141,18 @@ class dhrep (
     scope => $scope,
   }
   class { 'dhrep::services::fits':
+    scope => $scope,
+  }
+  class { 'dhrep::services::digilib':
+    scope => $scope,
+  }
+  class { 'dhrep::services::intern::messaging':
+    scope => $scope,
+  }
+  class { 'dhrep::services::intern::wildfly':
+    scope => $scope,
+  }
+  class { 'dhrep::services::iiifmd':
     scope => $scope,
   }
 
@@ -161,34 +183,23 @@ class dhrep (
       webauth_secret   => $tgauth_webauth_secret,
       no_shib_login    => $tgauth_no_shib_login,
     }
-    class { 'dhrep::services::intern::messaging':
-      scope => $scope,
-    }
-    class { 'dhrep::services::intern::tgwildfly':
-      scope => $scope,
-    }
     class { 'dhrep::services::crud':
       scope          => $scope,
+      location       => $tgcrud_location,
       publish_secret => $tgcrud_publish_secret,
       log_level      => $crud_log_level,
       require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
-      Class['dhrep::services::intern::tgwildfly']],
+      Class['dhrep::services::intern::wildfly']],
     }
     class { 'dhrep::services::crud_public':
-      scope          => $scope,
-      log_level      => $crud_public_log_level,
-      extract_techmd => true,
-      require        => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
-      Class['dhrep::services::intern::tgwildfly'], Class['dhrep::services::fits']],
+      scope     => $scope,
+      location  => $tgcrud_public_location,
+      log_level => $crud_public_log_level,
+      require   => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
+      Class['dhrep::services::intern::wildfly'], Class['dhrep::services::fits']],
     }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
-    }
-    class { 'dhrep::services::digilib':
-      scope => $scope,
-    }
-    class { 'dhrep::services::iiifmd':
-      scope => $scope,
     }
     class { 'dhrep::services::aggregator':
       scope => $scope,
@@ -213,25 +224,21 @@ class dhrep (
   if $scope == 'dariah' {
     class { 'dhrep::services::crud':
       scope               => $scope,
-      use_messaging       => false,
       location            => $dhcrud_location,
-      extract_techmd      => true,
       storage_host        => $dhcrud_storage_host,
       storage_host_public => $dhcrud_storage_host_public,
       pid_secret          => $dhcrud_pid_secret,
       log_level           => $crud_log_level,
-      require             => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::fits']],
+      require             => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::wildfly'],  Class['dhrep::services::fits']],
     }
     class { 'dhrep::services::crud_public':
       scope               => $scope,
-      use_messaging       => false,
       location            => $dhcrud_public_location,
-      extract_techmd      => true,
       storage_host        => $dhcrud_public_storage_host,
       storage_host_public => $dhcrud_public_storage_host_public,
       pid_secret          => $dhcrud_pid_secret,
       log_level           => $crud_public_log_level,
-      require             => Class['dhrep::services::intern::elasticsearch'],
+      require             => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::wildfly']],
     }
     class { 'dhrep::services::publikator':
       scope   => $scope,
@@ -293,20 +300,28 @@ class dhrep (
     }
   }
 
-  ###
-  # java8
-  ###
-  package {
-    'openjdk-6-jdk':          ensure => absent;
-    'openjdk-6-jre':          ensure => absent;
-    'openjdk-6-jre-headless': ensure => absent;
-    'openjdk-6-jre-lib':      ensure => absent;
-    'openjdk-7-jdk':          ensure => present;
-    # Creates symlink /usr/lib/jvm/default-java.
-    'default-jre-headless':   ensure => present;
-    'maven':                  ensure => present;
-    'make':                   ensure => present;
-    'apache2-utils':          ensure => present;
+  # TODO: conditional just for migration from trusty to bionic, cleanup afterwards
+  if ($::lsbdistcodename == 'trusty') {
+    ###
+    # java8
+    ###
+    package {
+      'openjdk-6-jdk':          ensure => absent;
+      'openjdk-6-jre':          ensure => absent;
+      'openjdk-6-jre-headless': ensure => absent;
+      'openjdk-6-jre-lib':      ensure => absent;
+      'openjdk-7-jdk':          ensure => present;
+      # Creates symlink /usr/lib/jvm/default-java.
+      'default-jre-headless':   ensure => present;
+      'maven':                  ensure => present;
+      'make':                   ensure => present;
+      'apache2-utils':          ensure => present;
+    }
+  } else {
+    package {
+      'openjdk-8-jdk-headless': ensure => present;
+      'default-jre-headless':   ensure => present;  # wildfly?
+    }
   }
 
   ###

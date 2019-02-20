@@ -16,17 +16,24 @@ class dhrep::nginx (
   include dhrep::services::tomcat_oaipmh
   include dhrep::services::tomcat_publish
   include dhrep::services::tomcat_pid
+  include dhrep::services::tomcat_digilib
+  include dhrep::services::tomcat_digilib2
+  include dhrep::services::tomcat_fits
 
   if $scope == 'textgrid' {
     include dhrep::services::tomcat_aggregator
-    include dhrep::services::tomcat_digilib
-    include dhrep::services::tomcat_digilib2
     include dhrep::services::tomcat_sesame
     include dhrep::services::tomcat_tgsearch
   }
   if $scope == 'dariah' {
-    include dhrep::services::tomcat_fits
     include dhrep::services::tomcat_publikator
+    include roles::dariahrepository
+    if ($::roles::dariahrepository::with_shib) {
+      $tomcat_publikator_http_port = '8080'
+    }
+    else {
+      $tomcat_publikator_http_port = $::dhrep::params::config['tomcat_publikator']['http_port']
+    }
   }
 
   $_confdir  = $::dhrep::params::confdir
@@ -189,10 +196,16 @@ class dhrep::nginx (
     minute  => '07',
   }
 
+  host { 'ref.de.dariah.eu':
+    comment => 'prevent "host not found in upstream..." errors on first nginx startup when network not fully ready',
+    ip      => '141.5.101.74',
+    ensure  => present,
+  }
+
   telegraf::input { 'nginx':
     plugin_type => 'nginx',
-    options     => {
-      'urls' => ['http://localhost/nginx_status'],
-    },
+    options     => [{
+        'urls' => ['http://localhost/nginx_status'],
+    }],
   }
 }

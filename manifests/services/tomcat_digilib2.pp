@@ -31,5 +31,6 @@ class dhrep::services::tomcat_digilib2 (
     xmx              => $xmx,
     xms              => $xms,
     telegraf_enabled => true,
+    tomcat_version   => $dhrep::params::tomcat_version,
   }
 }

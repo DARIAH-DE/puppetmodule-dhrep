@@ -1,6 +1,12 @@
 user www-data;
+<% if @lsbdistcodename == "trusty" -%>
 worker_processes 4;
-pid /var/run/nginx.pid;
+<% else -%>
+worker_processes auto;
+<% end -%>
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
 
 events {
 	worker_connections 2048;
@@ -16,7 +22,7 @@ http {
 	tcp_nodelay on;
 	keepalive_timeout 120;
 	types_hash_max_size 2048;
-	# server_tokens off;
+	server_tokens off;
 	# server_names_hash_bucket_size 64;
 	# server_name_in_redirect off;
 	include /etc/nginx/mime.types;
@@ -59,7 +65,7 @@ http {
 	# proxy tgsearch toplevel aggregations and aggregator items
 	proxy_buffer_size 64k;
 	proxy_buffers 8 128k;
-	proxy_cache_path /var/www/nginx-cache/tgsearch levels=1:2 keys_zone=tgsearch:12m;
+	proxy_cache_path /var/www/nginx-cache/tgsearch levels=1:2 inactive=1d keys_zone=tgsearch:12m max_size=1g;
 	proxy_cache_path /var/www/nginx-cache/aggregator levels=1:2 inactive=30d keys_zone=aggregator:12m max_size=100g;
 	proxy_cache_path /var/www/nginx-cache/digilib_iiif levels=1:2 inactive=60d keys_zone=digilib_iiif:12m max_size=100g;
 	proxy_cache_path /var/www/nginx-cache/digilib_digilib levels=1:2 inactive=60d keys_zone=digilib_digilib:12m max_size=100g;
@@ -68,11 +74,16 @@ http {
   ssl_session_cache shared:SSL:32m;
   ssl_session_timeout 15m;
 
-	##
-	# Virtual Host Configs
-	##
-	include /etc/nginx/conf.d/*.conf;
-	include /etc/nginx/sites-enabled/*;
+<% if @lsbdistcodename != "trusty" -%>
+  # prevent "host not found in upstream..." errors on first nginx startup when network not fully ready
+  # resolver 127.0.0.53 valid=30s;
+<% end -%>
+
+  ##
+  # Virtual Host Configs
+  ##
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
 
 }
 

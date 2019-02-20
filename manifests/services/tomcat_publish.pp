@@ -35,5 +35,6 @@ class dhrep::services::tomcat_publish (
     xmx                  => $xmx,
     xms                  => $xms,
     telegraf_enabled     => true,
+    tomcat_version       => $dhrep::params::tomcat_version,
   }
 }

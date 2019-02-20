@@ -1,0 +1,52 @@
+###
+# general settings
+###
+
+# some service urls
+serviceBaseUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/iiif/manifests
+iiifServiceUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/digilib/rest/IIIF
+miradorUrl=https://<%= @mirador_host %>/1.0/iiif/mirador?uri=
+# context and conformance urls
+iiifContextUrl=http://iiif.io/api/image/2/context.json
+iiifConformanceUrl=http://iiif.io/api/image/2/level2.json
+# jsonld output specific settings
+jsonldContextUrl=http://iiif.io/api/presentation/2/context.json
+# cache directory, needs to be existing and writeable
+cacheDir=/var/dhrep/iiifmd/cache
+# projects which should be listed for IIIF (comma separated)
+listedProjects=<%= @iiif_enabled_projects.join(",") %>
+# uris of incomplete publications, which cause errors
+brokenUris=<%= @iiif_blacklist_uris.join(",") %>
+# labels
+publishedLabel="Published data in the TextGrid Repository"
+publishedDescription="Published data in the TextGrid Repository."
+sandboxLabel="Data in the TextGrid Repository Sandbox"
+sandboxDescription="Data in the TextGrid Repository Sandbox is reviewed for final publication, but may still be removed."
+
+###
+# textgrid specific settings
+###
+
+tg.sparqlEndpoint=http://localhost:9091/openrdf-sesame/repositories/textgrid-public
+tg.crudUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/rest
+tg.searchUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgsearch-public
+tg.esCluster=<%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
+tg.esNodes=127.0.0.1:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>
+tg.esIndex=textgrid-public
+tg.esType=metadata
+# xslt file for extracting ordered uris from mets file (from resources/xslt folder)
+tg.metsXsltFile=metsExtract.xsl
+# url for textgridrep website
+tg.repositoryUrl=https://<%= @repository_host %>
+tg.presentationUrl=https://<%= @repository_host %>
+tg.repositoryLogo=https://textgridrep.org/textgrid-theme/images/textgrid-repository-logo.svg
+tg.oaipmhUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgoaipmh/oai
+
+###
+# dariah-de specific settings
+###
+
+dh.crudUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
+dh.repositoryUrl=https://<%= @repository_host %>
+dh.presentationUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
+dh.repositoryLogo=https://res.de.dariah.eu/logos/dariah-de/dariah-de_cmyk_en.svg

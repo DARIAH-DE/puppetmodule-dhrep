@@ -9,6 +9,7 @@ ProxyPass         /publikator  http://localhost:<%= scope.lookupvar('dhrep::serv
 ProxyPassReverse  /publikator  http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator
 ProxyPassReverse  /publikator  https://<%= scope.lookupvar('::fqdn') %>/publikator
 
+<% if scope.lookupvar('dhrep::services::publikator::enable_aai') == true -%>
 <Proxy http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_publikator::http_port') %>/publikator*>
    AuthType shibboleth
    Require shibboleth
@@ -29,3 +30,4 @@ ProxyPassReverse  /publikator  https://<%= scope.lookupvar('::fqdn') %>/publikat
   require shib-attr isMemberOf <%= scope.lookupvar('dhrep::publikator_lock_to_group') %>
 <% end -%>
 </Location>
+<% end -%>
