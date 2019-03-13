@@ -39,7 +39,6 @@ class dhrep::services::publish (
   $_group    = $::dhrep::services::tomcat_publish::group
   $_aptdir   = $::dhrep::params::aptdir
   $templates = 'dhrep/etc/dhrep/publish'
-  # TODO Find a better solution to put pid and crud ports into publish's config.xml!
   $crud_port = $::dhrep::params::config['tomcat_crud']['http_port'];
   $pid_port  = $::dhrep::params::config['tomcat_pid']['http_port'];
 
@@ -178,14 +177,24 @@ class dhrep::services::publish (
   if $scope == 'textgrid' {
     ###
     # add elasticsearch script for removing nearly publish flag from elasticsearch
+    # NOTE we need to deploy the scripts to both masternode ans workhorse!
     ###
     file { '/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy':
       ensure  => file,
       owner   => 'elasticsearch',
       group   => 'elasticsearch',
       mode    => '0640',
-      source  => 'puppet:///modules/dhrep/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy',
+      source  => 'puppet:///modules/dhrep/etc/elasticsearch/scripts/removeNearlyPublishFlag.groovy',
       require => File['/etc/elasticsearch/masternode/scripts/'],
+      notify  => Service[$_catname],
+    }
+    file { '/etc/elasticsearch/workhorse/scripts/removeNearlyPublishFlag.groovy':
+      ensure  => file,
+      owner   => 'elasticsearch',
+      group   => 'elasticsearch',
+      mode    => '0640',
+      source  => 'puppet:///modules/dhrep/etc/elasticsearch/scripts/removeNearlyPublishFlag.groovy',
+      require => File['/etc/elasticsearch/workhorse/scripts/'],
       notify  => Service[$_catname],
     }
   }

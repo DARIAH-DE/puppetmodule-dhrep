@@ -22,6 +22,7 @@ class dhrep::services::crud (
   $orcid_resolver               = 'https://orcid.org/',
   $gnd_resolver                 = 'http://d-nb.info/gnd/',
   $publikator_location          = "https://${::fqdn}/publikator",
+  # TODO? <https://ask.puppet.com/question/29749/fqdn-no-longer-valid-for-vhost-name-in-hiera-file-for-puppetlabs-apache-module>
   $link_to_documentation        = "https://${::fqdn}/doc/services/submodules/publikator/docs/index.html",
   $link_to_apidoc               = "https://${::fqdn}/doc/services",
   $link_to_faq                  = 'https://wiki.de.dariah.eu/display/publicde/FAQs+zum+DARIAH-DE+Repository',

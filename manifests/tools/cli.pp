@@ -56,7 +56,11 @@ class dhrep::tools::cli (
       require => [File["${_optdir}/consistency"],File['/etc/elasticsearch/masternode/scripts/idMatchesTextgridUri.groovy']],
     }
     # the es-index consistency check needs a groovy script to be present in elasticsearch
+    # NOTE we need to put it in masternode AND workhorse script folders!
     file { '/etc/elasticsearch/masternode/scripts':
+      ensure => directory,
+    }
+    file { '/etc/elasticsearch/workhorse/scripts':
       ensure => directory,
     }
     file { '/etc/elasticsearch/masternode/scripts/idMatchesTextgridUri.groovy':
@@ -64,8 +68,16 @@ class dhrep::tools::cli (
       owner   => 'elasticsearch',
       group   => 'elasticsearch',
       mode    => '0640',
-      source  => 'puppet:///modules/dhrep/etc/elasticsearch/masternode/scripts/idMatchesTextgridUri.groovy',
+      source  => 'puppet:///modules/dhrep/etc/elasticsearch/scripts/idMatchesTextgridUri.groovy',
       require => File['/etc/elasticsearch/masternode/scripts/'],
+    }
+    file { '/etc/elasticsearch/workhorse/scripts/idMatchesTextgridUri.groovy':
+      ensure  => file,
+      owner   => 'elasticsearch',
+      group   => 'elasticsearch',
+      mode    => '0640',
+      source  => 'puppet:///modules/dhrep/etc/elasticsearch/scripts/idMatchesTextgridUri.groovy',
+      require => File['/etc/elasticsearch/workhorse/scripts/'],
     }
     # the cronjob for es-index check
     cron { 'es_index_check' :
