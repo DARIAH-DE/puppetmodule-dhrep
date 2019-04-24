@@ -4,8 +4,8 @@
 #
 class dhrep::services::tomcat_pid (
   $scope = undef,
-  $xmx   = $dhrep::params::servicetomcat_xmx,
-  $xms   = $dhrep::params::servicetomcat_xms,
+  $xmx   = $dhrep::params::tomcat_pid_xmx,
+  $xms   = $dhrep::params::tomcat_pid_xms,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_pid']['catname']

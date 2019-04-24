@@ -4,8 +4,8 @@
 #
 class dhrep::services::tomcat_tgsearch (
   $scope = undef,
-  $xmx   = $dhrep::params::servicetomcat_xmx,
-  $xms   = $dhrep::params::servicetomcat_xms,
+  $xmx   = $dhrep::params::tomcat_tgsearch_xmx,
+  $xms   = $dhrep::params::tomcat_tgsearch_xms,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_tgsearch']['catname']

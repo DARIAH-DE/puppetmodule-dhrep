@@ -239,9 +239,13 @@ class dhrep::params {
       $tomcat_sesame_xms          = '32m'
       $tomcat_digilib_xmx         = '64m'
       $tomcat_digilib_xms         = '32m'
+      $tomcat_tgsearch_xmx        = '64m'
+      $tomcat_tgsearch_xms        = '32m'
+      $tomcat_pid                 = '64m'
+      $tomcat_pid                 = '32m'
     }
     'server': {
-      $elasticsearch_es_heap_size = '3072m'
+      $elasticsearch_es_heap_size = '2560m'
       $servicetomcat_xmx          = '1024m'
       $servicetomcat_xms          = '1024m'
       $tomcat_crud_xmx            = '1792m'
@@ -260,6 +264,10 @@ class dhrep::params {
       $tomcat_sesame_xms          = '768m'
       $tomcat_digilib_xmx         = '1280m'
       $tomcat_digilib_xms         = '1280m'
+      $tomcat_tgsearch_xmx        = '2560m'
+      $tomcat_tgsearch_xms        = '2560m'
+      $tomcat_pid                 = '384m'
+      $tomcat_pid                 = '384m'
     }
     default: {
       $elasticsearch_es_heap_size = '512m'
@@ -281,6 +289,10 @@ class dhrep::params {
       $tomcat_sesame_xms          = '32m'
       $tomcat_digilib_xmx         = '512m'
       $tomcat_digilib_xms         = '32m'
+      $tomcat_tgsearch_xmx        = '512m'
+      $tomcat_tgsearch_xms        = '32m'
+      $tomcat_pid                 = '384m'
+      $tomcat_pid                 = '32m'
     }
   }
 }
