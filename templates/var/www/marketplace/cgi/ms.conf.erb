@@ -6,23 +6,23 @@ description: TextGrid Plugins!
 url: https://<%= scope.lookupvar('profiles::textgridrepository::public_hostname') %>/marketplace
 # id has to be alphanumeric string!
 id: tg01
-name: textgridMS-<%= scope.lookupvar('::fqdn') %>
+name: textgridMS-<%= scope.lookupvar('profiles::textgridrepository::public_hostname') %>
 # 32 pixel is the correct size
 icon: tg32.png
 cache_dir: ./mplace_cache
 company: TextGrid
-company_url: http://www.textgrid.de
+company_url: https://textgrid.de
 # the actual repository
 #update_url: http://download.digital-humanities.de/updates/textgridlab/
 update_url: https://textgridlab.org/updates/beta
 # the p2 update site
-p2_update_site: http://www.textgridlab.org/updates/beta
+p2_update_site: https://textgridlab.org/updates/beta
 # wikiSite contains URL to the system where we store information about
 # the plugins. Should ideally point to something that returns XML
 # disabling ssl (https) for now, because we get an URLError!
 wiki_api: http://dev2.dariah.eu/wiki/rest/prototype/1/content/
 # url for viewing a page
-wiki_view: https://dev2.dariah.eu/wiki/pages/viewpage.action?pageId=
+wiki_view: https://wiki.dariah.eu/wiki/pages/viewpage.action?pageId=
 # pluginInfo points to a page where we can get structured information about all the plugins
 # must be joined with wikiSite: https://dev2.dariah.eu/wiki/rest/prototype/1/content/36342854
 plugin_info: 36342854
