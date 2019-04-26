@@ -132,17 +132,12 @@ class dhrep::services::tgmarketplace (
     mode    => '0755',
     require => File['/var/www/marketplace/cgi'],
   }
-
-  ###
-  # cron for automatical cache reloading
-  ###
-  cron { 'marketplace-cach-reload':
-    ensure  => present,
-    command => "curl -s http://${fqdn}/marketplace/cgi/msInterface.cgi?action=cache_reload > /dev/null",
-    user    => 'root',
-    hour    => $time[0],
-    minute  => $time[1],
-    weekday => 0,
+  file { '/var/www/marketplace/cgi/data.yaml':
+    source  => 'file:///usr/local/src/textgrid-marketplace-git/data.yaml',
+    owner   => $owner,
+    group   => $group,
+    mode    => '0755',
+    require => File['/var/www/marketplace/cgi'],
   }
 
   ###
