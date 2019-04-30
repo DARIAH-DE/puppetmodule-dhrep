@@ -6,7 +6,6 @@ class dhrep::services::tomcat_oaipmh (
   $scope     = undef,
   $xmx       = $::dhrep::params::tomcat_oaipmh_xmx,
   $xms       = $::dhrep::params::tomcat_oaipmh_xms,
-  $apr_patch = true,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_oaipmh']['catname']
@@ -29,6 +28,5 @@ class dhrep::services::tomcat_oaipmh (
     xms              => $xms,
     telegraf_enabled => true,
     tomcat_version   => $dhrep::params::tomcat_version,
-    apr_patch        => $apr_patch,
   }
 }
