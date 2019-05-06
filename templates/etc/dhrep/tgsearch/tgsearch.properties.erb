@@ -6,9 +6,8 @@ sesame.endpoint = http://localhost:9091/openrdf-sesame/repositories/textgrid-non
 
 # elastic search config
 elasticSearch.url = 127.0.0.1
-elasticSearch.port = <%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>
+elasticSearch.ports = <%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>,<%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %>
 elasticSearch.index = textgrid-nonpublic
-elasticSearch.clusterName = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 elasticSearch.publicIndex = textgrid-public
 elasticSearch.type = metadata
 elasticSearch.itemLimit = 3000
