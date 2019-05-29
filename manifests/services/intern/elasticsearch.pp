@@ -25,7 +25,7 @@
 class dhrep::services::intern::elasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
-#  $repo_version               = 5,
+  $repo_version               = 6,
   $elasticsearch_version      = '6.5.4',
   $highlighter_plugin_version = '1.7.0',
   $module_update_hack         = false,
@@ -46,22 +46,26 @@ class dhrep::services::intern::elasticsearch (
   ###
   # PLEASE NOTE read docs at <https://github.com/elasticsearch/puppet-elasticsearch/tree/master>
   # PLEASE NOTE for upgrading from 1.x to 5.x, please see <https://www.elastic.co/guide/en/elasticsearch/reference/5.6/setup-upgrade.html>
-  #class { 'elastic_stack::repo':
-  #  version => $repo_version,
-  #}
+  class { 'elastic_stack::repo':
+    version => $repo_version,
+    oss     => true,
+  }
+
+  apt::pin { 'elasticsearch':
+    packages => 'elasticsearch-oss',
+    version  => $elasticsearch_version,
+    priority => 1000,
+  }
 
   class { '::elasticsearch':
-#    manage_repo   => false,
-    version       => $elasticsearch_version,
-    autoupgrade   => false,
+    version           => $elasticsearch_version,
+    autoupgrade       => false,
     restart_on_change => true,
-    config        => {
-      'cluster.name'                         => $cluster_name,
-#      'discovery.zen.ping.multicast.enabled' => false,
-      # Elasticsearch is unreachable with following option, because it is bound to 10.0.2.14 on vagrant (why?)
-      # 'network.host' => '127.0.0.1',
+    oss               => true,
+    jvm_options       => [ "-Xms${_es_heap_size}", "-Xmx${_es_heap_size}" ],
+    config            => {
+      'cluster.name'    => $cluster_name,
     },
-    jvm_options   => [ "-Xms${_es_heap_size}", "-Xmx${_es_heap_size}" ],
   }
 
   ::elasticsearch::instance { 'masternode':
