@@ -120,21 +120,4 @@ class dhrep::services::aggregator (
     args   => "-U service:jmx:rmi:///jndi/rmi://localhost:${_jmx_port}/jmxrmi -O 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service=\"{http://aggregator.services.textgrid.info/}REST\",port=\"REST\",operation=\"getHTML\"' -A AvgResponseTime",
   }
 
-  ###
-  # metrics
-  ###
-  telegraf::input { "jolokia2_${_catname}_cxf":
-    plugin_type => 'jolokia2_agent',
-    options     => [{
-      'urls' => ["http://127.0.0.1:${_http_port}/jolokia/"],
-      'name_prefix' => "${_catname}.",
-      'metrics' => [{
-        'name'      => 'cxf_min_response',
-        'mbean'     => 'org.apache.cxf:bus.id=aggregator,type=Performance.Counter.Server,service="{http://aggregator.services.textgrid.info/}REST",port="REST"',
-        'paths' => ['MinResponseTime','MaxResponseTime', 'AvgResponseTime'],
-        'tag_keys' => ['name'],
-        }],
-    }],
-  }
-
 }

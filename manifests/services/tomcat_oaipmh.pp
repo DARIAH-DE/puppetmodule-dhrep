@@ -3,9 +3,9 @@
 # Class to install and configure oaipmh tomcat.
 #
 class dhrep::services::tomcat_oaipmh (
-  $scope = undef,
-  $xmx   = $::dhrep::params::tomcat_oaipmh_xmx,
-  $xms   = $::dhrep::params::tomcat_oaipmh_xms,
+  $scope     = undef,
+  $xmx       = $::dhrep::params::tomcat_oaipmh_xmx,
+  $xms       = $::dhrep::params::tomcat_oaipmh_xms,
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_oaipmh']['catname']
