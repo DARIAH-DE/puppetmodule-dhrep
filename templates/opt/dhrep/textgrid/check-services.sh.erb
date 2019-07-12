@@ -299,19 +299,15 @@ fi
 #
 # elasticsearch masternode
 #
-FILE="curl"
 MASTERNODE=$SERVER":<%= @elasticsearch_master_http_port %>"
 if $R; then echo "checking "$CSTR"es masternode"$CNRM" (intern)"$TRN $MASTERNODE; fi
-curl -s $MASTERNODE > $FILE
-URGL=`grep "200" curl`
-if [ -s $FILE -a  "$URGL" = '  "status" : 200,' ]; then
+ES_HEALTH=`curl -s $MASTERNODE/_cluster/health | jq -r .status`
+if [ "$ES_HEALTH" = "green" ]; then
     if $R; then echo -n "    $OK ["$VSTR; fi
-    if $R; then echo -n $URGL; fi
+    if $R; then echo -n $ES_HEALTH; fi
     if $R; then echo $CNRM"]"; fi
-    rm $FILE
 else
     if $R; then echo "    $FAILED"; fi
-    rm -f $FILE
     ERRORS=true
     ERRSTR=$ERRSTR" es-masternode"
 fi
@@ -319,19 +315,15 @@ fi
 #
 # elasticsearch workhorse
 #
-FILE="curl"
 WORKHORSE=$SERVER":<%= @elasticsearch_workhorse_http_port %>"
 if $R; then echo "checking "$CSTR"es workhorse"$CNRM" (intern)"$TRN $WORKHORSE; fi
-curl -s $WORKHORSE > $FILE
-URGL=`grep "200" $FILE`
-if [ -s $FILE ] && [ "$URGL" = '  "status" : 200,' ]; then
+ES_HEALTH=`curl -s $WORKHORSE/_cluster/health | jq -r .status`
+if [ "$ES_HEALTH" = "green" ]; then
     if $R; then echo -n "    $OK ["$VSTR; fi
-    if $R; then echo -n $URGL; fi
+    if $R; then echo -n $ES_HEALTH; fi
     if $R; then echo $CNRM"]"; fi
-    rm $FILE
 else
     if $R; then echo "    $FAILED"; fi
-    rm -f $FILE
     ERRORS=true
     ERRSTR=$ERRSTR" es-workhorse"
 fi
