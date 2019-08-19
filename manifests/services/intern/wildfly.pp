@@ -71,16 +71,33 @@ class dhrep::services::intern::wildfly (
   }
 
   ###
+  # update apt repo and install package
+  ###
+  package { 'message-beans':
+    ensure  => latest,
+    require => [Exec['update_dariah_apt_repository'], Class['wildfly']],
+  }
+
+  ###
+  # symlink war from deb war package to jboss deploy dir
+  ###
+  file { '/home/wildfly/wildfly/standalone/deployments/message-beans.war':
+    ensure  => 'link',
+    target  => '/var/dhrep/webapps/message-beans/message-beans.war',
+    require => Package['message-beans'],
+  }
+
+  ###
   # stage war
   ###
-  staging::file { 'message-beans.war':
-    source  => "https://ci.de.dariah.eu/nexus/service/local/artifact/maven/redirect?r=${message_beans_repo_component}&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
-    target  => "${_vardir}/message-beans-${message_beans_version}.war",
-    require => Class['wildfly'],
-  }
-  ~> file { '/home/wildfly/wildfly/standalone/deployments/message-beans.war':
-    source => "${_vardir}/message-beans-${message_beans_version}.war",
-  }
+#  staging::file { 'message-beans.war':
+#    source  => "https://ci.de.dariah.eu/nexus/service/local/artifact/maven/redirect?r=${message_beans_repo_component}&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
+#    target  => "${_vardir}/message-beans-${message_beans_version}.war",
+#    require => Class['wildfly'],
+#  }
+#  ~> file { '/home/wildfly/wildfly/standalone/deployments/message-beans.war':
+#    source => "${_vardir}/message-beans-${message_beans_version}.war",
+#  }
 
   ###
   # telegraf for wildfly
