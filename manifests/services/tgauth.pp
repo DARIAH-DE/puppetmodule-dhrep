@@ -46,27 +46,18 @@ class dhrep::services::tgauth (
 
   $_daasidir  = '/opt/daasi'
 
-  # TODO: conditional just for migration from trusty to bionic, cleanup afterwards
-  if ($::lsbdistcodename == 'trusty') {
-    apt::ppa { 'ppa:rtandy/openldap-backports': }
-    -> package {
-      'slapd':      ensure => present;
-      'ldap-utils': ensure => present;
-      'db5.3-util': ensure => present;
-      'mailutils':  ensure => present;
-      'php5-ldap':  ensure => present;
-    }
-  } else {
-    package {
-      'slapd':        ensure => present;
-      'ldap-utils':   ensure => present;
-      'db5.3-util':   ensure => present;
-      'mailutils':    ensure => present;
-      'php-ldap':     ensure => present;
-      'php-mbstring': ensure => present;
-      'php-xml':      ensure => present;
-      'php-soap':     ensure => present;
-    }
+  ###
+  # package definition for bionic
+  ###
+  package {
+    'slapd':        ensure => present;
+    'ldap-utils':   ensure => present;
+    'db5.3-util':   ensure => present;
+    'mailutils':    ensure => present;
+    'php-ldap':     ensure => present;
+    'php-mbstring': ensure => present;
+    'php-xml':      ensure => present;
+    'php-soap':     ensure => present;
   }
 
   Exec {
@@ -368,8 +359,8 @@ class dhrep::services::tgauth (
   cron { 'ldap-backup' :
     command => "${_optdir}/ldap-backup.sh > /dev/null 2>&1",
     user    => 'root',
-    hour    => 22,
-    minute  => '03',
+    hour    => 23,
+    minute  => '53',
   }
 
   ###
