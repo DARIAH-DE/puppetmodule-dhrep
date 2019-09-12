@@ -308,12 +308,12 @@
 		<class name="actionmodule.textgrid.publish.CopyElasticSearchIndex">
 			<property>
 				<field>elasticSearchReadHost</field>
-				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-nonpublic/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>/textgrid-nonpublic/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to read metadtaa from (non-public instance).</description>
 			</property>
 			<property>
 				<field>elasticSearchWriteHost</field>
-				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>/textgrid-public/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
@@ -398,7 +398,7 @@
 			</property>
 			<property>
 				<field>elasticSearchHost</field>
-				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>/textgrid-public/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
