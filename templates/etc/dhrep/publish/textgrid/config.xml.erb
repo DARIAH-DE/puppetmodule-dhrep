@@ -317,14 +317,16 @@
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
-				<field>elasticSearchClusterNameReadHost</field>
-				<value><%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %></value>
-				<description>The ElasticSearch cluster name</description>
+				<field>elasticSearchReadPorts</field>
+				<value><%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %></value>
+				<value><%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %></value>
+				<description>The ElasticSearch ports</description>
 			</property>
 			<property>
-				<field>elasticSearchClusterNameWriteHost</field>
-				<value><%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %></value>
-				<description>The ElasticSearch cluster name</description>
+				<field>elasticSearchWritePorts</field>
+				<value><%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %></value>
+				<value><%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %></value>
+				<description>The ElasticSearch ports</description>
 			</property>
 		</class>
 		<class name="actionmodule.textgrid.publish.MoveToStaticGridStorage">
@@ -400,9 +402,10 @@
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
-				<field>elasticSearchClusterName</field>
-				<value><%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %></value>
-				<description>The ElasticSearch cluster name</description>
+				<field>elasticSearchPorts</field>
+				<value><%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %></value>
+				<value><%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %></value>
+				<description>The ElasticSearch ports</description>
 			</property>
 			<property>
 				<field>removeFromRdfDatabase</field>
