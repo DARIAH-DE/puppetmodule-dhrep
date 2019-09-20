@@ -9,7 +9,7 @@ elasticSearch.port = <%= scope.lookupvar('dhrep::params::elasticsearch_master_ht
 elasticSearch.clusterName = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 elasticSearch.index = textgrid-public
 elasticSearch.type = metadata
-elasticSearch.itemList = 100
+elasticSearch.itemLimit = 100
 
 ########################
 ##  Project Choosing  ##
