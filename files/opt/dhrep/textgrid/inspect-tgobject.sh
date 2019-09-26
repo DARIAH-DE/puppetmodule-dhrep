@@ -121,3 +121,6 @@ fi
 
 validateOnDiskMd5 $id
 
+if [ "$VERBOSE" -gt "0" ]; then
+    extractMoreMeta "${id}"
+fi

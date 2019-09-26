@@ -252,10 +252,13 @@ location /pndsearch {
 ###
 # rewriting textgrid pids
 ###
-# rewrite /textgrid: and /hdl: uris, so they are served by tgcrud
-rewrite ^/(textgrid:[a-z0-9\.]+)$ /1.0/tgcrud-public/rest/$1/data last;
-rewrite ^/(textgrid:[a-z0-9\.]+)/data$ /1.0/tgcrud-public/rest/$1/data last;
-rewrite ^/(textgrid:[a-z0-9\.]+)/metadata$ /1.0/tgcrud-public/rest/$1/metadata last;
-rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)$ /1.0/tgcrud/rest/$1/data last;
-rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/data$ /1.0/tgcrud/rest/$1/data last;
-rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/metadata$ /1.0/tgcrud/rest/$1/metadata last;
+# rewrite /textgrid: and /hdl: uris, so they are served by tgcrud for data, metadata, and techmd! data is assumed for "root calls".
+# NOTE Shall only be working for texrtgridrep.org!
+#rewrite ^/(textgrid:[a-z0-9\.]+)$ /1.0/tgcrud-public/rest/$1/data last;
+#rewrite ^/(textgrid:[a-z0-9\.]+)/data$ /1.0/tgcrud-public/rest/$1/data last;
+#rewrite ^/(textgrid:[a-z0-9\.]+)/metadata$ /1.0/tgcrud-public/rest/$1/metadata last;
+#rewrite ^/(textgrid:[a-z0-9\.]+)/tech$ /1.0/tgcrud-public/rest/$1/tech last;
+#rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)$ /1.0/tgcrud/rest/$1/data last;
+#rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/data$ /1.0/tgcrud/rest/$1/data last;
+#rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/metadata$ /1.0/tgcrud/rest/$1/metadata last;
+#rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/tech$ /1.0/tgcrud/rest/$1/tech last;

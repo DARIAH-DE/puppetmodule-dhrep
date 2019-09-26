@@ -9,6 +9,12 @@ function ok {
     echo -e "[OK] $message"
 }
 
+# print a normal color info string
+function inf {
+    local message=$1
+    echo -e "\e[34m[INFO]\e[0m $message"
+}
+
 # print a red error string
 function error {
     local message=$1
@@ -50,4 +56,16 @@ function validateOnDiskMd5 {
 
 }
 
+function extractMoreMeta {
+    local id=$1
+    local path=$(id2path $id)
+    local fileloc=${path}/textgrid+${id/./,}
+    local metaloc=${path}/textgrid+${id/./,}.meta
 
+    local dc=`xqilla -i ${metaloc} <(echo "//*:dataContributor/text()")`
+    inf "data contributor: ${dc}"
+    local prj=`xqilla -i ${metaloc} <(echo "//*:project/text()")`
+    inf "project name: ${prj}"
+    local title=`xqilla -i ${metaloc} <(echo "//*:title/text()")`
+    inf "title: ${title}"
+}
