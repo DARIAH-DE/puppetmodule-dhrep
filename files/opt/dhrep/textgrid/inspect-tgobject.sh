@@ -12,7 +12,7 @@ esac
 # common config
 DATA_PATH=/data/nonpublic/productive/pairtree_root/te/xt/gr/id
 SESAME_URL=http://localhost:9091/openrdf-sesame/repositories/textgrid-nonpublic
-ELASTICSEARCH_URL=http://localhost:9202/textgrid-nonpublic/metadata/
+ELASTICSEARCH_URL=http://localhost:9202/textgrid-nonpublic/metadata
 LDAP_URI=ldap://127.0.0.1:389
 LDAP_PW=''
 
@@ -47,7 +47,7 @@ while :; do
         -p|--public)
             DATA_PATH=/data/public/productive/pairtree_root/te/xt/gr/id
             SESAME_URL=http://localhost:9091/openrdf-sesame/repositories/textgrid-public
-            ELASTICSEARCH_URL=http://localhost:9202/textgrid-public/metadata/
+            ELASTICSEARCH_URL=http://localhost:9202/textgrid-public/metadata
             ;;
         --)              # End of all options.
             shift
@@ -121,3 +121,6 @@ fi
 
 validateOnDiskMd5 $id
 
+if [ "$VERBOSE" -gt "0" ]; then
+    extractMoreMeta "${id}"
+fi
