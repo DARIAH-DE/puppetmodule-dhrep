@@ -71,5 +71,15 @@ class dhrep::tools::cli (
       group   => 'root',
       mode    => '0644',
     }
+
+    ###
+    # README for the tools.
+    ###
+    file { "${_optdir}/README.md":
+      mode    => '0644',
+      source  => 'puppet:///modules/dhrep/opt/dhrep/textgrid/README.md',
+      require => File[$_optdir],
+    }
+
   }
 }
