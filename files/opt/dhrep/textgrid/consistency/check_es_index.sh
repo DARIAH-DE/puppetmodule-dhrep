@@ -11,6 +11,7 @@ esac
 
 # find all elasticsearch entries where the internal id (._id) does not match the 
 # id in json metadata (textgridUri without the 'textgrid:'-prefix).
+# TODO: we need a keyword field on textgridUri and use that instead of concating base + '.' + rev
 function run_query {
   local JSON=`curl --request POST \
     --silent \
