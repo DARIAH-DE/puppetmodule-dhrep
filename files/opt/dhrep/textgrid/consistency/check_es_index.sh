@@ -11,7 +11,6 @@ esac
 
 # find all elasticsearch entries where the internal id (._id) does not match the 
 # id in json metadata (textgridUri without the 'textgrid:'-prefix).
-# needs the idMatchesTextgridUri.groovy script in elasticsearch script dir.
 function run_query {
   local JSON=`curl --request POST \
     --silent \

@@ -53,7 +53,6 @@ class dhrep::tools::cli (
     file { "${_optdir}/consistency/check_es_index.sh":
       mode    => '0777',
       source  => 'puppet:///modules/dhrep/opt/dhrep/textgrid/consistency/check_es_index.sh',
-      require => [File["${_optdir}/consistency"],File['/etc/elasticsearch/masternode/scripts/idMatchesTextgridUri.groovy']],
     }
     # the nagios command for es-index check
     nrpe::plugin { 'check_es_index_consistency':
