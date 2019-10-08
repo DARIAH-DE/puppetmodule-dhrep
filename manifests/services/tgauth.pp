@@ -359,7 +359,7 @@ class dhrep::services::tgauth (
   cron { 'ldap-backup' :
     command => "${_optdir}/ldap-backup.sh > /dev/null 2>&1",
     user    => 'root',
-    hour    => 23,
+    hour    => 21,
     minute  => '53',
   }
 
