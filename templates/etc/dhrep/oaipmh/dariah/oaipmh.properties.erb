@@ -1,15 +1,11 @@
 ###############################################################################
-OAI-PMH Configuration File
+##  OAI-PMH Configuration File                                               ##
 ###############################################################################
 
-##############################
-## elastic search endpoint ###
-##############################
-
-RS_ENDPOINT = http://<%= scope.lookupvar('::fqdn') %>/1.0/oaipmh
+RS_ENDPOINT = https://<%= scope.lookupvar('::fqdn') %>/1.0/oaipmh
 
 ############################
-## elastic search config ###
+##  ElasticSearch Config  ##
 ############################
 
 elasticSearch.url = 127.0.0.1
@@ -18,35 +14,35 @@ elasticSearch.clusterName = <%= scope.lookupvar('dhrep::services::intern::elasti
 elasticSearch.index = dariah-public
 elasticSearch.type = metadata
 
-############################
-####  Project Choosing #####
-############################
+########################
+##  Project Choosing  ##
+########################
 
 textgrid = false
 dariah = true
 
 #############################
-### Repository Properties ###
+##  Repository Properties  ##
 #############################
 
 RepositoryName = DARIAH-DE Repository
-BaseUrl = http://<%= scope.lookupvar('::fqdn') %>/1.0
+BaseUrl = https://<%= scope.lookupvar('::fqdn') %>/1.0
 DeletedRecordInfo = NO
 EarliestDateStamp = 2017-12-05T00:00:00Z
 Granularity = YYYY_MM_DD_THH_MM_SS_Z
 ProtocolVersion = 2.0
 AdminMail = support@de.dariah.eu
 
-############################
-##### Field Settings #######
-############################
+######################
+##  Field Settings  ##
+######################
 
 fields = descriptiveMetadata.dc:contributor, descriptiveMetadata.dc:coverage, descriptiveMetadata.dc:creator, descriptiveMetadata.dc:date, administrativeMetadata.dcterms:modified, descriptiveMetadata.dc:description, descriptiveMetadata.dc:format, descriptiveMetadata.dc:identifier, administrativeMetadata.dcterms:identifier, descriptiveMetadata.dc:language, descriptiveMetadata.dc:publisher, descriptiveMetadata.dc:relation, descriptiveMetadata.dc:rights, descriptiveMetadata.dc:source, descriptiveMetadata.dc:subject, descriptiveMetadata.dc:title, descriptiveMetadata.dc:type
 workFields = descriptiveMetadata.dc:title
 
-############################
-#### Dublin Core Fields ####
-############################
+##########################
+##  Dublin Core Fields  ##
+##########################
 
 contributorList = descriptiveMetadata.dc:contributor
 coverageList = descriptiveMetadata.dc:coverage
@@ -64,9 +60,9 @@ subjectList = descriptiveMetadata.dc:subject
 titleList = descriptiveMetadata.dc:title
 typeList = descriptiveMetadata.dc:type
 
-############################
-## ListIdentifierSetting ###
-############################
+#############################
+##  ListIdentifierSetting  ##
+#############################
 
 rangeField = administrativeMetadata.dcterms:modified
 identifierListFields = descriptiveMetadata.dc:identifier, descriptiveMetadata.dc:date, descriptiveMetadata.dc:format, administrativeMetadata.dcterms:identifier, administrativeMetadata.dcterms:modified
