@@ -2,7 +2,7 @@
 ##  OAI-PMH Configuration File                                               ##
 ###############################################################################
 
-RS_ENDPOINT = https://<%= scope.lookupvar('::fqdn') %>/oaipmh
+RS_ENDPOINT = https://<%= scope.lookupvar('::fqdn') %>/1.0/oaipmh
 
 ############################
 ##  ElasticSearch Config  ##
@@ -26,7 +26,7 @@ dariah = false
 #############################
 
 RepositoryName = TextGrid Repository
-BaseUrl = https://<%= scope.lookupvar('::fqdn') %>
+BaseUrl = https://<%= scope.lookupvar('::fqdn') %>/1.0/oaipmh/oai
 DeletedRecordInfo = NO
 EarliestDateStamp = 2011-06-11T02:32:40Z
 Granularity = YYYY_MM_DD_THH_MM_SS_Z
