@@ -1,4 +1,8 @@
-RS_ENDPOINT = http://<%= scope.lookupvar('::fqdn') %>/oaipmh
+###############################################################################
+##  OAI-PMH Configuration File                                               ##
+###############################################################################
+
+RS_ENDPOINT = https://<%= scope.lookupvar('profiles::textgridrepository::public_hostname') %>/1.0/oaipmh
 
 ############################
 ##  ElasticSearch Config  ##
@@ -13,7 +17,7 @@ elasticSearch.itemLimit = 100
 
 ########################
 ##  Project Choosing  ##
-########################
+########################1
 
 textgrid = true
 dariah = false
@@ -23,12 +27,12 @@ dariah = false
 #############################
 
 RepositoryName = TextGrid Repository
-BaseUrl = http://<%= scope.lookupvar('::fqdn') %>
+BaseUrl = https://<%= scope.lookupvar('profiles::textgridrepository::public_hostname') %>/1.0/oaipmh/oai
 DeletedRecordInfo = NO
 EarliestDateStamp = 2011-06-11T02:32:40Z
 Granularity = YYYY_MM_DD_THH_MM_SS_Z
 ProtocolVersion = 2.0
-AdminMail = funk@sub.uni-goettingen.de
+AdminMail = support@de.dariah.eu
 
 ######################
 ##  Field Settings  ##
