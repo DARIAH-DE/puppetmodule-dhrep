@@ -88,7 +88,7 @@ class dhrep::services::intern::elasticsearch (
     },
   }
 
-# FIXME check installation if plugins are existing!
+  # FIXME check installation if plugins are existing!
   if ($module_update_hack) {
     ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
       instances  => ['masternode', 'workhorse'],
@@ -126,7 +126,10 @@ class dhrep::services::intern::elasticsearch (
   ###
   # nrpe
   ###
-  package{ 'python-setuptools' : ensure => installed }
+  package { 'python-setuptools':
+    ensure => installed,
+  }
+
   package { 'nagios-plugin-elasticsearch':
     # ensure latest does not work right now, compare https://bugs.launchpad.net/ubuntu/+source/dbus/+bug/1593749
     # possibly with puppet 4? do we need 'latest' at all?
