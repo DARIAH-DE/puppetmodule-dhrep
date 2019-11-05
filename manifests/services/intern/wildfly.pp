@@ -7,8 +7,6 @@ class dhrep::services::intern::wildfly (
   $xmx = $dhrep::params::wildfly_xmx,
   $xms = $dhrep::params::wildfly_xms,
   $crud_pw = 'secret',
-  $message_beans_version = '1.3.3',
-  $message_beans_repo_component = 'releases',
 ) inherits dhrep::params {
 
   $_vardir = $::dhrep::params::vardir
@@ -69,18 +67,6 @@ class dhrep::services::intern::wildfly (
     entries => ["topic/${crud_name}","java:jboss/exported/jms/topic/${crud_name}"],
     notify  => [Service['tomcat-crud'], Service['tomcat-publish']],
   }
-
-  ###
-  # stage war
-  ###
-  #staging::file { 'message-beans.war':
-#    source  => "https://ci.de.dariah.eu/nexus/service/local/artifact/maven/redirect?r=${message_beans_repo_component}&g=info.textgrid.middleware&a=message-beans&v=${message_beans_version}&e=war",
-#    target  => "${_vardir}/message-beans-${message_beans_version}.war",
-#    require => Class['wildfly'],
- # }
-  #~> file { '/home/wildfly/wildfly/standalone/deployments/message-beans.war':
-    #source => "${_vardir}/message-beans-${message_beans_version}.war",
-  #}
 
   ###
   # update apt repo and install package
