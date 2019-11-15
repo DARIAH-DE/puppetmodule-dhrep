@@ -172,7 +172,7 @@ class dhrep::static::textgridlab_org(
   $repstatus_target='/var/www/nginx-root/textgridlab.org';
   file { '/opt/dhrep/update-textgridrep-status.sh':
     content => template('dhrep/opt/dhrep/update-textgridrep-status.sh.erb'),
-    mode   => '0755',
+    mode    => '0755',
     require => File[$repstatus_target],
   }
   # run every two minutes
@@ -184,18 +184,18 @@ class dhrep::static::textgridlab_org(
 
 
   #
-  # Update site: needs StorNext mount to be working!
+  # Update site: put into netapp right now, so no StorNext mount is needed anymore!
   #
   file { '/var/www/nginx-root/textgridlab.org/updates':
     ensure => link,
-    target => '/media/stornext/tglab/updates',
+    target => '/media/netapp/www/tglab/updates',
   }
 
   #
-  # TG-lab download files: needs StorNext mount to be working!
+  # TG-lab download files: put into netapp right now, so no StorNext mount is needed anymore!
   #
   file { '/var/www/nginx-root/textgridlab.org/download':
     ensure => link,
-    target => '/media/stornext/tglab/download',
+    target => '/media/netapp/www/tglab/download',
   }
 }
