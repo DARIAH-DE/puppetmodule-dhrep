@@ -23,24 +23,4 @@ class dhrep::tools {
     plugin => 'check_procs',
     args   => '-c 1:20 -w 1:2 -C cron',
   }
-
-  ###
-  # tsm nrpe check
-  ###
-  file { '/var/log/tsm/dsmerror.log':
-    group => 'nagios',
-    mode  => '0660',
-  }
-  file { '/usr/lib/nagios/plugins/check_tivoli':
-    ensure => file,
-    source => 'puppet:///modules/dhrep/usr/lib/nagios/plugins/check_tivoli',
-    owner  => root,
-    group  => root,
-    mode   => '0755',
-  }
-  nrpe::plugin { 'check_tivoli_root':
-    plugin         => 'check_tivoli',
-    args           => '-c /',
-    command_prefix => '/usr/bin/sudo',
-  }
 }
