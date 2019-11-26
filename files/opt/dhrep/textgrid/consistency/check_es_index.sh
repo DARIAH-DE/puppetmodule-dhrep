@@ -26,10 +26,10 @@ function run_query {
                 "script" : {
                   "lang": "painless",
                   "source": "
-                    if(doc['baseUri.keyword'].length < 1) {
+                    if(doc['baseUri.untouched'].length < 1) {
                       return true;
                     }
-                    def base = doc['baseUri.keyword'][0].substring(9);
+                    def base = doc['baseUri.untouched'][0].substring(9);
                     def rev = doc['revision'][0];
                     String uri = base + '.' + rev;
                     return uri != doc['_id'].value;
