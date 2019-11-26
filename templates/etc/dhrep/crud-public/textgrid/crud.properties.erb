@@ -90,7 +90,7 @@ SPARQL_NAMESPACE = http://www.w3.org/2005/sparql-results
 # The Index DB namespapce, if XML.
 IDXDB_NAMESPACE = urn:elasticsearch
 IDXDB_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata
-IDXDB_CLUSTER_NAME = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
+IDXDB_SERVICE_PORT_LIST = <%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %> <%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %>
 IDXDB_USER = *
 IDXDB_PASS = *
 IDXDB_SERVICE_URL_PUBLIC = http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata
