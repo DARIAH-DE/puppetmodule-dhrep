@@ -1,6 +1,12 @@
 # == Class: dhrep::services::intern::elasticsearch
 #
-# Class to install and configure elasticsearch.
+# === Description
+#
+# Class to install and configure elasticsearch for dhrep services, scope: textgrid and dariah.
+#
+# === Notes
+#
+# Initial database creation is now done by the script /opt/dhrep/init_databases.sh!
 #
 # === Parameters
 #
@@ -16,11 +22,11 @@
 # [*elasticsearch_version*]
 #   version of elasticsearch
 #
-# [*attachment_plugin_version*]
-#   version of elasticsearch attachment plugin
-#
 # [*highlighter_plugin_version*]
 #   version of elasticsearch highlighter plugin
+#
+# [*module_update_hack*]
+#   true if modules shall be installed, see TODOs below!
 #
 class dhrep::services::intern::elasticsearch (
   $scope                      = undef,
@@ -104,10 +110,6 @@ class dhrep::services::intern::elasticsearch (
     creates => '/usr/local/src/tgcommon-git',
     require => Package['git'],
   }
-
-  ###
-  # PLEASE NOTE database creation is now done by /opt/dhrep/init_databases.sh!
-  ###
 
   ###
   # telegraf for elasticsearch

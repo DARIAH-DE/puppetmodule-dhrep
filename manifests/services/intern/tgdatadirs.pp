@@ -1,6 +1,25 @@
 # == Class: dhrep::services::intern::tgdatadirs
 #
-# Class to install and configure TG-crud data folders.
+# === Description
+#
+# Class to install and configure TextGrid data folders, public and non-public. Local folders are used for local VMs (such as vagrant and VirtualBox installations), NFS mounts are used for productice machines in most cases.
+#
+# === Notes
+#
+#
+# === Parameters
+#
+# [*scope*]
+#   textgrid or dariah (textgrid only at the moment, no local or mounted storage is necesarry for DARIAH-DE Repository).
+#
+# [*create_local_datadirs*]
+#   true if local datadirs shall be created at system creation
+#
+# [*data_public_location*]
+#   location of the public data folder
+#
+# [*data_nonpublic_location*]
+#   location of the non-public data folder
 #
 class dhrep::services::intern::tgdatadirs (
   $scope                   = undef,
@@ -10,9 +29,8 @@ class dhrep::services::intern::tgdatadirs (
 ){
 
   ###
-  # the data dir
+  # the data dir: must be present
   ###
-
   file { '/data':
     ensure => directory,
     owner  => 'storage',
@@ -20,55 +38,55 @@ class dhrep::services::intern::tgdatadirs (
     mode   => '0755',
   }
 
+  ###
+  # create local data dirs if configured so
+  ###
   if($create_local_datadirs) {
-    ###
-    # local
-    ###
     file { '/data/public':
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
       mode   => '0755',
     }
-
     file { '/data/nonpublic':
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
       mode   => '0755',
     }
-
     file { '/data/public/productive':
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
       mode   => '0755',
     }
-
     file { '/data/nonpublic/productive':
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
       mode   => '0755',
     }
+  }
 
-  } else {
-
-    ###
-    # nfs
-    ###
+  ###
+  # create nfs mounts otherwise
+  ###
+  else {
 
     package { 'nfs-common':
       ensure => present,
     }
 
+    #
+    # FIXME Change into netapp folders and pathes if moving from StorNext to NetApp!!
+    #
+
     file { '/media/stornext':
       ensure => directory,
-#      owner  => 'storage',
-#      group  => 'ULSB',
-#      mode   => '0755',
+      # owner  => 'storage',
+      # group  => 'ULSB',
+      # mode   => '0755',
     }
-
     mount { '/media/stornext':
       ensure  => 'mounted',
       device  => 'gwdu157.fs.gwdg.de:/home/textgrid01/',
@@ -77,12 +95,10 @@ class dhrep::services::intern::tgdatadirs (
       atboot  => true,
       require => [File['/media/stornext'],Package['nfs-common']],
     }
-
     file { '/data/public':
       ensure => 'link',
       target => $data_public_location,
     }
-
     file { '/data/nonpublic':
       ensure => 'link',
       target => $data_nonpublic_location,
@@ -95,7 +111,5 @@ class dhrep::services::intern::tgdatadirs (
       plugin => 'check_disk',
       args   => '--units GB -w 1024 -c 256 -p /media/stornext',
     }
-
   }
-
 }

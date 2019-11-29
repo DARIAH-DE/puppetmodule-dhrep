@@ -1,12 +1,32 @@
 # == Class: dhrep::services::intern::messaging
 #
-# Class to build up messaging.
+# === Description
+#
+# Configuration of the enzmeta, bolrdf, and DARIAH-DE Repository messaging using Wildfly (please see wildfly.pp).
+#
+# FIXME: Are the user and password settings still in use?
+#
+# FIXME: Can we put these into the wildfly.pp class?
+#
+# === Parameters
+#
+# [*scope*]
+#   textgrid or dariah
+#
+# [*enzmeta_textgrid_user*]
+#   the enzmeta_textgrid_user (?)
+#
+# [*enzmeta_textgrid_password*]
+#   the enzmeta_textgrid_password (?)
+#
+# [*bolrdf_textgrid_user*]
+#   the bolrdf_textgrid_user (?)
 #
 class dhrep::services::intern::messaging (
   $scope                     = undef,
-  $enzmeta_textgrid_user     = '',
-  $enzmeta_textgrid_password = '',
-  $bolrdf_textgrid_user      = '',
+  $enzmeta_textgrid_user     = 'enzmeta-tguser',
+  $enzmeta_textgrid_password = 'enzmeta-tgpass',
+  $bolrdf_textgrid_user      = 'bolrdf-tguser',
 ) inherits dhrep::params {
 
   $_confdir = $::dhrep::params::confdir

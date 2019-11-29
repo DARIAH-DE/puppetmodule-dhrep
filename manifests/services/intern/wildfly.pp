@@ -1,6 +1,30 @@
 # == Class: dhrep::services::intern::wildfly
 #
-# Class to install and configure wildfly, adds also tgcrud user for jms
+# === Description
+#
+# Class to install and configure wildfly.
+#
+# === Notes
+#
+# === Parameters
+#
+# [*scope*]
+#   textgrid or dariah
+#
+# [*xmx*]
+#   xmx mempory usage of the wildfly service
+#
+# [*xms*]
+#   xms mempory usage of the wildfly service
+#
+# [*crud_pw*]
+#   the password crud is using to send messages to the wildfly messaging service
+#
+# [*message_beans_version*]
+#   the version of the message beans to be installed
+#
+# [*message_beans_repo_component*]
+#   the repo component the message beans shall be installed from
 #
 class dhrep::services::intern::wildfly (
   $scope = undef,

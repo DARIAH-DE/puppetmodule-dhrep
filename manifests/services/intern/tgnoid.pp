@@ -1,9 +1,24 @@
 # == Class: dhrep::services::intern::tgnoid
 #
-# Class to install and configure the NOID. Creates initial textgrid minter.
+# === Description
 #
-# TODO:
-#   add checks to bash script
+# Class to install and configure the NOID for TextGrid usage. The NOID is minting TextGrid URIs for internal and external TextGrid use. TG-crud is using the key/value store of the NOID identifiers for internal locking of TextGrid objects on revision URI level (such as textgrid:1234.3).
+#
+# In case of a rebuild of the TextGrid machines from backup files (LDAP, Sesame, and/or more) the NOID IDs must be minted again, until the next minted TextGrid URI will be a new one that is NOT yet used by any restored data! The internal key/value store must NOT be rebuild, it is only used at TG-crud runtime.
+#
+# Patches some warning out of the code and creates initial textgrid minter.
+#
+# === Notes
+#
+# TODO: add checks to bash script
+#
+# === Parameters
+#
+# [*scope*]
+#   textgrid or dariah (textgrid only at the moment, no NOIDs are used for the DARIAH-DE Repository, Handle PIDs are used there for internal identifier usage).
+#
+# [*crud_secret*]
+#   the secret crud uses to access the noid via HTTP
 #
 class dhrep::services::intern::tgnoid (
   $scope       = undef,
