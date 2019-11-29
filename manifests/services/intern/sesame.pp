@@ -1,8 +1,17 @@
 # == Class: dhrep::services::intern::sesame
 #
+# === Description
+#
 # Class to install and configure sesame.
-# Creates initial repos textgrid-nonpublic and textgrid-public and adds initial
-# triples.
+#
+# === Notes
+#
+# Initial database creation is now done by the script /opt/dhrep/init_databases.sh! Creates initial repos textgrid-nonpublic and textgrid-public and adds initial triples.
+#
+# === Parameters
+#
+# [*scope*]
+#   textgrid or dariah (textgrid only at the moment, there is no sesame installation for the DARIAH-DE Repository eright now.
 #
 class dhrep::services::intern::sesame (
   $scope = undef,
@@ -27,8 +36,7 @@ class dhrep::services::intern::sesame (
     creates => "/home/${_catname}/openrdf-sesame-${version}",
     require => Usertomcat::Instance[$_catname],
   }
-  ~>
-  tomcat::war { 'openrdf-workbench.war':
+  ~> tomcat::war { 'openrdf-workbench.war':
     war_ensure    => present,
     user          => $_catname,
     group         => $_catname,
@@ -36,8 +44,7 @@ class dhrep::services::intern::sesame (
     war_source    => "/home/${_catname}/openrdf-sesame-${version}/war/openrdf-workbench.war",
     require       => Usertomcat::Instance[$_catname],
   }
-  ~>
-  tomcat::war { 'openrdf-sesame.war':
+  ~> tomcat::war { 'openrdf-sesame.war':
     war_ensure    => present,
     user          => $_catname,
     group         => $_catname,
@@ -47,16 +54,12 @@ class dhrep::services::intern::sesame (
   }
 
   file { "/home/${_catname}/mime.ttl":
-    ensure  => present,
+    ensure  => file,
     owner   => $_catname,
     mode    => '0644',
     source  => 'puppet:///modules/dhrep/rdf/mime.ttl',
-    require => User[$_catname]
+    require => User[$_catname],
   }
-
-  ###
-  # NOTE database creation is now done by /opt/dhrep/init_databases.sh!
-  ###
 
   ###
   # sesame backup script
@@ -76,10 +79,10 @@ class dhrep::services::intern::sesame (
     require => [File[$_optdir],File["${_backupdir}/sesame"]],
   }
   cron { 'sesame-backup' :
-    command  => "${_optdir}/sesame-backup.sh",
-    user     => $_catname,
-    hour     => 22,
-    minute   => 33,
+    command => "${_optdir}/sesame-backup.sh",
+    user    => $_catname,
+    hour    => 22,
+    minute  => 33,
   }
 
   ###

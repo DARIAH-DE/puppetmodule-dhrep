@@ -1,6 +1,12 @@
 # == Class: dhrep::services::intern::elasticsearch
 #
-# Class to install and configure elasticsearch.
+# === Description
+#
+# Class to install and configure elasticsearch for dhrep services, scope: textgrid and dariah.
+#
+# === Notes
+#
+# Initial database creation is now done by the script /opt/dhrep/init_databases.sh!
 #
 # === Parameters
 #
@@ -25,7 +31,6 @@
 class dhrep::services::intern::elasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
-#  $repo_version               = 5,
   $elasticsearch_version      = '1.7.5',
   $attachments_plugin_version = '2.7.0',
   $highlighter_plugin_version = '1.7.0',
@@ -54,9 +59,8 @@ class dhrep::services::intern::elasticsearch (
   # for using es 1.7 with newer es-puppet module, remove code below and use elastic_stack::repo for es update
   apt::source { 'elasticsearch':
     comment  => '',
-# FIXME gpg keys could not be verified on bionic
+    # FIXME gpg keys could not be verified on bionic
     location => '[allow-insecure=yes] http://packages.elastic.co/elasticsearch/1.7/debian',
-#    location => 'http://packages.elastic.co/elasticsearch/1.7/debian',
     release  => 'stable',
     repos    => 'main',
     key      => {
@@ -127,10 +131,6 @@ class dhrep::services::intern::elasticsearch (
     creates => '/usr/local/src/tgcommon-git',
     require => Package['git'],
   }
-
-  ###
-  # PLEASE NOTE database creation is now done by /opt/dhrep/init_databases.sh!
-  ###
 
   ###
   # telegraf for elasticsearch
