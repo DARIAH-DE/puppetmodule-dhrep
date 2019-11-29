@@ -30,8 +30,7 @@ sandboxDescription="Data in the TextGrid Repository Sandbox is reviewed for fina
 tg.sparqlEndpoint=http://localhost:9091/openrdf-sesame/repositories/textgrid-public
 tg.crudUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgcrud-public/rest
 tg.searchUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/tgsearch-public
-tg.esCluster=<%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
-tg.esNodes=127.0.0.1:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>
+tg.esNodes=http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>, http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %>
 tg.esIndex=textgrid-public
 tg.esType=metadata
 # xslt file for extracting ordered uris from mets file (from resources/xslt folder)
