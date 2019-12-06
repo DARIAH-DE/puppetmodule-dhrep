@@ -31,7 +31,7 @@ server {
 
 	# Make site accessible from http://localhost/
 	server_name localhost;
-
+        add_header Referrer-Policy "no-referrer";
 	location / {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
@@ -65,7 +65,7 @@ server {
 #	server_name_in_redirect off;
 
 	server_name localhost;
-
+        add_header Referrer-Policy "no-referrer";
 	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
 
