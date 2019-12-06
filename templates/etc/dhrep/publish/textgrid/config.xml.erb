@@ -312,25 +312,23 @@
 		<class name="actionmodule.textgrid.publish.CopyElasticSearchIndex">
 			<property>
 				<field>elasticSearchReadHost</field>
-				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>/textgrid-nonpublic/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-nonpublic/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to read metadtaa from (non-public instance).</description>
 			</property>
 			<property>
 				<field>elasticSearchWriteHost</field>
-				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>/textgrid-public/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
-				<field>elasticSearchReadPorts</field>
-				<value><%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %></value>
-				<value><%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %></value>
-				<description>The ElasticSearch ports</description>
+				<field>elasticSearchClusterNameReadHost</field>
+				<value><%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %></value>
+				<description>The ElasticSearch cluster name</description>
 			</property>
 			<property>
-				<field>elasticSearchWritePorts</field>
-				<value><%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %></value>
-				<value><%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %></value>
-				<description>The ElasticSearch ports</description>
+				<field>elasticSearchClusterNameWriteHost</field>
+				<value><%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %></value>
+				<description>The ElasticSearch cluster name</description>
 			</property>
 		</class>
 		<class name="actionmodule.textgrid.publish.MoveToStaticGridStorage">
@@ -402,14 +400,13 @@
 			</property>
 			<property>
 				<field>elasticSearchHost</field>
-				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>/textgrid-public/metadata/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>/textgrid-public/metadata/</value>
 				<description>The endpoint URL of the ElasticSearch host to write metadata to (public instance).</description>
 			</property>
 			<property>
-				<field>elasticSearchPorts</field>
-				<value><%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %></value>
-				<value><%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %></value>
-				<description>The ElasticSearch ports</description>
+				<field>elasticSearchClusterName</field>
+				<value><%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %></value>
+				<description>The ElasticSearch cluster name</description>
 			</property>
 			<property>
 				<field>removeFromRdfDatabase</field>
