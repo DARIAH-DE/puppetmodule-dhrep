@@ -28,8 +28,9 @@ server {
 
 	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
-
-	# Make site accessible from http://localhost/
+        add_header Referrer-Policy "no-referrer";
+	
+        # Make site accessible from http://localhost/
 	server_name localhost;
 
 	location / {
@@ -69,6 +70,7 @@ server {
 
 	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
+        add_header Referrer-Policy "no-referrer";
 
 	ssl on;
 	ssl_certificate <%= @vhost_ssl_cert %>;
