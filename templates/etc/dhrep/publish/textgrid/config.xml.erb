@@ -232,24 +232,28 @@
 				<field>xpathNamespaces</field>
 				<value>tg=http://textgrid.info/namespaces/metadata/core/2010</value>
 			</property>
-			<property>
+            <property>
 				<field>editionRequiredFields</field>
-				<value>/tg:object/tg:edition/tg:isEditionOf</value>
-				<value>/tg:object/tg:edition/tg:license</value>
+				<value>boolean(/tg:object/tg:edition/tg:isEditionOf/text()!='')</value>
+				<value>boolean(/tg:object/tg:edition/tg:license/text()!='')</value>
+				<description>Add boolean (!) XPath expressions for fields which are required for publishing an Edition here.</description>
 			</property>
 			<property>
 				<field>itemRequiredFields</field>
-				<value>/tg:object/tg:item/tg:rightsHolder</value>
+				<value>boolean(/tg:object/tg:item/tg:rightsHolder/text()!='')</value>
+				<description>Add boolean (!) XPath expressions for fields which are required for publishing an Item here.</description>
 			</property>
 			<property>
 				<field>collectionRequiredFields</field>
-				<value>/tg:object/tg:collection/tg:collector</value>
+				<value>boolean(/tg:object/tg:collection/tg:collector/text()!='')</value>
+				<description>Add boolean (!) XPath expressions for fields which are required for publishing a collection here.</description>
 			</property>
 			<property>
 				<field>workRequiredFields</field>
-				<value>/tg:object/tg:work/tg:agent</value>
-				<value>/tg:object/tg:work/tg:dateOfCreation</value>
-				<value>/tg:object/tg:work/tg:genre</value>
+				<value>boolean(/tg:object/tg:work/tg:agent/text()!='')</value>
+				<value>/tg:object/tg:work/tg:dateOfCreation[@notBefore!='' and @notAfter!='']/@* or /tg:object/tg:work/tg:dateOfCreation/text()!=''</value>
+				<value>boolean(/tg:object/tg:work/tg:genre/text()!='')</value>
+				<description>Add boolean (!) XPath expressions for fields which are required for publishing a work here.</description>
 			</property>
 		</class>
 		<class name="actionmodule.textgrid.publish.PublishCheckWorldReadable">

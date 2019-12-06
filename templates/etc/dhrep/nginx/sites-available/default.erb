@@ -28,8 +28,9 @@ server {
 
 	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
-
-	# Make site accessible from http://localhost/
+        add_header Referrer-Policy "no-referrer";
+	
+        # Make site accessible from http://localhost/
 	server_name localhost;
         add_header Referrer-Policy "no-referrer";
 	location / {
@@ -48,6 +49,7 @@ server {
 #		allow 134.94.199.61; # Icinga DARIAH Jülich
 		allow 134.76.20.211; # Icinga DARIAH GWDG
 		allow 134.76.30.136; # Icinga DARIAH GWDG
+		allow 141.5.106.20;  # Icinga2-Test DARIAH GWDG
 		allow 127.0.0.1;     # Localhost as well :)
 		deny all;
 	}
@@ -68,6 +70,7 @@ server {
         add_header Referrer-Policy "no-referrer";
 	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
+        add_header Referrer-Policy "no-referrer";
 
 	ssl on;
 	ssl_certificate <%= @vhost_ssl_cert %>;
