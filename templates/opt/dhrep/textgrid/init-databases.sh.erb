@@ -5,14 +5,14 @@ if [[ "$@" != $SURETEXT ]]; then
   echo -e "\nThis script deletes LDAP, sesame and elasticsearch database!"
   echo -e "It may be used for initial server setup."
   echo -e "If you KNOW WHAT YOU'RE DOING and if you REALLY WANT IT, enter:"
-  echo -e "\n    ${0} ${SURETEXT}\n"
-  echo -e "\nIf this init script is NOT working as intended please assure..."
+  echo -e "\n    ${0} ${SURETEXT}\n\n"
+  echo -e "If this init script is NOT working as intended please assure..."
   echo -e "  ...you have database services running,"
   echo -e "  ...you have installed the correct Java alternative to be able to"
   echo -e "     install and run the services correctly (java-1.8.0-openjdk-amd64)"
-  echo -e "  ...you have checked out the correct path to the tgcommon tools,"
-  echo -e "     please see /usr/local/src/tgcommon-git/"
-  echo -e "Thanks! :-)"
+  echo -e "  ...you have checked out the correct branch of the tgcommon tools,"
+  echo -e "     please see /usr/local/src/tgcommon-git/\n"
+  echo -e "Thanks! :-)\n"
 	exit
 fi
 
