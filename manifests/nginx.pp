@@ -61,12 +61,15 @@ class dhrep::nginx (
   }
   # TODO: for nginx we use chained cert, possibly merge to chain by puppet magic?
   # for now the "kette" is not used, but a chained cert below
-  file { '/etc/ssl/Uni_Goettingen_Kette.pem':
+  # TODO: please do a
+  # $cat {hostname}-crt.pem dhrep_dariah_de_puppet/modules/profiles/files/etc/ssl/DFN_PKI_Generation_2.pem >> {hostname}-chain-crt.pem
+  # to add DFN cert to server cert.
+  file { '/etc/ssl/DFN_PKI_Generation_2.pem':
     ensure => file,
     owner  => root,
     group  => root,
     mode   => '0644',
-    source => 'puppet:///modules/profiles/etc/ssl/Uni_Goettingen_Kette_Telekom.pem',
+    source => 'puppet:///modules/profiles/etc/ssl/DFN_PKI_Generation_2.pem',
 #    notify => Service['nginx'],
   }
   if $sslkey != undef {
