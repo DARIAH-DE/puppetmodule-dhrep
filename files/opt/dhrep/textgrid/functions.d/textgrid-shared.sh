@@ -119,7 +119,7 @@ function isInElasticsearch {
 
     local res=`curl --silent $ELASTICSEARCH_URL/$id | jq .found`
 
-     if [ "$res" == "true" ]; then
+    if [ "$res" == "true" ]; then
         return 0
     else
     	  return 1
