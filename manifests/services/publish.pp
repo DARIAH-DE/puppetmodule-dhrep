@@ -171,4 +171,31 @@ class dhrep::services::publish (
     dateformat   => '.%Y-%m-%d',
   }
 
+  ###
+  # scope: textgrid
+  ###
+  if $scope == 'textgrid' {
+    ###
+    # add elasticsearch script for removing nearly publish flag from elasticsearch
+    # NOTE we need to deploy the scripts to both masternode ans workhorse!
+    ###
+    file { '/etc/elasticsearch/masternode/scripts/removeNearlyPublishFlag.groovy':
+      ensure  => file,
+      owner   => 'elasticsearch',
+      group   => 'elasticsearch',
+      mode    => '0640',
+      source  => 'puppet:///modules/dhrep/etc/elasticsearch/scripts/removeNearlyPublishFlag.groovy',
+      require => File['/etc/elasticsearch/masternode/scripts/'],
+      notify  => Service[$_catname],
+    }
+    file { '/etc/elasticsearch/workhorse/scripts/removeNearlyPublishFlag.groovy':
+      ensure  => file,
+      owner   => 'elasticsearch',
+      group   => 'elasticsearch',
+      mode    => '0640',
+      source  => 'puppet:///modules/dhrep/etc/elasticsearch/scripts/removeNearlyPublishFlag.groovy',
+      require => File['/etc/elasticsearch/workhorse/scripts/'],
+      notify  => Service[$_catname],
+    }
+  }
 }

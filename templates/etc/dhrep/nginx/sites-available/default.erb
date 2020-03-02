@@ -32,7 +32,7 @@ server {
 	
         # Make site accessible from http://localhost/
 	server_name localhost;
-        add_header Referrer-Policy "no-referrer";
+
 	location / {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
@@ -46,7 +46,7 @@ server {
 		# copied from http://blog.kovyrin.net/2006/04/29/monitoring-nginx-with-rrdtool/
 		stub_status on;
 		access_log off;
-#		allow 134.94.199.61; # Icinga DARIAH Jülich
+		allow 134.76.20.211; # Icinga DARIAH GWDG
 		allow 134.76.30.136; # Icinga DARIAH GWDG
 		allow 134.76.30.149; # Icinga2 DARIAH GWDG
 		allow 127.0.0.1;     # Localhost as well :)
@@ -60,11 +60,13 @@ server {
 # HTTPS server
 #
 server {
-	listen 443 ssl http2;
-	listen [::]:443 ssl http2 ipv6only=on; 
+	listen 443;
+#	listen 443 default_server;
+#	server_name _;
+#	server_name_in_redirect off;
 
 	server_name localhost;
-        add_header Referrer-Policy "no-referrer";
+
 	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
         add_header Referrer-Policy "no-referrer";

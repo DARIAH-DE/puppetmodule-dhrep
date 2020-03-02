@@ -9,14 +9,14 @@ RS_ENDPOINT = https://<%= scope.lookupvar('profiles::textgridrepository::public_
 ############################
 
 elasticSearch.url = 127.0.0.1
-elasticSearch.ports = <%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>, <%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %>
+elasticSearch.port = <%= scope.lookupvar('dhrep::params::elasticsearch_master_tcp_port') %>
+elasticSearch.clusterName = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 elasticSearch.index = textgrid-public
 elasticSearch.type = metadata
-elasticSearch.itemLimit = 100
 
 ########################
 ##  Project Choosing  ##
-########################
+########################1
 
 textgrid = true
 dariah = false
@@ -31,7 +31,7 @@ DeletedRecordInfo = NO
 EarliestDateStamp = 2011-06-11T02:32:40Z
 Granularity = YYYY_MM_DD_THH_MM_SS_Z
 ProtocolVersion = 2.0
-AdminMail = brodhun@sub.uni-goettingen.de
+AdminMail = support@de.dariah.eu
 
 ######################
 ##  Field Settings  ##
