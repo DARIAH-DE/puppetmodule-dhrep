@@ -226,7 +226,7 @@
 		<class name="actionmodule.textgrid.publish.PublishCheckEdition">
 			<property>
 				<field>tgsearchUrl</field>
-				<value>http://localhost:9090/tgsearch</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch</value>
 			</property>
 			<property>
 				<field>xpathNamespaces</field>
@@ -259,7 +259,7 @@
 		<class name="actionmodule.textgrid.publish.PublishCheckWorldReadable">
 			<property>
 				<field>tgsearchUrl</field>
-				<value>http://localhost:9090/tgsearch</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch</value>
 			</property>
 		</class>
 		<class name="actionmodule.textgrid.publish.CheckReferences">
@@ -280,6 +280,10 @@
 			<property>
 				<field>tgpidUrl</field>
 				<value>http://localhost:<%= @pid_port %>/tgpid/</value>
+			</property>
+            <property>
+				<field>tgsearchUrl</field>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch</value>
 			</property>
 			<property>
 				<field>pidResolverPrefix</field>
@@ -422,12 +426,12 @@
 		<class name="actionmodule.textgrid.copy.GatherObjectUris">
 			<property>
 				<field>tgsearchUrl</field>
-				<value>http://localhost:9090/tgsearch/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch/</value>
 				<description>The endpoint URL of the TG-search service (non-public instance).</description>
 			</property>
 			<property>
 				<field>tgsearchUrlPublic</field>
-				<value>http://localhost:9090/tgsearch-public/</value>
+				<value>http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_tgsearch::http_port') %>/tgsearch-public/</value>
 				<description>The endpoint URL of the TG-search service (non-public instance).</description>
 			</property>
 		</class>
