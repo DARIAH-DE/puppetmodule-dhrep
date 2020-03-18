@@ -21,11 +21,15 @@
 # [*data_nonpublic_location*]
 #   location of the non-public data folder
 #
+# [*tg_delete_empty_dirs*]
+#   delete empty dirs in data folders via cron job
+#
 class dhrep::services::intern::tgdatadirs (
   $scope                   = undef,
   $create_local_datadirs   = undef,
   $data_public_location    = undef,
   $data_nonpublic_location = undef,
+  $tg_delete_empty_dirs    = false,
 ){
 
   ###
@@ -102,6 +106,28 @@ class dhrep::services::intern::tgdatadirs (
     file { '/data/nonpublic':
       ensure => 'link',
       target => $data_nonpublic_location,
+    }
+
+    ###
+    # cron for deleting empty folders in data dirs
+    ###
+    if ($tg_delete_empty_dirs) {
+      cron { 'delete-empty-folders-public':
+        command  => "find ${data_public_location} -type d -empty -delete",
+        user     => 'storage',
+        hour     => 4,
+        minute   => 3,
+        monthday => 2,
+        require  => File['/data/public'],
+      }
+      cron { 'delete-empty-folders-nonpublic':
+        command  => "find ${data_nonpublic_location} -type d -empty -delete",
+        user     => 'storage',
+        hour     => 3,
+        minute   => 8,
+        monthday => 2,
+        require  => File['/data/public'],
+      }
     }
 
     ###
