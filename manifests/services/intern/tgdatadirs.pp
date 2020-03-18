@@ -45,7 +45,11 @@ class dhrep::services::intern::tgdatadirs (
   ###
   # create local data dirs if configured so
   ###
-  if($create_local_datadirs) {
+  if ($create_local_datadirs) {
+
+    $data_public_location    = '/data/public/productive',
+    $data_nonpublic_location = '/data/nonpublic/productive',
+
     file { '/data/public':
       ensure => directory,
       owner  => 'storage',
@@ -58,13 +62,13 @@ class dhrep::services::intern::tgdatadirs (
       group  => 'ULSB',
       mode   => '0755',
     }
-    file { '/data/public/productive':
+    file { $data_public_location:
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
       mode   => '0755',
     }
-    file { '/data/nonpublic/productive':
+    file { $data_nonpublic_location:
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
@@ -109,33 +113,33 @@ class dhrep::services::intern::tgdatadirs (
     }
 
     ###
-    # cron for deleting empty folders in data dirs
-    ###
-    if ($tg_delete_empty_dirs) {
-      cron { 'delete-empty-folders-public':
-        command  => "find ${data_public_location} -type d -empty -delete > /dev/null",
-        user     => 'storage',
-        hour     => 4,
-        minute   => 3,
-        monthday => 2,
-        require  => File['/data/public'],
-      }
-      cron { 'delete-empty-folders-nonpublic':
-        command  => "find ${data_nonpublic_location} -type d -empty -delete > /dev/null",
-        user     => 'storage',
-        hour     => 3,
-        minute   => 8,
-        monthday => 2,
-        require  => File['/data/public'],
-      }
-    }
-
-    ###
     # nrpe
     ###
     nrpe::plugin { 'check_disk_stornext':
       plugin => 'check_disk',
       args   => '--units GB -w 1024 -c 256 -p /media/stornext',
+    }
+  }
+
+  ###
+  # cron for deleting empty folders in data dirs
+  ###
+  if ($tg_delete_empty_dirs) {
+    cron { 'delete-empty-folders-public':
+      command  => "find ${data_public_location} -type d -empty -delete > /dev/null",
+      user     => 'storage',
+      hour     => 4,
+      minute   => 3,
+      monthday => 2,
+      require  => File['/data/public'],
+    }
+    cron { 'delete-empty-folders-nonpublic':
+      command  => "find ${data_nonpublic_location} -type d -empty -delete > /dev/null",
+      user     => 'storage',
+      hour     => 3,
+      minute   => 8,
+      monthday => 2,
+      require  => File['/data/public'],
     }
   }
 }
