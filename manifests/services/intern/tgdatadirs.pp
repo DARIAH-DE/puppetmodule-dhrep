@@ -47,8 +47,8 @@ class dhrep::services::intern::tgdatadirs (
   ###
   if ($create_local_datadirs) {
 
-    $data_public_location    = '/data/public/productive',
-    $data_nonpublic_location = '/data/nonpublic/productive',
+    $data_public_location    = '/data/public/productive'
+    $data_nonpublic_location = '/data/nonpublic/productive'
 
     file { '/data/public':
       ensure => directory,
