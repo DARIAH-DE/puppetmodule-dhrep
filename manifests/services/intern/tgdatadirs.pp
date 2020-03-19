@@ -47,8 +47,8 @@ class dhrep::services::intern::tgdatadirs (
   ###
   if ($create_local_datadirs) {
 
-    $data_public_location    = '/data/public/productive'
-    $data_nonpublic_location = '/data/nonpublic/productive'
+    $_local_data_public_location = '/data/public/productive'
+    $_local_data_nonpublic_location = '/data/nonpublic/productive'
 
     file { '/data/public':
       ensure => directory,
@@ -62,17 +62,39 @@ class dhrep::services::intern::tgdatadirs (
       group  => 'ULSB',
       mode   => '0755',
     }
-    file { $data_public_location:
+    file { $_local_data_public_location:
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
       mode   => '0755',
     }
-    file { $data_nonpublic_location:
+    file { $_local_data_nonpublic_location:
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
       mode   => '0755',
+    }
+
+    ###
+    # cron for deleting empty folders in data dirs
+    ###
+    if ($tg_delete_empty_dirs) {
+      cron { 'delete-empty-local-folders-public':
+        command  => "find ${_local_data_public_location} -type d -empty -delete > /dev/null",
+        user     => 'storage',
+        hour     => 5,
+        minute   => 24,
+        monthday => 20,
+        require  => File['/data/public'],
+      }
+      cron { 'delete-empty-local-folders-nonpublic':
+        command  => "find ${_local_data_nonpublic_location} -type d -empty -delete > /dev/null",
+        user     => 'storage',
+        hour     => 3,
+        minute   => 18,
+        monthday => 22,
+        require  => File['/data/public'],
+      }
     }
   }
 
@@ -119,27 +141,27 @@ class dhrep::services::intern::tgdatadirs (
       plugin => 'check_disk',
       args   => '--units GB -w 1024 -c 256 -p /media/stornext',
     }
-  }
 
-  ###
-  # cron for deleting empty folders in data dirs
-  ###
-  if ($tg_delete_empty_dirs) {
-    cron { 'delete-empty-folders-public':
-      command  => "find ${data_public_location} -type d -empty -delete > /dev/null",
-      user     => 'storage',
-      hour     => 5,
-      minute   => 24,
-      monthday => 20,
-      require  => File['/data/public'],
-    }
-    cron { 'delete-empty-folders-nonpublic':
-      command  => "find ${data_nonpublic_location} -type d -empty -delete > /dev/null",
-      user     => 'storage',
-      hour     => 3,
-      minute   => 18,
-      monthday => 22,
-      require  => File['/data/public'],
+    ###
+    # cron for deleting empty folders in data dirs
+    ###
+    if ($tg_delete_empty_dirs) {
+      cron { 'delete-empty-nfs-folders-public':
+        command  => "find ${data_public_location} -type d -empty -delete > /dev/null",
+        user     => 'storage',
+        hour     => 5,
+        minute   => 24,
+        monthday => 20,
+        require  => File['/data/public'],
+      }
+      cron { 'delete-empty-nfs-folders-nonpublic':
+        command  => "find ${data_nonpublic_location} -type d -empty -delete > /dev/null",
+        user     => 'storage',
+        hour     => 3,
+        minute   => 18,
+        monthday => 22,
+        require  => File['/data/public'],
+      }
     }
   }
 }
