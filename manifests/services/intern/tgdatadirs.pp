@@ -32,6 +32,9 @@ class dhrep::services::intern::tgdatadirs (
   $tg_delete_empty_dirs    = false,
 ){
 
+  $_data_public_location = $data_public_location
+  $_data_nonpublic_location = $data_nonpublic_location
+
   ###
   # the data dir: must be present
   ###
@@ -47,8 +50,8 @@ class dhrep::services::intern::tgdatadirs (
   ###
   if ($create_local_datadirs) {
 
-    $data_public_location    = '/data/public/productive'
-    $data_nonpublic_location = '/data/nonpublic/productive'
+    $_data_public_location    = '/data/public/productive'
+    $_data_nonpublic_location = '/data/nonpublic/productive'
 
     file { '/data/public':
       ensure => directory,
@@ -62,13 +65,13 @@ class dhrep::services::intern::tgdatadirs (
       group  => 'ULSB',
       mode   => '0755',
     }
-    file { $data_public_location:
+    file { $_data_public_location:
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
       mode   => '0755',
     }
-    file { $data_nonpublic_location:
+    file { $_data_nonpublic_location:
       ensure => directory,
       owner  => 'storage',
       group  => 'ULSB',
@@ -126,7 +129,7 @@ class dhrep::services::intern::tgdatadirs (
   ###
   if ($tg_delete_empty_dirs) {
     cron { 'delete-empty-folders-public':
-      command  => "find ${data_public_location} -type d -empty -delete > /dev/null",
+      command  => "find ${_data_public_location} -type d -empty -delete > /dev/null",
       user     => 'storage',
       hour     => 5,
       minute   => 24,
@@ -134,7 +137,7 @@ class dhrep::services::intern::tgdatadirs (
       require  => File['/data/public'],
     }
     cron { 'delete-empty-folders-nonpublic':
-      command  => "find ${data_nonpublic_location} -type d -empty -delete > /dev/null",
+      command  => "find ${_data_nonpublic_location} -type d -empty -delete > /dev/null",
       user     => 'storage',
       hour     => 3,
       minute   => 18,
