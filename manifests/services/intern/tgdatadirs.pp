@@ -128,17 +128,17 @@ class dhrep::services::intern::tgdatadirs (
     cron { 'delete-empty-folders-public':
       command  => "find ${data_public_location} -type d -empty -delete > /dev/null",
       user     => 'storage',
-      hour     => 4,
-      minute   => 3,
-      monthday => 2,
+      hour     => 5,
+      minute   => 24,
+      monthday => 20,
       require  => File['/data/public'],
     }
     cron { 'delete-empty-folders-nonpublic':
       command  => "find ${data_nonpublic_location} -type d -empty -delete > /dev/null",
       user     => 'storage',
       hour     => 3,
-      minute   => 8,
-      monthday => 2,
+      minute   => 18,
+      monthday => 22,
       require  => File['/data/public'],
     }
   }
