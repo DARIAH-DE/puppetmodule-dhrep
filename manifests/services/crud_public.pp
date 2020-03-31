@@ -30,6 +30,7 @@ class dhrep::services::crud_public (
   $oaipmh_location              = "https://${::fqdn}/1.0/oaipmh/oai",
   $datacite_location            = 'https://search.datacite.org/works/',
   $digilib_location             = "https://${::fqdn}/1.0/digilib/rest/IIIF/",
+  $switchboard_location         = 'https://switchboard.clarin.eu/#/dhrep/',
   $manifest_location            = "https://${::fqdn}/1.0/iiif/manifests/",
   $mirador_location             = 'https://textgridlab.org/1.0/iiif/mirador/',
   $extract_techmd               = true,
