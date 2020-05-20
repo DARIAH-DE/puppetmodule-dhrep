@@ -76,34 +76,36 @@
 	<!-- </step> -->
 	<!-- </policy> -->
 
-	<!-- Policy for publishing technical TextGrid objects in WorldReadable state 
+	<!-- Policy for publishing technical TextGrid objects in WorldReadable state
 		(also from TG-lab) -->
 	<policy name="TGPublishWorldReadable">
 		<step class="textgrid.publish.PublishStart">
 			<step class="textgrid.publish.PublishCheckWorldReadable">
-				<step class="textgrid.publish.ModifyAndUpdate">
-					<step class="textgrid.publish.CopyElasticSearchIndex">
-						<step class="textgrid.publish.CopyRelationData">
-							<step class="textgrid.publish.MoveToStaticGridStorage">
-								<step class="textgrid.publish.UpdateTgauth">
-									<step class="textgrid.publish.PublishComplete" />
-								</step>
-							</step>
-						</step>
-					</step>
-				</step>
+                <step class="textgrid.publish.CheckIsPublic">
+				    <step class="textgrid.publish.ModifyAndUpdate">
+					    <step class="textgrid.publish.CopyElasticSearchIndex">
+						    <step class="textgrid.publish.CopyRelationData">
+							    <step class="textgrid.publish.MoveToStaticGridStorage">
+								    <step class="textgrid.publish.UpdateTgauth">
+									    <step class="textgrid.publish.PublishComplete" />
+								    </step>
+							    </step>
+						    </step>
+					    </step>
+				    </step>
+                </step>
 			</step>
 		</step>
 	</policy>
 
-	<!-- Policy for validating sandbox data and publish afterwards (called directly 
+	<!-- Policy for validating sandbox data and publish afterwards (called directly
 		from the koLibRI TextGrid import module) -->
-	<!-- TODO Could be extended for validating sandbox data before finally publishing. 
-		Needs a new ProcessStarter and two new ActionModules, at least RemoveNearlyPublish, 
-		and maybe (depending on the response handling) that returns the PublishResponse 
+	<!-- TODO Could be extended for validating sandbox data before finally publishing.
+		Needs a new ProcessStarter and two new ActionModules, at least RemoveNearlyPublish,
+		and maybe (depending on the response handling) that returns the PublishResponse
 		to the client. Has to work on Edition level in the near future! -->
-	<!-- NOTE For the time beeing we just update the TG-auth isPublic flag by 
-		calling TG-auth#PUBLISH and delete the isNearyPublished relation from the 
+	<!-- NOTE For the time beeing we just update the TG-auth isPublic flag by
+		calling TG-auth#PUBLISH and delete the isNearyPublished relation from the
 		RDF database. Works only on TextGrid object level right now! -->
 	<policy name="TGPublishSandboxData">
 		<step class="textgrid.publish.PublishStart">
