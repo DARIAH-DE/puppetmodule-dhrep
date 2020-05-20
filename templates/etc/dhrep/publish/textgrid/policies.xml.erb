@@ -82,13 +82,15 @@
 		<step class="textgrid.publish.PublishStart">
 			<step class="textgrid.publish.PublishCheckWorldReadable">
                 <step class="textgrid.publish.CheckIsPublic">
-				    <step class="textgrid.publish.ModifyAndUpdate">
-					    <step class="textgrid.publish.CopyElasticSearchIndex">
-						    <step class="textgrid.publish.CopyRelationData">
-							    <step class="textgrid.publish.MoveToStaticGridStorage">
-								    <step class="textgrid.publish.UpdateTgauth">
-									    <step class="textgrid.publish.PublishComplete" />
-								    </step>
+                    <step class="textgrid.publish.GetPids">
+				        <step class="textgrid.publish.ModifyAndUpdate">
+					        <step class="textgrid.publish.CopyElasticSearchIndex">
+						        <step class="textgrid.publish.CopyRelationData">
+							        <step class="textgrid.publish.MoveToStaticGridStorage">
+								        <step class="textgrid.publish.UpdateTgauth">
+									        <step class="textgrid.publish.PublishComplete" />
+								        </step>
+                                    </step>
 							    </step>
 						    </step>
 					    </step>
