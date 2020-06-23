@@ -39,7 +39,7 @@ class dhrep::services::crud_public (
   $imprint_url                  = 'https://de.dariah.eu/impressum',
   $privpol_url                  = 'https://de.dariah.eu/privacy-policy',
   $contact_url                  = 'https://de.dariah.eu/kontakt',
-
+  $streaming_size               = 10485760,
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_public_name[$scope]
