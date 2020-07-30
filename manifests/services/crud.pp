@@ -31,6 +31,7 @@ class dhrep::services::crud (
   $oaipmh_location              = "https://${::fqdn}/1.0/oaipmh/oai",
   $datacite_location            = 'https://search.datacite.org/works/',
   $digilib_location             = "https://${::fqdn}/1.0/digilib/rest/IIIF/",
+  $switchboard_location         = 'https://switchboard.clarin.eu/#/dhrep/',
   $manifest_location            = "https://${::fqdn}/1.0/iiif/manifests/",
   $mirador_location             = 'https://textgridlab.org/1.0/iiif/mirador/',
   $extract_techmd               = true,
@@ -39,6 +40,7 @@ class dhrep::services::crud (
   $imprint_url                  = 'https://de.dariah.eu/impressum',
   $privpol_url                  = 'https://de.dariah.eu/privacy-policy',
   $contact_url                  = 'https://de.dariah.eu/kontakt',
+  $streaming_size               = 10485760,
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_name[$scope]

@@ -18,6 +18,7 @@ location /1.0/oaipmh {
 # dhcrud
 ###
 location /1.0/dhcrud {
+    add_header "X-Clacks-Overhead" "GNU Terry Pratchett";
     gzip on;
     gzip_types multipart/related application/xop+xml text/xml;
     client_max_body_size 5000m;
