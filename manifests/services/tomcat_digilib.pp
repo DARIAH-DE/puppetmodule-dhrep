@@ -14,19 +14,21 @@ class dhrep::services::tomcat_digilib (
   $jmx_port     = $::dhrep::params::config['tomcat_digilib']['jmx_port']
   $uid          = $::dhrep::params::config['tomcat_digilib']['uid']
   $gid          = $::dhrep::params::config['tomcat_digilib']['gid']
+  $depcat       = 'tomcat-crud'
 
   ###
   # user, home-dir and user-tomcat
   ###
   usertomcat::instance { $catname:
-    uid              => $uid,
-    gid              => $gid,
-    http_port        => $http_port,
-    control_port     => $control_port,
-    jmx_port         => $jmx_port,
-    xmx              => $xmx,
-    xms              => $xms,
-    telegraf_enabled => true,
-    tomcat_version   => $dhrep::params::tomcat_version,
+    uid               => $uid,
+    gid               => $gid,
+    http_port         => $http_port,
+    control_port      => $control_port,
+    jmx_port          => $jmx_port,
+    init_dependencies => $depcat,
+    xmx               => $xmx,
+    xms               => $xms,
+    telegraf_enabled  => true,
+    tomcat_version    => $dhrep::params::tomcat_version,
   }
 }
