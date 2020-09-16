@@ -44,6 +44,7 @@ class dhrep::services::publikator (
   $statsd_port               = 8125,
   $skip_landing_page         = false,
   $instance_name             = 'PROD',
+  $header_color              = 'none'
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_publikator
