@@ -41,6 +41,7 @@ class dhrep::services::crud_public (
   $contact_url                  = 'https://de.dariah.eu/kontakt',
   $streaming_size               = 10485760,
   $menu_header_color            = 'none',
+  $badge_text                   = 'none',
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_public_name[$scope]
