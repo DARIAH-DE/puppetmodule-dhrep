@@ -137,7 +137,7 @@ class dhrep::services::tgmarketplace (
   }
   file { '/var/www/marketplace/cgi/data.yaml':
     ensure  => 'link',
-    target  => 'file:///usr/local/src/textgrid-marketplace-git/data.yaml',
+    target  => '/usr/local/src/textgrid-marketplace-git/data.yaml',
     owner   => $owner,
     group   => $group,
     mode    => '0755',
