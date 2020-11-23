@@ -82,4 +82,11 @@ class dhrep::static::repository_de_dariah_eu(
     mode    => '0644',
     content => template('dhrep/var/www/nginx-root/dariah/schemas/bagit/profiles/dhrep_0.1.json.erb'),
   }
+  file { '/var/www/nginx-root/schemas/bagit/profiles/dhrep_0.2.json':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0644',
+    content => template('dhrep/var/www/nginx-root/dariah/schemas/bagit/profiles/dhrep_0.2.json.erb'),
+  }
 }

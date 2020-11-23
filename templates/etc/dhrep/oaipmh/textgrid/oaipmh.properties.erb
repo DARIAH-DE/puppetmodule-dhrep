@@ -37,8 +37,30 @@ AdminMail = brodhun@sub.uni-goettingen.de
 ##  Field Settings  ##
 ######################
 
-fields = created, format, identifier, dataContributor, textgridUri, project.id, relations.isDerivedFrom, title, pid.value, edition.isEditionOf, edition.agent.value, edition.license.licenseUri, edition.language, edition.source.bibliographicCitation.author.value, edition.source.bibliographicCitation.editor.value, edition.source.bibliographicCitation.editionTitle, edition.source.bibliographicCitation.placeOfPublication.value, edition.source.bibliographicCitation.publisher.value, edition.source.bibliographicCitation.editionNo, edition.source.bibliographicCitation.series, edition.source.bibliographicCitation.volume, edition.source.bibliographicCitation.issue, edition.source.bibliographicCitation.epage, edition.source.bibliographicCitation.spage, edition.source.bibliographicCitation.bibidentifier, work.abstract, work.genre, work.type, work.spatial.value, work.temporal.value, work.agent.value, work.subject.id.value, lastModified
-workFields = created, work.abstract, relations.isDerivedFrom, textgridUri, work.genre, title, work.type, work.spatial.value, work.temporal.spatial, work.agent.value, work.subject.id.value
+fields = extent,work.subject,revision,edition.source.bibliographicCitation,edition.license,created,issued,format,identifier,dataContributor,textgridUri,project,project.id,relations.isDerivedFrom,title,pid.value,edition.isEditionOf,edition.agent.value,edition.license.licenseUri,edition.language,edition.source.bibliographicCitation.author.value,edition.source.bibliographicCitation.editor.value,edition.source.bibliographicCitation.editionTitle,edition.source.bibliographicCitation.placeOfPublication.value,edition.source.bibliographicCitation.publisher.value,edition.source.bibliographicCitation.editionNo,edition.source.bibliographicCitation.series,edition.source.bibliographicCitation.volume,edition.source.bibliographicCitation.issue,edition.source.bibliographicCitation.epage,edition.source.bibliographicCitation.spage,edition.source.bibliographicCitation.bibidentifier,work.abstract,work.genre,work.type,work.spatial.value,work.temporal.value,work.agent.value,work.subject.id.value,lastModified
+workFields = created,work.abstract,relations.isDerivedFrom,textgridUri,work.genre,title,work.type,work.spatial.value,work.temporal.spatial,work.agent.value,work.subject.id.value
+
+
+######################
+## OpenAireRecords ###
+######################
+
+oar.titleFields = title,edition.source.bibliographicCitation.editionTitle
+oar.dateFields = created,issued,lastModified
+oar.contributorFields = dataContributor,project
+oar.languageFields = edition.language
+oar.alternateIdentifierFields = textgridUri
+oar.formatFields = format
+oar.rightsFields = edition.license
+oar.descriptionFields = work.abstract
+oar.relatedIdentifierFields = edition.isEditionOf
+oar.relationToWorkObject = edition.isEditionOf
+oar.geoLocationFields = edition.source.bibliographicCitation.placeOfPublication
+oar.handle = pid.value
+oar.versionFields = revision
+oar.subjectFields = work.subject
+oar.sizeField = extent
+
 
 ##########################
 ##  Dublin Core Fields  ##
@@ -77,3 +99,10 @@ identifierField = textgridUri
 specFieldPrefix = textgrid
 modifiedField = lastModified
 searchResponseSize = 100
+
+#######################
+### general Setting ###
+#######################
+
+pathToConfigFile = etc/dhrep/oaipmh/oaipmh.properties
+

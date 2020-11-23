@@ -45,26 +45,6 @@ class dhrep::resources::apache (
     notify => Service['apache2'],
   }
 
-  # Shibboleth configuration for Apache
-  # (see dariahshibboleth/README.md)
-  if $scope == 'textgrid' {
-    package { 'libapache2-mod-shib2':
-      ensure => present,
-      before => Package['shibboleth'],
-    }
-
-    if ($::lsbdistcodename == 'bionic') {
-      $mod_shibd_so = 'mod_shib.so'
-    } else {
-      $mod_shibd_so = 'mod_shib2.so'
-    }
-
-    ::apache::mod { 'shib2':
-      id  => 'mod_shib',
-      lib => $mod_shibd_so,
-    }
-  }
-
   concat::fragment{'apache_default_head':
     target  => $defaultvhost,
     content => "

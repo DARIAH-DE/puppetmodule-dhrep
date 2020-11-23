@@ -24,15 +24,18 @@ class dhrep::services::tgmarketplace (
   }
 
   ###
-  # clone marketplace from git and copy to var/www/
+  # clone marketplace from git and copy some parts to var/www/
+  # symlink data.yaml and keep updated with vcsrepo
   #
   # TODO use release-tag in any way?
-  # TODO cloning does not yield automatic updates via pull!!
   ###
-  exec { 'git_clone_textgrid_marketplace':
-    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgridlab-marketplace.git /usr/local/src/textgrid-marketplace-git',
-    creates => '/usr/local/src/textgrid-marketplace-git',
-    require => Package['git'],
+  vcsrepo { '/usr/local/src/textgrid-marketplace-git':
+    ensure   => latest,
+    owner    => 'root',
+    group    => 'root',
+    provider => git,
+    source   => 'https://github.com/DARIAH-DE/textgridlab-marketplace.git',
+    revision => 'master',
   }
   ->
   file { '/var/www/marketplace':
@@ -133,7 +136,8 @@ class dhrep::services::tgmarketplace (
     require => File['/var/www/marketplace/cgi'],
   }
   file { '/var/www/marketplace/cgi/data.yaml':
-    source  => 'file:///usr/local/src/textgrid-marketplace-git/data.yaml',
+    ensure  => 'link',
+    target  => '/usr/local/src/textgrid-marketplace-git/data.yaml',
     owner   => $owner,
     group   => $group,
     mode    => '0755',

@@ -1,5 +1,5 @@
 ###
-# rewrite logging
+# rewrite logging, please use for debugging
 ###
 #error_log /var/log/nginx/error.log notice;
 #rewrite_log on;
@@ -12,13 +12,6 @@ location /1.0/confserv/ {
     alias /var/www/confserv/1.0/;
     autoindex on;
 }
-
-###
-# old tg website (disabled)
-###
-#location /1.0/tgrep {
-#    alias /var/www/nginx-root/textgridrep.de/textgridrep-webseite;
-#}
 
 ###
 # tgauth und shibboleth
@@ -99,6 +92,7 @@ location /1.0/tgsearch-public/navigation/toplevel  {
 # tgcrud
 ###
 location /1.0/tgcrud {
+    add_header "X-Clacks-Overhead" "GNU Terry Pratchett";
 #    gzip on;
 #    gzip_types multipart/related application/xop+xml text/xml;
     client_max_body_size 1000m;
@@ -111,6 +105,7 @@ location /1.0/tgcrud {
     proxy_set_header        Host $http_host;
 }
 location /1.0/tgcrud-public {
+    add_header "X-Clacks-Overhead" "GNU Terry Pratchett";
 #    gzip on;
 #    gzip_types multipart/related application/xop+xml text/xml;
     client_max_body_size 1000m;
@@ -253,17 +248,3 @@ location /tgnsearch {
 location /pndsearch {
     proxy_pass https://ref.de.dariah.eu/pndsearch;
 }
-
-###
-# rewriting textgrid pids
-###
-# rewrite /textgrid: and /hdl: uris, so they are served by tgcrud for data, metadata, and techmd! data is assumed for "root calls".
-# NOTE Shall only be working for texrtgridrep.org!
-#rewrite ^/(textgrid:[a-z0-9\.]+)$ /1.0/tgcrud-public/rest/$1/data last;
-#rewrite ^/(textgrid:[a-z0-9\.]+)/data$ /1.0/tgcrud-public/rest/$1/data last;
-#rewrite ^/(textgrid:[a-z0-9\.]+)/metadata$ /1.0/tgcrud-public/rest/$1/metadata last;
-#rewrite ^/(textgrid:[a-z0-9\.]+)/tech$ /1.0/tgcrud-public/rest/$1/tech last;
-#rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)$ /1.0/tgcrud/rest/$1/data last;
-#rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/data$ /1.0/tgcrud/rest/$1/data last;
-#rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/metadata$ /1.0/tgcrud/rest/$1/metadata last;
-#rewrite ^/(hdl:(21\.T11991|21\.11113|11858|11378|11022)/[a-z0-9A-Z\-]+)/tech$ /1.0/tgcrud/rest/$1/tech last;
