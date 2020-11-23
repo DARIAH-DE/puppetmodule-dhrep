@@ -58,6 +58,8 @@ location /1.0/tgoaipmh {
     proxy_set_header	X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header	Host $http_host;
 }
+# Do rewrite to verb Identify if root URL given.
+rewrite /1.0/tgoaipmh/oai /1.0/tgoaipmh/oai?verb=Identify;
 
 ###
 # tgsearch
