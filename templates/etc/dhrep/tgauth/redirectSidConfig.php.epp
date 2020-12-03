@@ -1,0 +1,12 @@
+<?php
+// THIS FILE IS MANAGED BY PUPPET
+// look into hieradata to find responsible persons
+
+$ALLOWED_DOMAINS = array (
+  <% $domains.each |$domain| { -%>
+    '<%= $domain %>',
+  <% } -%>
+);
+
+?>
+

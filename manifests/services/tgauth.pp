@@ -34,7 +34,8 @@ class dhrep::services::tgauth (
   $ldap_clusternodes = [],
   $no_shib_login = false,
   $ldap_dbmaxsize = 10485760, # default value 10485760 bytes = 10mb
-  $ldapcleaner_older_than = 'OLDER_THAN8D'
+  $ldapcleaner_older_than = 'OLDER_THAN8D',
+  $sid_redirect_domains_allowed = [],
 ) inherits dhrep::params {
 
   $_backupdir = $::dhrep::params::backupdir
@@ -109,6 +110,13 @@ class dhrep::services::tgauth (
     mode    => '0644',
     content => template("dhrep/${_confdir}/tgauth/conf/config_tgwebauth.xml.erb"),
   }
+  file { "${_confdir}/tgauth/redirectSidConfig.php":
+    ensure  => file,
+    content => epp("dhrep/${_confdir}/tgauth/redirectSidConfig.php.epp", {
+      domains  => $sid_redirect_domains_allowed,
+      other => ['abc', 'def'],
+    }),
+  }
 
   ###
   # installing tgauth deb package
@@ -139,7 +147,7 @@ class dhrep::services::tgauth (
   }
 
   ###
-  # installing ocnfig files
+  # installing config files
   ###
   file { '/var/www/tgauth/rbacSoap/wsdl':
     ensure  => directory,

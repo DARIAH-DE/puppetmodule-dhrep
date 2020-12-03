@@ -35,6 +35,7 @@
 
   <!-- BASIC SETTINGS -->
   <Environment name="instanceName" value="<%= @instance_name %>" type="java.lang.String" override="false" description="Instance name (can be either TEST, PROD, DEVELOP)"/>
+  <Environment name="menuHeaderColor" value="<%= @menu_header_color %>" type="java.lang.String" override="false" description="Color of menu header, if not PROD instance"/>
   <Environment name="enableAAI" value="<%= @enable_aai %>" type="java.lang.Boolean" override="false" description="Enable AAI"/>
   <Environment name="logoutAAI" value="<%= @logout_aai %>" type="java.lang.String" override="false" description="AAI Logout URL"/>
   <Environment name="subcollectionsEnabled" value="<%= @subcollections_enabled %>" type="java.lang.Boolean" override="false" description="Enable subcollections"/>

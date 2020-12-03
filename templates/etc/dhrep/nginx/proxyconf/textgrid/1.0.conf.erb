@@ -9,6 +9,7 @@
 ###
 location /1.0/confserv/ {
 #    gzip on;
+    default_type application/json;
     alias /var/www/confserv/1.0/;
     autoindex on;
 }
