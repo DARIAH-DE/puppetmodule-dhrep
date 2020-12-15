@@ -117,14 +117,15 @@ class dhrep::services::intern::tgdatadirs (
       # group  => 'ULSB',
       # mode   => '0755',
     }
-    mount { '/media/stornext':
-      ensure  => 'mounted',
-      device  => 'gwdu157.fs.gwdg.de:/home/textgrid01/',
-      fstype  => 'nfs',
-      options => 'defaults',
-      atboot  => true,
-      require => [File['/media/stornext'],Package['nfs-common']],
-    }
+# TODO: mount target should move to hiera? or remove completely from puppet?
+#    mount { '/media/stornext':
+#      ensure  => 'mounted',
+#      device  => 'gwdu157.fs.gwdg.de:/home/textgrid01/',
+#      fstype  => 'nfs',
+#      options => 'defaults',
+#      atboot  => true,
+#      require => [File['/media/stornext'],Package['nfs-common']],
+#    }
     file { '/data/public':
       ensure => 'link',
       target => $data_public_location,
