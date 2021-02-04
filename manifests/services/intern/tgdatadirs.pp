@@ -144,7 +144,7 @@ class dhrep::services::intern::tgdatadirs (
       target => $data_nonpublic_location,
     }
 
-    # FIXME: Remove check for stornext if all digilib caches have been moved to netapp!
+    # FIXME: Remove NRPE check for stornext if all digilib caches have been moved to netapp!
 
     ###
     # nrpe
