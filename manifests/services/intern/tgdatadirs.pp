@@ -108,15 +108,23 @@ class dhrep::services::intern::tgdatadirs (
     }
 
     #
-    # FIXME Change into netapp folders and pathes if moving from StorNext to NetApp!!
+    # FIXME: Change into netapp folders and pathes if moving from StorNext to NetApp!!
     #
 
-    file { '/media/stornext':
+#    file { '/media/stornext':
+#      ensure => directory,
+#      # owner  => 'storage',
+#      # group  => 'ULSB',
+#      # mode   => '0755',
+#    }
+
+    file { '/media/netapp':
       ensure => directory,
       # owner  => 'storage',
       # group  => 'ULSB',
       # mode   => '0755',
     }
+
 # TODO: mount target should move to hiera? or remove completely from puppet?
 #    mount { '/media/stornext':
 #      ensure  => 'mounted',
@@ -126,6 +134,7 @@ class dhrep::services::intern::tgdatadirs (
 #      atboot  => true,
 #      require => [File['/media/stornext'],Package['nfs-common']],
 #    }
+
     file { '/data/public':
       ensure => 'link',
       target => $data_public_location,
@@ -135,12 +144,22 @@ class dhrep::services::intern::tgdatadirs (
       target => $data_nonpublic_location,
     }
 
+    # FIXME: Remove NRPE check for stornext if all digilib caches have been moved to netapp!
+
     ###
     # nrpe
     ###
     nrpe::plugin { 'check_disk_stornext':
       plugin => 'check_disk',
       args   => '--units GB -w 1024 -c 256 -p /media/stornext',
+    }
+
+    ###
+    # netapp
+    ###
+    nrpe::plugin { 'check_disk_netapp':
+      plugin => 'check_disk',
+      args   => '--units GB -w 1024 -c 256 -p /media/netapp',
     }
 
     ###
