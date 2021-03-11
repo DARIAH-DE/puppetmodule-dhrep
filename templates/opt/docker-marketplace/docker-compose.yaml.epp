@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  web:
+    image: <%= $image %>
+    env_file: marketplace.env
+    ports:
+      - 5000:80
+

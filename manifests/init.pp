@@ -215,7 +215,7 @@ class dhrep (
       scope   => $scope,
       require => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame']],
     }
-    class { 'dhrep::services::tgmarketplace': }
+    #class { 'dhrep::services::tgmarketplace': }
     class { 'dhrep::services::bughandler': }
   }
 

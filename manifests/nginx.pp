@@ -24,6 +24,7 @@ class dhrep::nginx (
     include dhrep::services::tomcat_aggregator
     include dhrep::services::tomcat_sesame
     include dhrep::services::tomcat_tgsearch
+    include dhrep::services::tgmarketplace
   }
   if $scope == 'dariah' {
     include dhrep::services::tomcat_publikator
