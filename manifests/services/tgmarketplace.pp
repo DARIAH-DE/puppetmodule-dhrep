@@ -177,7 +177,9 @@ class dhrep::services::tgmarketplace (
     #
     # tgmarketplace docker
     #
-    require profiles::docker  # set up docker and _firewall rules_
+    class { '::docker' :
+      version => 'latest',
+    }
     class {'docker::compose':
       version => '1.25.4',
     }
