@@ -6,7 +6,7 @@ class dhrep::services::tgmarketplace (
   $scope                 = undef,
   $time                  = ['23', '02'],
   $docker_image_registry = 'docker.gitlab.gwdg.de',
-  $docker_image_name     = 'dariah-de/textgridlab-marketplace/feature-deployment-changes',
+  $docker_image_name     = 'dariah-de/textgridlab-marketplace/develop',
   $docker_image_tag      = 'latest',
   $docker                = false,
 ) inherits dhrep::params {
