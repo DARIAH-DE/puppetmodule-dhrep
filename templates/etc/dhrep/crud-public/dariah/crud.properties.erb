@@ -140,7 +140,7 @@ IDXDB_PASS_PUBLIC = *
 IDXDB_PAIRTREE_USAGE = FALSE
 
 # The URI settings.
-ID_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_pid::http_port') %>/pid
+ID_SERVICE_URL = http://localhost:<%= scope.lookupvar('dhrep::services::tomcat_pid::http_port') %>/dhpid
 ID_SERVICE_USER = *
 ID_SERVICE_PASS = <%= @pid_secret %>
 ID_AUTOMAGIC_UNLOCKING_TIME = 1800000
