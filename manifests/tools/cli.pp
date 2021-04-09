@@ -11,7 +11,6 @@ class dhrep::tools::cli (
 
     package {
       'xqilla': ensure => present;
-      'jq':     ensure => present;
     }
 
     ###
@@ -51,8 +50,8 @@ class dhrep::tools::cli (
       require => File[$_optdir],
     }
     file { "${_optdir}/consistency/check_es_index.sh":
-      mode    => '0777',
-      source  => 'puppet:///modules/dhrep/opt/dhrep/textgrid/consistency/check_es_index.sh',
+      mode   => '0777',
+      source => 'puppet:///modules/dhrep/opt/dhrep/textgrid/consistency/check_es_index.sh',
     }
     # the nagios command for es-index check
     nrpe::plugin { 'check_es_index_consistency':

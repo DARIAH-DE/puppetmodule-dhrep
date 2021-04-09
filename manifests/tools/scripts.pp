@@ -16,6 +16,10 @@ class dhrep::tools::scripts (
   $fits_port    = $::dhrep::params::config['tomcat_fits']['http_port']
   $sesame_port  = $::dhrep::params::config['tomcat_sesame']['http_port']
 
+  package {
+    'jq': ensure => present;
+  }
+
   file { "${_optdir}/check-services.sh" :
     content => template("dhrep/opt/dhrep/${scope}/check-services.sh.erb"),
     owner   => 'root',
