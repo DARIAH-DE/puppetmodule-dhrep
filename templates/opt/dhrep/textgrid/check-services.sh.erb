@@ -15,13 +15,16 @@ done
 # generics
 #
 ERRORS=false
-ERRSTR="Failed service(s):"
+ERRSTR="Failed services:"
+WARNINGS=false
+WARNSTR="Service warnings:"
 SERVER="http://localhost"
 CNRM="$(tput sgr0)"
 OK="$(tput setaf 2)OK$CNRM"
+WARNING="$(tput setaf 3)WARNING$CNRM"
 FAILED="$(tput setaf 1)FAILED$CNRM"
 CSTR="$(tput setaf 5)"
-VSTR="$(tput setaf 3)"
+VSTR="$(tput setaf 2)"
 TRN="  ==>  "
 
 #
@@ -290,6 +293,7 @@ if [ "$URGL" = 'textgrid-public' ]; then
     if $R; then echo -n "    $OK ["$VSTR; fi
     if $R; then echo -n $URGL; fi
     if $R; then echo $CNRM"]"; fi
+    WARNINGS=true
 else
     if $R; then echo "    $FAILED"; fi
     ERRORS=true
@@ -306,6 +310,12 @@ if [ "$ES_HEALTH" = "green" ]; then
     if $R; then echo -n "    $OK ["$VSTR; fi
     if $R; then echo -n $ES_HEALTH; fi
     if $R; then echo $CNRM"]"; fi
+elif [ "$ES_HEALTH" = "yellow" ]; then
+    if $R; then echo -n "    $WARNING ["$VSTR; fi
+    if $R; then echo -n $ES_HEALTH; fi
+    if $R; then echo $CNRM"]"; fi
+    WARNINGS=true
+    WARNSTR=$WARNSTR" es-masternode"
 else
     if $R; then echo "    $FAILED"; fi
     ERRORS=true
@@ -322,6 +332,12 @@ if [ "$ES_HEALTH" = "green" ]; then
     if $R; then echo -n "    $OK ["$VSTR; fi
     if $R; then echo -n $ES_HEALTH; fi
     if $R; then echo $CNRM"]"; fi
+elif [ "$ES_HEALTH" = "yellow" ]; then
+    if $R; then echo -n "    $WARNING ["$VSTR; fi
+    if $R; then echo -n $ES_HEALTH; fi
+    if $R; then echo $CNRM"]"; fi
+    WARNINGS=true
+    WARNSTR=$WARNSTR" es-workhorse"
 else
     if $R; then echo "    $FAILED"; fi
     ERRORS=true
@@ -390,8 +406,13 @@ else
 fi
 
 #
-# check for errors
+# check for warnings and errors
 #
+if $WARNINGS; then
+    # Nagios WARNING
+    echo "Warnings in service checks! "$WARNSTR
+    exit 1
+fi
 if $ERRORS; then
     # Nagios ERROR
     echo "Service checks FAILED! "$ERRSTR
