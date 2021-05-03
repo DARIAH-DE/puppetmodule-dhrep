@@ -11,7 +11,6 @@ class dhrep::tools::cli (
 
     package {
       'xqilla': ensure => present;
-      'jq':     ensure => present;
     }
 
     ###
