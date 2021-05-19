@@ -10,9 +10,9 @@ RS_ENDPOINT = https://<%= scope.lookupvar('::fqdn') %>/1.0/oaipmh
 
 elasticSearch.url = 127.0.0.1
 elasticSearch.ports = <%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>, <%= scope.lookupvar('dhrep::params::elasticsearch_workhorse_http_port') %>
-elasticSearch.clusterName = <%= scope.lookupvar('dhrep::services::intern::elasticsearch::cluster_name') %>
 elasticSearch.index = dariah-public
 elasticSearch.type = metadata
+elasticSearch.itemLimit = 100
 
 ########################
 ##  Project Choosing  ##
@@ -39,6 +39,26 @@ AdminMail = support@de.dariah.eu
 
 fields = descriptiveMetadata.dc:contributor, descriptiveMetadata.dc:coverage, descriptiveMetadata.dc:creator, descriptiveMetadata.dc:date, administrativeMetadata.dcterms:modified, descriptiveMetadata.dc:description, descriptiveMetadata.dc:format, descriptiveMetadata.dc:identifier, administrativeMetadata.dcterms:identifier, descriptiveMetadata.dc:language, descriptiveMetadata.dc:publisher, descriptiveMetadata.dc:relation, descriptiveMetadata.dc:rights, descriptiveMetadata.dc:source, descriptiveMetadata.dc:subject, descriptiveMetadata.dc:title, descriptiveMetadata.dc:type
 workFields = descriptiveMetadata.dc:title
+
+######################
+## OpenAireRecords ###
+######################
+
+oar.titleFields = title,edition.source.bibliographicCitation.editionTitle
+oar.dateFields = created,issued,lastModified
+oar.contributorFields = dataContributor,project
+oar.languageFields = edition.language
+oar.alternateIdentifierFields = textgridUri
+oar.formatFields = format
+oar.rightsFields = edition.license
+oar.descriptionFields = work.abstract
+oar.relatedIdentifierFields = edition.isEditionOf
+oar.relationToWorkObject = edition.isEditionOf
+oar.geoLocationFields = edition.source.bibliographicCitation.placeOfPublication
+oar.handle = pid.value
+oar.versionFields = revision
+oar.subjectFields = work.subject
+oar.sizeField = extent
 
 ##########################
 ##  Dublin Core Fields  ##
