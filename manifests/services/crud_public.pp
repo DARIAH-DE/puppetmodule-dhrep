@@ -19,6 +19,7 @@ class dhrep::services::crud_public (
   $pid_prefix                   = '21.11113',
   $doi_resolver                 = 'https://doi.org/',
   $doi_prefix                   = '10.20375',
+  $doi_api_location             = 'https://api.datacite.org/',
   $orcid_resolver               = 'https://orcid.org/',
   $gnd_resolver                 = 'http://d-nb.info/gnd/',
   $publikator_location          = "https://${::fqdn}/publikator",

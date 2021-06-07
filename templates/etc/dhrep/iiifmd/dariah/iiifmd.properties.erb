@@ -39,8 +39,8 @@ tg.esType=metadata
 # xslt file for extracting ordered uris from mets file (from resources/xslt folder)
 tg.metsXsltFile=metsExtract.xsl
 # url for textgridrep website
-tg.repositoryUrl=https://<%= @repository_host %>
-tg.presentationUrl=https://<%= @repository_host %>
+tg.repositoryUrl=https://<%= @repository_host %>/
+tg.presentationUrl=https://<%= @repository_host %>/
 tg.repositoryLogo=https://textgridrep.org/textgrid-theme/images/textgrid-repository-logo.svg
 
 ###
@@ -48,7 +48,7 @@ tg.repositoryLogo=https://textgridrep.org/textgrid-theme/images/textgrid-reposit
 ###
 
 dh.crudUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
-dh.repositoryUrl=https://<%= @repository_host %>
+dh.repositoryUrl=https://<%= @repository_host %>/
 dh.presentationUrl=https://<%= scope.lookupvar('dhrep::public_hostname') %>/1.0/dhcrud
 dh.repositoryLogo=https://res.de.dariah.eu/logos/dariah-de/dariah-de_cmyk_en.svg
 dh.oaipmhUrl=https://<%= @repository_host %>/1.0/oaipmh/oai

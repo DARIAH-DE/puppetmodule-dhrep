@@ -15,10 +15,13 @@ done
 # generics
 #
 ERRORS=false
-ERRSTR="Failed service(s):"
+ERRSTR="Failed services:"
+WARNINGS=false
+WARNSTR="Service warnings:"
 SERVER="http://localhost"
 CNRM="$(tput sgr0)"
 OK="$(tput setaf 2)OK$CNRM"
+WARNING="$(tput setaf 3)WARNING$CNRM"
 FAILED="$(tput setaf 1)FAILED$CNRM"
 CSTR="$(tput setaf 5)"
 VSTR="$(tput setaf 3)"
@@ -198,19 +201,21 @@ fi
 #
 # elasticsearch masternode
 #
-FILE="curl"
 MASTERNODE=$SERVER":<%= @elasticsearch_master_http_port %>"
 if $R; then echo "checking "$CSTR"es masternode"$CNRM" (intern)"$TRN $MASTERNODE; fi
-curl -s $MASTERNODE > $FILE
-URGL=`grep "200" curl`
-if [ -s $FILE -a  "$URGL" = '  "status" : 200,' ]; then
+ES_HEALTH=`curl -s $MASTERNODE/_cluster/health | jq -r .status`
+if [ "$ES_HEALTH" = "green" ]; then
     if $R; then echo -n "    $OK ["$VSTR; fi
-    if $R; then echo -n $URGL; fi
-    rm $FILE
+    if $R; then echo -n $ES_HEALTH; fi
     if $R; then echo $CNRM"]"; fi
+elif [ "$ES_HEALTH" = "yellow" ]; then
+    if $R; then echo -n "    $WARNING ["$VSTR; fi
+    if $R; then echo -n $ES_HEALTH; fi
+    if $R; then echo $CNRM"]"; fi
+    WARNINGS=true
+    WARNSTR=$WARNSTR" es-masternode"
 else
     if $R; then echo "    $FAILED"; fi
-    rm $FILE
     ERRORS=true
     ERRSTR=$ERRSTR" es-masternode"
 fi
@@ -218,19 +223,21 @@ fi
 #
 # elasticsearch workhorse
 #
-FILE="curl"
 WORKHORSE=$SERVER":<%= @elasticsearch_workhorse_http_port %>"
 if $R; then echo "checking "$CSTR"es workhorse"$CNRM" (intern)"$TRN $WORKHORSE; fi
-curl -s $WORKHORSE > $FILE
-URGL=`grep "200" $FILE`
-if [ -s $FILE ] && [ "$URGL" = '  "status" : 200,' ]; then
+ES_HEALTH=`curl -s $WORKHORSE/_cluster/health | jq -r .status`
+if [ "$ES_HEALTH" = "green" ]; then
     if $R; then echo -n "    $OK ["$VSTR; fi
-    if $R; then echo -n $URGL; fi
-    rm $FILE
+    if $R; then echo -n $ES_HEALTH; fi
     if $R; then echo $CNRM"]"; fi
+elif [ "$ES_HEALTH" = "yellow" ]; then
+    if $R; then echo -n "    $WARNING ["$VSTR; fi
+    if $R; then echo -n $ES_HEALTH; fi
+    if $R; then echo $CNRM"]"; fi
+    WARNINGS=true
+    WARNSTR=$WARNSTR" es-workhorse"
 else
     if $R; then echo "    $FAILED"; fi
-    rm $FILE
     ERRORS=true
     ERRSTR=$ERRSTR" es-workhorse"
 fi
@@ -279,8 +286,13 @@ else
 fi
 
 #
-# check for errors
+# check for warnings and errors
 #
+if $WARNINGS; then
+    # Nagios WARNING
+    echo "Warnings in service checks! "$WARNSTR
+    exit 1
+fi
 if $ERRORS; then
     # Nagios ERROR
     echo "Service checks FAILED! "$ERRSTR
