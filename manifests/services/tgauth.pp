@@ -433,7 +433,10 @@ class dhrep::services::tgauth (
   package {
     'libapache-dbi-perl': ensure => present;
     'libfile-flock-perl': ensure => present;
-    'perl-daasilib':      ensure => present;
+  }
+  package { 'perl-daasilib':
+    ensure  => present,
+    require => Exec['update_dariah_apt_repository'],
   }
   # install needed dirs
   file { $_daasidir :

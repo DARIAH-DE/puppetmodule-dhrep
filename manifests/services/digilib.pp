@@ -140,7 +140,6 @@ class dhrep::services::digilib (
     group   => root,
     mode    => '0644',
     content => template('dhrep/etc/dhrep/nginx/conf.d/digilib.conf.erb'),
-    notify  => Service['nginx'],
   }
 
   ###
