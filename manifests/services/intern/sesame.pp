@@ -37,12 +37,36 @@ class dhrep::services::intern::sesame (
     } else {
       $rdf4j_http_port    = $::dhrep::services::tomcat_sesame::http_port
       $rdf4j_jmx_port     = $::dhrep::services::tomcat_sesame::jmx_port
+
+      ###
+      # sesame backup script
+      ###
+      file { "${_backupdir}/sesame" :
+        ensure  => directory,
+        owner   => $user,
+        group   => $group,
+        mode    => '0755',
+        require => File[$_backupdir],
+      }
+      file{ "${_optdir}/sesame-backup.sh" :
+        source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/sesame-backup.sh",
+        owner   => $user,
+        group   => $group,
+        mode    => '0700',
+        require => [File[$_optdir],File["${_backupdir}/sesame"]],
+      }
+      cron { 'sesame-backup' :
+        command => "${_optdir}/sesame-backup.sh",
+        user    => $user,
+        hour    => 22,
+        minute  => 33,
+      }
     }
 
     #$uid = $::dhrep::params::config['rdf4j']['uid']
     #$gid = $::dhrep::params::config['rdf4j']['gid']
-    $group = rdf4j
-    $user = rdf4j
+    $group = 'rdf4j'
+    $user = 'rdf4j'
     $uid = 1020
     $gid = 1020
 
@@ -127,30 +151,30 @@ class dhrep::services::intern::sesame (
       source  => 'puppet:///modules/dhrep/rdf/mime.ttl',
       require => User[$_catname],
     }
-  }
 
-  ###
-  # sesame backup script
-  ###
-  file { "${_backupdir}/sesame" :
-    ensure  => directory,
-    owner   => $_catname,
-    group   => $_catname,
-    mode    => '0755',
-    require => File[$_backupdir],
-  }
-  file{ "${_optdir}/sesame-backup.sh" :
-    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/sesame-backup.sh",
-    owner   => $_catname,
-    group   => $_catname,
-    mode    => '0700',
-    require => [File[$_optdir],File["${_backupdir}/sesame"]],
-  }
-  cron { 'sesame-backup' :
-    command => "${_optdir}/sesame-backup.sh",
-    user    => $_catname,
-    hour    => 22,
-    minute  => 33,
+    ###
+    # sesame backup script
+    ###
+    file { "${_backupdir}/sesame" :
+      ensure  => directory,
+      owner   => $_catname,
+      group   => $_catname,
+      mode    => '0755',
+      require => File[$_backupdir],
+    }
+    file{ "${_optdir}/sesame-backup.sh" :
+      source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/sesame-backup.sh",
+      owner   => $_catname,
+      group   => $_catname,
+      mode    => '0700',
+      require => [File[$_optdir],File["${_backupdir}/sesame"]],
+    }
+    cron { 'sesame-backup' :
+      command => "${_optdir}/sesame-backup.sh",
+      user    => $_catname,
+      hour    => 22,
+      minute  => 33,
+    }
   }
 
   ###
