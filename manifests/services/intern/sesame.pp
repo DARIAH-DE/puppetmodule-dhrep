@@ -30,13 +30,34 @@ class dhrep::services::intern::sesame (
 
   if $use_docker {
 
-    # ports temporay for migration, change to $_http_port later
+    # ports temporay for migration, change to $_http_port later / put to params
     if $::dhrep::services::tomcat_sesame::use_tomcat {
       $rdf4j_http_port    = 9089
       $rdf4j_jmx_port     = 9911
     } else {
       $rdf4j_http_port    = $::dhrep::services::tomcat_sesame::http_port
       $rdf4j_jmx_port     = $::dhrep::services::tomcat_sesame::jmx_port
+    }
+
+    #$uid = $::dhrep::params::config['rdf4j']['uid']
+    #$gid = $::dhrep::params::config['rdf4j']['gid']
+    $group = rdf4j
+    $user = rdf4j
+    $uid = 1020
+    $gid = 1020
+
+    if ! defined(Group[$group]) {
+      group { $group:
+        ensure =>  present,
+        gid    =>  $gid,
+      }
+    }
+    if ! defined(User[$user]) {
+      user { $user:
+        ensure     => present,
+        uid        => $uid,
+        gid        => $gid,
+      }
     }
 
     include dhrep::services::intern::docker
