@@ -23,11 +23,8 @@ function backup_openrdf_repository {
   fi
 }
 
-cd $HOME
-
 for R in $REPOS
 do
   backup_openrdf_repository $R
 done
 
-cd $OLDPWD
