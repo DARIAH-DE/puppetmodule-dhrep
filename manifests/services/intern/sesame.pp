@@ -64,9 +64,17 @@ class dhrep::services::intern::sesame (
       }
       cron { 'sesame-backup' :
         command => "${_optdir}/sesame-backup.sh",
+        environment => 'PATH=/bin:/usr/bin:/usr/sbin',
         user    => $user,
         hour    => 22,
         minute  => 33,
+      }
+      cron { 'clean-old-sesame-backups' :
+        command => 'find  /var/dhrep/backups/sesame -type f -mtime +90 -delete',
+        environment => 'PATH=/bin:/usr/bin:/usr/sbin',
+        user    => $user,
+        hour    => 22,
+        minute  => 03,
       }
     }
 
