@@ -78,7 +78,8 @@ creatorList = work.agent.value
 dateList = created
 descriptionList = work.abstract
 formatList = format
-identifierList = textgridUri, pid.value, identifier
+# Remove identifier from identiflerList, unknown errors occurred and it is not needed, at least Max says so :-)
+identifierList = textgridUri, pid.value
 languageList = edition.language
 publisherList = edition.source.bibliographicCitation.publisher.value
 relationList = project.id, relations.isDerivedFrom
