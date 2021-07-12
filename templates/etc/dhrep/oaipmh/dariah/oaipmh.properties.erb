@@ -50,21 +50,22 @@ workFields = descriptiveMetadata.dc:title
 ## OpenAireRecords ###
 ######################
 
-oar.titleFields = title,edition.source.bibliographicCitation.editionTitle
-oar.dateFields = created,issued,lastModified
-oar.contributorFields = dataContributor,project
-oar.languageFields = edition.language
-oar.alternateIdentifierFields = textgridUri
-oar.formatFields = format
-oar.rightsFields = edition.license
-oar.descriptionFields = work.abstract
-oar.relatedIdentifierFields = edition.isEditionOf
-oar.relationToWorkObject = edition.isEditionOf
-oar.geoLocationFields = edition.source.bibliographicCitation.placeOfPublication
-oar.handle = pid.value
-oar.versionFields = revision
-oar.subjectFields = work.subject
-oar.sizeField = extent
+oar.identifierField = administrativeMetadata.dcterms:identifier
+oar.titleFields = descriptiveMetadata.dc:title
+oar.dateFields = administrativeMetadata.dcterms:created,administrativeMetadata.dcterms:modified
+oar.contributorFields = descriptiveMetadata.dc:contributor
+oar.languageFields = descriptiveMetadata.dc:language
+oar.alternateIdentifierFields = descriptiveMetadata.dc:identifier
+oar.formatFields = administrativeMetadata.dcterms:format
+oar.rightsFields = descriptiveMetadata.dc:rights
+oar.descriptionFields = descriptiveMetadata.dc:decsription
+oar.relatedIdentifierFields = descriptiveMetadata.dc:relation
+oar.relationToWorkObject = na
+oar.geoLocationFields = descriptiveMetadata.dc:coverage
+oar.handle = administrativeMetadata.dcterms:identifier
+oar.versionFields = na
+oar.subjectFields = descriptiveMetadata.dc:subject
+oar.sizeField = administrativeMetadata.dcterms:extent
 
 ##########################
 ##  Dublin Core Fields  ##
