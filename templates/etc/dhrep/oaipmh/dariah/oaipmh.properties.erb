@@ -96,7 +96,8 @@ rangeField = administrativeMetadata.dcterms:modified
 identifierListFields = descriptiveMetadata.dc:identifier, descriptiveMetadata.dc:date, descriptiveMetadata.dc:format, administrativeMetadata.dcterms:identifier, administrativeMetadata.dcterms:modified
 formatField = descriptiveMetadata.dc:format
 formatToFilter = <%= @format_to_filter %>
-dateOfObjectCreation = administrativeMetadata.dcterms:created
+# must be last object update, not object creation!
+dateOfObjectCreation = administrativeMetadata.dcterms:modified
 relationToFurtherMetadataObject = descriptiveMetadata.dc:relation
 repositoryObjectURIPrefix = hdl:
 identifierField = administrativeMetadata.dcterms:identifier
