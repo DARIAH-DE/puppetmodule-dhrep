@@ -43,14 +43,14 @@ metadataFormatListInstance = MetadataFormatListDelivererDH
 ##  Field Settings  ##
 ######################
 
-fields = administrativeMetadata.dcterms:modified, administrativeMetadata.dcterms:created, administrativeMetadata.dcterms:identifier, administrativeMetadata.dcterms:extent, administrativeMetadata.dcterms:relation, administrativeMetadata.dcterms:format, descriptiveMetadata.dc:contributor, descriptiveMetadata.dc:coverage, descriptiveMetadata.dc:creator, descriptiveMetadata.dc:date, descriptiveMetadata.dc:description, descriptiveMetadata.dc:format, descriptiveMetadata.dc:identifier, descriptiveMetadata.dc:language, descriptiveMetadata.dc:publisher, descriptiveMetadata.dc:relation, descriptiveMetadata.dc:rights, descriptiveMetadata.dc:source, descriptiveMetadata.dc:subject, descriptiveMetadata.dc:title, descriptiveMetadata.dc:type, descriptiveMetadata.dc:relation
+fields = administrativeMetadata.datacite:identifier, administrativeMetadata.dcterms:modified, administrativeMetadata.dcterms:created, administrativeMetadata.dcterms:identifier, administrativeMetadata.dcterms:extent, administrativeMetadata.dcterms:relation, administrativeMetadata.dcterms:format, descriptiveMetadata.dc:contributor, descriptiveMetadata.dc:coverage, descriptiveMetadata.dc:creator, descriptiveMetadata.dc:date, descriptiveMetadata.dc:description, descriptiveMetadata.dc:format, descriptiveMetadata.dc:identifier, descriptiveMetadata.dc:language, descriptiveMetadata.dc:publisher, descriptiveMetadata.dc:relation, descriptiveMetadata.dc:rights, descriptiveMetadata.dc:source, descriptiveMetadata.dc:subject, descriptiveMetadata.dc:title, descriptiveMetadata.dc:type, descriptiveMetadata.dc:relation
 workFields = descriptiveMetadata.dc:title
 
 ######################
 ## OpenAireRecords ###
 ######################
 
-oar.identifierField = administrativeMetadata.dcterms:identifier
+oar.identifierField = administrativeMetadata.datacite:identifier
 oar.titleFields = descriptiveMetadata.dc:title
 oar.dateFields = administrativeMetadata.dcterms:created, administrativeMetadata.dcterms:modified
 oar.contributorFields = descriptiveMetadata.dc:contributor
