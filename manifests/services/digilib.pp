@@ -3,11 +3,19 @@
 # Class to install and configure digilib
 #
 class dhrep::services::digilib (
-  $scope   = undef,
-  $version = 'latest',
+  $scope             = undef,
+  $version           = 'latest',
   $prescale_location = undef,
-  $tgcrud_location = 'https://textgridlab.org/1.0/tgcrud/TGCrudService?wsdl',
-  $dhcrud_location = 'https://repository.de.dariah.eu/1.0/dhcrud/',
+  $tgcrud_location   = 'https://textgridlab.org/1.0/tgcrud/TGCrudService?wsdl',
+  $dhcrud_location   = 'https://repository.de.dariah.eu/1.0/dhcrud/',
+  $prescale_dirs     = ['original', 'big', 'small', 'thumb'],
+#  $prescale_dirs     = [
+#                        'jpeg-sf1', 'tile-sf1',
+#                        'jpeg-sf2', 'tile-sf2',
+#                        'jpeg-sf4', 'tile-sf4',
+#                        'jpeg-sf8', 'tile-sf8',
+#                        'jpeg-sf16', 'tile-sf16',
+#                       ],
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_digilib
