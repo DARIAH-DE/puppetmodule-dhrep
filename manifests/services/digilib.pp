@@ -21,16 +21,17 @@ class dhrep::services::digilib (
   include dhrep::services::tomcat_digilib
   include dhrep::services::tomcat_digilib2
 
-  $_confdir    = $::dhrep::params::confdir
-  $_vardir     = $::dhrep::params::vardir
-  $_catname    = $::dhrep::services::tomcat_digilib::catname
-  $_xmx        = $::dhrep::services::tomcat_digilib::xmx
-  $_http_port  = $::dhrep::services::tomcat_digilib::http_port
-  $_jmx_port   = $::dhrep::services::tomcat_digilib::jmx_port
-  $_http_port2 = $::dhrep::services::tomcat_digilib2::http_port
-  $_jmx_port2  = $::dhrep::services::tomcat_digilib2::jmx_port
-  $_aptdir     = $::dhrep::params::aptdir
-  $templates   = 'dhrep/etc/dhrep/digilib/'
+  $_confdir      = $::dhrep::params::confdir
+  $_vardir       = $::dhrep::params::vardir
+  $_catname      = $::dhrep::services::tomcat_digilib::catname
+  $_xmx          = $::dhrep::services::tomcat_digilib::xmx
+  $_http_port    = $::dhrep::services::tomcat_digilib::http_port
+  $_jmx_port     = $::dhrep::services::tomcat_digilib::jmx_port
+  $_http_port2   = $::dhrep::services::tomcat_digilib2::http_port
+  $_jmx_port2    = $::dhrep::services::tomcat_digilib2::jmx_port
+  $_aptdir       = $::dhrep::params::aptdir
+  $templates     = 'dhrep/etc/dhrep/digilib/'
+  $prescale_base = "${_vardir}/digilib/prescale"
 
   ###
   # update apt repo and install package

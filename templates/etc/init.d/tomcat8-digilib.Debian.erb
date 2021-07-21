@@ -102,7 +102,7 @@ export JAVA_HOME
 list_prescale_dirs()
 {
     echo "list prescale dirs"
-    PBASE=/var/dhrep/prescale
+    PBASE=<%= scope.lookupvar('dhrep::services::digilib::prescale_base') %>
     PDIRS=(<%= scope.lookupvar('dhrep::services::digilib::prescale_dirs').join(' ') %>)
     for PDIR in "${PDIRS[@]}"; do
         ls $PBASE/$PDIR | wc -l

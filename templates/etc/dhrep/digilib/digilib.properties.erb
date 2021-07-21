@@ -1,5 +1,6 @@
 <%
 prescale_dirs = scope.lookupvar('dhrep::services::digilib::prescale_dirs')
+prescale_base = scope.lookupvar('dhrep::services::digilib::prescale_base')
 -%>
 # Properties for DHREP Digilib Service
-basedir-list = <%= prescale_dirs.map{ |dir| "/var/dhrep/digilib/prescale/#{dir}" }.join(':') %>
+basedir-list = <%= prescale_dirs.map{ |dir| "#{prescale_base}/#{dir}" }.join(':') %>
