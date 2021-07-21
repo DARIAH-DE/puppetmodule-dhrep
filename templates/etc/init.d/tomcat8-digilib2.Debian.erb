@@ -122,7 +122,7 @@ fill_cache()
     if ! curl --output /dev/null --silent --head --fail <%= scope.lookupvar('dhrep::services::tomcat_digilib2::check_url') %> ; then
       echo curl returned an error - please check <%= scope.lookupvar('dhrep::services::tomcat_digilib2::check_url') %>
     else
-      digilib cache prepared
+      echo digilib cache prepared
     fi
 }
 
