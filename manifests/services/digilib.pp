@@ -3,26 +3,35 @@
 # Class to install and configure digilib
 #
 class dhrep::services::digilib (
-  $scope   = undef,
-  $version = 'latest',
+  $scope             = undef,
+  $version           = 'latest',
   $prescale_location = undef,
-  $tgcrud_location = 'https://textgridlab.org/1.0/tgcrud/TGCrudService?wsdl',
-  $dhcrud_location = 'https://repository.de.dariah.eu/1.0/dhcrud/',
+  $tgcrud_location   = 'https://textgridlab.org/1.0/tgcrud/TGCrudService?wsdl',
+  $dhcrud_location   = 'https://repository.de.dariah.eu/1.0/dhcrud/',
+  $prescale_dirs     = ['original', 'big', 'small', 'thumb'],
+#  $prescale_dirs     = [
+#                        'jpeg-sf1', 'tile-sf1',
+#                        'jpeg-sf2', 'tile-sf2',
+#                        'jpeg-sf4', 'tile-sf4',
+#                        'jpeg-sf8', 'tile-sf8',
+#                        'jpeg-sf16', 'tile-sf16',
+#                       ],
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_digilib
   include dhrep::services::tomcat_digilib2
 
-  $_confdir    = $::dhrep::params::confdir
-  $_vardir     = $::dhrep::params::vardir
-  $_catname    = $::dhrep::services::tomcat_digilib::catname
-  $_xmx        = $::dhrep::services::tomcat_digilib::xmx
-  $_http_port  = $::dhrep::services::tomcat_digilib::http_port
-  $_jmx_port   = $::dhrep::services::tomcat_digilib::jmx_port
-  $_http_port2 = $::dhrep::services::tomcat_digilib2::http_port
-  $_jmx_port2  = $::dhrep::services::tomcat_digilib2::jmx_port
-  $_aptdir     = $::dhrep::params::aptdir
-  $templates   = 'dhrep/etc/dhrep/digilib/'
+  $_confdir      = $::dhrep::params::confdir
+  $_vardir       = $::dhrep::params::vardir
+  $_catname      = $::dhrep::services::tomcat_digilib::catname
+  $_xmx          = $::dhrep::services::tomcat_digilib::xmx
+  $_http_port    = $::dhrep::services::tomcat_digilib::http_port
+  $_jmx_port     = $::dhrep::services::tomcat_digilib::jmx_port
+  $_http_port2   = $::dhrep::services::tomcat_digilib2::http_port
+  $_jmx_port2    = $::dhrep::services::tomcat_digilib2::jmx_port
+  $_aptdir       = $::dhrep::params::aptdir
+  $templates     = 'dhrep/etc/dhrep/digilib/'
+  $prescale_base = "${_vardir}/digilib/prescale"
 
   ###
   # update apt repo and install package

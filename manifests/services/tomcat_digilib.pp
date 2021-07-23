@@ -6,6 +6,7 @@ class dhrep::services::tomcat_digilib (
   $scope = undef,
   $xmx   = $::dhrep::params::tomcat_digilib_xmx,
   $xms   = $::dhrep::params::tomcat_digilib_xms,
+  $check_uri = 'textgrid:wtxq.0',
 ) inherits dhrep::params {
 
   $catname      = $::dhrep::params::config['tomcat_digilib']['catname']
@@ -15,6 +16,7 @@ class dhrep::services::tomcat_digilib (
   $uid          = $::dhrep::params::config['tomcat_digilib']['uid']
   $gid          = $::dhrep::params::config['tomcat_digilib']['gid']
   $depcat       = 'tomcat-crud'
+  $check_url    = "http://localhost:${::dhrep::params::config['tomcat_digilib']['http_port']}/digilibservice/rest/IIIF/${check_uri}/info.json"
 
   ###
   # user, home-dir and user-tomcat
@@ -30,5 +32,6 @@ class dhrep::services::tomcat_digilib (
     xms               => $xms,
     telegraf_enabled  => true,
     tomcat_version    => $dhrep::params::tomcat_version,
+    initd_template_loc => 'dhrep/etc/init.d/tomcat8-digilib.Debian.erb',
   }
 }
