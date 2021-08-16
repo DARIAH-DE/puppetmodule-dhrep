@@ -166,11 +166,11 @@ class dhrep::nginx (
       enable    => true,
       require   => [Package['nginx'],Package['ssl-cert']],
       subscribe => [
-          File['/etc/nginx/sites-available/default'],
-          File['/etc/nginx/nginx.conf'],
-          File['/etc/nginx/proxyconf/1.0.conf'],
-          File['/etc/nginx/conf.d/digilib.conf'],
-        ],
+        File['/etc/nginx/sites-available/default'],
+        File['/etc/nginx/nginx.conf'],
+        File['/etc/nginx/proxyconf/1.0.conf'],
+        File['/etc/nginx/conf.d/digilib.conf'],
+      ],
     }
   }
 
