@@ -7,7 +7,7 @@
 # === Parameters
 #
 # [*scope*]
-#   textgrid or dariah (textgrid only at the moment, there is no sesame installation for the DARIAH-DE Repository eright now.
+#   textgrid or dariah
 # [*ignore_service_status*]
 #   let puppet ignore the service status of nginx, useful if nginx is stopped manually for maintenance reasons
 #
@@ -158,7 +158,7 @@ class dhrep::nginx (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${templates}/sites-available/default.erb"),
+    content => template("${templates}/sites-available/${scope}/default.erb"),
   }
   if ! $ignore_service_status {
     service { 'nginx':

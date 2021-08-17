@@ -5,6 +5,28 @@
 #rewrite_log on;
 
 ###
+# top level domain proxy (search)
+# NOTE redirect requests for / permanently to /search (default.conf) and then proxy the /search
+#      path to dfatest/search
+###
+location /search {
+    proxy_pass https://dfatest.de.dariah.eu/search/;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
+
+###
+# colreg
+###
+location /colreg-ui {
+    proxy_pass https://dfatest.de.dariah.eu/colreg-ui/;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        Host $http_host;
+}
+
+###
 # oaipmh
 ###
 location /1.0/oaipmh {
