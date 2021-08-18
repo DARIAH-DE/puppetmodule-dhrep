@@ -79,6 +79,11 @@ server {
   ssl_ecdh_curve secp384r1;
 <% end -%>
 
+    # Redirect requests for / permanently to /search, proxy the /search path to dfatest/search in proxyconf/1.0.conf
+    location / {
+        return 301 /search$request_uri;
+    }
+
 	location /shibboleth { alias /opt/dariahshibboleth/sp-metadata.xml; }
 
 	include /etc/nginx/proxyconf/1.0.conf;
