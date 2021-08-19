@@ -20,7 +20,7 @@ class dhrep::services::publish (
   $dhcrud_client_timeout                = 600000,
   $cr_endpoint                          = 'https://repository.de.dariah.eu/colreg-ui/',
   $cr_client_timeout                    = 5000,
-  $cr_submit_draft_path                 = '/api/collections/submitAndPublish'
+  $cr_submit_draft_path                 = '/api/collections/submitAndPublish',
   $cr_oai_path                          = 'oaipmh',
   $default_process_starter              = 'dariahde.publish.DHPublish',
   $policies_file                        = 'policies.xml',
