@@ -29,9 +29,9 @@ function delete_temp_files () {
 # DEPENDENCIES: You will need xmllint and jq for XML and JSON parsing!
 ###
 
+# Check for host parameter
 if [ $1"x" == "x" ]; then
-    echo "Please provide the host name: [repository|dhrepworkshop|trep].de.dariah.eu"
-    echo "$0 [HOSTNAME]"
+    echo "---> ERROR! Please provide host name parameter: [repository|dhrepworkshop|trep].de.dariah.eu"
     exit 1;
 fi
 
@@ -41,7 +41,7 @@ delete_temp_files;
 
 # Check for existing output file
 if [ -f "$DEST" ]; then
-    echo "---> ERROR! OUTPUT FILE ALREADY EXISTS: $DEST!"
+    echo "---> ERROR! Output file already exists: $DEST!"
     exit 1;
 fi
 
