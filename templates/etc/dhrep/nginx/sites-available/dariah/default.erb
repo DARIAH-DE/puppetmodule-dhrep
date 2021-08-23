@@ -34,7 +34,7 @@ server {
 	server_name localhost;
 
     # Redirect requests for / permanently to /search (/ only!), proxy the /search path to dfatest/search in proxyconf/1.0.conf
-    location $ {
+    location = / {
         return 301 /search$request_uri;
     }
 
@@ -80,7 +80,7 @@ server {
 <% end -%>
 
     # Redirect requests for / permanently to /search (/ only!), proxy the /search path to dfatest/search in proxyconf/1.0.conf
-    location $ {
+    location = /{
         return 301 /search$request_uri;
     }
 
