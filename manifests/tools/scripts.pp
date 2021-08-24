@@ -17,7 +17,8 @@ class dhrep::tools::scripts (
   $sesame_port  = $::dhrep::params::config['tomcat_sesame']['http_port']
 
   package {
-    'jq': ensure => present;
+    'jq': ensure            => present;
+    'libxml2-utils': ensure => present;
   }
 
   file { "${_optdir}/check-services.sh" :
@@ -32,6 +33,16 @@ class dhrep::tools::scripts (
   if $scope == 'textgrid' {
     file { "${_optdir}/init-databases.sh" :
       content => template("dhrep/opt/dhrep/${scope}/init-databases.sh.erb"),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0700',
+      require => File[$_optdir],
+    }
+  }
+
+  if $scope == 'dariah' {
+    file { "${_optdir}/re-index-dhrep-cr.sh" :
+      content => template("dhrep/opt/dhrep/${scope}/re-index-dhrep-cr.sh.erb"),
       owner   => 'root',
       group   => 'root',
       mode    => '0700',
