@@ -13,17 +13,18 @@
 # Since: 2021-08-08
 ###
 
-
-# needs package libxml2-utils
-
-
 ###
-# VARS
+# VARS and FILES
 ###
 
-HOST=$1;
-DEST=$HOST"_cr_entries.xml";
+PROTO=http
+HOST=localhost;
 HANDLE_URL="hdl.handle.net";
+# Please use submitAndPublish or submitDraft here.
+COLREG_METHOD="submitDraft";
+COLREG_KEY=<%= @cr_import_key %>
+
+DEST=$HOST"_cr_entries.xml";
 MAP=$HOST"_cr_map.txt";
 TMP1=$HOST"_1.tmp";
 TMP2=$HOST"_2.tmp";
@@ -47,10 +48,10 @@ function delete_temp_files () {
 ####
 
 # Check for host parameter
-if [ $1"x" == "x" ]; then
-    echo "---> ERROR! Please provide host name parameter: [repository|dhrepworkshop|trep].de.dariah.eu"
-    exit 1;
-fi
+#if [ $1"x" == "x" ]; then
+#    echo "---> ERROR! Please provide host name parameter: [repository|dhrepworkshop|trep].de.dariah.eu"
+#    exit 1;
+#fi
 
 echo "---> Hostname: $HOST";
 
@@ -71,13 +72,11 @@ echo "---> Output file: $DEST";
 # 1. We need all collections from DH-rep visa OAI-PMH: <https://$HOST/1.0/oaipmh/oai?verb=ListSets>
 echo -n "---> Getting all sets from OAI-PMH... ";
 # $TMP1: OAI-PMH ListSets response
-curl -XGET -s "https://$HOST/1.0/oaipmh/oai?verb=ListSets" > $TMP1;
+curl -XGET -s "$PROTO://$HOST/1.0/oaipmh/oai?verb=ListSets" > $TMP1;
 # $TMP2: All Handle PIDs only
-xmllint --xpath "//*[local-name()='setSpec']/text()" $TMP1 > $TMP2;
-# Use on other *nix systems: We do need each Handle to be in one line!
-#xmllint --xpath "//*[local-name()='setSpec']/text()" < (sed 's/hdl:/\nhdl:/g' $TMP1) > $TMP2;
+xmllint --xpath "//*[local-name()='setSpec']/text()" <(sed 's/hdl:/\nhdl:/g' $TMP1) > $TMP2;
 declare -i SETS=$(wc -l < $TMP2);
-echo "FOUND $SETS SETS";
+echo "Found $SETS sets";
 
 # Loop collections
 echo "---> Getting metadata for each set";
@@ -94,7 +93,7 @@ while IFS= read -r PID; do
     # For each collection (OAI-PMH set), get record metadata: <https://$HOST/1.0/oaipmh/oai?verb=GetRecord&identifier=hdl:21.T11991/0000-001B-4E7C-2&metadataPrefix=oai_dc>
     echo -n "    ---> PASS#1: Get OAI-PMH metadata... "
     # $TMP3: Single OAI-PMH record
-    curl -XGET -s "https://$HOST/1.0/oaipmh/oai?verb=GetRecord&identifier=$PID&metadataPrefix=oai_dc" > $TMP3;
+    curl -XGET -s "$PROTO://$HOST/1.0/oaipmh/oai?verb=GetRecord&identifier=$PID&metadataPrefix=oai_dc" > $TMP3;
     IDENTIFIER_CR=$(xmllint --xpath "//*[local-name()='dc']/*[local-name()='identifier'][starts-with(text(),'hdl:')]" $TMP3);
     IDENTIFIER_CR=${IDENTIFIER_CR/hdl:/};
     IDENTIFIER_CR=${IDENTIFIER_CR/\//%2F/};
@@ -149,13 +148,10 @@ while IFS= read -r PID; do
     REDIS_KEY=${REDIS_KEY/\"/};
     echo "DONE";
 
-    # Send it to <https://$HOST/colreg-ui/api/collections/submitAndPublish> or <https://$HOST/colreg-ui/api/collections/submitDraft>.
-    echo -n "    ---> PASS#5: Call CR#submitDraft() for collection creation... ";
-    # echo -n "    ---> PASS#5: Call CR#submitAndPublish() for collection creation... ";
+    # Send prepared file to Collection Registry.
+    echo -n "    ---> PASS#5: Call CR#$COLREG_METHOD for collection creation... ";
     if [ "$2" = "SUBMIT_TO_CR" ]; then
-        curl -XPOST -s "https://dfa.de.dariah.eu/colreg-ui/api/collections/submitDraft/" -H 'Content-Type: application/xml' -d @$TMP5 > $TMP7;
-        # curl -XPOST -s "https://$HOST/colreg-ui/api/collections/submitDraft/" -H 'Content-Type: application/xml' -d @$TMP5 > $TMP7;
-        # curl -XPOST -s "https://$HOST/colreg-ui/api/collections/submitAndPublish/" -H 'Content-Type: application/xml' -d @$TMP5 > $TMP7;
+        curl -XPOST -s "$PROTO://$HOST/colreg-ui/api/collections/$COLREG_METHOD?key=$COLREG_KEY" -H 'Content-Type: application/xml' -d @$TMP5 > $TMP7;
         CRID=$(xmllint --xpath "//*[local-name()='collectionId']/text()" $TMP7);
         echo "" >> $MAP;
         echo 'FU=$(redis-cli -n 1 get '$REDIS_KEY');' >> $MAP;
@@ -166,9 +162,9 @@ while IFS= read -r PID; do
     else
         echo "SKIPPED";
     fi
-done < $TMP2
 
-# TODO Add CRID to redis, you need the key (SOURCE ID from Handle metadata): "crid_https://de.dariah.eu/storage/EAEA0-1DDA-E710-7EC3-0" and the value (CRID from CR response): "611cc40f2437297ef712fe16"
-# Please see $MAP file! Use it CAREFULLY!
+    # TODO Add CRID to redis, you need the key (SOURCE ID from Handle metadata): "crid_https://de.dariah.eu/storage/EAEA0-1DDA-E710-7EC3-0" and the value (CRID from CR response): "611cc40f2437297ef712fe16"
+    # Please see $MAP file! Use it CAREFULLY!
+done < $TMP2
 
 delete_temp_files;

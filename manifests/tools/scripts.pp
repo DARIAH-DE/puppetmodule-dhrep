@@ -9,12 +9,13 @@ class dhrep::tools::scripts (
   $_optdir = $::dhrep::params::optdir
 
   # TODO Find a better solution to put service ports into check-services file!
-  $crud_port    = $::dhrep::params::config['tomcat_crud']['http_port']
-  $publish_port = $::dhrep::params::config['tomcat_publish']['http_port']
-  $pid_port     = $::dhrep::params::config['tomcat_pid']['http_port']
-  $oaipmh_port  = $::dhrep::params::config['tomcat_oaipmh']['http_port']
-  $fits_port    = $::dhrep::params::config['tomcat_fits']['http_port']
-  $sesame_port  = $::dhrep::params::config['tomcat_sesame']['http_port']
+  $crud_port         = $::dhrep::params::config['tomcat_crud']['http_port']
+  $publish_port      = $::dhrep::params::config['tomcat_publish']['http_port']
+  $pid_port          = $::dhrep::params::config['tomcat_pid']['http_port']
+  $oaipmh_port       = $::dhrep::params::config['tomcat_oaipmh']['http_port']
+  $fits_port         = $::dhrep::params::config['tomcat_fits']['http_port']
+  $sesame_port       = $::dhrep::params::config['tomcat_sesame']['http_port']
+  $colreg_import_key = $::dhrep::services::publish::cr_import_key
 
   package {
     'jq': ensure            => present;
