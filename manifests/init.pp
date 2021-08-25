@@ -40,6 +40,7 @@ class dhrep (
   $dhcrud_public_storage_host = undef,
   $dhcrud_public_storage_host_public = undef,
   $dhcrud_public_pid_secret = undef,
+  $dhpublish_cr_import_key = undef,
   #publikator
   $publikator_lock_to_group = undef,
 ) inherits dhrep::params {
@@ -198,6 +199,12 @@ class dhrep (
       require   => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::sesame'],
       Class['dhrep::services::intern::wildfly'], Class['dhrep::services::fits']],
     }
+    class { 'dhrep::services::publish':
+      scope        => $scope,
+      pid_secret   => $publish_pid_secret,
+      log_level    => $publish_log_level,
+      storage_host => $dhcrud_storage_host,
+    }
     class { 'dhrep::services::tgconfserv':
       service_base_url => $tgconfserv_service_base_url,
     }
@@ -241,6 +248,13 @@ class dhrep (
       log_level           => $crud_public_log_level,
       require             => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::wildfly']],
     }
+    class { 'dhrep::services::publish':
+      scope        => $scope,
+      pid_secret   => $publish_pid_secret,
+      log_level    => $publish_log_level,
+      storage_host => $dhcrud_storage_host,
+      cr_input_key => $dhpublish_cr_import_key,
+    }
     class { 'dhrep::services::publikator':
       scope   => $scope,
       require => Class['dhrep::services::publish'],
@@ -261,12 +275,6 @@ class dhrep (
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
     require => Class['dhrep::services::intern::elasticsearch'],
-  }
-  class { 'dhrep::services::publish':
-    scope        => $scope,
-    pid_secret   => $publish_pid_secret,
-    log_level    => $publish_log_level,
-    storage_host => $dhcrud_storage_host,
   }
 
   ###

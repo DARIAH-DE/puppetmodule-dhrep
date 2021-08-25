@@ -22,7 +22,7 @@ HOST="localhost";
 HANDLE_URL="hdl.handle.net";
 # Please use submitAndPublish or submitDraft here.
 COLREG_METHOD="submitDraft";
-COLREG_KEY=<%= scope.lookupvar("::dhrep::services::publish::cr_import_key") %>
+COLREG_KEY=<%= scope.lookupvar("::profiles::dariahrepository::publish_cr_import_key") %>
 
 DEST=$HOST"_cr_entries.xml";
 MAP=$HOST"_cr_map.txt";
