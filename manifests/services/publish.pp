@@ -21,7 +21,7 @@ class dhrep::services::publish (
   $cr_client_timeout                    = 5000,
   $cr_submit_draft_path                 = '/api/collections/submitAndPublish',
   $cr_oai_path                          = 'oaipmh',
-  $cr_import_key                        = 'crImportSecret',
+  $cr_import_key                        = 'crImportKey',
   $default_process_starter              = 'dariahde.publish.DHPublish',
   $policies_file                        = 'policies.xml',
   $maintenance                          = false,
