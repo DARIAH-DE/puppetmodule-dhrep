@@ -249,11 +249,11 @@ class dhrep (
       require             => [Class['dhrep::services::intern::elasticsearch'], Class['dhrep::services::intern::wildfly']],
     }
     class { 'dhrep::services::publish':
-      scope        => $scope,
-      pid_secret   => $publish_pid_secret,
-      log_level    => $publish_log_level,
-      storage_host => $dhcrud_storage_host,
-      cr_input_key => $dhpublish_cr_import_key,
+      scope         => $scope,
+      pid_secret    => $publish_pid_secret,
+      log_level     => $publish_log_level,
+      storage_host  => $dhcrud_storage_host,
+      cr_import_key => $dhpublish_cr_import_key,
     }
     class { 'dhrep::services::publikator':
       scope   => $scope,
