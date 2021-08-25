@@ -41,6 +41,8 @@ class dhrep::tools::scripts (
     }
   }
 
+  # TODO Find a better way to get secret key here?
+  import dhrep::services::publish
   if $scope == 'dariah' {
     file { "${_optdir}/re-index-dhrep-cr.sh" :
       content => template("dhrep/opt/dhrep/${scope}/re-index-dhrep-cr.sh.erb"),
