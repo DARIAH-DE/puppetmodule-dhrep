@@ -15,7 +15,6 @@ class dhrep::tools::scripts (
   $oaipmh_port   = $::dhrep::params::config['tomcat_oaipmh']['http_port']
   $fits_port     = $::dhrep::params::config['tomcat_fits']['http_port']
   $sesame_port   = $::dhrep::params::config['tomcat_sesame']['http_port']
-  $cr_import_key = $::dhrep::services::publish::cr_import_key
 
   package {
     'jq': ensure            => present;
@@ -41,8 +40,6 @@ class dhrep::tools::scripts (
     }
   }
 
-  # TODO Find a better way to get secret key here?
-  include 'dhrep::services::publish'
   if $scope == 'dariah' {
     file { "${_optdir}/re-index-dhrep-cr.sh" :
       content => template("dhrep/opt/dhrep/${scope}/re-index-dhrep-cr.sh.erb"),
