@@ -24,8 +24,8 @@ HANDLE_URL="hdl.handle.net";
 COLREG_METHOD="submitDraft";
 COLREG_KEY=<%= scope.lookupvar("::profiles::dariahrepository::publish_cr_import_key") %>
 
-DEST=$HOST"_cr_entries.xml";
-MAP=$HOST"_cr_map.txt";
+DEST="cr-entries_$HOST.xml";
+MAP="cr-mapping_$HOST.txt";
 TMP1=$HOST"_1.tmp";
 TMP2=$HOST"_2.tmp";
 TMP3=$HOST"_3.tmp";
@@ -153,12 +153,18 @@ while IFS= read -r PID; do
     if [ "$2" = "SUBMIT_TO_CR" ]; then
         curl -XPOST -s "$PROTO://$HOST/colreg-ui/api/collections/$COLREG_METHOD?key=$COLREG_KEY" -H 'Content-Type: application/xml' -d @$TMP5 > $TMP7;
         CRID=$(xmllint --xpath "//*[local-name()='collectionId']/text()" $TMP7);
-        echo "" >> $MAP;
-        echo 'FU=$(redis-cli -n 1 get '$REDIS_KEY');' >> $MAP;
-        echo 'if [ ! "$FU" ]; then' >> $MAP;
-        echo "    redis-cli -n 1 set $REDIS_KEY \"$CRID\";" >> $MAP;
-        echo "fi" >> $MAP;
-        echo "DONE";
+        FU=$(redis-cli -n 1 get $REDIS_KEY);
+        echo "         RSPS: $REDIS_KEY";
+        if [ ! "$FU" ]; then
+            echo -n "         ---> CRID is empty! New CRID would be: $CRID";
+            # Write redis-cli command to mapping file.
+            echo "redis-cli -n 1 set $REDIS_KEY \"$CRID\";" >> $MAP;
+        else
+            echo -n "         ---> CRID existing: $FU";
+            # Write skipped keys to file for documentation.
+            echo "# DO NOT SET existing CRID: $REDIS_KEY=$FU (new: $CRID)" >> $MAP;
+        fi
+        echo " ...DONE";
     else
         echo "SKIPPED";
     fi
