@@ -7,6 +7,7 @@ class dhrep::tools::scripts (
 ) inherits dhrep::params {
 
   $_optdir = $::dhrep::params::optdir
+  $_cr_import_key = $::dhrep::services::publish::cr_import_key
 
   # TODO Find a better solution to put service ports into check-services file!
   $crud_port         = $::dhrep::params::config['tomcat_crud']['http_port']
@@ -42,7 +43,6 @@ class dhrep::tools::scripts (
   }
 
   # TODO Find a better way to get secret key here?
-  import dhrep::services::publish
   if $scope == 'dariah' {
     file { "${_optdir}/re-index-dhrep-cr.sh" :
       content => template("dhrep/opt/dhrep/${scope}/re-index-dhrep-cr.sh.erb"),
