@@ -19,8 +19,8 @@ class dhrep::nginx (
   $dhparam                            = undef,
   $nginx_root                         = undef,
   $ignore_service_status              = false,
-  $proxyconf_proxypath_dhrep_search   = 'https://dfa.de.dariah.eu/search/',
-  $proxyconf_proxypath_dhrep_colreg   = 'https://dfa.de.dariah.eu/colreg-ui/',
+  $proxyconf_proxypath_dhrep_search   = 'https://dfa.de.dariah.eu/search-alt/',
+  $proxyconf_proxypath_dhrep_colreg   = 'https://dfa.de.dariah.eu/colreg-ui-alt/',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_oaipmh
