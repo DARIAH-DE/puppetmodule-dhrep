@@ -9,7 +9,7 @@
 # NOTE redirect requests for / permanently to /search (default.conf) and then proxy the /search
 #      path to dfatest/search
 ###
-location /search {
+location /search/ {
     proxy_pass <%= scope.lookupvar('dhrep::nginx::proxyconf_proxypath_dhrep_search') %>;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -18,7 +18,7 @@ location /search {
 ###
 # colreg
 ###
-location /colreg-ui {
+location /colreg-ui/ {
     proxy_pass <%= scope.lookupvar('dhrep::nginx::proxyconf_proxypath_dhrep_colreg') %>;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
