@@ -13,6 +13,7 @@ location /search/ {
     proxy_pass <%= scope.lookupvar('dhrep::nginx::proxyconf_proxypath_dhrep_search') %>;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    <%= scope.lookupvar('dhrep::nginx::proxyconf_proxy_set_host_header') %>
 }
 
 ###
@@ -22,6 +23,7 @@ location /colreg-ui/ {
     proxy_pass <%= scope.lookupvar('dhrep::nginx::proxyconf_proxypath_dhrep_colreg') %>;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    <%= scope.lookupvar('dhrep::nginx::proxyconf_proxy_set_host_header') %>
 }
 
 ###
