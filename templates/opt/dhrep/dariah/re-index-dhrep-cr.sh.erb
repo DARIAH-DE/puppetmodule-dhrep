@@ -96,7 +96,7 @@ while IFS= read -r PID; do
     curl -XGET -s "$PROTO://$HOST/1.0/oaipmh/oai?verb=GetRecord&identifier=$PID&metadataPrefix=oai_dc" > $TMP3;
     IDENTIFIER_CR=$(xmllint --xpath "//*[local-name()='dc']/*[local-name()='identifier'][starts-with(text(),'hdl:')]" $TMP3);
     IDENTIFIER_CR=${IDENTIFIER_CR/hdl:/};
-    IDENTIFIER_CR=${IDENTIFIER_CR/\//%2F/};
+    IDENTIFIER_CR=${IDENTIFIER_CR/\//%2F};
     IDENTIFIER_CR=${IDENTIFIER_CR/identifier>/identifier>https:\/\/$HOST\/1.0\/oaipmh\/oai/};
     DOI_WITH_RESOLVER=$(xmllint --xpath "//*[local-name()='dc']/*[local-name()='identifier'][starts-with(text(),'doi:')]/text()" $TMP3);
     DOI_WITH_RESOLVER=${DOI_WITH_RESOLVER/doi:/http://dx.doi.org/};
