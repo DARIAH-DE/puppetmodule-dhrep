@@ -29,17 +29,14 @@ server {
 	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
     add_header Referrer-Policy "no-referrer";
-    add_header X-Clacks-Overhead "GNU John Dearheart";
 
     # Make site accessible from http://localhost/
 	server_name localhost;
-	location / {
-		# First attempt to serve request as file, then
-		# as directory, then fall back to displaying a 404.
-		try_files $uri $uri/ /index.html;
-		# Uncomment to enable naxsi on this location
-		# include /etc/nginx/naxsi.rules
-	}
+
+    # Redirect requests for / permanently to /search (/ only!), proxy the /search path to dfatest/search in proxyconf/1.0.conf
+    location = / {
+        return 301 /search$request_uri;
+    }
 
 	# Status of nginx
 	location /nginx_status {
@@ -51,21 +48,23 @@ server {
 		deny all;
 	}
 
-	# textgrid proxy rules
+	# include proxy rules
 	include /etc/nginx/proxyconf/1.0.conf;
 }
 
 # HTTPS server
 #
 server {
-	listen 443 ssl http2;
-	listen [::]:443 ssl http2 ipv6only=on;
+	listen 443;
+#	listen 443 default_server;
+#	server_name _;
+#	server_name_in_redirect off;
 
 	server_name localhost;
-    add_header Referrer-Policy "no-referrer";
-    add_header X-Clacks-Overhead "GNU John Dearheart";
+
 	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
+    add_header Referrer-Policy "no-referrer";
 
 	ssl on;
 	ssl_certificate <%= @vhost_ssl_cert %>;
@@ -79,6 +78,11 @@ server {
   ssl_dhparam /etc/nginx/dhparam2048.pem;
   ssl_ecdh_curve secp384r1;
 <% end -%>
+
+    # Redirect requests for / permanently to /search (/ only!), proxy the /search path to dfatest/search in proxyconf/1.0.conf
+    location = /{
+        return 301 /search$request_uri;
+    }
 
 	location /shibboleth { alias /opt/dariahshibboleth/sp-metadata.xml; }
 

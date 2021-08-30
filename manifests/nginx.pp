@@ -7,7 +7,7 @@
 # === Parameters
 #
 # [*scope*]
-#   textgrid or dariah (textgrid only at the moment, there is no sesame installation for the DARIAH-DE Repository eright now.
+#   textgrid or dariah
 # [*ignore_service_status*]
 #   let puppet ignore the service status of nginx, useful if nginx is stopped manually for maintenance reasons
 #
@@ -19,6 +19,9 @@ class dhrep::nginx (
   $dhparam                            = undef,
   $nginx_root                         = undef,
   $ignore_service_status              = false,
+  $proxyconf_proxypath_dhrep_search   = 'https://dfa.de.dariah.eu/search-alt/',
+  $proxyconf_proxypath_dhrep_colreg   = 'https://dfa.de.dariah.eu/colreg-ui-alt/',
+  $proxyconf_proxy_set_host_header    = '    ',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_oaipmh
@@ -158,7 +161,7 @@ class dhrep::nginx (
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${templates}/sites-available/default.erb"),
+    content => template("${templates}/sites-available/${scope}/default.erb"),
   }
   if ! $ignore_service_status {
     service { 'nginx':
@@ -166,11 +169,11 @@ class dhrep::nginx (
       enable    => true,
       require   => [Package['nginx'],Package['ssl-cert']],
       subscribe => [
-          File['/etc/nginx/sites-available/default'],
-          File['/etc/nginx/nginx.conf'],
-          File['/etc/nginx/proxyconf/1.0.conf'],
-          File['/etc/nginx/conf.d/digilib.conf'],
-        ],
+        File['/etc/nginx/sites-available/default'],
+        File['/etc/nginx/nginx.conf'],
+        File['/etc/nginx/proxyconf/1.0.conf'],
+        File['/etc/nginx/conf.d/digilib.conf'],
+      ],
     }
   }
 
