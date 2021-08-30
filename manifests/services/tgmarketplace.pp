@@ -7,19 +7,12 @@ class dhrep::services::tgmarketplace (
   $docker_image_registry = 'docker.gitlab.gwdg.de',
   $docker_image_name     = 'dariah-de/textgridlab-marketplace/develop',
   $docker_image_tag      = 'latest',
-  $docker                = false,
 ) inherits dhrep::params {
 
   #
   # tgmarketplace docker
   #
-  class { '::docker' :
-    version => 'latest',
-  }
-  class {'docker::compose':
-    version => '1.25.4',
-  }
-  docker::registry { $docker_image_registry: }
+  include dhrep::services::intern::docker
 
   file { '/opt/docker-marketplace':
     ensure  => directory,
@@ -42,8 +35,8 @@ class dhrep::services::tgmarketplace (
   docker::image { "${docker_image_registry}/${docker_image_name}":
     ensure    => latest,
     image_tag => $docker_image_tag,
-  } ->
-  docker_compose { 'marketplace':
+  }
+  -> docker_compose { 'marketplace':
     ensure        => present,
     compose_files => ['/opt/docker-marketplace/docker-compose.yaml'],
     require       => [

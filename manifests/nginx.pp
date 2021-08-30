@@ -4,6 +4,13 @@
 #
 # Set proxyconfig for forwarding local services via port 80.
 #
+# === Parameters
+#
+# [*scope*]
+#   textgrid or dariah
+# [*ignore_service_status*]
+#   let puppet ignore the service status of nginx, useful if nginx is stopped manually for maintenance reasons
+#
 class dhrep::nginx (
   $scope                              = undef,
   $tgsearch_toplevel_cache_expiration = '24h',
@@ -11,6 +18,10 @@ class dhrep::nginx (
   $sslkey                             = undef,
   $dhparam                            = undef,
   $nginx_root                         = undef,
+  $ignore_service_status              = false,
+  $proxyconf_proxypath_dhrep_search   = 'https://dfa.de.dariah.eu/search-alt/',
+  $proxyconf_proxypath_dhrep_colreg   = 'https://dfa.de.dariah.eu/colreg-ui-alt/',
+  $proxyconf_proxy_set_host_header    = '    ',
 ) inherits dhrep::params {
 
   include dhrep::services::tomcat_oaipmh
@@ -71,7 +82,6 @@ class dhrep::nginx (
     group  => root,
     mode   => '0644',
     source => 'puppet:///modules/profiles/etc/ssl/DFN_PKI_Generation_2.pem',
-#    notify => Service['nginx'],
   }
   if $sslkey != undef {
     file { "/etc/ssl/${::fqdn}.key.pem":
@@ -80,7 +90,6 @@ class dhrep::nginx (
       group  => root,
       mode   => '0600',
       source => $sslkey,
-      notify => Service['nginx'],
     }
   }
   if $sslcert != undef {
@@ -90,7 +99,6 @@ class dhrep::nginx (
       group  => root,
       mode   => '0644',
       source => $sslcert,
-      notify => Service['nginx'],
     }
   }
   # todo: else create dhparam:
@@ -102,17 +110,9 @@ class dhrep::nginx (
       group  => root,
       mode   => '0644',
       source => $dhparam,
-      notify => Service['nginx'],
     }
     $dhparam_file = true
   }
-
-  # Use with module jfryman/nginx (maybe later)
-  #    class { 'nginx':
-  #        http_cfg_append => {
-  #            client_body_buffer_size => '512k',
-  #        }
-  #    }
 
   file { '/var/www':
     ensure => directory,
@@ -148,7 +148,6 @@ class dhrep::nginx (
     group   => root,
     mode    => '0644',
     content => template("${templates}/proxyconf/${scope}/1.0.conf.erb"),
-    notify  => Service['nginx'],
   }
   -> file { '/etc/nginx/nginx.conf':
     ensure  => file,
@@ -156,19 +155,26 @@ class dhrep::nginx (
     group   => root,
     mode    => '0644',
     content => template("${templates}/nginx.erb"),
-    notify  => Service['nginx'],
   }
   -> file { '/etc/nginx/sites-available/default':
     ensure  => file,
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${templates}/sites-available/default.erb"),
+    content => template("${templates}/sites-available/${scope}/default.erb"),
   }
-  ~> service { 'nginx':
-    ensure  => running,
-    enable  => true,
-    require => [Package['nginx'],Package['ssl-cert']],
+  if ! $ignore_service_status {
+    service { 'nginx':
+      ensure    => running,
+      enable    => true,
+      require   => [Package['nginx'],Package['ssl-cert']],
+      subscribe => [
+        File['/etc/nginx/sites-available/default'],
+        File['/etc/nginx/nginx.conf'],
+        File['/etc/nginx/proxyconf/1.0.conf'],
+        File['/etc/nginx/conf.d/digilib.conf'],
+      ],
+    }
   }
 
   logrotate::rule { 'nginx':

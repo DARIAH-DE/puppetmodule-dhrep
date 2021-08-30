@@ -1,0 +1,17 @@
+version: '2'
+services:
+  rdf4j:
+    image: <%= $image %>
+    environment:
+      - JAVA_OPTS="-Xmx768m"
+    ports:
+      - 127.0.0.1:<%= $http_port %>:8080
+      - 127.0.0.1:<%= $jmx_port %>:9999
+    restart: always
+    volumes:
+      - rdf4j_data:/var/rdf4j
+      - rdf4j_logs:/usr/local/tomcat/logs   
+
+volumes:
+  rdf4j_data:
+  rdf4j_logs:

@@ -50,7 +50,6 @@ class dhrep::static::repository_de_dariah_eu(
     require => File['/var/www/nginx-root/doc'],
   }
 
-
   #
   # BagIt Profile folders and profile itself
   #

@@ -81,7 +81,10 @@ class dhrep::services::iiifmd (
       group  => $_catname,
       mode   => '0755',
     }
-    package { 'textgrid-mirador': ensure  => present }
+    package { 'textgrid-mirador':
+      ensure  => present,
+      require => Exec['update_dariah_apt_repository'],
+    }
   }
   else {
     # TODO create dhrep scope "dariah" mirador?

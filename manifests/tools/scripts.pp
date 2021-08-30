@@ -9,15 +9,16 @@ class dhrep::tools::scripts (
   $_optdir = $::dhrep::params::optdir
 
   # TODO Find a better solution to put service ports into check-services file!
-  $crud_port    = $::dhrep::params::config['tomcat_crud']['http_port']
-  $publish_port = $::dhrep::params::config['tomcat_publish']['http_port']
-  $pid_port     = $::dhrep::params::config['tomcat_pid']['http_port']
-  $oaipmh_port  = $::dhrep::params::config['tomcat_oaipmh']['http_port']
-  $fits_port    = $::dhrep::params::config['tomcat_fits']['http_port']
-  $sesame_port  = $::dhrep::params::config['tomcat_sesame']['http_port']
+  $crud_port     = $::dhrep::params::config['tomcat_crud']['http_port']
+  $publish_port  = $::dhrep::params::config['tomcat_publish']['http_port']
+  $pid_port      = $::dhrep::params::config['tomcat_pid']['http_port']
+  $oaipmh_port   = $::dhrep::params::config['tomcat_oaipmh']['http_port']
+  $fits_port     = $::dhrep::params::config['tomcat_fits']['http_port']
+  $sesame_port   = $::dhrep::params::config['tomcat_sesame']['http_port']
 
   package {
-    'jq': ensure => present;
+    'jq': ensure            => present;
+    'libxml2-utils': ensure => present;
   }
 
   file { "${_optdir}/check-services.sh" :
@@ -37,6 +38,16 @@ class dhrep::tools::scripts (
     group   => 'root',
     mode    => '0700',
     require => File[$_optdir],
+  }
+
+  if $scope == 'dariah' {
+    file { "${_optdir}/re-index-dhrep-cr.sh" :
+      content => template("dhrep/opt/dhrep/${scope}/re-index-dhrep-cr.sh.erb"),
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0700',
+      require => File[$_optdir],
+    }
   }
 
   ###
