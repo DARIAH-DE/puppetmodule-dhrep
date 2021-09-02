@@ -22,16 +22,16 @@ class dhrep::services::tomcat_digilib (
   # user, home-dir and user-tomcat
   ###
   usertomcat::instance { $catname:
-    uid               => $uid,
-    gid               => $gid,
-    http_port         => $http_port,
-    control_port      => $control_port,
-    jmx_port          => $jmx_port,
-    init_dependencies => $depcat,
-    xmx               => $xmx,
-    xms               => $xms,
-    telegraf_enabled  => true,
-    tomcat_version    => $dhrep::params::tomcat_version,
+    uid                => $uid,
+    gid                => $gid,
+    http_port          => $http_port,
+    control_port       => $control_port,
+    jmx_port           => $jmx_port,
+    init_dependencies  => $depcat,
+    xmx                => $xmx,
+    xms                => $xms,
+    telegraf_enabled   => true,
+    tomcat_version     => $dhrep::params::tomcat_version,
     initd_template_loc => 'dhrep/etc/init.d/tomcat8-digilib.Debian.erb',
   }
 }

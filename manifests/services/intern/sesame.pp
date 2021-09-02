@@ -29,7 +29,7 @@ class dhrep::services::intern::sesame (
 
 
   if $use_docker {
-  
+
     #$uid = $::dhrep::params::config['rdf4j']['uid']
     #$gid = $::dhrep::params::config['rdf4j']['gid']
     $group = 'rdf4j'
@@ -63,18 +63,18 @@ class dhrep::services::intern::sesame (
         require => [File[$_optdir],File["${_backupdir}/sesame"]],
       }
       cron { 'sesame-backup' :
-        command => "${_optdir}/sesame-backup.sh",
+        command     => "${_optdir}/sesame-backup.sh",
         environment => 'PATH=/bin:/usr/bin:/usr/sbin',
-        user    => $user,
-        hour    => 22,
-        minute  => 33,
+        user        => $user,
+        hour        => 22,
+        minute      => 33,
       }
       cron { 'clean-old-sesame-backups' :
-        command => 'find  /var/dhrep/backups/sesame -type f -mtime +90 -delete',
+        command     => 'find  /var/dhrep/backups/sesame -type f -mtime +90 -delete',
         environment => 'PATH=/bin:/usr/bin:/usr/sbin',
-        user    => $user,
-        hour    => 22,
-        minute  => 03,
+        user        => $user,
+        hour        => 22,
+        minute      => 3,
       }
     }
 
@@ -86,23 +86,23 @@ class dhrep::services::intern::sesame (
     }
     if ! defined(User[$user]) {
       user { $user:
-        ensure     => present,
-        uid        => $uid,
-        gid        => $gid,
+        ensure => present,
+        uid    => $uid,
+        gid    => $gid,
       }
     }
 
     include dhrep::services::intern::docker
-      file { '/opt/docker-triplestore':
+    file { '/opt/docker-triplestore':
       ensure  => directory,
     }
 
     file { '/opt/docker-triplestore/docker-compose.yml':
       ensure  => file,
       content => epp('dhrep/opt/docker-triplestore/docker-compose.yml.epp', {
-        image     => "${docker_image_registry}/${docker_image_name}:${docker_image_tag}",
-        http_port => $rdf4j_http_port,
-        jmx_port  => $rdf4j_jmx_port,
+          image     => "${docker_image_registry}/${docker_image_name}:${docker_image_tag}",
+          http_port => $rdf4j_http_port,
+          jmx_port  => $rdf4j_jmx_port,
       }),
     }
 
@@ -114,8 +114,8 @@ class dhrep::services::intern::sesame (
       ensure        => present,
       compose_files => ['/opt/docker-triplestore/docker-compose.yml'],
       require       => [
-                          File['/opt/docker-triplestore/docker-compose.yml'],
-                        ],
+        File['/opt/docker-triplestore/docker-compose.yml'],
+      ],
     }
   }
 
