@@ -1,6 +1,6 @@
 # == Class: dhrep::tools::scripts
 #
-# install ans configure scripts, such as check-services and init-databases within the vm
+# install and configure scripts, such as check-services and init-databases within the vm
 #
 class dhrep::tools::scripts (
   $scope = undef,
@@ -29,6 +29,9 @@ class dhrep::tools::scripts (
     require => File[$_optdir],
   }
 
+  ###
+  # create init-databases script
+  ###
   file { "${_optdir}/init-databases.sh" :
     content => template("dhrep/opt/dhrep/${scope}/init-databases.sh.erb"),
     owner   => 'root',

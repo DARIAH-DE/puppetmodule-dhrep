@@ -1,9 +1,10 @@
 #!/bin/bash
-SURETEXT="YES-DESTROY-EVERYTHING"
+
+SURETEXT="YES-DESTROY-EVERYTHING-I-AM-VERY-SURE-ABOUT-IT"
 
 if [[ "$@" != $SURETEXT ]]; then
   echo -e "\nThis script deletes LDAP, sesame and elasticsearch database!"
-  echo -e "It may be used for initial server setup."
+  echo -e "It may be used for initial database setup."
   echo -e "If you KNOW WHAT YOU'RE DOING and if you REALLY WANT IT, enter:"
   echo -e "\n    ${0} ${SURETEXT}\n\n"
   echo -e "If this init script is NOT working as intended please assure..."
