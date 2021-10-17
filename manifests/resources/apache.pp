@@ -117,7 +117,7 @@ class dhrep::resources::apache (
   telegraf::input { 'apache2_procstat':
     plugin_type => 'procstat',
     options     => [{
-      'exe' => 'apache2',
+      'exe'     => 'apache2',
       'pid_tag' => true,
     }],
   }

@@ -113,8 +113,8 @@ class dhrep::services::tgauth (
   file { "${_confdir}/tgauth/redirectSidConfig.php":
     ensure  => file,
     content => epp("dhrep/${_confdir}/tgauth/redirectSidConfig.php.epp", {
-      domains  => $sid_redirect_domains_allowed,
-      other => ['abc', 'def'],
+      domains => $sid_redirect_domains_allowed,
+      other   => ['abc', 'def'],
     }),
   }
 

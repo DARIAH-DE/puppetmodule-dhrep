@@ -1,8 +1,8 @@
 # copied from https://github.com/datacentred/datacentred-ldap/blob/master/lib/puppet/parser/functions/sha1digest.rb
 # todo: SALT {SSHA}
-# 
+#
 module Puppet::Parser::Functions
-  newfunction(:sha1digest, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
+  newfunction(:sha1digest, type: rvalue, doc: <<-'ENDHEREDOC') do |args|
     Hash a plaintext using SHA-1 Digest
 
       Example:
@@ -14,4 +14,3 @@ module Puppet::Parser::Functions
     "{SHA}#{[Digest::SHA1.digest(args[0])].pack('m0').strip}"
   end
 end
-

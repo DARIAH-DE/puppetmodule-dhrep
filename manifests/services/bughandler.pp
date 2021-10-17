@@ -31,8 +31,7 @@ class dhrep::services::bughandler (
       source   => "https://puppet-pull:${gitlab_token}@gitlab.gwdg.de/dariah-de/textgridlab/bughandler.git",
       revision => 'main',
     }
-    ->
-    file { '/var/www/bugreport':
+    -> file { '/var/www/bugreport':
       ensure => directory,
       owner  => $owner,
       group  => $group,
@@ -49,7 +48,7 @@ class dhrep::services::bughandler (
       mode    => '0755',
       require => File[$_logdir],
     }
-    logrotate::rule { bughandler:
+    logrotate::rule { 'bughandler':
       path         => "${_logdir}/bughandler/bughandler.log",
       require      => File["${_logdir}/bughandler"],
       rotate       => 365,
@@ -77,7 +76,7 @@ class dhrep::services::bughandler (
     ###
     # apache config, apache should be setup by dhrep::init
     ###
-    file { "/etc/apache2/textgrid/default_vhost_includes/bughandler.conf":
+    file { '/etc/apache2/textgrid/default_vhost_includes/bughandler.conf':
       content => "
       # --------------------------------------------------------------------------
       # TextGrid Bughandler configuration
@@ -89,7 +88,7 @@ class dhrep::services::bughandler (
         Options +ExecCGI
       </Directory>
       ",
-      notify => Service['apache2'],
+      notify  => Service['apache2'],
     }
   }
 }

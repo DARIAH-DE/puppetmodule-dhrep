@@ -17,18 +17,15 @@ define dhrep::resources::create_rdf_repository (
     url     => "http://localhost:${port}/openrdf-sesame/repositories",
     require => Tomcat::War['openrdf-sesame.war'],
   }
-  ~>
-  dhrep::tools::wait_for_url_ready { "${name}_workbench_ready_wait":
+  ~> dhrep::tools::wait_for_url_ready { "${name}_workbench_ready_wait":
     url     => "http://localhost:${port}/openrdf-workbench/",
     require => Tomcat::War['openrdf-workbench.war'],
   }
-  ~>
-  exec { "create_repo_${name}":
+  ~> exec { "create_repo_${name}":
     path    => ['/usr/bin','/bin','/usr/sbin'],
     command => "curl ${create_target} --data ${create_data}",
   }
-  ~>
-  exec { "ttl_to_repo_${name}":
+  ~> exec { "ttl_to_repo_${name}":
     path    => ['/usr/bin','/bin','/usr/sbin'],
     command => "curl ${ttl_target} -X POST -d @/home/${user}/mime.ttl --header 'Content-Type: text/turtle;charset=UTF-8'",
     require => [Exec["create_repo_${name}"],File["/home/${user}/mime.ttl"],],
