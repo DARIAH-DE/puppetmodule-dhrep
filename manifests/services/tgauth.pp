@@ -291,7 +291,7 @@ class dhrep::services::tgauth (
   }
 
   # set root ldap password and create init ldap ldfis and init script.
-  $slapd_rootpw_sha = sha1digest($slapd_rootpw)
+  $slapd_rootpw_sha = dhrep::sha1digest($slapd_rootpw)
 
   file { "${_optdir}/ldap-init/ldap-cn-config.ldif":
     ensure  => file,
