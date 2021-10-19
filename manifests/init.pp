@@ -9,7 +9,6 @@ class dhrep (
   $crud_public_log_level = undef,
   $publish_log_level = undef,
   $elasticsearch_cluster_name = undef,
-  $oracle_jdk8 = true,
   $pid_user = undef,
   $pid_passwd = undef,
   $pid_prefix = undef,
@@ -275,38 +274,6 @@ class dhrep (
   class { 'dhrep::services::oaipmh':
     scope   => $scope,
     require => Class['dhrep::services::intern::elasticsearch'],
-  }
-
-  ###
-  # java8 we want! openjdk-r does not seem to be up to date, so oracle for now
-  ###
-  if $oracle_jdk8 {
-    # copied from
-    # https://github.com/Spantree/puppet-java8/blob/master/manifests/init.pp
-    # Ubuntu specific, for debian look at above link
-    # accept license
-    file { '/tmp/java.preseed':
-      source => 'puppet:///modules/liferay/oracle-java.preseed',
-      mode   => '0600',
-      backup => false,
-    }
-
-    apt::ppa { 'ppa:webupd8team/java': }
-    -> package { 'software-properties-common': ensure => present }
-    -> package {
-      'oracle-java8-installer':
-        ensure       => present,
-        responsefile => '/tmp/java.preseed',
-        require      => [Apt::Ppa['ppa:webupd8team/java'], File['/tmp/java.preseed']],
-    }
-    -> package { 'oracle-java8-set-default': ensure => present }
-
-  } else {
-    apt::ppa { 'ppa:webupd8team/java': ensure => absent }
-    package {
-      'oracle-java8-set-default': ensure => absent;
-      'oracle-java8-installer':   ensure => absent;
-    }
   }
 
   # TODO: conditional just for migration from trusty to bionic, cleanup afterwards

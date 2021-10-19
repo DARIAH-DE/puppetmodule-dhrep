@@ -28,16 +28,7 @@ class dhrep::services::intern::wildfly (
 ) inherits dhrep::params {
 
   $_vardir = $::dhrep::params::vardir
-
-  if($::dhrep::oracle_jdk8) {
-    $java_home = '/usr/lib/jvm/java-8-oracle'
-  } else {
-    if ($::lsbdistcodename == 'trusty') {
-      $java_home = '/usr/lib/jvm/default-java'
-    } else {
-      $java_home = '/usr/lib/jvm/java-8-openjdk-amd64'
-    }
-  }
+  $java_home = '/usr/lib/jvm/java-8-openjdk-amd64'
 
   ###
   # set messaging topic to dh or tg crud
