@@ -22,19 +22,11 @@
 # [*elasticsearch_version*]
 #   version of elasticsearch
 #
-# [*highlighter_plugin_version*]
-#   version of elasticsearch highlighter plugin
-#
-# [*module_update_hack*]
-#   true if modules shall be installed, see TODOs below!
-#
 class dhrep::services::intern::elasticsearch (
   $scope                      = undef,
   $cluster_name               = undef,
   $repo_version               = 6,
   $elasticsearch_version      = '6.5.4',
-  $highlighter_plugin_version = '1.7.0',
-  $module_update_hack         = false,
 ) inherits dhrep::params {
 
   $_master_http_port    = $::dhrep::params::elasticsearch_master_http_port
@@ -92,14 +84,6 @@ class dhrep::services::intern::elasticsearch (
       'transport.tcp.port'               => $_workhorse_tcp_port,
       'discovery.zen.ping.unicast.hosts' => "127.0.0.1:${_master_tcp_port}",
     },
-  }
-
-  # FIXME check installation if plugins are existing!
-  if ($module_update_hack) {
-    ::elasticsearch::plugin{"org.wikimedia.search.highlighter/experimental-highlighter-elasticsearch-plugin/${highlighter_plugin_version}":
-      instances  => ['masternode', 'workhorse'],
-      module_dir => 'experimental-highlighter-elasticsearch-plugin',
-    }
   }
 
   # clone commons repo, which contains shell scripts to create textgrid elastic search indexes
