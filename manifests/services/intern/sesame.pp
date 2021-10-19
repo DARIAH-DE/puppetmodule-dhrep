@@ -84,12 +84,10 @@ class dhrep::services::intern::sesame (
     minute      => 3,
   }
 
-  file { "/opt/docker-triplestore/mime.ttl":
-    ensure  => file,
-    owner   => $_catname,
-    mode    => '0644',
-    source  => 'puppet:///modules/dhrep/rdf/mime.ttl',
-    require => User[$_catname],
+  file { '/opt/docker-triplestore/mime.ttl':
+    ensure => file,
+    mode   => '0644',
+    source => 'puppet:///modules/dhrep/rdf/mime.ttl',
   }
 
   include dhrep::services::intern::docker
