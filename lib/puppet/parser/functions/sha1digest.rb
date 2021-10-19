@@ -2,7 +2,7 @@
 # todo: SALT {SSHA}
 #
 module Puppet::Parser::Functions
-  newfunction(:sha1digest, type: rvalue, doc: <<-'ENDHEREDOC') do |args|
+  newfunction(:sha1digest, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
     Hash a plaintext using SHA-1 Digest
 
       Example:
