@@ -2,7 +2,9 @@
 #
 # === Description
 #
-# Class to install and configure sesame.
+# Class to install and configure rdf4j.
+# It is still named sesame for backwards compatibility reasons.
+# Shall we better name it "triplestore" so we are safe for a jena switch? ;-)
 #
 # === Notes
 #
@@ -33,46 +35,8 @@ class dhrep::services::intern::sesame (
   $uid = 1020
   $gid = 1020
 
-  # ports temporay for migration, change to $_http_port later / put to params
-  if $::dhrep::services::tomcat_sesame::use_tomcat {
-    $rdf4j_http_port    = 9089
-    $rdf4j_jmx_port     = 9911
-  } else {
-    $rdf4j_http_port    = $::dhrep::services::tomcat_sesame::http_port
-    $rdf4j_jmx_port     = $::dhrep::services::tomcat_sesame::jmx_port
-
-    ###
-    # sesame backup script
-    ###
-    file { "${_backupdir}/sesame" :
-      ensure  => directory,
-      owner   => $user,
-      group   => $group,
-      mode    => '0755',
-      require => File[$_backupdir],
-    }
-    file{ "${_optdir}/sesame-backup.sh" :
-      source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/sesame-backup.sh",
-      owner   => $user,
-      group   => $group,
-      mode    => '0700',
-      require => [File[$_optdir],File["${_backupdir}/sesame"]],
-    }
-    cron { 'sesame-backup' :
-      command     => "${_optdir}/sesame-backup.sh",
-      environment => 'PATH=/bin:/usr/bin:/usr/sbin',
-      user        => $user,
-      hour        => 22,
-      minute      => 33,
-    }
-    cron { 'clean-old-sesame-backups' :
-      command     => 'find  /var/dhrep/backups/sesame -type f -mtime +90 -delete',
-      environment => 'PATH=/bin:/usr/bin:/usr/sbin',
-      user        => $user,
-      hour        => 22,
-      minute      => 3,
-    }
-  }
+  $rdf4j_http_port    = $::dhrep::services::tomcat_sesame::http_port
+  $rdf4j_jmx_port     = $::dhrep::services::tomcat_sesame::jmx_port
 
   if ! defined(Group[$group]) {
     group { $group:
@@ -86,6 +50,46 @@ class dhrep::services::intern::sesame (
       uid    => $uid,
       gid    => $gid,
     }
+  }
+
+  ###
+  # sesame backup script
+  ###
+  file { "${_backupdir}/sesame" :
+    ensure  => directory,
+    owner   => $user,
+    group   => $group,
+    mode    => '0755',
+    require => File[$_backupdir],
+  }
+  file{ "${_optdir}/sesame-backup.sh" :
+    source  => "puppet:///modules/dhrep/opt/dhrep/${scope}/sesame-backup.sh",
+    owner   => $user,
+    group   => $group,
+    mode    => '0700',
+    require => [File[$_optdir],File["${_backupdir}/sesame"]],
+  }
+  cron { 'sesame-backup' :
+    command     => "${_optdir}/sesame-backup.sh",
+    environment => 'PATH=/bin:/usr/bin:/usr/sbin',
+    user        => $user,
+    hour        => 22,
+    minute      => 33,
+  }
+  cron { 'clean-old-sesame-backups' :
+    command     => 'find  /var/dhrep/backups/sesame -type f -mtime +90 -delete',
+    environment => 'PATH=/bin:/usr/bin:/usr/sbin',
+    user        => $user,
+    hour        => 22,
+    minute      => 3,
+  }
+
+  file { "/opt/docker-triplestore/mime.ttl":
+    ensure  => file,
+    owner   => $_catname,
+    mode    => '0644',
+    source  => 'puppet:///modules/dhrep/rdf/mime.ttl',
+    require => User[$_catname],
   }
 
   include dhrep::services::intern::docker
