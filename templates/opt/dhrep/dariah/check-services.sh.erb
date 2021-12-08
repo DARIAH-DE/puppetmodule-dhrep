@@ -26,6 +26,7 @@ FAILED="$(tput setaf 1)FAILED$CNRM"
 CSTR="$(tput setaf 5)"
 VSTR="$(tput setaf 3)"
 TRN="  ==>  "
+NO_CHECK_CERTIFICATE="--no-check-certificate"
 
 #
 # dhcrud
@@ -149,7 +150,7 @@ fi
 INFO="info"
 DIGILIB=$SERVER"/1.0/digilib/rest/"$INFO
 if $R; then echo "checking "$CSTR"digilib"$CNRM $TRN $DIGILIB; fi
-wget -q $DIGILIB
+wget NO_CHECK_CERTIFICATE -q $DIGILIB
 if [ -s $INFO ]; then
     rm $INFO
     if $R; then     echo "    $OK"; fi
@@ -187,7 +188,7 @@ fi
 INFO="collection.json"
 IIIFMD=$SERVER"/1.0/iiif/manifests/"$INFO
 if $R; then echo "checking "$CSTR"iiifmd"$CNRM $TRN $IIIFMD; fi
-wget -q $IIIFMD
+wget NO_CHECK_CERTIFICATE -q $IIIFMD
 if [ -s $INFO ]; then
     rm $INFO
     if $R; then echo "    $OK"; fi
