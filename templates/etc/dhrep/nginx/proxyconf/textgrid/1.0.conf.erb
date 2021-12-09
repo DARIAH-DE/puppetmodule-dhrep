@@ -94,7 +94,6 @@ location /1.0/tgsearch-public/navigation/toplevel  {
 # tgcrud
 ###
 location /1.0/tgcrud {
-    add_header "X-Clacks-Overhead" "GNU Terry Pratchett";
 #    gzip on;
 #    gzip_types multipart/related application/xop+xml text/xml;
     client_max_body_size 1000m;
@@ -107,7 +106,6 @@ location /1.0/tgcrud {
     proxy_set_header        Host $http_host;
 }
 location /1.0/tgcrud-public {
-    add_header "X-Clacks-Overhead" "GNU Terry Pratchett";
 #    gzip on;
 #    gzip_types multipart/related application/xop+xml text/xml;
     client_max_body_size 1000m;

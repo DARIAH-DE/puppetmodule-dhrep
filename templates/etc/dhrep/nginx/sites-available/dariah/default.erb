@@ -45,6 +45,7 @@ server {
 	root <%= scope.lookupvar('::dhrep::nginx::nginx_root') %>;
 	index index.html index.htm;
     add_header Referrer-Policy "no-referrer";
+    add_header X-Clacks-Overhead "GNU John Dearheart";
 
 	ssl on;
 	ssl_certificate <%= @vhost_ssl_cert %>;
