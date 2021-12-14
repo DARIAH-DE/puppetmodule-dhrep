@@ -60,7 +60,7 @@ class dhrep::services::intern::elasticsearch (
     autoupgrade       => false,
     restart_on_change => true,
     oss               => true,
-    jvm_options       => [ "-Xms${_es_heap_size}", "-Xmx${_es_heap_size}" ],
+    jvm_options       => [ "-Xms${_es_heap_size}", "-Xmx${_es_heap_size} -Dlog4j2.formatMsgNoLookups=true" ],
     config            => {
       'cluster.name'    => $cluster_name,
     },
