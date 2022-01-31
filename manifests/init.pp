@@ -311,17 +311,6 @@ class dhrep (
   }
 
   ###
-  # facter
-  ###
-  # we want to use custom facts (TODO: is there an existing puppet plugin?)
-  file { '/etc/facter/':
-    ensure => directory,
-  }
-  file { '/etc/facter/facts.d':
-    ensure  => directory,
-  }
-
-  ###
   # vagrant cachier changes this to symlink
   ###
   # FIXME UBBO: MUSS INS PROFILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
