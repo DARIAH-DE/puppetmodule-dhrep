@@ -44,6 +44,7 @@ class dhrep::services::crud (
   $streaming_size               = 10485760,
   $menu_header_color            = 'none',
   $badge_text                   = 'none',
+  $log_config_file              = 'crud.log4j',
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_name[$scope]
@@ -105,12 +106,12 @@ class dhrep::services::crud (
   ###
   # logging
   ###
-  file { "${_confdir}/${_short}/crud.log4j":
+  file { "${_confdir}/${_short}/${log_config_file}":
     ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
-    content => template("${templates}/crud.log4j.erb"),
+    content => template("${templates}/${log_config_file}.erb"),
     require => File["${_confdir}/${_short}"],
   }
   file { "${_logdir}/${_short}":

@@ -23,7 +23,8 @@ class dhrep::services::crud_public (
   $orcid_resolver               = 'https://orcid.org/',
   $gnd_resolver                 = 'http://d-nb.info/gnd/',
   $publikator_location          = "https://${::fqdn}/publikator",
-  $link_to_documentation        = 'https://wiki.de.dariah.eu/display/publicde/Das+DARIAH-DE+Repository',
+  # TODO? <https://ask.puppet.com/question/29749/fqdn-no-longer-valid-for-vhost-name-in-hiera-file-for-puppetlabs-apache-module>
+  $link_to_documentation        = "https://${::fqdn}/doc/services/submodules/publikator/docs/index.html",
   $link_to_apidoc               = "https://${::fqdn}/doc/services",
   $link_to_faq                  = 'https://wiki.de.dariah.eu/display/publicde/FAQs+zum+DARIAH-DE+Repository',
   $name_of_contact              = 'DARIAH-DE',
@@ -43,6 +44,7 @@ class dhrep::services::crud_public (
   $streaming_size               = 10485760,
   $menu_header_color            = 'none',
   $badge_text                   = 'none',
+  $log_config_file              = 'crud.log4j',
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_public_name[$scope]
@@ -65,7 +67,9 @@ class dhrep::services::crud_public (
     require => [Exec['update_dariah_apt_repository'], Usertomcat::Instance[$_catname]],
   }
 
+  ###
   # symlink war from deb package to tomcat webapps dir
+  ###
   file { "/home/${_user}/${_catname}/webapps/${_short}":
     ensure  => 'link',
     target  => "${_aptdir}/${_short}",
@@ -102,12 +106,12 @@ class dhrep::services::crud_public (
   ###
   # logging
   ###
-  file { "${_confdir}/${_short}/crud.log4j":
+  file { "${_confdir}/${_short}/${log_config_file}":
     ensure  => file,
     owner   => $_user,
     group   => $_group,
     mode    => '0640',
-    content => template("${templates}/crud.log4j.erb"),
+    content => template("${templates}/${log_config_file}.erb"),
     require => File["${_confdir}/${_short}"],
   }
   file { "${_logdir}/${_short}":
