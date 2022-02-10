@@ -29,7 +29,7 @@ DIRECTLY_PUBLISH_WITH_CREATE = FALSE
 METADATA_NAMESPACE = http://textgrid.info/namespaces/metadata/core/2010
 
 # The path to the log4j config file (mandatory).
-LOG4J_CONFIGFILE = /etc/dhrep/dhcrud-public/crud.log4j
+LOG4J_CONFIGFILE = <%= @log_config_location %>
 
 # The Handle resolver URL (resolving only!).
 PID_RESOLVER = <%= @pid_resolver %>
