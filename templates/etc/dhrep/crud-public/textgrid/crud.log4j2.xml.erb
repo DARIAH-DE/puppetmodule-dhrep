@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" strict="true" name="CrudLogging" monitorInterval="15">
+  <Properties>
+    <Property name="logFilename">/var/log/dhrep/tgcrud-public/crud.log</Property>
+    <Property name="rblogFilename">/var/log/dhrep/tgcrud-public/rollback.log</Property>
+    <Property name="pattern">%d{yyyy-MM-dd'T'HH:mm:ss.SSS}\t%p\t%t\t%m%n</Property>
+  </Properties>
+  <Appenders>
+    <Appender type="Console" name="STDOUT">
+      <Layout type="PatternLayout" pattern="${pattern}" />
+    </Appender>
+    <Appender type="File" name="CRUD_LOGGING" fileName="${logFilename}">
+      <Layout type="PatternLayout" pattern="${pattern}" />
+    </Appender>
+    <Appender type="File" name="CRUD_RB_LOGGING" fileName="${rblogFilename}">
+      <Layout type="PatternLayout" pattern="${pattern}" />
+    </Appender>
+  </Appenders>
+  <Loggers>
+    <Logger name="crudLogger" level="<%= scope.lookupvar('dhrep::services::crud_public::log_level') %>" additivity="false">
+      <AppenderRef ref="CRUD_LOGGING" />
+    </Logger>
+    <Logger name="rollbackLogger" level="debug" additivity="false">
+      <AppenderRef ref="CRUD_RB_LOGGING" />
+    </Logger>
+    <Root level="error">
+      <AppenderRef ref="STDOUT" />
+    </Root>
+  </Loggers>
+</Configuration>
