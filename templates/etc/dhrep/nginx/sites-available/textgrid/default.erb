@@ -83,4 +83,10 @@ server {
 	location /shibboleth { alias /opt/dariahshibboleth/sp-metadata.xml; }
 
 	include /etc/nginx/proxyconf/1.0.conf;
+
+  # 2022-05-19: Die Digitale Bibliothek von TextGrid zum Beschauen (kurzfristig)
+	location /630b9a6e36398e266cfa2123aaca604173c3aa36/ {
+		autoindex on;
+  }
+
 }
