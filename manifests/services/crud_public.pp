@@ -44,7 +44,7 @@ class dhrep::services::crud_public (
   $streaming_size               = 10485760,
   $menu_header_color            = 'none',
   $badge_text                   = 'none',
-  $log_config_file              = 'crud.log4j',
+  $log_config_file              = 'crud.log4j2.xml',
 ) inherits dhrep::params {
 
   $_name     = $::dhrep::params::crud_public_name[$scope]
