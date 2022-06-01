@@ -28,7 +28,7 @@ class dhrep::static::textgridlab_org(
   # TODO Cloning does not yield automatic updates via pull!!
   #
   -> exec { 'git_clone_textgrid_metadata':
-    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/common/textgrid-metadata.git /usr/local/src/textgrid-metadata-git',
+    command => 'git clone https://gitlab.gwdg.de/dariah-de/textgridrep/textgrid-metadata.git /usr/local/src/textgrid-metadata-git',
     creates => '/usr/local/src/textgrid-metadata-git',
     require => Package['git'],
   }

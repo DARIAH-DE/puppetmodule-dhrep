@@ -90,7 +90,7 @@ class dhrep::services::intern::elasticsearch (
   # FIXME use vcsrepo!
   exec { 'git_clone_tgcommon':
     path    => ['/usr/bin','/bin','/usr/sbin'],
-    command => 'git clone git://projects.gwdg.de/dariah-de/tg/textgrid-repository/common.git /usr/local/src/tgcommon-git',
+    command => 'git clone https://gitlab.gwdg.de/dariah-de/dariah-de-common.git /usr/local/src/tgcommon-git',
     creates => '/usr/local/src/tgcommon-git',
     require => Package['git'],
   }
