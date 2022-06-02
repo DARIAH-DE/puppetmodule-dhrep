@@ -53,6 +53,18 @@ class dhrep::services::intern::sesame (
   }
 
   ###
+  # checkout rdf4j init script and tools
+  ###
+  # FIXME use vcsrepo!
+  # FIXME checkout default branch (develop?)
+  exec { 'git_clone_rdf4j-service':
+    path    => ['/usr/bin','/bin','/usr/sbin'],
+    command => 'git clone https://gitlab.gwdg.de/dariah-de/textgridrep/rdf4j-service.git /usr/local/src/rdf4j-service',
+    creates => '/usr/local/src/rdf4j-service',
+    require => Package['git'],
+  }
+
+  ###
   # sesame backup script
   ###
   file { "${_backupdir}/sesame" :

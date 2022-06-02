@@ -1,5 +1,8 @@
 #!/bin/bash
 
+###
+# are you really really sure?
+###
 SURETEXT="YES-DESTROY-EVERYTHING-I-AM-VERY-SURE-ABOUT-IT"
 
 if [[ "$@" != $SURETEXT ]]; then
@@ -14,46 +17,53 @@ if [[ "$@" != $SURETEXT ]]; then
   echo -e "  ...you have checked out the correct branch of the tgcommon tools,"
   echo -e "     please see /usr/local/src/tgcommon-git/\n"
   echo -e "Thanks! :-)\n"
-	exit
+  exit
 fi
 
-#
+###
 # initialise
-#
+###
 SCOPE="textgrid"
 SLAPD_ROOTPW=<%= scope.lookupvar('dhrep::tgauth_slapd_rootpw') %>
 RDF_DB_PORT=<%= @sesame_port %>
 ES_MASTER_HTTP_PORT=<%= scope.lookupvar('dhrep::params::elasticsearch_master_http_port') %>
+LINES=">>>>>>>>>>  "
 
-#
+###
 # create initial ldap db
-#
-echo "creating initial ldap database..."
-cd /opt/dhrep/ldap-init && ./tgldapconf.sh && ldapadd -x -f ./ldap-rbac-template.ldif -D "cn=Manager,dc=textgrid,dc=de" -w "${SLAPD_ROOTPW}" &&
-echo "...created"
+###                                                                                             
+echo $LINES"creating initial ldap database"
+cd /opt/dhrep/ldap-init && ./tgldapconf.sh && ldapadd -x -f ./ldap-rbac-template.ldif -D "cn=Manager,dc=textgrid,dc=de" -w "${SLAPD_ROOTPW}"
+if [ $? != 0]; then
+    echo $LINES"error creating ldap db!";
+    exit $?;
+else
+  echo $LINES"created";
+fi
 
-#
-# create initial sesame db
-#
-echo "creating initial sesame databases..."
-CREATE_TARGET="http://localhost:$RDF_DB_PORT/openrdf-workbench/repositories/SYSTEM/create"
-# public
-CREATE_DATA_PUBLIC="type=native&Repository+ID=$SCOPE-public&Repository+title=rdf+repo+for+$SCOPE-public+data&Triple+indexes=spoc%2Cposc%2Copsc%2Csopc"
-curl $CREATE_TARGET --data "${CREATE_DATA_PUBLIC}"
-TTL_TARGET_PUBLIC="http://localhost:$RDF_DB_PORT/openrdf-sesame/repositories/$SCOPE-public/statements"
-curl $TTL_TARGET_PUBLIC -X POST -d @/opt/docker-triplestore/mime.ttl --header 'Content-Type: text/turtle;charset=UTF-8'
-# nonpublic
-CREATE_DATA_NONPUBLIC="type=native&Repository+ID=$SCOPE-nonpublic&Repository+title=rdf+repo+for+$SCOPE-nonpublic+data&Triple+indexes=spoc%2Cposc%2Copsc%2Csopc"
-curl $CREATE_TARGET --data "${CREATE_DATA_NONPUBLIC}"
-TTL_TARGET_NONPUBLIC="http://localhost:$RDF_DB_PORT/openrdf-sesame/repositories/$SCOPE-nonpublic/statements"
-curl $TTL_TARGET_NONPUBLIC -X POST -d @/opt/docker-triplestore/mime.ttl --header 'Content-Type: text/turtle;charset=UTF-8'
-echo "...created"
+###                                                                                              
+# create initial rdf db
+###
+echo $LINES"creating initial rdf databases"
+cd /usr/local/src/rdf4j-service/tools/ && RDF_DB_PORT=<%= @sesame_port %> ./init-rdf4j.sh
+echo "resp: $?"
+if [ $? != 0]; then
+    echo $LINES"error creating rdf db!";
+    exit $?;
+else
+  echo $LINES"created";
+fi
 
-#
+###
 # create initial elasticsearch public and nonpublic index
-#
-echo "creating initial elasticsearch database..."
+###
+echo $LINES"creating initial elasticsearch database"
 cd /usr/local/src/tgcommon-git/esutils/tools/$SCOPE/createIndex/
 ./createAllPublic.sh localhost:$ES_MASTER_HTTP_PORT
-./createAllNonpublic.sh localhost:$ES_MASTER_HTTP_PORT &&
-echo "...created"
+./createAllNonpublic.sh localhost:$ES_MASTER_HTTP_PORT
+if [ $? ] != 0; then
+    echo $LINES"error creating esdb!";
+    exit $?;
+else
+    echo $LINES"created";
+fi

@@ -88,6 +88,7 @@ class dhrep::services::intern::elasticsearch (
 
   # clone commons repo, which contains shell scripts to create textgrid elastic search indexes
   # FIXME use vcsrepo!
+  # FIXME checkout default branch (develop?)
   exec { 'git_clone_tgcommon':
     path    => ['/usr/bin','/bin','/usr/sbin'],
     command => 'git clone https://gitlab.gwdg.de/dariah-de/dariah-de-common.git /usr/local/src/tgcommon-git',
