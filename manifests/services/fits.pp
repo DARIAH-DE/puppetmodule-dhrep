@@ -18,9 +18,9 @@ class dhrep::services::fits (
 
   $fits_folder         = "fits-${fits_version}"
   $fits_file           = "${fits_folder}.zip"
-  $fits_source         = "http://projects.iq.harvard.edu/files/fits/files/${fits_file}"
+  $fits_source         = "https://projects.iq.harvard.edu/files/fits/files/${fits_file}"
   $fits_service_file   = "fits-${fits_servlet_version}.war"
-  $fits_service_source = "http://projects.iq.harvard.edu/files/fits/files/fits-${fits_servlet_version}.war"
+  $fits_service_source = "https://projects.iq.harvard.edu/files/fits/files/fits-${fits_servlet_version}.war"
   $fits_home           = "/home/${_catname}/${fits_folder}"
 
   ###
